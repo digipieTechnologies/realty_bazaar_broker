@@ -1,0 +1,14 @@
+# Configuration for Supabase Edge Functions
+# Disable JWT verification for callback and webhook endpoints so external services (Facebook/Instagram/web browsers) can call them.
+
+[functions.facebook-callback]
+verify_jwt = false
+
+[functions.instagram-callback]
+verify_jwt = false
+
+[functions.instagram-webhook]
+verify_jwt = false
+
+[functions.facebook-webhook]
+verify_jwt = false

@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.brokerflow.brokerflow",
+      "sha256_cert_fingerprints": [
+        "D5:7D:01:8A:B6:2A:CD:C0:5F:C7:D5:C8:E1:0F:BF:15:21:80:91:21:55:B3:5B:A3:E7:E9:E9:C2:46:3C:02:5F"
+      ]
+    }
+  }
+]

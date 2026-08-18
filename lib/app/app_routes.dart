@@ -1,0 +1,226 @@
+// File: lib/app/app_routes.dart
+// Purpose: Routing table and GoRouter configuration with Navigator keys.
+
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:get_storage/get_storage.dart';
+import '../modules/auth/screens/login_screen.dart';
+import '../modules/auth/screens/otp_verification_screen.dart';
+import '../modules/auth/screens/splash_screen.dart';
+import '../modules/dashboard/screens/shell_layout_screen.dart';
+import '../modules/dashboard/screens/dashboard_tab_screen.dart';
+import '../modules/dashboard/screens/leads_tab_screen.dart';
+import '../modules/dashboard/screens/properties_tab_screen.dart';
+import '../modules/dashboard/screens/request_video_tab_screen.dart';
+import '../modules/dashboard/screens/referrals_tab_screen.dart';
+import '../modules/dashboard/screens/reports_tab_screen.dart';
+import '../modules/dashboard/screens/settings_tab_screen.dart';
+import '../modules/dashboard/screens/profile_screen.dart';
+import '../modules/dashboard/screens/posts_tab_screen.dart';
+import '../modules/dashboard/screens/help_tab_screen.dart';
+
+import '../modules/auth/screens/reset_password_screen.dart';
+import '../models/otp_type.dart';
+import '../widgets/common/common_app_bar.dart';
+import '../models/property_model.dart';
+import '../modules/properties/widgets/view_property_dialog.dart';
+
+class AppRoutes {
+  AppRoutes._();
+
+  // Global Navigator Key for AppOverlay/Toasts access
+  static final GlobalKey<NavigatorState> rootNavigatorKey =
+      GlobalKey<NavigatorState>();
+
+  // Route Paths
+  static const String initial = '/';
+  static const String login = '/login';
+  static const String signUp = '/signup';
+  static const String forgotPassword = '/forgot-password';
+  static const String verifyOtp = '/verify-otp';
+  static const String resetPassword = '/reset-password';
+  static const String home = '/dashboard';
+  static const String details = '/details';
+
+  /// Navigates to Property Details dialog for a given property
+  static void navigateToPropertyDetails(BuildContext context, PropertyModel property) {
+    ViewPropertyDialog.show(context, property: property);
+  }
+
+  // GoRouter Singleton Instance
+  static final GoRouter router = GoRouter(
+    navigatorKey: rootNavigatorKey,
+    initialLocation: initial,
+    debugLogDiagnostics: true,
+    redirect: (context, state) {
+      final userId = GetStorage().read<String>('user_id');
+      final isLoggedIn = userId != null && userId.isNotEmpty;
+
+      final goingToAuth =
+          state.matchedLocation == login ||
+          state.matchedLocation == signUp ||
+          state.matchedLocation == forgotPassword ||
+          state.matchedLocation == verifyOtp ||
+          state.matchedLocation == resetPassword;
+
+      final goingToSplash = state.matchedLocation == initial;
+
+      final goingToLoginOrSignup =
+          state.matchedLocation == login ||
+          state.matchedLocation == signUp ||
+          state.matchedLocation == forgotPassword;
+
+      if (!isLoggedIn && !goingToAuth && !goingToSplash) {
+        return login;
+      }
+
+      if (isLoggedIn && goingToLoginOrSignup) {
+        return home;
+      }
+
+      return null;
+    },
+    errorBuilder: (context, state) => Scaffold(
+      body: Center(
+        child: Text(
+          'Route not found: ${state.uri.path}',
+          style: const TextStyle(color: Colors.red, fontSize: 16),
+        ),
+      ),
+    ),
+    routes: [
+      GoRoute(
+        path: initial,
+        name: 'splash',
+        builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: login,
+        name: 'login',
+        builder: (context, state) =>
+            const LoginScreen(initialMode: AuthMode.login),
+      ),
+      GoRoute(
+        path: signUp,
+        name: 'signup',
+        builder: (context, state) =>
+            const LoginScreen(initialMode: AuthMode.signup),
+      ),
+      GoRoute(
+        path: forgotPassword,
+        name: 'forgot_password',
+        builder: (context, state) =>
+            const LoginScreen(initialMode: AuthMode.forgotPassword),
+      ),
+      GoRoute(
+        path: verifyOtp,
+        name: 'verify_otp',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final email = extra?['email'] as String?;
+          final userId = extra?['userId'] as String?;
+          final isPreSignup = extra?['isPreSignup'] as bool? ?? false;
+          final otpType = extra?['otpType'] as AppOtpType? ?? AppOtpType.emailVerify;
+          final signUpData = extra?['signUpData'] as Map<String, String>?;
+          return OtpVerificationScreen(
+            email: email,
+            userId: userId,
+            isPreSignup: isPreSignup,
+            otpType: otpType,
+            signUpData: signUpData,
+          );
+        },
+      ),
+      GoRoute(
+        path: resetPassword,
+        name: 'reset_password',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final email = extra?['email'] as String? ?? '';
+          return ResetPasswordScreen(email: email);
+        },
+      ),
+
+      // Legacy route fallback redirect
+      GoRoute(path: '/home', redirect: (context, state) => '/dashboard'),
+
+      // Shell Route wrapping the 8 responsive dashboard screens
+      ShellRoute(
+        builder: (context, state, child) {
+          return ShellLayoutScreen(child: child);
+        },
+        routes: [
+          GoRoute(
+            path: '/dashboard',
+            name: 'dashboard',
+            builder: (context, state) => const DashboardTabScreen(),
+          ),
+          GoRoute(
+            path: '/leads',
+            name: 'leads',
+            builder: (context, state) => const LeadsTabScreen(),
+          ),
+          GoRoute(
+            path: '/posts',
+            name: 'posts',
+            builder: (context, state) => const PostsTabScreen(),
+          ),
+          GoRoute(
+            path: '/properties',
+            name: 'properties',
+            builder: (context, state) => const PropertiesTabScreen(),
+          ),
+          GoRoute(
+            path: '/request-video',
+            name: 'request_video',
+            builder: (context, state) => const RequestVideoTabScreen(),
+          ),
+          GoRoute(
+            path: '/referrals',
+            name: 'referrals',
+            builder: (context, state) => const ReferralsTabScreen(),
+          ),
+          GoRoute(
+            path: '/reports',
+            name: 'reports',
+            builder: (context, state) => const ReportsTabScreen(),
+          ),
+          GoRoute(
+            path: '/settings',
+            name: 'settings',
+            builder: (context, state) => const SettingsTabScreen(),
+          ),
+          GoRoute(
+            path: '/profile',
+            name: 'profile',
+            builder: (context, state) => const ProfileScreen(),
+          ),
+          GoRoute(
+            path: '/help',
+            name: 'help',
+            builder: (context, state) => const HelpTabScreen(),
+          ),
+        ],
+      ),
+
+
+      GoRoute(
+        path: details,
+        name: 'details',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final title = extra?['title'] as String? ?? 'Details';
+          return Scaffold(
+            appBar: CommonAppBar(title: title),
+            body: Center(
+              child: Text(
+                'Placeholder details screen for $title',
+                style: const TextStyle(fontSize: 16),
+              ),
+            ),
+          );
+        },
+      ),
+    ],
+  );
+}

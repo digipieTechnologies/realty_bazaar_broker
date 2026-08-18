@@ -1,0 +1,142 @@
+import 'package:equatable/equatable.dart';
+import 'broker_model.dart';
+import 'social_post_model.dart';
+
+class SocialLeadModel extends Equatable {
+  static String tableName = "social_leads";
+
+  final String? id;
+  final String userName;
+  final String? notes;
+  final String? propertyDetails;
+  final String phone;
+  final String? phoneCountryCode;
+  final String? phoneCountryIso;
+  final SocialPostModel? socialPostId;
+  final BrokerModel? brokerId;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
+  // Backward compatibility getters for UI components
+  String get contactNumber {
+    final code = phoneCountryCode ?? '91';
+    return '+$code $phone';
+  }
+  String get whatsappNumber => phone;
+  SocialPostModel? get socialPost => socialPostId;
+
+  const SocialLeadModel({
+    this.id,
+    this.userName = '',
+    this.notes,
+    this.propertyDetails,
+    this.phone = '',
+    this.phoneCountryCode = '91',
+    this.phoneCountryIso = 'IN',
+    SocialPostModel? socialPostId,
+    SocialPostModel? socialPost,
+    this.brokerId,
+    this.createdAt,
+    this.updatedAt,
+  }) : socialPostId = socialPostId ?? socialPost;
+
+  static SocialLeadModel fromJson(dynamic json) {
+    if (json is! Map) {
+      return SocialLeadModel(id: json?.toString());
+    }
+
+    SocialPostModel? parsedSocialPost;
+    if (json['social_posts'] != null) {
+      parsedSocialPost = SocialPostModel.fromJson(json['social_posts']);
+    } else if (json['social_post'] != null) {
+      parsedSocialPost = SocialPostModel.fromJson(json['social_post']);
+    } else if (json['social_post_id'] != null) {
+      parsedSocialPost = SocialPostModel.fromJson(json['social_post_id']);
+    }
+
+    final rawPhone = json['phone']?.toString() ??
+        json['contact_number']?.toString() ??
+        json['whatsapp_number']?.toString() ??
+        '';
+
+    return SocialLeadModel(
+      id: json['id']?.toString(),
+      userName: json['user_name']?.toString() ?? '',
+      notes: json['notes']?.toString(),
+      propertyDetails: json['property_details']?.toString(),
+      phone: rawPhone,
+      phoneCountryCode: json['phone_country_code']?.toString() ?? '91',
+      phoneCountryIso: json['phone_country_iso']?.toString() ?? 'IN',
+      socialPostId: parsedSocialPost,
+      brokerId: json['broker_id'] != null
+          ? BrokerModel.fromJson(json['broker_id'])
+          : null,
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json['created_at'].toString())?.toLocal()
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.tryParse(json['updated_at'].toString())?.toLocal()
+          : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    if (id != null) data['id'] = id;
+    data['user_name'] = userName;
+    data['notes'] = notes;
+    data['property_details'] = propertyDetails;
+    data['phone'] = phone;
+    data['phone_country_code'] = phoneCountryCode ?? '91';
+    data['phone_country_iso'] = phoneCountryIso ?? 'IN';
+    data['social_post_id'] = socialPostId?.id;
+    data['broker_id'] = brokerId?.id;
+    if (createdAt != null) {
+      data['created_at'] = createdAt?.toUtc().toIso8601String();
+    }
+    return data;
+  }
+
+  SocialLeadModel copyWith({
+    String? id,
+    String? userName,
+    String? notes,
+    String? propertyDetails,
+    String? phone,
+    String? phoneCountryCode,
+    String? phoneCountryIso,
+    SocialPostModel? socialPostId,
+    BrokerModel? brokerId,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return SocialLeadModel(
+      id: id ?? this.id,
+      userName: userName ?? this.userName,
+      notes: notes ?? this.notes,
+      propertyDetails: propertyDetails ?? this.propertyDetails,
+      phone: phone ?? this.phone,
+      phoneCountryCode: phoneCountryCode ?? this.phoneCountryCode,
+      phoneCountryIso: phoneCountryIso ?? this.phoneCountryIso,
+      socialPostId: socialPostId ?? this.socialPostId,
+      brokerId: brokerId ?? this.brokerId,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+    id,
+    userName,
+    notes,
+    propertyDetails,
+    phone,
+    phoneCountryCode,
+    phoneCountryIso,
+    socialPostId,
+    brokerId,
+    createdAt,
+    updatedAt,
+  ];
+}

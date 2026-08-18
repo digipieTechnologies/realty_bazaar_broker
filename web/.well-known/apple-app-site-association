@@ -1,0 +1,24 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "699K6Q6LU2.com.brokerflow.brokerflow",
+        "paths": [
+          "/social-connection-result*",
+          "/dashboard*",
+          "/properties/*",
+          "/leads*",
+          "/posts*",
+          "/settings*",
+          "/profile*"
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "699K6Q6LU2.com.brokerflow.brokerflow"
+    ]
+  }
+}
