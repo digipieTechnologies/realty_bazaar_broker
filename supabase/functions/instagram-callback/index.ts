@@ -171,7 +171,7 @@ serve(async (req) => {
 
     // 5. Success! Redirect user to the web success page
     const redirectUrl = `${webAppUrl}/social-connection-result?platform=instagram&connected=true`;
-    
+
     return new Response(null, {
       status: 302,
       headers: {
@@ -183,9 +183,9 @@ serve(async (req) => {
   } catch (e) {
     const errorMsg = e instanceof Error ? e.message : "Unknown error";
     console.error(`Instagram callback error: ${errorMsg}`);
-    
+
     const redirectUrl = `${webAppUrl}/social-connection-result?platform=instagram&connected=false&error=${encodeURIComponent(errorMsg)}`;
-    
+
     return new Response(null, {
       status: 302,
       headers: {

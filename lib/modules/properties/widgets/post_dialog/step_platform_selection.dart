@@ -1,7 +1,7 @@
 // File: lib/modules/properties/widgets/post_dialog/step_platform_selection.dart
 // Purpose: Step 0 UI for platform selection (Instagram & Facebook) with responsive layout, property preview banner, and social publishing tips.
 
-import 'package:brokerhive/models/property_enums.dart';
+import 'package:the_realty_bazaar/models/property_enums.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

@@ -12,7 +12,7 @@ class HelpTabScreen extends StatelessWidget {
     return const BaseTabScreen(
       title: 'Help & Support',
       description:
-          'Visit our online documentation or contact help desk support at tech-support@brokerhive.com.',
+          'Visit our online documentation or contact help desk support at tech-support@realtybazaar.com.',
       icon: Icons.help_outline_rounded,
     );
   }

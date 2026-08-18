@@ -5,7 +5,7 @@ class AppStrings {
   AppStrings._();
 
   // App Level
-  static const String appName = 'Broker CRM';
+  static const String appName = 'The Realty Bazaar';
   static const String appVersion = '1.0.0';
 
   // Splash & Onboarding Placeholder

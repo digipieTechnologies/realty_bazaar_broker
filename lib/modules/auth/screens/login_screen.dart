@@ -511,7 +511,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return AppTextField(
       controller: _emailController,
       label: context.tr('email_address'),
-      hint: 'name@brokerhive.com',
+      hint: 'name@therealtybazaar.com',
       keyboardType: TextInputType.emailAddress,
       textInputAction: _currentMode == AuthMode.forgotPassword
           ? TextInputAction.done

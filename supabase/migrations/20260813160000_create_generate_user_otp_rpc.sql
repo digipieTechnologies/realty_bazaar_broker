@@ -31,13 +31,13 @@ BEGIN
 
   -- Dynamic subject & description based on otp_type
   IF v_clean_otp_type = 'forgot_password' THEN
-    v_subject := 'Reset Your Password - BrokerHive';
+    v_subject := 'Reset Your Password - The Realty Bazaar';
     v_description := 'We received a request to reset your password. Please use the verification code below to proceed with updating your password.';
   ELSIF v_clean_otp_type = 'change_password' THEN
-    v_subject := 'Change Password Code - BrokerHive';
+    v_subject := 'Change Password Code - The Realty Bazaar';
     v_description := 'We received a request to change your password. Please use the verification code below to proceed with updating your password.';
   ELSE
-    v_subject := 'Your BrokerHive Verification Code';
+    v_subject := 'Your The Realty Bazaar Verification Code';
     v_description := 'We received a request to verify your email address. Please use the verification code below to complete the process.';
   END IF;
 
@@ -103,7 +103,7 @@ BEGIN
         || '</style></head><body>'
         || '<div class="wrapper"><div class="container">'
         || '<div class="header">'
-        || '<h1>BrokerHive</h1>'
+        || '<h1>The Realty Bazaar</h1>'
         || '<p>Real Estate Brokerage Platform</p>'
         || '</div>'
         || '<div class="body-content">'
@@ -116,11 +116,11 @@ BEGIN
         || '</div>'
         || '<div class="divider"></div>'
         || '<p class="security-note"><strong>🔒 Security Notice:</strong> If you did not request this code, please ignore this email. Never share this code with anyone.</p>'
-        || '<p class="security-note">This is an automated message from BrokerHive — your trusted real estate brokerage management platform for managing leads, properties, and client relationships.</p>'
+        || '<p class="security-note">This is an automated message from The Realty Bazaar — your trusted real estate brokerage management platform for managing leads, properties, and client relationships.</p>'
         || '</div>'
         || '<div class="footer">'
-        || '<p>&copy; ' || EXTRACT(YEAR FROM NOW())::text || ' BrokerHive. All rights reserved.</p>'
-        || '<p>Powered by <a href="#">BrokerHive Platform</a></p>'
+        || '<p>&copy; ' || EXTRACT(YEAR FROM NOW())::text || ' The Realty Bazaar. All rights reserved.</p>'
+        || '<p>Powered by <a href="#">The Realty Bazaar Platform</a></p>'
         || '</div>'
         || '</div></div>'
         || '</body></html>'

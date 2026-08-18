@@ -1,5 +1,5 @@
 // File: lib/widgets/inputs/app_square_media_picker.dart
-// Purpose: Reusable Meesho-style square media picker for images and videos with local thumbnail generation and readOnly support in brokerflow-app.
+// Purpose: Reusable Meesho-style square media picker for images and videos with local thumbnail generation and readOnly support in realty_bazaar-app.
 
 import 'dart:convert';
 import 'dart:io' as io;

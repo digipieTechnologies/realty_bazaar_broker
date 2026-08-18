@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
-        android:label="BrokerHive"
+        android:label="The Realty Bazaar"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -35,23 +35,22 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
-            <!-- Deep Links: App Links for brokerhive-app-v1.web.app -->
+            <!-- Deep Links: App Links for therealtybazaar-app.web.app -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data
                     android:scheme="https"
-                    android:host="brokerhive-app-v1.web.app"/>
+                    android:host="therealtybazaar-app.web.app"/>
             </intent-filter>
 
-            <!-- Deep Links: Custom URI scheme for brokerhive:// & brokerflow:// -->
+            <!-- Deep Links: Custom URI scheme for therealtybazaar:// -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="brokerhive"/>
-                <data android:scheme="brokerflow"/>
+                <data android:scheme="therealtybazaar"/>
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

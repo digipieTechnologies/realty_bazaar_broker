@@ -44,7 +44,7 @@ serve(async (req) => {
     const body: SendEmailRequest = await req.json();
     const { to, from, otp_type } = body;
     let html = body.html;
-    let subject = body.subject || "Your BrokerHive Verification Code";
+    let subject = body.subject || "Your The Realty Bazaar Verification Code";
 
     // Format recipient email array
     const recipients = Array.isArray(to) ? to : [to];

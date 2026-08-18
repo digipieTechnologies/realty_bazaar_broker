@@ -54,9 +54,9 @@ serve(async (req) => {
   }
 
   try {
-    const appId = Deno.env.get("FACEBOOK_APP_ID") || Deno.env.get("META_APP_ID");
-    const appSecret = Deno.env.get("FACEBOOK_APP_SECRET") || Deno.env.get("META_APP_SECRET");
-    let redirectUri = Deno.env.get("FACEBOOK_REDIRECT_URI") || Deno.env.get("META_REDIRECT_URI");
+    const appId = Deno.env.get("META_APP_ID");
+    const appSecret = Deno.env.get("META_APP_SECRET");
+    let redirectUri = Deno.env.get("FACEBOOK_REDIRECT_URI");
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const supabaseServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 

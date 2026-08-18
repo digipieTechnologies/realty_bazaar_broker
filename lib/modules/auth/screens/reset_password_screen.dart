@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../../../app/app_assets.dart';
 import '../../../app/app_colors.dart';
 import '../../../app/app_routes.dart';
+import '../../../app/app_strings.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../app/app_utils.dart';
 import '../../../providers/auth/auth_provider.dart';
@@ -272,7 +273,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             ),
             const SizedBox(height: 16.0),
             Text(
-              'Set a strong, new password to protect your BrokerHive account and client data.',
+              'Set a strong, new password to protect your ${AppStrings.appName} account and client data.',
               style: TextStyle(
                 color: Colors.white.withOpacity(0.85),
                 fontSize: 15.0,
@@ -337,7 +338,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   Widget _copyrightFooter() {
     return Text(
-      '© ${DateTime.now().year} BrokerHive. All rights reserved.',
+      '© ${DateTime.now().year} ${AppStrings.appName}. All rights reserved.',
       style: AppTextStyles.caption.copyWith(color: AppColors.textMuted),
       textAlign: TextAlign.center,
     );

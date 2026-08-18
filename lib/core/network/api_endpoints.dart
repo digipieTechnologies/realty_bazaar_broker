@@ -5,7 +5,7 @@ class ApiEndpoints {
   ApiEndpoints._();
 
   // Base URL (read from config in practice, default placeholder here)
-  static const String baseUrl = 'https://api.brokerflow.example.com/v1';
+  static const String baseUrl = 'https://api.realty_bazaar.example.com/v1';
 
   // Authentication endpoints
   static const String login = '/auth/login';

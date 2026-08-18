@@ -29,6 +29,6 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Brokerflow requires access to your location to share your current position with users in chat.</string>
+	<string>The Realty Bazaar requires access to your location to share your current position with users in chat.</string>
 </dict>
 </plist>

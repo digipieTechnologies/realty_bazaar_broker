@@ -14,8 +14,8 @@ serve(async (req) => {
   }
 
   try {
-    const appId = Deno.env.get("FACEBOOK_APP_ID") || Deno.env.get("META_APP_ID");
-    let redirectUri = Deno.env.get("FACEBOOK_REDIRECT_URI") || Deno.env.get("META_REDIRECT_URI");
+    const appId = Deno.env.get("META_APP_ID");
+    let redirectUri = Deno.env.get("FACEBOOK_REDIRECT_URI");
 
     if (!appId || !redirectUri) {
       throw new Error("Missing Facebook/Meta server environment variables.");

@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>BrokerHive</string>
+	<string>The Realty Bazaar</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>brokerhive</string>
+	<string>the_realty_bazaar</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -22,6 +22,17 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>therealtybazaar</string>
+			</array>
+		</dict>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -47,17 +58,17 @@
 		<string>http</string>
 	</array>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>BrokerHive requires access to your photo library to select and upload property photos and videos.</string>
+	<string>The Realty Bazaar requires access to your photo library to select and upload property photos and videos.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>BrokerHive requires permission to save photos and videos to your photo library.</string>
+	<string>The Realty Bazaar requires permission to save photos and videos to your photo library.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>BrokerHive requires camera access to capture property photos and videos directly in the app.</string>
+	<string>The Realty Bazaar requires camera access to capture property photos and videos directly in the app.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>BrokerHive requires microphone access to record videos with audio.</string>
+	<string>The Realty Bazaar requires microphone access to record videos with audio.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>BrokerHive requires access to your location to share your current position with users in chat.</string>
+	<string>The Realty Bazaar requires access to your location to share your current position with users in chat.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>BrokerHive requires access to your location to share your current position with users in chat.</string>
+	<string>The Realty Bazaar requires access to your location to share your current position with users in chat.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

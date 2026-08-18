@@ -1,4 +1,4 @@
-package com.brokerflow.brokerflow
+package com.therealtybazaar.app
 
 import io.flutter.embedding.android.FlutterActivity
 

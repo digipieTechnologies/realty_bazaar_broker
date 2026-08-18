@@ -1,5 +1,5 @@
 // File: lib/widgets/inputs/app_pinput_field.dart
-// Purpose: Reusable Pinput OTP field component styled with the BrokerHive design tokens.
+// Purpose: Reusable Pinput OTP field component styled with the The Realty Bazaar design tokens.
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

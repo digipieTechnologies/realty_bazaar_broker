@@ -19,7 +19,7 @@ serve(async (req) => {
 
   try {
     const { propertyId, brokerId, instagramUsername, facebookPageName } =
-      await req.json()li;
+      await req.json();
 
     if (!propertyId) {
       return new Response(
@@ -125,7 +125,7 @@ serve(async (req) => {
         ? `IG - @${instagramUsername.toUpperCase()}`
         : facebookPageName
         ? `FB - ${facebookPageName.toUpperCase()}`
-        : "BROKERHIVE";
+        : "REALTYBAZAAR";
 
     const bottomContact = brokerName && brokerPhone
       ? `${brokerName.toUpperCase()} - ${brokerPhone}`

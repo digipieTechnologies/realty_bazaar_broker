@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../app/app_strings.dart';
 import '../../widgets/dialogs/permission_dialog.dart';
 
 class PermissionService {
@@ -63,7 +64,7 @@ class PermissionService {
         context: context,
         title: 'Photos & Media Permission',
         description:
-            'BrokerHive needs access to your photos and media library to select and upload property images and videos. Please allow access in App Settings.',
+            '${AppStrings.appName} needs access to your photos and media library to select and upload property images and videos. Please allow access in App Settings.',
         icon: Icons.photo_library_rounded,
         primaryButtonText: 'Open Settings',
         onPrimaryPressed: () async {
@@ -106,7 +107,7 @@ class PermissionService {
         context: context,
         title: 'Camera Permission Required',
         description:
-            'BrokerHive needs camera access so you can capture property photos and videos directly in the app. Please allow access in App Settings.',
+            '${AppStrings.appName} needs camera access so you can capture property photos and videos directly in the app. Please allow access in App Settings.',
         icon: Icons.camera_alt_rounded,
         primaryButtonText: 'Open Settings',
         onPrimaryPressed: () async {
@@ -161,7 +162,7 @@ class PermissionService {
         context: context,
         title: 'Location Permission Required',
         description:
-            'BrokerHive needs access to your device location to share your current position. Please allow location access in App Settings.',
+            '${AppStrings.appName} needs access to your device location to share your current position. Please allow location access in App Settings.',
         icon: Icons.location_on_rounded,
         primaryButtonText: 'Open Settings',
         onPrimaryPressed: () async {

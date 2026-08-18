@@ -3,7 +3,7 @@
 //          (topHeader, instagramHandle, location, bottomContact, caption) via the
 //          generate-post-content edge function with a local fallback.
 
-import 'package:brokerhive/models/property_enums.dart';
+import 'package:the_realty_bazaar/models/property_enums.dart';
 import 'package:flutter/foundation.dart';
 import '../../../core/supabase/supabase_config.dart';
 import '../../../models/property_model.dart';
@@ -149,7 +149,7 @@ class PostContentService {
     final fb = sp.facebookAccount?.pageName;
     if (ig != null && ig.isNotEmpty) return 'IG - @${ig.toUpperCase()}';
     if (fb != null && fb.isNotEmpty) return 'FB - ${fb.toUpperCase()}';
-    return 'BROKERHIVE';
+    return 'THE REALTY BAZAAR';
   }
 
   static String _buildContact(String name, String phone) {

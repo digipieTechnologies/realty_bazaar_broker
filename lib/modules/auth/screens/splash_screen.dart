@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/app_routes.dart';
 import '../../../app/app_assets.dart';
+import '../../../app/app_strings.dart';
 import '../../../widgets/brand/app_logo.dart';
 import '../../../core/localization/app_localizations.dart';
 
@@ -112,9 +113,9 @@ class _SplashScreenState extends State<SplashScreen>
                     ),
                   ),
                   const SizedBox(height: 24.0),
-                  const Text(
-                    'BrokerHive',
-                    style: TextStyle(
+                  Text(
+                    AppStrings.appName,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 36.0,
                       fontWeight: FontWeight.w800,
