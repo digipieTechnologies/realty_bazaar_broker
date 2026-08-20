@@ -6,7 +6,9 @@ class AppAssets {
 
   // Images Placeholders (for future CRM assets)
   static const String logo = 'assets/logo/app_logo.png';
-  static const String building = 'assets/logo/building.png';
+  static const String logoTransparent = 'assets/logo/app_logo_transparent.png';
+  static const String logoWhite = 'assets/logo/app_logo_white.png';
+  static const String building = 'assets/logo/app_logo_transparent.png';
   static const String defaultAvatar = 'assets/images/default_avatar.png';
   static const String illustrationPlaceholder =
       'assets/images/illustration_placeholder.png';

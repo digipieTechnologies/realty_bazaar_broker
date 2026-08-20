@@ -60,6 +60,7 @@ dependencies:
   onesignal_flutter: ^5.2.8
   device_info_plus: ^11.1.0
   pinput: ^5.0.0
+  firebase_core: ^4.13.0
 
 dev_dependencies:
   flutter_test:
@@ -119,18 +120,18 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 
 flutter_launcher_icons:
-  image_path: "assets/logo/app_logo.png"
+  image_path: "assets/logo/app_logo_white.png"
   android: true
   ios: true
   remove_alpha_ios: true
   web:
     generate: true
-    image_path: "assets/logo/app_logo.png"
+    image_path: "assets/logo/app_logo_transparent.png"
   windows:
     generate: true
-    image_path: "assets/logo/app_logo.png"
+    image_path: "assets/logo/app_logo_white.png"
   macos:
     generate: true
-    image_path: "assets/logo/app_logo.png"
+    image_path_macos: "assets/logo/app_logo_white.png"
 
 

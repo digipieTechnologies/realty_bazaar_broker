@@ -82,12 +82,6 @@ class PropertyCardWidget extends StatelessWidget {
                   top: Radius.circular(14.0),
                 ),
               ),
-              // Top Status Badge
-              Positioned(
-                top: 8,
-                left: 8,
-                child: _buildStatusBadge(context, property.propertyStatus),
-              ),
               // Photo Counter Badge
               Positioned(
                 bottom: 8,
@@ -287,7 +281,6 @@ class PropertyCardWidget extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      _buildStatusBadge(context, property.propertyStatus),
                       const SizedBox(height: 16.0),
                       Text(
                         formattedPrice,
@@ -371,11 +364,6 @@ class PropertyCardWidget extends StatelessWidget {
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(16.0),
                   ),
-                ),
-                Positioned(
-                  top: 10,
-                  left: 10,
-                  child: _buildStatusBadge(context, property.propertyStatus),
                 ),
                 Positioned(
                   bottom: 10,
@@ -680,33 +668,6 @@ class PropertyCardWidget extends StatelessWidget {
         AppToast.showError('Error', propertyProvider.errorMessage ?? 'Could not delete property.');
       }
     }
-  }
-
-  Widget _buildStatusBadge(BuildContext context, dynamic status) {
-    final localizedStatus = PropertyLocalizer.getLocalizedPropertyStatus(
-      context,
-      status,
-    );
-    final statusStr = status is PropertyStatus ? status.name : status.toString();
-    final isAvailable = statusStr.toLowerCase() == 'available';
-    final badgeColor = isAvailable ? AppColors.success : AppColors.warning;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-      decoration: BoxDecoration(
-        color: badgeColor.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(6.0),
-        border: Border.all(color: badgeColor.withValues(alpha: 0.3)),
-      ),
-      child: Text(
-        localizedStatus.toUpperCase(),
-        style: AppTextStyles.caption.copyWith(
-          color: badgeColor,
-          fontSize: 10.0,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
   }
 
   Widget _buildChip({

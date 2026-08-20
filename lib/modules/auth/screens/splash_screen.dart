@@ -107,9 +107,8 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                     ),
                     child: const AppLogo(
-                      size: 64.0,
+                      size: 80.0,
                       backgroundColor: Colors.transparent,
-                      iconColor: Colors.white,
                     ),
                   ),
                   const SizedBox(height: 24.0),

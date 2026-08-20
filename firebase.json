@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "brokerhive-app-v1",
+    "site": "the-realty-bazaar-broker",
     "public": "build/web",
     "ignore": [
       "firebase.json",

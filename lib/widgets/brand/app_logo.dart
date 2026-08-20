@@ -10,6 +10,7 @@ class AppLogo extends StatelessWidget {
   final BorderRadius? borderRadius;
   final Color? backgroundColor;
   final Color? iconColor;
+  final bool useWhiteLogo;
 
   const AppLogo({
     super.key,
@@ -18,16 +19,16 @@ class AppLogo extends StatelessWidget {
     this.borderRadius,
     this.backgroundColor,
     this.iconColor,
+    this.useWhiteLogo = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final effectiveIconSize = iconSize ?? (size * 0.55);
+    final effectiveIconSize = iconSize ?? (size * 0.75);
     final effectiveBorderRadius =
         borderRadius ?? BorderRadius.circular(size * 0.28);
     final effectiveBgColor =
         backgroundColor ?? AppColors.primary.withOpacity(0.08);
-    final effectiveIconColor = iconColor ?? AppColors.primary;
 
     return Container(
       width: size,
@@ -38,8 +39,8 @@ class AppLogo extends StatelessWidget {
       ),
       alignment: Alignment.center,
       child: Image.asset(
-        AppAssets.logo,
-        color: effectiveIconColor,
+        useWhiteLogo ? AppAssets.logoWhite : AppAssets.logoTransparent,
+        color: iconColor,
         width: effectiveIconSize,
         height: effectiveIconSize,
         fit: BoxFit.contain,

@@ -89,11 +89,11 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.therealtybazaar" "\0"
+            VALUE "CompanyName", "com.therealtybazaar.broker" "\0"
             VALUE "FileDescription", "The Realty Bazaar" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "the_realty_bazaar" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2026 com.therealtybazaar. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 com.therealtybazaar.broker. All rights reserved." "\0"
             VALUE "OriginalFilename", "the_realty_bazaar.exe" "\0"
             VALUE "ProductName", "The Realty Bazaar" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"

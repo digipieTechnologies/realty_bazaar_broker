@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "872541492683",
+    "project_id": "the-realty-bazaar",
+    "storage_bucket": "the-realty-bazaar.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:872541492683:android:d4e062e8b189687d00924e",
+        "android_client_info": {
+          "package_name": "com.therealtybazaar.broker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6a0PBkdOvKw7UCqKB9NYr-2gkh2AIuGs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -10,6 +10,11 @@ PODS:
     - FlutterMacOS
   - file_picker (0.0.1):
     - FlutterMacOS
+  - Firebase/CoreOnly (10.29.0):
+    - FirebaseCore (= 10.29.0)
+  - firebase_core (4.13.0):
+    - Firebase/CoreOnly (~> 10.29.0)
+    - FlutterMacOS
   - FirebaseCore (10.29.0):
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.12)
@@ -86,6 +91,7 @@ DEPENDENCIES:
   - device_info_plus (from `Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos`)
   - ffmpeg_kit_flutter_new_min_gpl (from `Flutter/ephemeral/.symlinks/plugins/ffmpeg_kit_flutter_new_min_gpl/macos`)
   - file_picker (from `Flutter/ephemeral/.symlinks/plugins/file_picker/macos`)
+  - firebase_core (from `Flutter/ephemeral/.symlinks/plugins/firebase_core/macos`)
   - FirebaseCore (= 10.29.0)
   - FirebaseCoreInternal (= 10.29.0)
   - FirebaseMessaging (= 10.29.0)
@@ -98,6 +104,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Firebase
     - FirebaseCore
     - FirebaseCoreInternal
     - FirebaseInstallations
@@ -116,6 +123,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/ffmpeg_kit_flutter_new_min_gpl/macos
   file_picker:
     :path: Flutter/ephemeral/.symlinks/plugins/file_picker/macos
+  firebase_core:
+    :path: Flutter/ephemeral/.symlinks/plugins/firebase_core/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
   geolocator_apple:
@@ -134,6 +143,8 @@ SPEC CHECKSUMS:
   device_info_plus: 1b14eed9bf95428983aed283a8d51cce3d8c4215
   ffmpeg_kit_flutter_new_min_gpl: 5fa7f1ca6f63cc2bd9a8a0c894a2efb020ff2c3c
   file_picker: e716a70a9fe5fd9e09ebc922d7541464289443af
+  Firebase: cec914dab6fd7b1bd8ab56ea07ce4e03dd251c2d
+  firebase_core: e9e7733473cb57fbb7f439866e368feb96080d6d
   FirebaseCore: 30e9c1cbe3d38f5f5e75f48bfcea87d7c358ec16
   FirebaseCoreInternal: df84dd300b561c27d5571684f389bf60b0a5c934
   FirebaseInstallations: 913cf60d0400ebd5d6b63a28b290372ab44590dd

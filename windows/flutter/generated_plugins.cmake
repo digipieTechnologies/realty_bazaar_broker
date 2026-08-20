@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   app_links
   ffmpeg_kit_flutter_new_min_gpl
+  firebase_core
   geolocator_windows
   permission_handler_windows
   url_launcher_windows

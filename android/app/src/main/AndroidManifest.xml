@@ -35,22 +35,23 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
-            <!-- Deep Links: App Links for therealtybazaar-app.web.app -->
+            <!-- Deep Links: App Links for the-realty-bazaar-broker.web.app -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data
                     android:scheme="https"
-                    android:host="therealtybazaar-app.web.app"/>
+                    android:host="the-realty-bazaar-broker.web.app"/>
             </intent-filter>
 
-            <!-- Deep Links: Custom URI scheme for therealtybazaar:// -->
+            <!-- Deep Links: Custom URI schemes for therealtybazaar:// and broker:// -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data android:scheme="therealtybazaar"/>
+                <data android:scheme="broker"/>
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
