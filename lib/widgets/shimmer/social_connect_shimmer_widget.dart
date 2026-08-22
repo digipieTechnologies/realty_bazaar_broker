@@ -49,33 +49,40 @@ class SingleSocialConnectCardSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Compact collapsed card skeleton (~56px height) matching compact default closed SocialConnectCard
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(14.0),
-        border: Border.all(color: AppColors.border, width: 1.0),
+        borderRadius: BorderRadius.circular(18.0),
+        border: Border.all(color: AppColors.border, width: 1.2),
       ),
-      padding: const EdgeInsets.all(14.0),
-      child: const Row(
+      padding: EdgeInsets.all(isMobile ? 12.0 : 16.0),
+      child: Row(
         children: [
-          AppShimmerContainer(width: 36, height: 36, borderRadius: 10.0),
-          SizedBox(width: 10.0),
-          Expanded(
+          // Logo Badge Circle Skeleton
+          AppShimmerContainer(
+            width: isMobile ? 32.0 : 38.0,
+            height: isMobile ? 32.0 : 38.0,
+            borderRadius: 19.0,
+          ),
+          const SizedBox(width: 12.0),
+          // Title & Username Lines Skeleton
+          const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                AppShimmerContainer(width: 120, height: 16),
+                AppShimmerContainer(width: 120, height: 15, borderRadius: 4.0),
                 SizedBox(height: 4.0),
-                AppShimmerContainer(width: 80, height: 10),
+                AppShimmerContainer(width: 80, height: 11, borderRadius: 4.0),
               ],
             ),
           ),
-          SizedBox(width: 8.0),
-          AppShimmerContainer(width: 70, height: 20, borderRadius: 6.0),
-          SizedBox(width: 6.0),
-          AppShimmerContainer(width: 16, height: 16, borderRadius: 8.0),
+          const SizedBox(width: 8.0),
+          // Live Status Badge Pill Skeleton
+          const AppShimmerContainer(width: 86, height: 22, borderRadius: 12.0),
+          const SizedBox(width: 6.0),
+          // Chevron Circle Button Skeleton
+          const AppShimmerContainer(width: 24, height: 24, borderRadius: 12.0),
         ],
       ),
     );

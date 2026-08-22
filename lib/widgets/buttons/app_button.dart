@@ -1,7 +1,8 @@
 // File: lib/widgets/buttons/app_button.dart
-// Purpose: Main unified button widget across the entire application with theme support, loading states, variants, and responsive styling.
+// Purpose: Main unified button widget across the entire application with theme support, loading states, variants, responsive styling, and enhanced icon sizes.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
 import '../containers/container_corner.dart';
@@ -16,6 +17,7 @@ class AppButton extends StatelessWidget {
   final AppButtonVariant variant;
   final Widget? icon;
   final IconData? iconData;
+  final double? iconSize;
   final bool isLoading;
   final bool isDisabled;
   final double? width;
@@ -39,6 +41,7 @@ class AppButton extends StatelessWidget {
     this.variant = AppButtonVariant.solid,
     this.icon,
     this.iconData,
+    this.iconSize,
     this.isLoading = false,
     this.isDisabled = false,
     this.width,
@@ -62,6 +65,7 @@ class AppButton extends StatelessWidget {
     VoidCallback? onPressed,
     Widget? icon,
     IconData? iconData,
+    double? iconSize,
     bool isLoading = false,
     bool isDisabled = false,
     double? width,
@@ -79,6 +83,7 @@ class AppButton extends StatelessWidget {
       variant: AppButtonVariant.solid,
       icon: icon,
       iconData: iconData,
+      iconSize: iconSize,
       isLoading: isLoading,
       isDisabled: isDisabled,
       width: width,
@@ -97,6 +102,7 @@ class AppButton extends StatelessWidget {
     VoidCallback? onPressed,
     Widget? icon,
     IconData? iconData,
+    double? iconSize,
     bool isLoading = false,
     bool isDisabled = false,
     double? width,
@@ -114,6 +120,7 @@ class AppButton extends StatelessWidget {
       variant: AppButtonVariant.outline,
       icon: icon,
       iconData: iconData,
+      iconSize: iconSize,
       isLoading: isLoading,
       isDisabled: isDisabled,
       width: width,
@@ -132,6 +139,7 @@ class AppButton extends StatelessWidget {
     VoidCallback? onPressed,
     Widget? icon,
     IconData? iconData,
+    double? iconSize,
     bool isLoading = false,
     bool isDisabled = false,
     double? width,
@@ -148,6 +156,7 @@ class AppButton extends StatelessWidget {
       variant: AppButtonVariant.gradient,
       icon: icon,
       iconData: iconData,
+      iconSize: iconSize,
       isLoading: isLoading,
       isDisabled: isDisabled,
       width: width,
@@ -161,7 +170,8 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool effectivelyDisabled = isDisabled || isLoading || onPressed == null;
+    final bool effectivelyDisabled =
+        isDisabled || isLoading || onPressed == null;
 
     // Resolve colors & styles based on theme and variant
     Color resolvedBgColor = Colors.transparent;
@@ -169,7 +179,8 @@ class AppButton extends StatelessWidget {
     Color resolvedBorderColor = Colors.transparent;
 
     TextStyle defaultBaseStyle = textStyle ?? AppTextStyles.button;
-    Color resolvedTextColor = textColor ?? defaultBaseStyle.color ?? AppColors.surface;
+    Color resolvedTextColor =
+        textColor ?? defaultBaseStyle.color ?? AppColors.surface;
 
     if (effectivelyDisabled) {
       resolvedBgColor = AppColors.border;
@@ -211,7 +222,7 @@ class AppButton extends StatelessWidget {
           break;
 
         case AppButtonVariant.danger:
-          resolvedBgColor = color ?? const Color(0xFFEF4444);
+          resolvedBgColor = color ?? AppColors.error;
           resolvedTextColor = textColor ?? AppColors.surface;
           break;
       }
@@ -222,12 +233,16 @@ class AppButton extends StatelessWidget {
       fontWeight: defaultBaseStyle.fontWeight ?? FontWeight.bold,
     );
 
+    // Calculate prominent icon size (default ~22.0)
+    final double defaultIconSize =
+        iconSize ?? ((resolvedStyle.fontSize ?? 14.0) + 7.0);
+
     // Build icon widget
     Widget? effectiveIcon = icon;
     if (effectiveIcon == null && iconData != null) {
       effectiveIcon = Icon(
         iconData,
-        size: (resolvedStyle.fontSize ?? 14.0) + 4.0,
+        size: defaultIconSize,
         color: resolvedTextColor,
       );
     }
@@ -237,38 +252,48 @@ class AppButton extends StatelessWidget {
     if (child != null) {
       bodyContent = child!;
     } else {
-      bodyContent = Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (isLoading) ...[
-            AppLoader(
-              size: (resolvedStyle.fontSize ?? 14.0) + 4.0,
-              color: resolvedTextColor,
-            ),
-            SizedBox(width: iconSpacing),
-          ] else if (effectiveIcon != null) ...[
-            effectiveIcon,
-            if (text != null && text!.isNotEmpty) SizedBox(width: iconSpacing),
-          ],
-          if (text != null && text!.isNotEmpty)
-            Flexible(
-              child: Text(
-                text!,
-                style: resolvedStyle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+      bodyContent = IconTheme(
+        data: IconThemeData(
+          color: resolvedTextColor,
+          size: defaultIconSize,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (isLoading) ...[
+              AppLoader(
+                size: defaultIconSize,
+                color: resolvedTextColor,
               ),
-            ),
-        ],
+              SizedBox(width: iconSpacing),
+            ] else if (effectiveIcon != null) ...[
+              effectiveIcon,
+              if (text != null && text!.isNotEmpty) SizedBox(width: iconSpacing),
+            ],
+            if (text != null && text!.isNotEmpty)
+              Flexible(
+                child: Text(
+                  text!,
+                  style: resolvedStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+          ],
+        ),
       );
     }
 
     Widget buttonWidget = ContainerCorner(
       width: width,
       height: height,
-      color: variant == AppButtonVariant.gradient && !effectivelyDisabled ? null : resolvedBgColor,
-      colors: variant == AppButtonVariant.gradient && !effectivelyDisabled ? resolvedGradient : [Colors.transparent, Colors.transparent],
+      color: variant == AppButtonVariant.gradient && !effectivelyDisabled
+          ? null
+          : resolvedBgColor,
+      colors: variant == AppButtonVariant.gradient && !effectivelyDisabled
+          ? resolvedGradient
+          : [Colors.transparent, Colors.transparent],
       borderColor: resolvedBorderColor,
       borderWidth: resolvedBorderColor != Colors.transparent ? 1.5 : 0.0,
       borderRadius: borderRadius,

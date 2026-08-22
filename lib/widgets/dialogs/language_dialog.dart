@@ -8,7 +8,7 @@ import '../../app/app_text_styles.dart';
 import '../../models/language_model.dart';
 import '../../providers/language/language_provider.dart';
 import '../../core/localization/app_localizations.dart';
-import '../buttons/rounded_button.dart';
+import '../buttons/app_button.dart';
 import '../containers/container_corner.dart';
 
 class LanguageDialog extends StatefulWidget {
@@ -157,9 +157,9 @@ class _LanguageDialogState extends State<LanguageDialog> {
             Row(
               children: [
                 Expanded(
-                  child: RoundedButton(
+                  child: AppButton(
                     text: context.tr('cancel'),
-                    variant: ButtonVariant.outline,
+                    variant: AppButtonVariant.outline,
                     borderColor: AppColors.border,
                     textStyle: AppTextStyles.button.copyWith(
                       color: AppColors.textPrimary,
@@ -171,9 +171,9 @@ class _LanguageDialogState extends State<LanguageDialog> {
                 ),
                 const SizedBox(width: 12.0),
                 Expanded(
-                  child: RoundedButton(
+                  child: AppButton(
                     text: context.tr('save'),
-                    variant: ButtonVariant.solid,
+                    variant: AppButtonVariant.solid,
                     color: AppColors.primary,
                     onPressed: () {
                       languageProvider.setLanguage(_selectedLanguageCode);

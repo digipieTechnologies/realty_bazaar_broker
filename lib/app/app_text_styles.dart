@@ -1,5 +1,5 @@
 // File: lib/app/app_text_styles.dart
-// Purpose: Design system typography tokens.
+// Purpose: Design system typography tokens with enhanced legibility sizes.
 
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
@@ -9,7 +9,7 @@ class AppTextStyles {
 
   // Heading Styles
   static const TextStyle heading1 = TextStyle(
-    fontSize: 28.0,
+    fontSize: 30.0,
     fontWeight: FontWeight.w700,
     color: AppColors.textPrimary,
     letterSpacing: -0.5,
@@ -17,7 +17,7 @@ class AppTextStyles {
   );
 
   static const TextStyle heading2 = TextStyle(
-    fontSize: 22.0,
+    fontSize: 24.0,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
     letterSpacing: -0.3,
@@ -25,7 +25,7 @@ class AppTextStyles {
   );
 
   static const TextStyle heading3 = TextStyle(
-    fontSize: 18.0,
+    fontSize: 19.0,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
     letterSpacing: -0.2,
@@ -34,7 +34,7 @@ class AppTextStyles {
 
   // Subtitle/Large Body Styles
   static const TextStyle subtitle = TextStyle(
-    fontSize: 16.0,
+    fontSize: 17.0,
     fontWeight: FontWeight.w500,
     color: AppColors.textSecondary,
     height: 1.4,
@@ -42,14 +42,14 @@ class AppTextStyles {
 
   // Body Styles
   static const TextStyle body1 = TextStyle(
-    fontSize: 15.0,
+    fontSize: 16.0,
     fontWeight: FontWeight.w400,
     color: AppColors.textPrimary,
     height: 1.5,
   );
 
   static const TextStyle body2 = TextStyle(
-    fontSize: 13.0,
+    fontSize: 14.0,
     fontWeight: FontWeight.w400,
     color: AppColors.textSecondary,
     height: 1.45,
@@ -57,7 +57,7 @@ class AppTextStyles {
 
   // Caption/Small Styles
   static const TextStyle caption = TextStyle(
-    fontSize: 11.0,
+    fontSize: 12.0,
     fontWeight: FontWeight.w400,
     color: AppColors.textMuted,
     letterSpacing: 0.1,
@@ -66,7 +66,7 @@ class AppTextStyles {
 
   // Interactive Styles
   static const TextStyle button = TextStyle(
-    fontSize: 13.0,
+    fontSize: 14.5,
     fontWeight: FontWeight.w600,
     color: AppColors.surface,
     letterSpacing: 0.2,
@@ -74,14 +74,14 @@ class AppTextStyles {
   );
 
   static const TextStyle textField = TextStyle(
-    fontSize: 14.0,
+    fontSize: 15.0,
     fontWeight: FontWeight.w400,
     color: AppColors.textPrimary,
     height: 1.2,
   );
 
   static const TextStyle label = TextStyle(
-    fontSize: 12.0,
+    fontSize: 13.0,
     fontWeight: FontWeight.w500,
     color: AppColors.textSecondary,
     letterSpacing: 0.2,
@@ -89,7 +89,7 @@ class AppTextStyles {
   );
 
   static const TextStyle error = TextStyle(
-    fontSize: 12.0,
+    fontSize: 13.0,
     fontWeight: FontWeight.w400,
     color: AppColors.error,
     height: 1.2,

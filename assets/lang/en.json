@@ -12,6 +12,7 @@
   "step_configure_notifications": "Configure Notifications",
   "quick_actions": "QUICK ACTIONS",
   "action_profile": "Profile",
+  "profile": "Profile",
   "action_edit_business": "Edit Business",
   "action_import_properties": "Import Properties",
   "action_invite_team": "Invite Team",
@@ -77,6 +78,9 @@
   "hindi": "Hindi",
   "gujarati": "Gujarati",
   "cancel": "Cancel",
+  "discard": "Discard",
+  "discard_changes": "Discard Changes?",
+  "discard_changes_desc": "Are you sure you want to go back? Unsaved property details will be lost.",
   "save": "Save",
   "ok": "OK",
   "close": "Close",
@@ -213,6 +217,7 @@
   "search_property_hint": "Search title, description, area, 2 BHK, garden...",
   "add_property": "Add Property",
   "add_new_property": "Add New Property",
+  "edit": "Edit",
   "edit_property": "Edit Property",
   "delete_property": "Delete Property",
   "delete_property_confirm_desc": "Are you sure you want to delete \"{title}\"? This action cannot be undone.",
@@ -486,5 +491,10 @@
   "publish_now": "Publish Now",
   "next": "Next",
   "post_property_title": "Post Property to Social Media",
-  "post_property_subtitle": "Publish listing across Instagram & Facebook"
+  "post_property_subtitle": "Publish listing across Instagram & Facebook",
+  "location": "Location",
+  "toast_property_deleted_title": "Property Deleted",
+  "toast_property_deleted_desc": "The property has been deleted successfully.",
+  "post_property_feature_desc": "Share this listing on social channels to attract active buyers & capture lead inquiries.",
+  "video_request_feature_desc": "Request a professional walkthrough video tour from our media production team."
 }

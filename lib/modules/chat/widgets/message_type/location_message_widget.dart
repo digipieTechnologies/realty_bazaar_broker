@@ -74,7 +74,7 @@ class LocationMessageWidget extends StatelessWidget {
                     'assets/images/map_placeholder.png',
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) => Container(
-                      color: const Color(0xFFE5E7EB),
+                      color: AppColors.border,
                       child: const Icon(Icons.map_rounded, size: 40.0, color: AppColors.textMuted),
                     ),
                   ),

@@ -10,6 +10,7 @@ import '../../core/utils/common_ext.dart';
 import '../../util/app_utils.dart';
 import '../images/cached_image.dart';
 import '../toast/app_toast.dart';
+import '../buttons/app_button.dart';
 
 class AppFilePreviewDialog extends StatefulWidget {
   final String? fileUrl;
@@ -204,7 +205,7 @@ class _AppFilePreviewDialogState extends State<AppFilePreviewDialog> {
           margin: const EdgeInsets.all(16.0),
           padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
-            color: const Color(0xFF1E1E1E),
+            color: AppColors.darkCanvas,
             borderRadius: BorderRadius.circular(12.0),
             border: Border.all(color: Colors.white12),
           ),
@@ -239,7 +240,7 @@ class _AppFilePreviewDialogState extends State<AppFilePreviewDialog> {
                     child: SelectableText(
                       _textContent!,
                       style: const TextStyle(
-                        color: Color(0xFFD4D4D4),
+                        color: AppColors.darkCanvasLight,
                         fontFamily: 'monospace',
                         fontSize: 13.0,
                         height: 1.4,
@@ -297,16 +298,14 @@ class _AppFilePreviewDialogState extends State<AppFilePreviewDialog> {
             ),
           ],
           const SizedBox(height: 32.0),
-          ElevatedButton.icon(
+          AppButton.solid(
+            text: 'Open or Download $ext File',
+            iconData: Icons.file_download_rounded,
+            height: 48.0,
+            borderRadius: 10.0,
+            color: AppColors.primary,
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
             onPressed: _openExternal,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 14.0),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-            ),
-            icon: const Icon(Icons.file_download_rounded),
-            label: Text('Open or Download $ext File'),
           ),
         ],
       ),

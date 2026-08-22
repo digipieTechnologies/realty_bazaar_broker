@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
-import '../buttons/rounded_button.dart';
+import '../buttons/app_button.dart';
 import '../containers/container_corner.dart';
 
 enum DialogType { info, success, error, warning }
@@ -157,9 +157,9 @@ class AppDialog extends StatelessWidget {
                 children: [
                   if (cancelText != null) ...[
                     Expanded(
-                      child: RoundedButton(
+                      child: AppButton(
                         text: cancelText,
-                        variant: ButtonVariant.outline,
+                        variant: AppButtonVariant.outline,
                         borderColor: AppColors.border,
                         textStyle: AppTextStyles.button.copyWith(
                           color: AppColors.textSecondary,
@@ -170,9 +170,9 @@ class AppDialog extends StatelessWidget {
                     const SizedBox(width: 12.0),
                   ],
                   Expanded(
-                    child: RoundedButton(
+                    child: AppButton(
                       text: confirmText,
-                      variant: ButtonVariant.solid,
+                      variant: AppButtonVariant.solid,
                       color: themeColor,
                       onPressed: () => Navigator.of(ctx).pop(true),
                     ),
@@ -262,9 +262,9 @@ class AppDialog extends StatelessWidget {
                 children: [
                   if (cancelText != null) ...[
                     Expanded(
-                      child: RoundedButton(
+                      child: AppButton(
                         text: cancelText!,
-                        variant: ButtonVariant.outline,
+                        variant: AppButtonVariant.outline,
                         borderColor: AppColors.border,
                         textStyle: AppTextStyles.button.copyWith(
                           color: AppColors.textSecondary,
@@ -278,9 +278,9 @@ class AppDialog extends StatelessWidget {
                     const SizedBox(width: 12.0),
                   ],
                   Expanded(
-                    child: RoundedButton(
+                    child: AppButton(
                       text: confirmText,
-                      variant: ButtonVariant.solid,
+                      variant: AppButtonVariant.solid,
                       color: themeColor,
                       onPressed: () {
                         Navigator.of(context).pop();

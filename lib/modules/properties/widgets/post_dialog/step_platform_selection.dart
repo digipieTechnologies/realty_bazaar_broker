@@ -273,7 +273,7 @@ class StepPlatformSelection extends StatelessWidget {
       subtitle: context.tr('ig_feed_desc'),
       logoPath: 'assets/icons/instagram.png',
       fallbackIcon: Icons.camera_alt_rounded,
-      brandColor: const Color(0xFFE1306C),
+      brandColor: AppColors.instagram,
       isSelected: selectInstagram,
       isConnected: isConnected,
       accountName: accountName,
@@ -293,7 +293,7 @@ class StepPlatformSelection extends StatelessWidget {
       subtitle: context.tr('fb_page_desc'),
       logoPath: 'assets/icons/facebook.png',
       fallbackIcon: Icons.facebook_rounded,
-      brandColor: const Color(0xFF1877F2),
+      brandColor: AppColors.facebook,
       isSelected: selectFacebook,
       isConnected: isConnected,
       accountName: accountName,
@@ -315,10 +315,10 @@ class StepPlatformSelection extends StatelessWidget {
     String? accountName,
     required VoidCallback onTap,
   }) {
-    final badgeBgColor = isConnected ? const Color(0xFFECFDF5) : const Color(0xFFFFFBEB);
-    final badgeBorderColor = isConnected ? const Color(0xFFA7F3D0) : const Color(0xFFFDE68A);
-    final badgeTextColor = isConnected ? const Color(0xFF047857) : const Color(0xFFB45309);
-    final badgeDotColor = isConnected ? const Color(0xFF059669) : const Color(0xFFD97706);
+    final badgeBgColor = isConnected ? AppColors.statusSuccessBgLight : AppColors.statusWarningBgLight;
+    final badgeBorderColor = isConnected ? AppColors.statusSuccessBorderLight : AppColors.statusWarningBorderLight;
+    final badgeTextColor = isConnected ? AppColors.statusSuccessDarkText : AppColors.statusWarningText;
+    final badgeDotColor = isConnected ? AppColors.statusSuccessText : AppColors.tagAmber;
     final statusText = isConnected ? (accountName != null ? '@$accountName' : context.tr('connected')) : context.tr('not_connected');
 
     return InkWell(
@@ -447,22 +447,22 @@ class StepPlatformSelection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-        color: const Color(0xFFFEF2F2),
+        color: AppColors.errorLight,
         borderRadius: BorderRadius.circular(12.0),
-        border: Border.all(color: const Color(0xFFFCA5A5)),
+        border: Border.all(color: AppColors.errorBorder),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(Icons.warning_amber_rounded, color: Color(0xFFDC2626), size: 18.0),
+              const Icon(Icons.warning_amber_rounded, color: AppColors.error, size: 18.0),
               const SizedBox(width: 8.0),
               Expanded(
                 child: Text(
                   context.tr('account_conn_required'),
                   style: AppTextStyles.body2.copyWith(
-                    color: const Color(0xFF991B1B),
+                    color: AppColors.posterBurgundy,
                     fontWeight: FontWeight.bold,
                     fontSize: 12.0,
                   ),
@@ -473,7 +473,7 @@ class StepPlatformSelection extends StatelessWidget {
           const SizedBox(height: 6.0),
           Text(
             connectionErrorMessage!,
-            style: AppTextStyles.caption.copyWith(color: const Color(0xFFB91C1C), fontSize: 11.0),
+            style: AppTextStyles.caption.copyWith(color: AppColors.error, fontSize: 11.0),
           ),
           const SizedBox(height: 10.0),
           Wrap(
@@ -484,7 +484,7 @@ class StepPlatformSelection extends StatelessWidget {
                 AppButton(
                   text: context.tr('connect_instagram_business'),
                   iconData: Icons.link_rounded,
-                  color: const Color(0xFFE1306C),
+                  color: AppColors.instagram,
                   height: 36.0,
                   borderRadius: 8.0,
                   onPressed: () {
@@ -496,7 +496,7 @@ class StepPlatformSelection extends StatelessWidget {
                 AppButton(
                   text: context.tr('connect_facebook_page'),
                   iconData: Icons.link_rounded,
-                  color: const Color(0xFF1877F2),
+                  color: AppColors.facebook,
                   height: 36.0,
                   borderRadius: 8.0,
                   onPressed: () {

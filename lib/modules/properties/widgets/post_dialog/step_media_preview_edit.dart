@@ -392,9 +392,9 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
-                          Icons.arrow_back_ios_rounded,
+                          Icons.chevron_left_rounded,
                           color: Colors.white,
-                          size: 13.0,
+                          size: 18.0,
                         ),
                       ),
                     ),
@@ -416,9 +416,9 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
-                          Icons.arrow_forward_ios_rounded,
+                          Icons.chevron_right_rounded,
                           color: Colors.white,
-                          size: 13.0,
+                          size: 18.0,
                         ),
                       ),
                     ),
@@ -502,7 +502,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
               _buildThemeOption('black', 'Black', Colors.black, Colors.black),
               _buildThemeOption('white', 'White', Colors.white, Colors.white),
               _buildThemeOption('classic', 'Classic', Colors.red.shade900, Colors.blue.shade700),
-              _buildThemeOption('gold', 'Gold', const Color(0xFFD97706), const Color(0xFFB45309)),
+              _buildThemeOption('gold', 'Gold', AppColors.posterGold, AppColors.posterGoldDark),
               _buildThemeOption('minimal', 'Minimal', AppColors.primary, AppColors.secondary),
             ],
           ),
@@ -666,7 +666,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
         baseColor = Colors.black;
         break;
       case 'gold':
-        baseColor = const Color(0xFFFEF3C7);
+        baseColor = AppColors.posterGoldLight;
         break;
       case 'minimal':
         baseColor = AppColors.surface;
@@ -687,7 +687,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
       case 'black':
         return Colors.white;
       case 'gold':
-        return const Color(0xFF92400E);
+        return AppColors.statusWarningDarkText;
       case 'minimal':
         return AppColors.textPrimary;
       case 'white':
@@ -705,7 +705,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
         baseColor = Colors.black;
         break;
       case 'gold':
-        baseColor = const Color(0xFFD97706);
+        baseColor = AppColors.posterGold;
         break;
       case 'minimal':
         baseColor = AppColors.primary;
@@ -715,7 +715,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
         break;
       case 'classic':
       default:
-        baseColor = const Color(0xFF4A76A8); // Soft blue
+        baseColor = AppColors.posterBlueSoft; // Soft blue
         break;
     }
     return _isTransparent ? baseColor.withValues(alpha: 0.25) : baseColor;
@@ -739,7 +739,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
         baseColor = Colors.black;
         break;
       case 'gold':
-        baseColor = const Color(0xFFB45309);
+        baseColor = AppColors.posterGoldDark;
         break;
       case 'minimal':
         baseColor = AppColors.primary;
@@ -749,7 +749,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
         break;
       case 'classic':
       default:
-        baseColor = const Color(0xFF991B1B); // Dark red / Burgundy
+        baseColor = AppColors.posterBurgundy; // Dark red / Burgundy
         break;
     }
     return _isTransparent ? baseColor.withValues(alpha: 0.25) : baseColor;
@@ -773,7 +773,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
         baseColor = Colors.black;
         break;
       case 'gold':
-        baseColor = const Color(0xFF78350F);
+        baseColor = AppColors.posterGoldBrown;
         break;
       case 'minimal':
         baseColor = AppColors.secondary;
@@ -783,7 +783,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
         break;
       case 'classic':
       default:
-        baseColor = const Color(0xFF881337); // Deep rose red
+        baseColor = AppColors.posterRoseRed; // Deep rose red
         break;
     }
     return _isTransparent ? baseColor.withValues(alpha: 0.25) : baseColor;

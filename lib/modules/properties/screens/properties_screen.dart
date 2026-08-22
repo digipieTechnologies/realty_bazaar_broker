@@ -7,6 +7,7 @@ import '../../../app/app_text_styles.dart';
 import '../../../models/property_model.dart';
 import '../../../providers/property/property_provider.dart';
 import '../../../providers/auth/auth_provider.dart';
+import '../../../util/common_ext.dart';
 import '../../../widgets/common/search_filter_header_widget.dart';
 import '../../../widgets/shimmer/property_list_shimmer_widget.dart';
 import '../../../widgets/common/app_card_container.dart';
@@ -70,7 +71,7 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
   }
 
   void _openAddEditPropertyScreen([PropertyModel? property]) {
-    Navigator.of(context).push(
+    Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
         builder: (context) => AddEditPropertyScreen(propertyToEdit: property),
       ),
@@ -79,11 +80,16 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = context.isMobileUI;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: AppConstants.getTabPadding(context),
+          padding: AppConstants.getTabPadding(
+            context,
+            bottomExtra: isMobile ? 80.0 : 24.0,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -96,25 +102,14 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
                   _searchController.clear();
                   _onSearchQueryChanged('');
                 },
-                trailingAction: MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: SizedBox(
-                    height: 46.0,
-                    width: 46.0,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: Colors.white,
-                        padding: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        elevation: 0,
-                      ),
-                      onPressed: () => _openAddEditPropertyScreen(),
-                      child: const Icon(Icons.add_rounded, size: 24.0),
-                    ),
-                  ),
+                trailingAction: AppButton.solid(
+                  iconData: Icons.add_rounded,
+                  width: 46.0,
+                  height: 46.0,
+                  borderRadius: 12.0,
+                  padding: EdgeInsets.zero,
+                  color: AppColors.primary,
+                  onPressed: () => _openAddEditPropertyScreen(),
                 ),
               ),
               const SizedBox(height: 20.0),

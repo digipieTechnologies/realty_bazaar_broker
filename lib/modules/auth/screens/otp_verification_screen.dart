@@ -15,7 +15,7 @@ import '../../../core/localization/app_localizations.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../util/common_ext.dart';
 import '../../../widgets/brand/app_logo.dart';
-import '../../../widgets/buttons/rounded_button.dart';
+import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/toast/app_toast.dart';
 import '../widgets/auth_header_widget.dart';
 
@@ -409,9 +409,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         const SizedBox(height: 32.0),
 
         // Verify button
-        RoundedButton(
+        AppButton(
           text: 'Verify Email',
-          variant: ButtonVariant.gradient,
+          variant: AppButtonVariant.gradient,
           isLoading: isLoading,
           icon: const Icon(
             Icons.check_circle_outline_rounded,
@@ -489,9 +489,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Icon(
-                  Icons.arrow_back_rounded,
+                  Icons.chevron_left_rounded,
                   color: AppColors.textPrimary,
-                  size: 18.0,
+                  size: 20.0,
                 ),
                 const SizedBox(width: 8.0),
                 Text(

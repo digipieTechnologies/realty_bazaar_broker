@@ -69,7 +69,7 @@ class ChatAttachmentPreviewWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12.0),
                     border: Border.all(color: AppColors.border),
-                    color: isImage || isVideo ? AppColors.surfaceLight : const Color(0xFFCCCCCC),
+                    color: isImage || isVideo ? AppColors.surfaceLight : AppColors.slate300,
                   ),
                   clipBehavior: Clip.antiAlias,
                   child: isImage || isVideo
@@ -109,7 +109,7 @@ class ChatAttachmentPreviewWidget extends StatelessWidget {
                             const Icon(
                               Icons.article_rounded,
                               size: 32.0,
-                              color: Color(0xFF374151),
+                              color: AppColors.textDarkSlate,
                             ),
                             const SizedBox(height: 4.0),
                             Text(
@@ -117,7 +117,7 @@ class ChatAttachmentPreviewWidget extends StatelessWidget {
                               style: const TextStyle(
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF1F2937),
+                                color: AppColors.textDarkGray,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,

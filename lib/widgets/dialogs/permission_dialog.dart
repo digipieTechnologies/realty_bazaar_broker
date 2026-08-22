@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
+import '../buttons/app_button.dart';
 
 class PermissionDialog extends StatelessWidget {
   final String title;
@@ -82,51 +83,31 @@ class PermissionDialog extends StatelessWidget {
               children: [
                 // Cancel Button
                 Expanded(
-                  child: OutlinedButton(
+                  child: AppButton.outline(
+                    text: cancelButtonText,
+                    height: 44.0,
+                    borderRadius: 12.0,
+                    borderColor: AppColors.border,
+                    textColor: AppColors.textSecondary,
                     onPressed: () {
                       Navigator.of(context).pop(false);
                       onCancelPressed?.call();
                     },
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 12.0),
-                      side: const BorderSide(color: AppColors.border),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                    ),
-                    child: Text(
-                      cancelButtonText,
-                      style: AppTextStyles.button.copyWith(
-                        color: AppColors.textSecondary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
                   ),
                 ),
                 const SizedBox(width: 12.0),
 
                 // Primary Action Button (Open Settings / Allow)
                 Expanded(
-                  child: ElevatedButton(
+                  child: AppButton.solid(
+                    text: primaryButtonText,
+                    height: 44.0,
+                    borderRadius: 12.0,
+                    color: AppColors.primary,
                     onPressed: () {
                       Navigator.of(context).pop(true);
                       onPrimaryPressed();
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(vertical: 12.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                    ),
-                    child: Text(
-                      primaryButtonText,
-                      style: AppTextStyles.button.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
                   ),
                 ),
               ],

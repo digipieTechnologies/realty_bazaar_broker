@@ -11,7 +11,7 @@ import '../../core/localization/app_localizations.dart';
 import '../../models/models.dart';
 import '../../modules/properties/widgets/select_property_tile_widget.dart';
 import '../../providers/property/property_provider.dart';
-import '../buttons/rounded_button.dart';
+import '../buttons/app_button.dart';
 import '../inputs/app_textfield.dart';
 import '../shimmer/select_property_list_shimmer_widget.dart';
 import 'video_request_dialog.dart';
@@ -162,11 +162,11 @@ class _SelectPropertyForVideoRequestDialogState
       footer: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          RoundedButton(
+          AppButton(
             text: context.tr('continue_button'),
             onPressed: _selectedProperty == null ? null : _handleContinue,
             isDisabled: _selectedProperty == null,
-            variant: ButtonVariant.solid,
+            variant: AppButtonVariant.solid,
             color: AppColors.primary,
             height: 44.0,
             borderRadius: 10.0,

@@ -49,7 +49,7 @@ class SelectPropertyTileWidget extends StatelessWidget {
     final priceStr = _formatPrice(property.price);
     final locationStr = _formatLocation(property.address);
     final bhkStr = property.bedrooms > 0 ? '${property.bedrooms} BHK' : '';
-    final typeStr = property.propertyType.name.toUpperCase();
+    final typeStr = property.propertyType.displayName.toUpperCase();
 
     return Container(
       margin: const EdgeInsets.only(bottom: 10.0),

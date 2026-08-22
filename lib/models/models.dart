@@ -8,6 +8,7 @@ export 'social_account_model.dart';
 export 'social_post_model.dart';
 export 'social_lead_model.dart';
 export 'property_model.dart';
+export 'property_enums.dart';
 export 'media_model.dart';
 export 'language_model.dart';
 export 'video_request_enums.dart';

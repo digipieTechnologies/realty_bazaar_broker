@@ -89,8 +89,6 @@ class SocialPostListShimmerWidget extends StatelessWidget {
                     AppShimmerContainer(width: 35.0, height: 16.0, borderRadius: 4.0),
                     SizedBox(width: 10.0),
                     AppShimmerContainer(width: 35.0, height: 16.0, borderRadius: 4.0),
-                    SizedBox(width: 10.0),
-                    AppShimmerContainer(width: 35.0, height: 16.0, borderRadius: 4.0),
                     Spacer(),
                     AppShimmerContainer(width: 120.0, height: 34.0, borderRadius: 8.0),
                   ],

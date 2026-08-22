@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
+import '../buttons/app_back_button.dart';
 
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
@@ -30,7 +31,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.leading,
     this.showBackButton = true,
     this.onBackPressed,
-    this.backIcon = Icons.arrow_back_rounded,
+    this.backIcon = Icons.chevron_left_rounded,
     this.actions,
     this.backgroundColor,
     this.foregroundColor,
@@ -58,23 +59,10 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     Widget? leadingWidget = leading;
     if (leadingWidget == null && effectiveShowBackButton) {
-      leadingWidget = MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: IconButton(
-          icon: Icon(
-            backIcon,
-            color: effectiveFgColor,
-            size: 22.0,
-          ),
-          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-          onPressed: () {
-            if (onBackPressed != null) {
-              onBackPressed!();
-            } else {
-              Navigator.of(context).maybePop();
-            }
-          },
-        ),
+      leadingWidget = AppBackButton(
+        icon: backIcon,
+        color: effectiveFgColor,
+        onPressed: onBackPressed,
       );
     }
 

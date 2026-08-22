@@ -21,7 +21,7 @@ class PropertyPreviewSpecsGrid extends StatelessWidget {
         '${property.area.toStringAsFixed(0)} ${PropertyLocalizer.getLocalizedAreaUnit(context, property.areaUnit)}';
 
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(14.0),
       decoration: BoxDecoration(
         color: AppColors.background,
         borderRadius: BorderRadius.circular(16.0),

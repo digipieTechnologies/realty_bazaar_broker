@@ -9,6 +9,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../app/app_assets.dart';
 import '../../../app/app_colors.dart';
 import '../../../app/app_strings.dart';
 import '../../../app/app_text_styles.dart';
@@ -23,6 +24,9 @@ import '../widgets/compact_setup_progress_widget.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../widgets/dialogs/language_dialog.dart';
 
+import '../../../widgets/navigation/app_bottom_navigation_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 class ShellLayoutScreen extends StatefulWidget {
   final Widget child;
 
@@ -35,62 +39,43 @@ class ShellLayoutScreen extends StatefulWidget {
 class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // Definition of navigation items
+  // Definition of navigation items for desktop sidebar
   static const List<_NavigationItem> _navItems = [
     _NavigationItem(
       title: 'Dashboard',
       titleKey: 'dashboard',
       path: '/dashboard',
-      icon: Icons.grid_view_rounded,
+      filledIconAsset: AppAssets.icDashboardFilled,
+      outlineIconAsset: AppAssets.icDashboardOutline,
     ),
     _NavigationItem(
       title: 'Posts',
       titleKey: 'posts',
       path: '/posts',
-      icon: Icons.article_outlined,
+      filledIconAsset: AppAssets.icPostsFilled,
+      outlineIconAsset: AppAssets.icPostsOutline,
     ),
     _NavigationItem(
       title: 'Leads',
       titleKey: 'leads',
       path: '/leads',
-      icon: Icons.people_outline_rounded,
+      filledIconAsset: AppAssets.icLeadsFilled,
+      outlineIconAsset: AppAssets.icLeadsOutline,
     ),
     _NavigationItem(
       title: 'Properties',
       titleKey: 'properties',
       path: '/properties',
-      icon: Icons.apartment_rounded,
+      filledIconAsset: AppAssets.icPropertiesFilled,
+      outlineIconAsset: AppAssets.icPropertiesOutline,
     ),
     _NavigationItem(
       title: 'Request Video',
       titleKey: 'request_video',
       path: '/request-video',
-      icon: Icons.videocam_outlined,
+      filledIconAsset: AppAssets.icVideoFilled,
+      outlineIconAsset: AppAssets.icVideoOutline,
     ),
-    // _NavigationItem(
-    //   title: 'Referrals',
-    //   titleKey: 'referrals',
-    //   path: '/referrals',
-    //   icon: Icons.share_outlined,
-    // ),
-    // _NavigationItem(
-    //   title: 'Reports',
-    //   titleKey: 'reports',
-    //   path: '/reports',
-    //   icon: Icons.bar_chart_rounded,
-    // ),
-    // _NavigationItem(
-    //   title: 'Settings',
-    //   titleKey: 'settings',
-    //   path: '/settings',
-    //   icon: Icons.settings_outlined,
-    // ),
-    // _NavigationItem(
-    //   title: 'Help',
-    //   titleKey: 'system_help',
-    //   path: '/help',
-    //   icon: Icons.help_outline_rounded,
-    // ),
   ];
 
   @override
@@ -121,9 +106,6 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
 
   void _onTabSelected(int index) {
     if (!mounted) return;
-    if (_scaffoldKey.currentState?.isDrawerOpen ?? false) {
-      _scaffoldKey.currentState?.closeDrawer();
-    }
     context.go(_navItems[index].path);
   }
 
@@ -186,7 +168,7 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
       );
     }
 
-    // Determine screen label for mobile AppBar title
+    // Determine screen label for mobile/tablet AppBar title
     String mobileTitle = context.tr('dashboard');
     if (location.startsWith('/profile')) {
       mobileTitle = context.tr('action_profile');
@@ -199,36 +181,15 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
       }
     }
 
-    // Mobile layout
+    // Mobile & Tablet layout with Bottom Navigation Bar (No Drawer)
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: AppColors.background,
-      drawer: Drawer(
-        width: 260.0,
-        backgroundColor: AppColors.surface,
-        elevation: 0.0,
-        child: _buildSidebar(
-          currentIndex,
-          location.startsWith('/profile'),
-          profile == null,
-          displayName,
-          displayRole,
-          displayEmail,
-        ),
-      ),
       appBar: CommonAppBar(
         key: const ValueKey('mobile_appbar'),
         title: mobileTitle,
         showBackButton: false,
-        leading: Builder(
-          builder: (context) => MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: IconButton(
-              icon: const Icon(Icons.menu_rounded, color: AppColors.textPrimary),
-              onPressed: () => Scaffold.of(context).openDrawer(),
-            ),
-          ),
-        ),
+        leading: null,
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 12.0),
@@ -237,6 +198,7 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
         ],
       ),
       body: profile == null ? const DashboardShimmerWidget() : widget.child,
+      bottomNavigationBar: AppBottomNavigationBar(currentPath: location),
     );
   }
 
@@ -361,8 +323,8 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
               ),
             ),
             const Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 10.0,
+              Icons.chevron_right_rounded,
+              size: 16.0,
               color: AppColors.textMuted,
             ),
           ],
@@ -389,12 +351,20 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
             Row(
               children: [
                 const SizedBox(width: 12.0),
-                Icon(
-                  item.icon,
-                  size: 20.0,
-                  color: isSelected
-                      ? AppColors.primary
-                      : AppColors.textSecondary,
+                SizedBox(
+                  width: 20.0,
+                  height: 20.0,
+                  child: SvgPicture.asset(
+                    isSelected ? item.filledIconAsset : item.outlineIconAsset,
+                    width: 20.0,
+                    height: 20.0,
+                    colorFilter: ColorFilter.mode(
+                      isSelected
+                          ? AppColors.primary
+                          : AppColors.textSecondary,
+                      BlendMode.srcIn,
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 14.0),
                 Text(
@@ -608,12 +578,14 @@ class _NavigationItem {
   final String title;
   final String titleKey;
   final String path;
-  final IconData icon;
+  final String filledIconAsset;
+  final String outlineIconAsset;
 
   const _NavigationItem({
     required this.title,
     required this.titleKey,
     required this.path,
-    required this.icon,
+    required this.filledIconAsset,
+    required this.outlineIconAsset,
   });
 }

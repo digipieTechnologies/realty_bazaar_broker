@@ -175,7 +175,7 @@ class PropertyCardWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Left Image Section
-            _buildImageSection(context, imageUrl, 260.0, 180.0),
+            _buildImageSection(context, imageUrl, 210.0, 140.0),
             const SizedBox(width: 20.0),
 
             // Middle Content Section
@@ -552,46 +552,40 @@ class PropertyCardWidget extends StatelessWidget {
         ),
         Positioned(
           bottom: 8,
-          left: 8,
           right: 8,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 4.0,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8.0,
+              vertical: 4.0,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.65),
+              borderRadius: BorderRadius.circular(6.0),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.photo_camera_outlined,
+                  color: Colors.white,
+                  size: 12.0,
                 ),
-                decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.65),
-                  borderRadius: BorderRadius.circular(6.0),
+                const SizedBox(width: 4.0),
+                Text(
+                  context.tr(
+                    'photos_count',
+                    arguments: {
+                      'count':
+                          '${property.medias.isNotEmpty ? property.medias.length : 1}',
+                    },
+                  ),
+                  style: AppTextStyles.caption.copyWith(
+                    color: Colors.white,
+                    fontSize: 11.0,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.photo_library_outlined,
-                      color: Colors.white,
-                      size: 12.0,
-                    ),
-                    const SizedBox(width: 4.0),
-                    Text(
-                      context.tr(
-                        'photos_count',
-                        arguments: {
-                          'count':
-                              '${property.medias.isNotEmpty ? property.medias.length : 1}',
-                        },
-                      ),
-                      style: AppTextStyles.caption.copyWith(
-                        color: Colors.white,
-                        fontSize: 11.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],

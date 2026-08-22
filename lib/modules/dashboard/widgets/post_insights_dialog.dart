@@ -8,6 +8,7 @@ import '../../../core/localization/app_localizations.dart';
 import '../../../models/social_post_model.dart';
 import '../../../models/social_enums.dart';
 import '../../../widgets/dialogs/app_base_dialog.dart';
+import '../../../widgets/buttons/app_button.dart';
 
 class PostInsightsDialog extends StatelessWidget {
   final SocialPostModel post;
@@ -29,7 +30,7 @@ class PostInsightsDialog extends StatelessWidget {
     final insights = post.insights ?? const PostInsightsModel();
     final isFacebook = post.platform == SocialPlatform.facebook;
     final platformName = isFacebook ? 'Facebook' : 'Instagram';
-    final platformColor = isFacebook ? const Color(0xFF1877F2) : const Color(0xFFE4405F);
+    final platformColor = isFacebook ? AppColors.facebook : AppColors.instagramAlt;
     final assetIcon = isFacebook ? 'assets/icons/facebook.png' : 'assets/icons/instagram.png';
 
     final impressions = insights.impressions > 0 ? insights.impressions : (post.viewsCount ?? 0);
@@ -109,7 +110,7 @@ class PostInsightsDialog extends StatelessWidget {
 
             _buildDetailRow(
               icon: Icons.favorite_rounded,
-              iconColor: const Color(0xFFE4405F),
+              iconColor: AppColors.instagramAlt,
               label: context.tr('likes'),
               value: '${post.likesCount ?? 0}',
             ),
@@ -117,7 +118,7 @@ class PostInsightsDialog extends StatelessWidget {
 
             _buildDetailRow(
               icon: Icons.chat_bubble_outline_rounded,
-              iconColor: const Color(0xFF1877F2),
+              iconColor: AppColors.facebook,
               label: context.tr('comments'),
               value: '${post.commentCount ?? 0}',
             ),
@@ -175,21 +176,12 @@ class PostInsightsDialog extends StatelessWidget {
             const SizedBox(height: 20.0),
 
             // Close Button
-            SizedBox(
-              width: double.infinity,
+            AppButton.solid(
+              text: context.tr('close_insights'),
               height: 44.0,
-              child: ElevatedButton(
-                onPressed: () => Navigator.of(context).pop(),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                child: Text(context.tr('close_insights'), style: AppTextStyles.button),
-              ),
+              borderRadius: 10.0,
+              color: AppColors.primary,
+              onPressed: () => Navigator.of(context).pop(),
             ),
           ],
         ),

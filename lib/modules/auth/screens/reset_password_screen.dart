@@ -15,7 +15,7 @@ import '../../../app/app_utils.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../util/common_ext.dart';
 import '../../../widgets/brand/app_logo.dart';
-import '../../../widgets/buttons/rounded_button.dart';
+import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/toast/app_toast.dart';
 import '../widgets/auth_header_widget.dart';
 import '../widgets/password_field_widget.dart';
@@ -202,9 +202,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Icon(
-                  Icons.arrow_back_rounded,
+                  Icons.chevron_left_rounded,
                   color: AppColors.textPrimary,
-                  size: 18.0,
+                  size: 20.0,
                 ),
                 const SizedBox(width: 8.0),
                 Text(
@@ -354,9 +354,9 @@ class _ResetPasswordSubmitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final isLoading = context.select<AuthProvider, bool>((p) => p.isLoading);
 
-    return RoundedButton(
+    return AppButton(
       text: 'UPDATE PASSWORD',
-      variant: ButtonVariant.gradient,
+      variant: AppButtonVariant.gradient,
       isLoading: isLoading,
       icon: const Icon(
         Icons.check_circle_outline_rounded,

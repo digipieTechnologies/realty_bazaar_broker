@@ -5,3 +5,4 @@ export 'facebook_icon_widget.dart';
 export 'instagram_icon_widget.dart';
 export 'call_icon_widget.dart';
 export 'whatsapp_icon_widget.dart';
+export 'message_icon_widget.dart';

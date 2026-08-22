@@ -52,7 +52,7 @@ class VideoRequestTileWidget extends StatelessWidget {
       case VideoRequestStatus.cancelled:
         return context.tr('cancelled');
       default:
-        return status.name.toUpperCase();
+        return status.toString().split('.').last.toUpperCase();
     }
   }
 

@@ -52,7 +52,7 @@ class FileMessageWidget extends StatelessWidget {
 
     final Color badgeBg = isMe
         ? Colors.white.withValues(alpha: 0.25)
-        : const Color(0xFFE8F1FF);
+        : AppColors.primary100;
     final Color badgeIconColor = isMe ? Colors.white : AppColors.primary;
     final Color textColor = isMe ? Colors.white : AppColors.textPrimary;
     final Color subtitleColor = isMe ? Colors.white.withValues(alpha: 0.8) : AppColors.textMuted;
@@ -64,12 +64,12 @@ class FileMessageWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: isMe
             ? Colors.white.withValues(alpha: 0.12)
-            : const Color(0xFFF7F9FC),
+            : AppColors.background,
         borderRadius: BorderRadius.circular(12.0),
         border: Border.all(
           color: isMe
               ? Colors.white.withValues(alpha: 0.2)
-              : const Color(0xFFE1E8F0),
+              : AppColors.border,
         ),
       ),
       child: Row(

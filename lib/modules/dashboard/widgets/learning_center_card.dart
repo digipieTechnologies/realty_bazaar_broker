@@ -74,8 +74,8 @@ class LearningCenterCard extends StatelessWidget {
                           ),
                         ),
                         const Icon(
-                          Icons.arrow_forward_rounded,
-                          size: 16.0,
+                          Icons.chevron_right_rounded,
+                          size: 18.0,
                           color: AppColors.textSecondary,
                         ),
                       ],

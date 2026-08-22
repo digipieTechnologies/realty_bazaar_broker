@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../app/app_colors.dart';
+import '../../../app/app_constants.dart';
 import '../../../models/social_lead_model.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../providers/lead/lead_provider.dart';
@@ -69,11 +70,9 @@ class _LeadsTabScreenState extends State<LeadsTabScreen> {
         child: Consumer<LeadProvider>(
           builder: (context, provider, child) {
             return SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(
-                isMobile ? 12.0 : 24.0,
-                isMobile ? 12.0 : 24.0,
-                isMobile ? 12.0 : 24.0,
-                isMobile ? 80.0 : 100.0,
+              padding: AppConstants.getTabPadding(
+                context,
+                bottomExtra: isMobile ? 80.0 : 24.0,
               ),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

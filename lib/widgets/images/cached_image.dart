@@ -18,6 +18,7 @@ class CachedImage extends StatelessWidget {
   final BoxFit fit;
   final String? placeholder;
   final Color? borderColor;
+  final Color? backgroundColor;
   final BorderRadius borderRadius;
   final Widget? errorWidget;
 
@@ -31,6 +32,7 @@ class CachedImage extends StatelessWidget {
     this.imageBytes,
     this.borderRadius = BorderRadius.zero,
     this.borderColor,
+    this.backgroundColor,
     this.borderWidth = 1.0,
     this.errorWidget,
   });
@@ -51,12 +53,12 @@ class CachedImage extends StatelessWidget {
           height: height,
           width: width,
           decoration: BoxDecoration(
-            color: AppColors.surfaceLight,
+            color: backgroundColor ?? Colors.transparent,
             borderRadius: borderRadius,
           ),
           child: Center(
             child: Image.asset(
-              placeholder ?? AppAssets.logo,
+              placeholder ?? AppAssets.logoTransparent,
               height: height,
               width: width,
               fit: BoxFit.contain,

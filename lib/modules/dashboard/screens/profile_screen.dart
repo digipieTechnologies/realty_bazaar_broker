@@ -10,7 +10,7 @@ import '../../../app/app_text_styles.dart';
 import '../../../app/app_utils.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../widgets/inputs/app_textfield.dart';
-import '../../../widgets/buttons/rounded_button.dart';
+import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/loaders/app_loader.dart';
 import '../../../widgets/dialogs/app_dialog.dart';
 import '../../../widgets/dividers/app_divider.dart';
@@ -167,6 +167,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final authProvider = Provider.of<AuthProvider>(context);
     final profile = authProvider.userProfile;
     final isDesktop = context.isDesktopUI;
+    final isMobile = context.isMobileUI;
 
     if (profile == null) {
       return Scaffold(
@@ -183,22 +184,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: AppConstants.getTabPadding(context),
+          padding: AppConstants.getTabPadding(
+            context,
+            bottomExtra: isMobile ? 80.0 : 24.0,
+          ),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Heading Section
-                _buildHeader(profile),
-                const SizedBox(height: 24.0),
+                _buildHeader(profile, isDesktop),
+                SizedBox(height: isDesktop ? 24.0 : 14.0),
 
                 // Forms Layout
                 if (isDesktop)
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(flex: 3, child: _buildPersonalDetailsCard()),
+                      Expanded(
+                        flex: 3,
+                        child: _buildPersonalDetailsCard(isDesktop),
+                      ),
                       const SizedBox(width: 24.0),
                       Expanded(
                         flex: 4,
@@ -209,31 +216,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 else
                   Column(
                     children: [
-                      _buildPersonalDetailsCard(),
-                      const SizedBox(height: 24.0),
+                      _buildPersonalDetailsCard(isDesktop),
+                      SizedBox(height: isMobile ? 12.0 : 24.0),
                       _buildBusinessDetailsCard(isDesktop),
                     ],
                   ),
 
-                const SizedBox(height: 32.0),
+                SizedBox(height: isDesktop ? 24.0 : 16.0),
 
                 // Save Button (Upside)
                 Align(
                   alignment: isDesktop
                       ? Alignment.centerRight
                       : Alignment.center,
-                  child: RoundedButton(
+                  child: AppButton(
                     text: context.tr('save_changes'),
-                    variant: ButtonVariant.gradient,
+                    variant: AppButtonVariant.gradient,
                     width: isDesktop ? 200.0 : double.infinity,
                     isLoading: _isSaving,
                     onPressed: _isSaving || _isSigningOut ? null : _saveChanges,
                   ),
                 ),
 
-                const SizedBox(height: 24.0),
+                SizedBox(height: isDesktop ? 20.0 : 14.0),
                 const AppDivider(),
-                const SizedBox(height: 24.0),
+                SizedBox(height: isDesktop ? 20.0 : 14.0),
 
                 // Account Actions Section (Downside)
                 _buildAccountActionsCard(isDesktop),
@@ -245,31 +252,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildHeader(dynamic profile) {
+  Widget _buildHeader(dynamic profile, bool isDesktop) {
     final plan = profile.brokerId?.plan ?? 'Free';
 
     return Row(
       children: [
         CircleAvatar(
-          radius: 36,
+          radius: isDesktop ? 36 : 28,
           backgroundColor: AppColors.primary.withOpacity(0.1),
           child: Text(
             (profile.name as String? ?? 'B').substring(0, 1).toUpperCase(),
-            style: const TextStyle(
-              fontSize: 28,
+            style: TextStyle(
+              fontSize: isDesktop ? 28 : 20,
               fontWeight: FontWeight.bold,
               color: AppColors.primary,
             ),
           ),
         ),
-        const SizedBox(width: 20.0),
+        SizedBox(width: isDesktop ? 20.0 : 12.0),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 profile.name ?? 'Broker Profile',
-                style: AppTextStyles.heading1.copyWith(fontSize: 26.0),
+                style: AppTextStyles.heading1.copyWith(
+                  fontSize: isDesktop ? 26.0 : 20.0,
+                ),
               ),
               const SizedBox(height: 4.0),
               Row(
@@ -320,7 +329,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildPersonalDetailsCard() {
+  Widget _buildPersonalDetailsCard(bool isDesktop) {
     return Card(
       elevation: 0.0,
       shape: RoundedRectangleBorder(
@@ -328,7 +337,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         side: const BorderSide(color: AppColors.border, width: 1.0),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.all(isDesktop ? 24.0 : 14.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -338,7 +347,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               context.tr('personal_details_subtitle'),
               style: const TextStyle(fontSize: 13.0, color: AppColors.textSecondary),
             ),
-            const Divider(height: 32, color: AppColors.border),
+            Divider(height: isDesktop ? 32 : 20, color: AppColors.border),
 
             AppTextField(
               controller: _nameController,
@@ -350,7 +359,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               validator: AppUtils.validateName,
             ),
-            const SizedBox(height: 20.0),
+            SizedBox(height: isDesktop ? 20.0 : 12.0),
 
             PhoneFieldWidget(
               controller: _phoneController,
@@ -361,7 +370,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 });
               },
             ),
-            const SizedBox(height: 20.0),
+            SizedBox(height: isDesktop ? 20.0 : 12.0),
 
             AppTextField(
               controller: _emailController,
@@ -387,7 +396,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         side: const BorderSide(color: AppColors.border, width: 1.0),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.all(isDesktop ? 24.0 : 14.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -397,7 +406,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               context.tr('business_details_subtitle'),
               style: const TextStyle(fontSize: 13.0, color: AppColors.textSecondary),
             ),
-            const Divider(height: 32, color: AppColors.border),
+            Divider(height: isDesktop ? 32 : 20, color: AppColors.border),
 
             AppTextField(
               controller: _businessNameController,
@@ -410,7 +419,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               validator: (val) =>
                   AppUtils.validateRequired(val, fieldName: context.tr('business_name')),
             ),
-            const SizedBox(height: 20.0),
+            SizedBox(height: isDesktop ? 20.0 : 12.0),
 
             AppTextField(
               controller: _fullAddressController,
@@ -424,7 +433,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               validator: (val) =>
                   AppUtils.validateRequired(val, fieldName: context.tr('full_address')),
             ),
-            const SizedBox(height: 20.0),
+            SizedBox(height: isDesktop ? 20.0 : 12.0),
 
             AppTextField(
               controller: _landmarkController,
@@ -437,7 +446,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               validator: (val) =>
                   AppUtils.validateRequired(val, fieldName: context.tr('landmark')),
             ),
-            const SizedBox(height: 20.0),
+            SizedBox(height: isDesktop ? 20.0 : 12.0),
 
             if (isDesktop) ...[
               Row(
@@ -515,7 +524,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 validator: (val) =>
                     AppUtils.validateRequired(val, fieldName: context.tr('city')),
               ),
-              const SizedBox(height: 20.0),
+              const SizedBox(height: 12.0),
               AppTextField(
                 controller: _stateController,
                 label: context.tr('state'),
@@ -527,7 +536,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 validator: (val) =>
                     AppUtils.validateRequired(val, fieldName: context.tr('state')),
               ),
-              const SizedBox(height: 20.0),
+              const SizedBox(height: 12.0),
               AppTextField(
                 controller: _pincodeController,
                 label: context.tr('pincode'),
@@ -539,7 +548,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 validator: (val) =>
                     AppUtils.validateRequired(val, fieldName: context.tr('pincode')),
               ),
-              const SizedBox(height: 20.0),
+              const SizedBox(height: 12.0),
               AppTextField(
                 controller: _countryController,
                 label: context.tr('country'),
@@ -592,7 +601,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         side: const BorderSide(color: AppColors.border, width: 1.0),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.all(isDesktop ? 24.0 : 14.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -602,12 +611,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               context.tr('sign_out_subtitle'),
               style: const TextStyle(fontSize: 13.0, color: AppColors.textSecondary),
             ),
-            const Divider(height: 32, color: AppColors.border),
+            Divider(height: isDesktop ? 32 : 20, color: AppColors.border),
             Align(
               alignment: isDesktop ? Alignment.centerLeft : Alignment.center,
-              child: RoundedButton(
+              child: AppButton(
                 text: context.tr('sign_out_button'),
-                variant: ButtonVariant.solid,
+                variant: AppButtonVariant.solid,
                 color: AppColors.error,
                 width: isDesktop ? 200.0 : double.infinity,
                 isLoading: _isSigningOut,

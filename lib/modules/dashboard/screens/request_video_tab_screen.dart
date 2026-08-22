@@ -3,6 +3,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
 import '../../../app/app_colors.dart';
+import '../../../app/app_constants.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../providers/video_request/video_request_provider.dart';
@@ -12,7 +13,6 @@ import '../../../widgets/shimmer/video_request_list_shimmer_widget.dart';
 import '../widgets/video_requests/video_request_summary_section.dart';
 import '../widgets/video_requests/video_request_table_widget.dart';
 
-import '../../../widgets/buttons/app_floating_action_button.dart';
 import '../../../widgets/dialogs/select_property_for_video_request_dialog.dart';
 
 class RequestVideoTabScreen extends StatefulWidget {
@@ -70,37 +70,32 @@ class _RequestVideoTabScreenState extends State<RequestVideoTabScreen> {
     }
   }
 
+  void _handleRequestVideo() {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final brokerId = authProvider.userProfile?.brokerId?.id ?? _brokerId ?? '';
+    if (brokerId.isEmpty) {
+      AppToast.showError('Error', 'Broker profile information not available.');
+      return;
+    }
+    showDialog(
+      context: context,
+      builder: (context) => SelectPropertyForVideoRequestDialog(brokerId: brokerId),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isMobile = context.isMobileUI;
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      floatingActionButton: AppFloatingActionButton(
-        label: context.tr('generate_video_request'),
-        icon: Icons.add_rounded,
-        onPressed: () {
-          final authProvider = Provider.of<AuthProvider>(context, listen: false);
-          final brokerId = authProvider.userProfile?.brokerId?.id ?? _brokerId ?? '';
-          if (brokerId.isEmpty) {
-            AppToast.showError('Error', 'Broker profile information not available.');
-            return;
-          }
-          showDialog(
-            context: context,
-            builder: (context) => SelectPropertyForVideoRequestDialog(brokerId: brokerId),
-          );
-        },
-      ),
       body: SafeArea(
         child: Consumer<VideoRequestProvider>(
           builder: (context, provider, child) {
             return SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(
-                isMobile ? 12.0 : 24.0,
-                isMobile ? 12.0 : 24.0,
-                isMobile ? 12.0 : 24.0,
-                isMobile ? 96.0 : 120.0,
+              padding: AppConstants.getTabPadding(
+                context,
+                bottomExtra: isMobile ? 80.0 : 24.0,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,6 +150,7 @@ class _RequestVideoTabScreenState extends State<RequestVideoTabScreen> {
                         searchQuery: provider.searchQuery,
                       );
                     },
+                    onRequestVideoPressed: _handleRequestVideo,
                   ),
                 ],
               ),

@@ -441,7 +441,7 @@ class _PostPropertyDialogState extends State<PostPropertyDialog> {
         else
           AppButton.outline(
             text: context.tr('back'),
-            iconData: Icons.arrow_back_rounded,
+            iconData: Icons.chevron_left_rounded,
             height: 42.0,
             borderRadius: 10.0,
             onPressed: (isNextLoading || isPublishing)
@@ -461,7 +461,7 @@ class _PostPropertyDialogState extends State<PostPropertyDialog> {
                           : context.tr('next')))),
           iconData: (isPublishing || (_isExporting && _currentStep == 2))
               ? null
-              : (_currentStep == 3 ? Icons.send_rounded : Icons.arrow_forward_rounded),
+              : (_currentStep == 3 ? Icons.send_rounded : Icons.chevron_right_rounded),
           height: 42.0,
           borderRadius: 10.0,
           isLoading: isNextLoading && !(_isExporting && _currentStep == 2),

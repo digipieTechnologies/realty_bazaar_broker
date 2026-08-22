@@ -76,7 +76,7 @@ class _FullScreenMediaViewerState extends State<FullScreenMediaViewer> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.arrow_back_rounded, color: Colors.white, size: 28.0),
+                  icon: const Icon(Icons.chevron_left_rounded, color: Colors.white, size: 28.0),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
                 Text(

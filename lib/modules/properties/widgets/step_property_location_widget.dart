@@ -31,11 +31,13 @@ class StepPropertyLocationWidget extends StatelessWidget {
         // Section Title with Info Icon
         Row(
           children: [
-            Text(
-              context.tr('section_location_details'),
-              style: AppTextStyles.heading2.copyWith(
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+            Flexible(
+              child: Text(
+                context.tr('section_location_details'),
+                style: AppTextStyles.heading2.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
               ),
             ),
             const SizedBox(width: 8.0),

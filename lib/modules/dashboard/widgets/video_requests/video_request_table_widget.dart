@@ -4,9 +4,11 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import '../../../../app/app_colors.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../models/models.dart';
 import '../../../../util/common_ext.dart';
+import '../../../../widgets/buttons/app_button.dart';
 import '../../../../widgets/common/app_empty_state_widget.dart';
 import '../../../../widgets/common/app_filter_popup.dart';
 import '../../../../widgets/common/app_pagination_widget.dart';
@@ -29,6 +31,7 @@ class VideoRequestTableWidget extends StatefulWidget {
   final ValueChanged<VideoRequestStatus?>? onStatusFilterChanged;
   final List<VideoRequestStatus>? statusesFilter;
   final ValueChanged<List<VideoRequestStatus>>? onStatusesFilterChanged;
+  final VoidCallback? onRequestVideoPressed;
 
   const VideoRequestTableWidget({
     super.key,
@@ -45,6 +48,7 @@ class VideoRequestTableWidget extends StatefulWidget {
     this.onStatusFilterChanged,
     this.statusesFilter,
     this.onStatusesFilterChanged,
+    this.onRequestVideoPressed,
   });
 
   @override
@@ -118,6 +122,22 @@ class _VideoRequestTableWidgetState extends State<VideoRequestTableWidget> {
                     },
                   ),
                 ),
+                if (widget.onRequestVideoPressed != null) ...[
+                  const SizedBox(width: 12.0),
+                  AppButton(
+                    text: context.isMobileUI ? null : context.tr('generate_video_request'),
+                    iconData: Icons.add_rounded,
+                    height: 42.0,
+                    width: context.isMobileUI ? 42.0 : null,
+                    padding: context.isMobileUI
+                        ? EdgeInsets.zero
+                        : const EdgeInsets.symmetric(horizontal: 16.0),
+                    borderRadius: 10.0,
+                    color: AppColors.primary,
+                    tooltip: context.tr('generate_video_request'),
+                    onPressed: widget.onRequestVideoPressed,
+                  ),
+                ],
               ],
             ),
           ),

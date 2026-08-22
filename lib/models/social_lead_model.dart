@@ -23,6 +23,35 @@ class SocialLeadModel extends Equatable {
     return '+$code $phone';
   }
   String get whatsappNumber => phone;
+
+  String buildWhatsappUrl() {
+    final cleanPhone = (phoneCountryCode ?? '91') + phone.replaceAll(RegExp(r'\D'), '');
+    final property = socialPost?.propertyId;
+    final propertyName = property?.propertyTitle.isNotEmpty == true
+        ? property!.propertyTitle
+        : (propertyDetails ?? socialPost?.caption ?? '');
+    final address = property?.address?.fullAddress ?? '';
+
+    final StringBuffer msgBuffer = StringBuffer();
+    msgBuffer.writeln('Hello ${userName.isNotEmpty ? userName : 'there'},');
+    msgBuffer.writeln('Thanks for connecting with us!');
+
+    if (propertyName.isNotEmpty) {
+      msgBuffer.writeln('\nHere are the property details:');
+      msgBuffer.writeln('📌 Property: $propertyName');
+      if (address.isNotEmpty) {
+        msgBuffer.writeln('📍 Location: $address');
+      }
+    } else if (notes != null && notes!.trim().isNotEmpty) {
+      msgBuffer.writeln('\nRegarding your inquiry: ${notes!.trim()}');
+    }
+
+    msgBuffer.writeln('\nPlease let us know if you have any questions or when you would like to schedule a site visit.');
+
+    final encodedText = Uri.encodeComponent(msgBuffer.toString());
+    return 'https://wa.me/$cleanPhone?text=$encodedText';
+  }
+
   SocialPostModel? get socialPost => socialPostId;
 
   const SocialLeadModel({

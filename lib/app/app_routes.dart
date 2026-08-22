@@ -23,7 +23,9 @@ import '../modules/auth/screens/reset_password_screen.dart';
 import '../models/otp_type.dart';
 import '../widgets/common/common_app_bar.dart';
 import '../models/property_model.dart';
-import '../modules/properties/widgets/view_property_dialog.dart';
+import '../models/social_lead_model.dart';
+import '../modules/properties/screens/view_property_screen.dart';
+import '../modules/leads/screens/view_lead_screen.dart';
 
 class AppRoutes {
   AppRoutes._();
@@ -42,9 +44,22 @@ class AppRoutes {
   static const String home = '/dashboard';
   static const String details = '/details';
 
-  /// Navigates to Property Details dialog for a given property
+  /// Navigates to Property Details full screen for a given property
   static void navigateToPropertyDetails(BuildContext context, PropertyModel property) {
-    ViewPropertyDialog.show(context, property: property);
+    Navigator.of(context, rootNavigator: true).push(
+      MaterialPageRoute(
+        builder: (context) => ViewPropertyScreen(property: property),
+      ),
+    );
+  }
+
+  /// Navigates to Lead Details full screen for a given lead
+  static void navigateToLeadDetails(BuildContext context, SocialLeadModel lead) {
+    Navigator.of(context, rootNavigator: true).push(
+      MaterialPageRoute(
+        builder: (context) => ViewLeadScreen(lead: lead),
+      ),
+    );
   }
 
   // GoRouter Singleton Instance

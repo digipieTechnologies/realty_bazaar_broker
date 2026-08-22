@@ -12,6 +12,7 @@
   "step_configure_notifications": "नोटिफिकेशन कॉन्फ़िगर करें",
   "quick_actions": "त्वरित कार्रवाई",
   "action_profile": "प्रोफ़ाइल",
+  "profile": "प्रोफ़ाइल",
   "action_edit_business": "व्यवसाय संपादित करें",
   "action_import_properties": "प्रॉपर्टी आयात करें",
   "action_invite_team": "टीम को आमंत्रित करें",
@@ -77,6 +78,9 @@
   "hindi": "हिन्दी",
   "gujarati": "ગુજરાતી",
   "cancel": "रद्द करें",
+  "discard": "त्यागें",
+  "discard_changes": "क्या बदलाव त्यागना चाहते हैं?",
+  "discard_changes_desc": "क्या आप वाकई वापस जाना चाहते हैं? न सहेजे गए विवरण खो जाएंगे।",
   "save": "सहेजें",
   "ok": "ठीक है",
   "close": "बंद करें",
@@ -213,6 +217,7 @@
   "search_property_hint": "शीर्षक, विवरण, क्षेत्र, 2 बीएचके, गार्डन खोजें...",
   "add_property": "प्रॉपर्टी जोड़ें",
   "add_new_property": "नई प्रॉपर्टी जोड़ें",
+  "edit": "संपादित करें",
   "edit_property_listing": "प्रॉपर्टी लिस्टिंग संपादित करें",
   "no_properties_found": "कोई मेल खाती हुई प्रॉपर्टी नहीं मिली",
   "no_properties_listed_yet": "अभी तक कोई प्रॉपर्टी सूचीबद्ध नहीं है",
@@ -486,5 +491,10 @@
   "publish_now": "अभी प्रकाशित करें",
   "next": "आगे",
   "post_property_title": "सोशल मीडिया पर संपत्ति पोस्ट करें",
-  "post_property_subtitle": "इंस्टाग्राम और फेसबुक पर लिस्टिंग प्रकाशित करें"
+  "post_property_subtitle": "इंस्टाग्राम और फेसबुक पर लिस्टिंग प्रकाशित करें",
+  "location": "स्थान",
+  "toast_property_deleted_title": "प्रॉपर्टी हटाई गई",
+  "toast_property_deleted_desc": "प्रॉपर्टी सफलतापूर्वक हटा दी गई है।",
+  "post_property_feature_desc": "सक्रिय खरीदारों को आकर्षित करने के लिए इस लिस्टिंग को सोशल चैनलों पर साझा करें।",
+  "video_request_feature_desc": "हमारी मीडिया टीम से एक पेशेवर वीडियो वॉकथ्रू का अनुरोध करें।"
 }

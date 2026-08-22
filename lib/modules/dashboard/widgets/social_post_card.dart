@@ -252,8 +252,8 @@ class SocialPostCard extends StatelessWidget {
                         )
                       : Container(
                           color: isFB
-                              ? const Color(0xFF1877F2).withValues(alpha: 0.1)
-                              : const Color(0xFFE1306C).withValues(alpha: 0.1),
+                              ? AppColors.facebook.withValues(alpha: 0.1)
+                              : AppColors.instagram.withValues(alpha: 0.1),
                           child: Center(
                             child: isFB
                                 ? const FacebookIconWidget(size: 40.0)
@@ -382,7 +382,7 @@ class _PostMetricsRow extends StatelessWidget {
         _buildMetricItem(
           icon: Icons.favorite_border_rounded,
           value: likes,
-          color: const Color(0xFFEF4444),
+          color: AppColors.error,
         ),
         const SizedBox(width: 10.0),
         _buildMetricItem(

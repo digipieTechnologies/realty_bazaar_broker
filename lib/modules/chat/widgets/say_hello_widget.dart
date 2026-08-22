@@ -1,9 +1,10 @@
 // File: lib/modules/chat/widgets/say_hello_widget.dart
-// Purpose: Centered placeholder widget shown in empty chat rooms prompting users to say hello.
+// Purpose: Centered placeholder widget shown in empty chat rooms prompting users to say hello using AppButton.
 
 import 'package:flutter/material.dart';
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
+import '../../../widgets/buttons/app_button.dart';
 
 class SayHelloWidget extends StatelessWidget {
   final VoidCallback onSayHello;
@@ -43,17 +44,13 @@ class SayHelloWidget extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 18.0),
-          ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-            ),
-            icon: const Icon(Icons.send_rounded, size: 16.0),
-            label: const Text('Say Hello 👋'),
+          AppButton.solid(
+            text: 'Say Hello 👋',
+            iconData: Icons.send_rounded,
+            height: 42.0,
+            borderRadius: 20.0,
+            color: AppColors.primary,
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
             onPressed: onSayHello,
           ),
         ],

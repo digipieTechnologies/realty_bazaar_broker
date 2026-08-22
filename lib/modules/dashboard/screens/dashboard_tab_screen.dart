@@ -5,16 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../app/app_assets.dart';
 import '../../../app/app_colors.dart';
 import '../../../app/app_constants.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/services/permission_service.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../providers/social/social_provider.dart';
+import '../../../util/common_ext.dart';
 import '../../../widgets/common/app_section_header.dart';
 import '../../../widgets/dialogs/app_dialog.dart';
 import '../../../widgets/shimmer/social_connect_shimmer_widget.dart';
 import '../../../widgets/toast/app_toast.dart';
+import '../widgets/dashboard_header_banner_widget.dart';
 import '../widgets/dashboard_summary_widget.dart';
 import '../widgets/recent_leads_widget.dart';
 import '../widgets/recent_posts_widget.dart';
@@ -117,15 +120,22 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthProvider>();
     final socialProvider = context.watch<SocialProvider>();
+    final isMobile = context.isMobileUI;
 
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: AppConstants.getTabPadding(context),
+          padding: AppConstants.getTabPadding(
+            context,
+            bottomExtra: isMobile ? 80.0 : 24.0,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Header Banner with Curved Background & Avatar (Inspired by Demo UI)
+              const DashboardHeaderBannerWidget(),
+
               // Responsive Main Content Layout
               LayoutBuilder(
                 builder: (context, constraints) {
@@ -143,7 +153,7 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
                             children: [
                               const AppSectionHeader(
                                 title: 'Overview Performance',
-                                icon: Icons.insights_rounded,
+                                svgAsset: AppAssets.icDashboardFilled,
                               ),
                               const DashboardSummaryWidget(),
                               const SizedBox(height: 24.0),
@@ -204,12 +214,12 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
                       // Section 1: Summary / Overview Performance
                       const AppSectionHeader(
                         title: 'Overview Performance',
-                        icon: Icons.insights_rounded,
+                        svgAsset: AppAssets.icDashboardFilled,
                       ),
                       const DashboardSummaryWidget(),
-                      const SizedBox(height: 24.0),
+                      const SizedBox(height: 14.0),
                       const Divider(height: 1.0, color: AppColors.border),
-                      const SizedBox(height: 24.0),
+                      const SizedBox(height: 14.0),
 
                       // Section 2: Connected Channels (Social Channels)
                       const AppSectionHeader(
@@ -231,21 +241,21 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
                           socialProvider,
                         ),
                       ],
-                      const SizedBox(height: 24.0),
+                      const SizedBox(height: 14.0),
                       const Divider(height: 1.0, color: AppColors.border),
-                      const SizedBox(height: 24.0),
+                      const SizedBox(height: 14.0),
 
                       // Section 3: Recent Leads Widget (Top 3 Leads)
                       const RecentLeadsWidget(),
-                      const SizedBox(height: 24.0),
+                      const SizedBox(height: 14.0),
                       const Divider(height: 1.0, color: AppColors.border),
-                      const SizedBox(height: 24.0),
+                      const SizedBox(height: 14.0),
 
                       // Section 4: Recent Posts Widget (Top 3 Posts)
                       const RecentPostsWidget(),
-                      const SizedBox(height: 24.0),
+                      const SizedBox(height: 14.0),
                       const Divider(height: 1.0, color: AppColors.border),
-                      const SizedBox(height: 24.0),
+                      const SizedBox(height: 14.0),
 
                       // Section 5: Recent Properties Widget (Top 3 Properties)
                       const RecentPropertiesWidget(),
@@ -322,7 +332,7 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
         height: 40.0,
         fit: BoxFit.contain,
       ),
-      buttonColor: const Color(0xFF1877F2),
+      buttonColor: AppColors.facebook,
     );
   }
 
@@ -359,7 +369,7 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
         height: 40.0,
         fit: BoxFit.contain,
       ),
-      buttonGradient: const [Color(0xFFFCAF45), Color(0xFFC13584)],
+      buttonGradient: AppColors.instagramGradient,
     );
   }
 }

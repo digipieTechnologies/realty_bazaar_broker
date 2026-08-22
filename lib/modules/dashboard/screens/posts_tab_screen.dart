@@ -15,6 +15,7 @@ import '../../../widgets/common/app_card_container.dart';
 import '../../../widgets/common/app_pagination_widget.dart';
 import '../../../widgets/common/app_tab_bar_widget.dart';
 import '../../../widgets/shimmer/social_post_list_shimmer_widget.dart';
+import '../../../widgets/buttons/app_button.dart';
 import '../widgets/social_post_card.dart';
 
 class PostsTabScreen extends StatefulWidget {
@@ -66,7 +67,10 @@ class _PostsTabScreenState extends State<PostsTabScreen> {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: AppConstants.getTabPadding(context, bottomExtra: isMobile ? 80.0 : 100.0),
+          padding: AppConstants.getTabPadding(
+            context,
+            bottomExtra: isMobile ? 80.0 : 24.0,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -82,13 +86,13 @@ class _PostsTabScreenState extends State<PostsTabScreen> {
                     key: SocialPlatform.facebook,
                     title: 'Facebook',
                     assetIcon: 'assets/icons/facebook.png',
-                    brandColor: Color(0xFF1877F2),
+                    brandColor: AppColors.facebook,
                   ),
                   AppTabItem(
                     key: SocialPlatform.instagram,
                     title: 'Instagram',
                     assetIcon: 'assets/icons/instagram.png',
-                    brandColor: Color(0xFFE4405F),
+                    brandColor: AppColors.instagramAlt,
                   ),
                 ],
               ),
@@ -174,7 +178,7 @@ class _PostsTabScreenState extends State<PostsTabScreen> {
   ) {
     final platformName = isFacebook ? 'Facebook Page' : 'Instagram Business';
     final assetIcon = isFacebook ? 'assets/icons/facebook.png' : 'assets/icons/instagram.png';
-    final buttonColor = isFacebook ? const Color(0xFF1877F2) : const Color(0xFFE4405F);
+    final buttonColor = isFacebook ? AppColors.facebook : AppColors.instagramAlt;
 
     return Center(
       child: Container(
@@ -224,35 +228,23 @@ class _PostsTabScreenState extends State<PostsTabScreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24.0),
-            SizedBox(
-              width: double.infinity,
+            AppButton.solid(
+              text: 'Connect $platformName',
+              iconData: Icons.link_rounded,
               height: 46.0,
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  if (brokerId != null) {
-                    if (isFacebook) {
-                      provider.connectFacebook(brokerId);
-                    } else {
-                      provider.connectInstagramDirectly(brokerId);
-                    }
+              borderRadius: 10.0,
+              color: buttonColor,
+              onPressed: () {
+                if (brokerId != null) {
+                  if (isFacebook) {
+                    provider.connectFacebook(brokerId);
                   } else {
-                    context.go('/dashboard');
+                    provider.connectInstagramDirectly(brokerId);
                   }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: buttonColor,
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                icon: const Icon(Icons.link_rounded, size: 18.0),
-                label: Text(
-                  'Connect $platformName',
-                  style: AppTextStyles.button.copyWith(fontSize: 14.0),
-                ),
-              ),
+                } else {
+                  context.go('/dashboard');
+                }
+              },
             ),
           ],
         ),

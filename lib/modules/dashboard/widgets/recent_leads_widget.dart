@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../app/app_assets.dart';
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
@@ -52,7 +53,7 @@ class _RecentLeadsWidgetState extends State<RecentLeadsWidget> {
           // Header Row: Section Header Badge & View All Button
           AppSectionHeader(
             title: context.tr('recent_leads'),
-            icon: Icons.people_alt_rounded,
+            svgAsset: AppAssets.icLeadsFilled,
             padding: const EdgeInsets.fromLTRB(16.0, 12.0, 12.0, 12.0),
             trailing: InkWell(
               onTap: () => context.go('/leads'),
@@ -73,11 +74,11 @@ class _RecentLeadsWidgetState extends State<RecentLeadsWidget> {
                         fontSize: 12.0,
                       ),
                     ),
-                    const SizedBox(width: 4.0),
+                    const SizedBox(width: 2.0),
                     const Icon(
-                      Icons.arrow_forward_rounded,
+                      Icons.chevron_right_rounded,
                       color: AppColors.primary,
-                      size: 14.0,
+                      size: 16.0,
                     ),
                   ],
                 ),

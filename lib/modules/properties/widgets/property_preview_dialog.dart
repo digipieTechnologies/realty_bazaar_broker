@@ -19,9 +19,10 @@ import './property_location_card.dart';
 import './property_amenities_wrap.dart';
 import 'package:flutter/foundation.dart';
 import '../../../core/utils/video_thumbnail_helper.dart';
-import './view_property_dialog.dart';
+import '../screens/view_property_screen.dart';
 import '../../../app/app_routes.dart';
 import '../../../widgets/dialogs/app_base_dialog.dart';
+import '../../../widgets/buttons/app_button.dart';
 
 class PropertyPreviewDialog extends StatefulWidget {
   final PropertyModel property;
@@ -190,7 +191,11 @@ class _PropertyPreviewDialogState extends State<PropertyPreviewDialog> {
 
     final navContext = AppRoutes.rootNavigatorKey.currentContext;
     if (navContext != null) {
-      ViewPropertyDialog.show(navContext, property: savedProp);
+      Navigator.of(navContext).push(
+        MaterialPageRoute(
+          builder: (context) => ViewPropertyScreen(property: savedProp),
+        ),
+      );
     }
   }
 
@@ -239,15 +244,12 @@ class _PropertyPreviewDialogState extends State<PropertyPreviewDialog> {
                 const SizedBox(height: 24.0),
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
-                      fixedSize: const Size.fromHeight(48.0),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-                    ),
+                  child: AppButton.solid(
+                    text: context.tr('view_property'),
+                    height: 48.0,
+                    borderRadius: 12.0,
+                    color: AppColors.primary,
                     onPressed: _onViewPropertyPressed,
-                    child: Text(context.tr('view_property'), style: const TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ),
               ],

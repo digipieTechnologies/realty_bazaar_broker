@@ -16,6 +16,7 @@ import 'package:dio/dio.dart';
 
 import 'package:image/image.dart' as img;
 
+import '../../../app/app_colors.dart';
 import '../../../core/utils/video_thumbnail_helper.dart';
 import '../../../providers/social/social_provider.dart';
 
@@ -573,10 +574,10 @@ class MediaExportService {
         base = Colors.black;
         break;
       case 'gold':
-        base = const Color(0xFFFEF3C7);
+        base = AppColors.posterGoldLight;
         break;
       case 'minimal':
-        base = const Color(0xFFF5F5F5);
+        base = AppColors.posterNeutralLight;
         break;
       case 'white':
         base = Colors.white;
@@ -594,9 +595,9 @@ class MediaExportService {
       case 'black':
         return Colors.white;
       case 'gold':
-        return const Color(0xFF92400E);
+        return AppColors.statusWarningDarkText;
       case 'minimal':
-        return const Color(0xFF212121);
+        return AppColors.posterNeutralDark;
       case 'white':
         return Colors.black;
       case 'classic':
@@ -613,17 +614,17 @@ class MediaExportService {
         base = Colors.black;
         break;
       case 'gold':
-        base = const Color(0xFFD97706);
+        base = AppColors.posterGold;
         break;
       case 'minimal':
-        base = const Color(0xFF5C6BC0);
+        base = AppColors.posterIndigoSoft;
         break;
       case 'white':
         base = Colors.white;
         break;
       case 'classic':
       default:
-        base = const Color(0xFF4A76A8);
+        base = AppColors.posterBlueSoft;
         break;
     }
     return base.withValues(alpha: alpha);
@@ -648,17 +649,17 @@ class MediaExportService {
         base = Colors.black;
         break;
       case 'gold':
-        base = const Color(0xFFB45309);
+        base = AppColors.posterGoldDark;
         break;
       case 'minimal':
-        base = const Color(0xFF5C6BC0);
+        base = AppColors.posterIndigoSoft;
         break;
       case 'white':
         base = Colors.white;
         break;
       case 'classic':
       default:
-        base = const Color(0xFF991B1B);
+        base = AppColors.posterBurgundy;
         break;
     }
     return base.withValues(alpha: alpha);
@@ -683,17 +684,17 @@ class MediaExportService {
         base = Colors.black;
         break;
       case 'gold':
-        base = const Color(0xFF78350F);
+        base = AppColors.posterGoldBrown;
         break;
       case 'minimal':
-        base = const Color(0xFF7C4DFF);
+        base = AppColors.tagIndigo;
         break;
       case 'white':
         base = Colors.white;
         break;
       case 'classic':
       default:
-        base = const Color(0xFF881337);
+        base = AppColors.posterRoseRed;
         break;
     }
     return base.withValues(alpha: alpha);

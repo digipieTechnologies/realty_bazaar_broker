@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
+import '../buttons/app_button.dart';
 
 class AppFilterButton extends StatefulWidget {
   final Widget child;
@@ -183,53 +184,33 @@ class _AppFilterButtonState extends State<AppFilterButton> {
                               children: [
                                 if (widget.onClear != null)
                                   Expanded(
-                                    child: OutlinedButton(
+                                    child: AppButton.outline(
+                                      text: 'Clear All',
+                                      height: 42.0,
+                                      borderRadius: 10.0,
+                                      borderColor: AppColors.border,
+                                      textColor: AppColors.textPrimary,
                                       onPressed: () {
                                         widget.onClear!();
                                         _closePopup();
                                       },
-                                      style: OutlinedButton.styleFrom(
-                                        foregroundColor: AppColors.textPrimary,
-                                        side: const BorderSide(color: AppColors.border),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10.0),
-                                        ),
-                                        padding: EdgeInsets.zero,
-                                        minimumSize: const Size.fromHeight(42.0),
-                                        fixedSize: const Size.fromHeight(42.0),
-                                      ),
-                                      child: const Text(
-                                        'Clear All',
-                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5),
-                                      ),
                                     ),
                                   ),
                                 if (widget.onClear != null && widget.onApply != null)
                                   const SizedBox(width: 8.0),
                                 if (widget.onApply != null)
                                   Expanded(
-                                    child: ElevatedButton(
+                                    child: AppButton.solid(
+                                      text: 'Apply',
+                                      height: 42.0,
+                                      borderRadius: 10.0,
+                                      color: AppColors.primary,
                                       onPressed: () {
                                         if (widget.onApply != null) {
                                           widget.onApply!();
                                         }
                                         _closePopup();
                                       },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: AppColors.primary,
-                                        foregroundColor: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10.0),
-                                        ),
-                                        padding: EdgeInsets.zero,
-                                        minimumSize: const Size.fromHeight(42.0),
-                                        fixedSize: const Size.fromHeight(42.0),
-                                        elevation: 0,
-                                      ),
-                                      child: const Text(
-                                        'Apply',
-                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5),
-                                      ),
                                     ),
                                   ),
                               ],

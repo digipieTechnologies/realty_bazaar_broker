@@ -195,9 +195,9 @@ class _StepCaptionReviewState extends State<StepCaptionReview> {
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
-                          Icons.arrow_back_ios_rounded,
+                          Icons.chevron_left_rounded,
                           color: Colors.white,
-                          size: 13.0,
+                          size: 18.0,
                         ),
                       ),
                     ),
@@ -219,9 +219,9 @@ class _StepCaptionReviewState extends State<StepCaptionReview> {
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
-                          Icons.arrow_forward_ios_rounded,
+                          Icons.chevron_right_rounded,
                           color: Colors.white,
-                          size: 13.0,
+                          size: 18.0,
                         ),
                       ),
                     ),
@@ -351,9 +351,9 @@ class _StepCaptionReviewState extends State<StepCaptionReview> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE1306C).withValues(alpha: 0.1),
+                  color: AppColors.instagram.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20.0),
-                  border: Border.all(color: const Color(0xFFE1306C).withValues(alpha: 0.3)),
+                  border: Border.all(color: AppColors.instagram.withValues(alpha: 0.3)),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -362,12 +362,12 @@ class _StepCaptionReviewState extends State<StepCaptionReview> {
                       'assets/icons/instagram.png',
                       width: 16.0,
                       height: 16.0,
-                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.camera_alt_rounded, size: 16.0, color: Color(0xFFE1306C)),
+                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.camera_alt_rounded, size: 16.0, color: AppColors.instagram),
                     ),
                     const SizedBox(width: 6.0),
                     const Text(
                       'Instagram Feed & Reels',
-                      style: TextStyle(color: Color(0xFFE1306C), fontSize: 12.0, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: AppColors.instagram, fontSize: 12.0, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -376,9 +376,9 @@ class _StepCaptionReviewState extends State<StepCaptionReview> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1877F2).withValues(alpha: 0.1),
+                  color: AppColors.facebook.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20.0),
-                  border: Border.all(color: const Color(0xFF1877F2).withValues(alpha: 0.3)),
+                  border: Border.all(color: AppColors.facebook.withValues(alpha: 0.3)),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -387,12 +387,12 @@ class _StepCaptionReviewState extends State<StepCaptionReview> {
                       'assets/icons/facebook.png',
                       width: 16.0,
                       height: 16.0,
-                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.facebook_rounded, size: 16.0, color: Color(0xFF1877F2)),
+                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.facebook_rounded, size: 16.0, color: AppColors.facebook),
                     ),
                     const SizedBox(width: 6.0),
                     const Text(
                       'Facebook Page',
-                      style: TextStyle(color: Color(0xFF1877F2), fontSize: 12.0, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: AppColors.facebook, fontSize: 12.0, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),

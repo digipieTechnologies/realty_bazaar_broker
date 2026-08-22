@@ -16,31 +16,47 @@ class StatCardSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(
-        isDesktop ? 16.0 : 12.0,
-        isDesktop ? 14.0 : 10.0,
-        isDesktop ? 16.0 : 12.0,
-        isDesktop ? 14.0 : 10.0,
-      ),
+      padding: EdgeInsets.all(isDesktop ? 16.0 : 12.0),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(isDesktop ? 16.0 : 12.0),
+        borderRadius: BorderRadius.circular(isDesktop ? 18.0 : 14.0),
         border: Border.all(color: AppColors.border, width: 1.0),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              AppShimmerContainer(width: 36, height: 36, borderRadius: 10.0),
-              AppShimmerContainer(width: 50, height: 18, borderRadius: 10.0),
+              // Circle Icon Skeleton
+              AppShimmerContainer(
+                width: isDesktop ? 34 : 27,
+                height: isDesktop ? 34 : 27,
+                borderRadius: 17.0,
+              ),
+              // Right Tag Pill Skeleton
+              AppShimmerContainer(
+                width: isDesktop ? 55 : 44,
+                height: isDesktop ? 20 : 16,
+                borderRadius: 12.0,
+              ),
             ],
           ),
           SizedBox(height: isDesktop ? 12.0 : 8.0),
-          AppShimmerContainer(width: 60, height: isDesktop ? 24 : 20, borderRadius: 6.0),
-          const SizedBox(height: 4.0),
-          const AppShimmerContainer(width: 90, height: 11, borderRadius: 4.0),
+          // Metric Value Line Skeleton
+          AppShimmerContainer(
+            width: isDesktop ? 70 : 50,
+            height: isDesktop ? 24 : 19,
+            borderRadius: 6.0,
+          ),
+          const SizedBox(height: 5.0),
+          // Subtitle Text Line Skeleton
+          AppShimmerContainer(
+            width: isDesktop ? 100 : 80,
+            height: isDesktop ? 12 : 11,
+            borderRadius: 4.0,
+          ),
         ],
       ),
     );

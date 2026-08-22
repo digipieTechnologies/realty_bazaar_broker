@@ -1,16 +1,14 @@
-// File: lib/modules/dashboard/widgets/dashboard_summary_widget.dart
-// Purpose: Reusable dashboard summary widget displaying 4 key metrics (Today's Leads, Total Leads, Total Properties, Active Video Requests) powered by Supabase RPC with compact responsive heights.
-
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../../app/app_assets.dart';
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../providers/dashboard/dashboard_provider.dart';
 import '../../../util/common_ext.dart';
-import '../../../widgets/common/app_card_container.dart';
 import '../../../widgets/shimmer/dashboard_summary_shimmer_widget.dart';
 
 class DashboardSummaryWidget extends StatefulWidget {
@@ -58,37 +56,41 @@ class _DashboardSummaryWidgetState extends State<DashboardSummaryWidget> {
         title: context.tr('todays_leads'),
         value: '$todaysLeads',
         tagText: growthStr,
-        tagColor: AppColors.success,
+        tagColor: AppColors.accentCoral,
         icon: Icons.trending_up_rounded,
-        iconBgColor: AppColors.primary.withValues(alpha: 0.1),
-        iconColor: AppColors.primary,
+        iconBgColor: AppColors.accentCoral,
+        iconColor: Colors.white,
+        cardBgColor: AppColors.accentCoralLight,
       ),
       _StatItemData(
         title: context.tr('total_leads'),
         value: '$totalLeads',
         tagText: context.tr('filter_all'),
-        tagColor: AppColors.info,
-        icon: Icons.people_alt_rounded,
-        iconBgColor: AppColors.success.withValues(alpha: 0.1),
-        iconColor: AppColors.success,
+        tagColor: AppColors.primary700,
+        svgAsset: AppAssets.icLeadsFilled,
+        iconBgColor: AppColors.primary500,
+        iconColor: Colors.white,
+        cardBgColor: AppColors.primary50,
       ),
       _StatItemData(
         title: context.tr('properties'),
         value: '$totalProperties',
         tagText: context.tr('prop_status_available'),
-        tagColor: AppColors.warning,
-        icon: Icons.apartment_rounded,
-        iconBgColor: AppColors.warning.withValues(alpha: 0.1),
-        iconColor: AppColors.warning,
+        tagColor: AppColors.tagAmber,
+        svgAsset: AppAssets.icPropertiesFilled,
+        iconBgColor: AppColors.accentGold,
+        iconColor: Colors.white,
+        cardBgColor: AppColors.accentGoldLight,
       ),
       _StatItemData(
         title: context.tr('video_requests'),
         value: '$videoRequests',
         tagText: context.tr('pending'),
-        tagColor: AppColors.primary,
-        icon: Icons.videocam_rounded,
-        iconBgColor: AppColors.primary.withValues(alpha: 0.1),
-        iconColor: AppColors.primary,
+        tagColor: AppColors.tagTeal,
+        svgAsset: AppAssets.icVideoFilled,
+        iconBgColor: AppColors.accentTeal,
+        iconColor: Colors.white,
+        cardBgColor: AppColors.accentTealLight,
       ),
     ];
 
@@ -134,18 +136,22 @@ class _StatItemData {
   final String value;
   final String tagText;
   final Color tagColor;
-  final IconData icon;
+  final IconData? icon;
+  final String? svgAsset;
   final Color iconBgColor;
   final Color iconColor;
+  final Color cardBgColor;
 
   const _StatItemData({
     required this.title,
     required this.value,
     required this.tagText,
     required this.tagColor,
-    required this.icon,
+    this.icon,
+    this.svgAsset,
     required this.iconBgColor,
     required this.iconColor,
+    required this.cardBgColor,
   });
 }
 
@@ -160,14 +166,20 @@ class _StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppCardContainer(
-      borderRadius: isDesktop ? 16.0 : 12.0,
-      padding: EdgeInsets.fromLTRB(
-        isDesktop ? 16.0 : 12.0,
-        isDesktop ? 14.0 : 10.0,
-        isDesktop ? 16.0 : 12.0,
-        isDesktop ? 14.0 : 10.0,
+    return Container(
+      decoration: BoxDecoration(
+        color: data.cardBgColor,
+        borderRadius: BorderRadius.circular(isDesktop ? 18.0 : 14.0),
+        border: Border.all(color: data.iconBgColor.withValues(alpha: 0.25), width: 1.0),
+        boxShadow: [
+          BoxShadow(
+            color: data.iconBgColor.withValues(alpha: 0.08),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
+      padding: EdgeInsets.all(isDesktop ? 16.0 : 12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -176,54 +188,64 @@ class _StatCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: EdgeInsets.all(isDesktop ? 8.0 : 5.0),
+                padding: EdgeInsets.all(isDesktop ? 8.0 : 6.0),
                 decoration: BoxDecoration(
                   color: data.iconBgColor,
-                  borderRadius: BorderRadius.circular(isDesktop ? 10.0 : 7.0),
+                  shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  data.icon,
-                  color: data.iconColor,
-                  size: isDesktop ? 18.0 : 14.0,
-                ),
+                child: data.svgAsset != null
+                    ? SvgPicture.asset(
+                        data.svgAsset!,
+                        width: isDesktop ? 18.0 : 15.0,
+                        height: isDesktop ? 18.0 : 15.0,
+                        colorFilter: ColorFilter.mode(
+                          data.iconColor,
+                          BlendMode.srcIn,
+                        ),
+                      )
+                    : Icon(
+                        data.icon,
+                        color: data.iconColor,
+                        size: isDesktop ? 18.0 : 15.0,
+                      ),
               ),
               Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: isDesktop ? 8.0 : 6.0,
-                  vertical: isDesktop ? 3.0 : 2.0,
+                  horizontal: isDesktop ? 9.0 : 7.0,
+                  vertical: isDesktop ? 4.0 : 3.0,
                 ),
                 decoration: BoxDecoration(
-                  color: data.tagColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(10.0),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
                 child: Text(
                   data.tagText,
                   style: AppTextStyles.caption.copyWith(
                     color: data.tagColor,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w800,
                     fontSize: isDesktop ? 11.0 : 10.0,
                   ),
                 ),
               ),
             ],
           ),
-          SizedBox(height: isDesktop ? 10.0 : 6.0),
+          SizedBox(height: isDesktop ? 12.0 : 8.0),
           Text(
             data.value,
             style: AppTextStyles.heading1.copyWith(
-              fontSize: isDesktop ? 22.0 : 17.0,
+              fontSize: isDesktop ? 24.0 : 19.0,
               fontWeight: FontWeight.w800,
               color: AppColors.textPrimary,
               height: 1.1,
             ),
           ),
-          const SizedBox(height: 2.0),
+          const SizedBox(height: 3.0),
           Text(
             data.title,
             style: AppTextStyles.caption.copyWith(
               color: AppColors.textSecondary,
               fontWeight: FontWeight.w600,
-              fontSize: isDesktop ? 12.0 : 11.0,
+              fontSize: isDesktop ? 12.5 : 11.5,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

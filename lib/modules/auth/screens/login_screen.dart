@@ -19,7 +19,7 @@ import '../../../models/user_enums.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../util/common_ext.dart';
 import '../../../widgets/brand/app_logo.dart';
-import '../../../widgets/buttons/rounded_button.dart';
+import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/inputs/app_textfield.dart';
 import '../../../widgets/toast/app_toast.dart';
 import '../widgets/auth_footer_link_widget.dart';
@@ -640,14 +640,14 @@ class _AuthSubmitButton extends StatelessWidget {
       buttonText = context.tr('send_reset_link');
     }
 
-    return RoundedButton(
+    return AppButton(
       text: buttonText,
-      variant: ButtonVariant.gradient,
+      variant: AppButtonVariant.gradient,
       isLoading: isLoading,
       icon: const Icon(
-        Icons.arrow_forward_rounded,
+        Icons.chevron_right_rounded,
         color: Colors.white,
-        size: 18.0,
+        size: 20.0,
       ),
       onPressed: onPressed,
     ).disable(isDisable: isLoading);

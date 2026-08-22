@@ -8,6 +8,7 @@ import '../../../models/models.dart';
 import '../../../providers/video_request/video_request_provider.dart';
 import '../../../widgets/shimmer/video_request_shimmer_widget.dart';
 import '../../../widgets/toast/app_toast.dart';
+import '../../../widgets/buttons/app_button.dart';
 import '../../modules/chat/chat.dart';
 
 import 'app_base_dialog.dart';
@@ -335,24 +336,13 @@ class _VideoRequestDialogState extends State<VideoRequestDialog> {
               ),
             ),
             const SizedBox(height: 20.0),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  fixedSize: const Size.fromHeight(46.0),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-                ),
-                onPressed: _isSubmitting ? null : _submitRequest,
-                child: _isSubmitting
-                    ? const SizedBox(
-                        height: 18.0,
-                        width: 18.0,
-                        child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.0),
-                      )
-                    : Text(context.tr('submit_request'), style: const TextStyle(fontWeight: FontWeight.bold)),
-              ),
+            AppButton.solid(
+              text: context.tr('submit_request'),
+              isLoading: _isSubmitting,
+              height: 46.0,
+              borderRadius: 10.0,
+              color: AppColors.primary,
+              onPressed: _isSubmitting ? null : _submitRequest,
             ),
           ],
         ),
@@ -401,7 +391,7 @@ class _VideoRequestDialogState extends State<VideoRequestDialog> {
         statusColor = AppColors.textSecondary;
         statusIcon = Icons.info_outline_rounded;
         statusTitle = 'Request Update';
-        statusDesc = 'Your video request is in status: ${status?.name ?? ''}.';
+        statusDesc = 'Your video request is in status: ${status?.toString().split('.').last ?? ''}.';
     }
 
     return AppBaseDialog(
@@ -458,90 +448,51 @@ class _VideoRequestDialogState extends State<VideoRequestDialog> {
           _buildPropertyHeader(),
           const SizedBox(height: 16.0),
           if (status == VideoRequestStatus.pending)
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.red,
-                  side: const BorderSide(color: Colors.red),
-                  fixedSize: const Size.fromHeight(46.0),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-                ),
-                onPressed: _isSubmitting ? null : _cancelRequest,
-                child: _isSubmitting
-                    ? const SizedBox(
-                        height: 18.0,
-                        width: 18.0,
-                        child: CircularProgressIndicator(color: Colors.red, strokeWidth: 2.0),
-                      )
-                    : const Text('Cancel Request', style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
+            AppButton.outline(
+              text: 'Cancel Request',
+              isLoading: _isSubmitting,
+              height: 46.0,
+              borderRadius: 10.0,
+              borderColor: Colors.red,
+              textColor: Colors.red,
+              onPressed: _isSubmitting ? null : _cancelRequest,
             )
           else if (status == VideoRequestStatus.cancelled)
             Row(
               children: [
                 Expanded(
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.textPrimary,
-                      side: const BorderSide(color: AppColors.border),
-                      fixedSize: const Size.fromHeight(46.0),
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-                    ),
+                  child: AppButton.outline(
+                    text: context.tr('close_button'),
+                    height: 46.0,
+                    borderRadius: 10.0,
+                    borderColor: AppColors.border,
+                    textColor: AppColors.textPrimary,
                     onPressed: () => Navigator.of(context).pop(),
-                    child: Text(
-                      context.tr('close_button'),
-                      style: AppTextStyles.button.copyWith(
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
                   ),
                 ),
                 const SizedBox(width: 10.0),
                 Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
-                      fixedSize: const Size.fromHeight(46.0),
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-                    ),
+                  child: AppButton.solid(
+                    text: context.tr('request_again'),
+                    height: 46.0,
+                    borderRadius: 10.0,
+                    color: AppColors.primary,
                     onPressed: () {
                       setState(() {
                         _existingRequest = null;
                       });
                     },
-                    child: Text(
-                      context.tr('request_again'),
-                      style: AppTextStyles.button.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
                   ),
                 ),
               ],
             )
           else
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  fixedSize: const Size.fromHeight(46.0),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-                ),
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('OK', style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
+            AppButton.solid(
+              text: 'OK',
+              height: 46.0,
+              borderRadius: 10.0,
+              color: AppColors.primary,
+              onPressed: () => Navigator.of(context).pop(),
             ),
         ],
       ),

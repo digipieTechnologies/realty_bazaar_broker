@@ -1,15 +1,16 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../app/app_routes.dart';
 import '../../../app/app_assets.dart';
+import '../../../app/app_routes.dart';
 import '../../../app/app_strings.dart';
-import '../../../widgets/brand/app_logo.dart';
 import '../../../core/localization/app_localizations.dart';
+import '../../../widgets/brand/app_logo.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

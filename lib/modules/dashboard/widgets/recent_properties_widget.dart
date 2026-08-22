@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../app/app_assets.dart';
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
@@ -52,7 +53,7 @@ class _RecentPropertiesWidgetState extends State<RecentPropertiesWidget> {
           // Header Row: Section Header Badge & View All Button
           AppSectionHeader(
             title: context.tr('properties'),
-            icon: Icons.apartment_rounded,
+            svgAsset: AppAssets.icPropertiesFilled,
             padding: const EdgeInsets.fromLTRB(16.0, 12.0, 12.0, 12.0),
             trailing: InkWell(
               onTap: () => context.go('/properties'),
