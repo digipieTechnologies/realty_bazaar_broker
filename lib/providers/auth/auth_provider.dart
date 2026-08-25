@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 import '../../core/services/notification_service.dart';
+import '../../core/services/clarity_service.dart';
 import '../../core/supabase/supabase_config.dart';
 import '../../util/common_ext.dart';
 import '../../models/models.dart';
@@ -368,6 +369,7 @@ class AuthProvider extends ChangeNotifier {
 
   UserModel? _userProfile;
   UserModel? get userProfile => _userProfile;
+  bool get isAuthenticated => _userProfile != null || (_storage.read<String>(sessionKey)?.isNotEmpty ?? false);
 
   /// Checks email existence and role, then generates a 2-minute OTP for forgot password using `generate_user_otp` RPC.
   Future<bool> requestForgotPasswordOtp(String email, {UserRole expectedRole = UserRole.broker}) async {
@@ -619,6 +621,16 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       subscribeToCurrentUserRealtime(id);
       syncDeviceToken(id);
+
+      // Identify user and tag role in Microsoft Clarity
+      ClarityService.instance.setUserId(id);
+      if (profile.role != null) {
+        ClarityService.instance.setCustomTag('role', profile.role!.dbValue);
+      }
+      if (profile.name != null && profile.name!.isNotEmpty) {
+        ClarityService.instance.setCustomTag('user_name', profile.name!);
+      }
+
       return _userProfile;
     } catch (e) {
       debugPrint('Error fetching current user profile for $id: $e');
@@ -861,6 +873,114 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('Logout error: $e');
       rethrow;
+    } finally {
+      _setLoading(false);
+      notifyListeners();
+    }
+  }
+
+  /// Permanently deletes / soft-deletes the current authenticated user's account via Edge Function
+  Future<bool> deleteAccount({required String reason, BuildContext? context}) async {
+    _setLoading(true);
+    _setError(null);
+    try {
+      final response = await SupabaseConfig.client.functions.invoke(
+        'delete-account',
+        body: {
+          'action': 'request',
+          'reason': reason,
+        },
+      );
+
+      if (response.status == 409) {
+        final msg = response.data?['message'] ?? 'A deletion request is already pending.';
+        _setError(msg);
+        return false;
+      }
+
+      if (response.status != 200) {
+        final errorMsg = response.data?['error'] ?? 'Failed to delete account.';
+        throw Exception(errorMsg);
+      }
+
+      // Cleanup local state and feature providers
+      unsubscribeCurrentUserRealtime();
+      try {
+        await SupabaseConfig.client.removeAllChannels();
+      } catch (e) {
+        debugPrint('Error removing channels: $e');
+      }
+
+      await removeDeviceTokenOnLogout();
+      await _storage.remove(sessionKey);
+      _userProfile = null;
+
+      final targetContext = context ?? AppRoutes.rootNavigatorKey.currentContext;
+      if (targetContext != null && targetContext.mounted) {
+        try {
+          targetContext.read<DashboardProvider>().clear();
+          targetContext.read<LeadProvider>().clear();
+          targetContext.read<PropertyProvider>().clear();
+          targetContext.read<VideoRequestProvider>().clear();
+          targetContext.read<ChatProvider>().clear();
+          targetContext.read<SocialProvider>().clear();
+        } catch (e) {
+          debugPrint('Error clearing feature providers on deletion: $e');
+        }
+      }
+
+      return true;
+    } catch (e) {
+      debugPrint('Delete account error: $e');
+      _setError(e.toString());
+      return false;
+    } finally {
+      _setLoading(false);
+      notifyListeners();
+    }
+  }
+
+  /// Submits a public account deletion request for unauthenticated / guest users
+  Future<bool> submitPublicDeletionRequest({
+    String? email,
+    String? phone,
+    String? reason,
+  }) async {
+    _setLoading(true);
+    _setError(null);
+    try {
+      final response = await SupabaseConfig.client.functions.invoke(
+        'delete-account',
+        body: {
+          'action': 'request',
+          if (email != null && email.isNotEmpty) 'email': email,
+          if (phone != null && phone.isNotEmpty) 'phone': phone,
+          'reason': reason ?? 'Public web deletion request',
+        },
+      );
+
+      if (response.status == 409) {
+        final msg = response.data?['message'] ?? 'A deletion request is already pending.';
+        _setError(msg);
+        return false;
+      }
+
+      if (response.status != 200) {
+        final errorMsg = response.data?['error'] ?? 'Failed to submit deletion request.';
+        _setError(errorMsg.toString());
+        return false;
+      }
+
+      return true;
+    } on FunctionException catch (fe) {
+      debugPrint('Public delete account FunctionException: ${fe.details}');
+      final msg = fe.details is Map ? (fe.details['error'] ?? fe.reasonPhrase) : fe.reasonPhrase;
+      _setError(msg?.toString() ?? 'No account found matching these details.');
+      return false;
+    } catch (e) {
+      debugPrint('Public delete account error: $e');
+      _setError(e.toString());
+      return false;
     } finally {
       _setLoading(false);
       notifyListeners();

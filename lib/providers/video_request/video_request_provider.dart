@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../core/services/clarity_service.dart';
 import '../../core/supabase/supabase_config.dart';
 import '../../models/models.dart';
 
@@ -258,6 +259,8 @@ class VideoRequestProvider extends ChangeNotifier {
       }).select('*, property:properties(*, address:addresses(*))').single();
 
       final newModel = VideoRequestModel.fromJson(response);
+
+      ClarityService.instance.sendCustomEvent('feature_video_request_submitted');
 
       await fetchVideoRequestCounts(brokerId: brokerId);
       await fetchVideoRequests(

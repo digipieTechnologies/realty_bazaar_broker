@@ -4,6 +4,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
 import '../buttons/app_button.dart';
@@ -129,7 +130,7 @@ class AppDialog extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         child: ContainerCorner(
-          width: 320.0,
+          width: 480.0,
           color: AppColors.surface,
           borderRadius: 16.0,
           padding: const EdgeInsets.all(24.0),

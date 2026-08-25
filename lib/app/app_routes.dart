@@ -28,7 +28,11 @@ import '../modules/properties/screens/view_property_screen.dart';
 import '../modules/leads/screens/view_lead_screen.dart';
 
 import '../modules/dashboard/screens/ad_campaign_settings_screen.dart';
+import '../modules/auth/screens/delete_account_screen.dart';
+import '../modules/legal/screens/privacy_policy_screen.dart';
+import '../modules/legal/screens/terms_of_service_screen.dart';
 import '../util/common_ext.dart';
+import '../core/services/clarity_service.dart';
 
 class AppRoutes {
   AppRoutes._();
@@ -44,6 +48,9 @@ class AppRoutes {
   static const String forgotPassword = '/forgot-password';
   static const String verifyOtp = '/verify-otp';
   static const String resetPassword = '/reset-password';
+  static const String deleteAccount = '/delete-account';
+  static const String privacyPolicy = '/privacy-policy';
+  static const String termsOfService = '/terms-of-service';
   static const String home = '/dashboard';
   static const String details = '/details';
   static const String campaignSettings = '/campaign-settings';
@@ -93,6 +100,9 @@ class AppRoutes {
     navigatorKey: rootNavigatorKey,
     initialLocation: initial,
     debugLogDiagnostics: true,
+    observers: [
+      ClarityRouteObserver(),
+    ],
     redirect: (context, state) {
       final userId = GetStorage().read<String>('user_id');
       final isLoggedIn = userId != null && userId.isNotEmpty;
@@ -104,6 +114,11 @@ class AppRoutes {
           state.matchedLocation == verifyOtp ||
           state.matchedLocation == resetPassword;
 
+      final goingToPublicLegal =
+          state.matchedLocation == deleteAccount ||
+          state.matchedLocation == privacyPolicy ||
+          state.matchedLocation == termsOfService;
+
       final goingToSplash = state.matchedLocation == initial;
 
       final goingToLoginOrSignup =
@@ -111,7 +126,7 @@ class AppRoutes {
           state.matchedLocation == signUp ||
           state.matchedLocation == forgotPassword;
 
-      if (!isLoggedIn && !goingToAuth && !goingToSplash) {
+      if (!isLoggedIn && !goingToAuth && !goingToSplash && !goingToPublicLegal) {
         return login;
       }
 
@@ -152,6 +167,21 @@ class AppRoutes {
         name: 'forgot_password',
         builder: (context, state) =>
             const LoginScreen(initialMode: AuthMode.forgotPassword),
+      ),
+      GoRoute(
+        path: deleteAccount,
+        name: 'delete_account',
+        builder: (context, state) => const DeleteAccountScreen(),
+      ),
+      GoRoute(
+        path: privacyPolicy,
+        name: 'privacy_policy',
+        builder: (context, state) => const PrivacyPolicyScreen(),
+      ),
+      GoRoute(
+        path: termsOfService,
+        name: 'terms_of_service',
+        builder: (context, state) => const TermsOfServiceScreen(),
       ),
       GoRoute(
         path: verifyOtp,

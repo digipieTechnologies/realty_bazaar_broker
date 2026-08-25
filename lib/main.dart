@@ -3,35 +3,58 @@
 
 // ignore_for_file: deprecated_member_use
 
+import 'package:clarity_flutter/clarity_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:get/get.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:provider/provider.dart';
+
 // ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app/app_routes.dart';
-import 'app/app_theme.dart';
 import 'app/app_strings.dart';
+import 'app/app_theme.dart';
+import 'core/localization/app_localizations.dart';
+import 'core/services/clarity_service.dart';
+import 'core/services/notification_service.dart';
+import 'core/services/storage_service.dart';
 import 'providers/auth/auth_provider.dart';
+import 'providers/campaign/ad_campaign_provider.dart';
+import 'providers/chat/chat_provider.dart';
 import 'providers/dashboard/dashboard_provider.dart';
-import 'providers/social/social_provider.dart';
 import 'providers/language/language_provider.dart';
 import 'providers/lead/lead_provider.dart';
 import 'providers/property/property_provider.dart';
+import 'providers/social/social_provider.dart';
 import 'providers/video_request/video_request_provider.dart';
-import 'providers/chat/chat_provider.dart';
-import 'providers/campaign/ad_campaign_provider.dart';
-import 'core/localization/app_localizations.dart';
-import 'core/services/storage_service.dart';
-import 'core/services/notification_service.dart';
 
 void main() async {
   // Ensure Flutter engine bindings are loaded first
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Global Flutter Framework Error Handler (UI/Widget build exceptions)
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    ClarityService.instance.logError(
+      details.exception,
+      stackTrace: details.stack,
+      reason: details.context?.toString(),
+    );
+  };
+
+  // Global Async/Platform Error Handler (Isolate/Async unhandled exceptions)
+  PlatformDispatcher.instance.onError = (error, stack) {
+    ClarityService.instance.logError(
+      error,
+      stackTrace: stack,
+      reason: 'PlatformDispatcher unhandled error',
+    );
+    return false;
+  };
 
   // Initialize OneSignal Notification Service
   try {
@@ -92,12 +115,17 @@ void main() async {
     debugPrint('Failed to initialize NotificationService: $e');
   }
 
-  // 5. Run the application
-  runApp(const MyApp());
+  // 5. Run the application (wrapped with Clarity if available)
+  final clarityConfig = ClarityService.instance.createConfig();
+  if (clarityConfig != null && ClarityService.instance.isSupportedPlatform) {
+    runApp(ClarityWidget(app: const RealtyBazaarApp(), clarityConfig: clarityConfig));
+  } else {
+    runApp(const RealtyBazaarApp());
+  }
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class RealtyBazaarApp extends StatelessWidget {
+  const RealtyBazaarApp({super.key});
 
   @override
   Widget build(BuildContext context) {

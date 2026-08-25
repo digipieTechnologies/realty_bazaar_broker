@@ -25,6 +25,9 @@ class AppColors {
   static const Color primaryLight = primary100;
   static const Color primaryDark = primary700;
 
+  static const Color white = Colors.white;
+  static const Color black = Colors.black;
+
   // ==========================================
   // Secondary & Dynamic Accents
   // ==========================================

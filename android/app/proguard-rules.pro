@@ -20,3 +20,8 @@
 # Play Core & Deferred Components
 -dontwarn com.google.android.play.core.**
 -dontwarn io.flutter.embedding.engine.deferredcomponents.**
+
+# Microsoft Clarity
+-keep class com.microsoft.clarity.** { *; }
+-dontwarn com.microsoft.clarity.**
+

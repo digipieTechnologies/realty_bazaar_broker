@@ -18,6 +18,7 @@ class AppTextField extends StatefulWidget {
   final int? maxLength;
   final TextInputType keyboardType;
   final ValueChanged<String>? onChanged;
+  final int minLines;
   final int maxLines;
   final VoidCallback? onTap;
   final FocusNode? focusNode;
@@ -37,6 +38,7 @@ class AppTextField extends StatefulWidget {
     this.maxLength,
     this.keyboardType = TextInputType.text,
     this.onChanged,
+    this.minLines = 1,
     this.maxLines = 1,
     this.onTap,
     this.focusNode,
@@ -81,6 +83,7 @@ class _AppTextFieldState extends State<AppTextField> {
           maxLength: widget.maxLength,
           keyboardType: widget.keyboardType,
           onChanged: widget.onChanged,
+          minLines: widget.minLines,
           maxLines: widget.maxLines,
           onTap: widget.onTap,
           textInputAction: widget.textInputAction,

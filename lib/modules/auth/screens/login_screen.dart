@@ -613,10 +613,46 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _copyrightFooter() {
-    return Text(
-      context.tr('copyright_text'),
-      style: AppTextStyles.caption.copyWith(color: AppColors.textMuted),
-      textAlign: TextAlign.center,
+    return Column(
+      children: [
+        Text(
+          context.tr('copyright_text'),
+          style: AppTextStyles.caption.copyWith(color: AppColors.textMuted),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 8.0),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            InkWell(
+              onTap: () => context.push(AppRoutes.privacyPolicy),
+              child: Text(
+                context.tr('privacy_policy'),
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: AppColors.textSecondary,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+            ),
+            InkWell(
+              onTap: () => context.push(AppRoutes.termsOfService),
+              child: Text(
+                context.tr('terms_of_service'),
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: AppColors.textSecondary,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

@@ -10,6 +10,7 @@ import '../../models/social_account_model.dart';
 import '../../models/social_post_model.dart';
 import '../../models/social_enums.dart';
 import '../../core/services/supabase_storage_service.dart';
+import '../../core/services/clarity_service.dart';
 
 class SocialProvider extends ChangeNotifier {
   bool _isFacebookConnected = false;
@@ -524,6 +525,8 @@ class SocialProvider extends ChangeNotifier {
       );
 
       _updatePostInLists(updatedPost);
+
+      ClarityService.instance.sendCustomEvent('feature_enable_post_automation');
 
       AppToast.showSuccess(
         'Automation Enabled',

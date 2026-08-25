@@ -1,23 +1,25 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-import '../../../app/app_routes.dart';
+import 'package:provider/provider.dart';
+import 'package:the_realty_bazaar/core/extensions/context_extensions.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_constants.dart';
+import '../../../app/app_routes.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../app/app_utils.dart';
+import '../../../core/localization/app_localizations.dart';
+import '../../../models/models.dart';
 import '../../../providers/auth/auth_provider.dart';
-import '../../../widgets/inputs/app_textfield.dart';
+import '../../../util/common_ext.dart';
 import '../../../widgets/buttons/app_button.dart';
-import '../../../widgets/loaders/app_loader.dart';
 import '../../../widgets/dialogs/app_dialog.dart';
 import '../../../widgets/dividers/app_divider.dart';
-import '../../../core/localization/app_localizations.dart';
-import '../../../util/common_ext.dart';
+import '../../../widgets/inputs/app_textfield.dart';
+import '../../../widgets/loaders/app_loader.dart';
 import '../../auth/widgets/phone_field_widget.dart';
-import '../../../models/models.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -613,16 +615,70 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: const TextStyle(fontSize: 13.0, color: AppColors.textSecondary),
             ),
             Divider(height: isDesktop ? 32 : 20, color: AppColors.border),
-            Align(
-              alignment: isDesktop ? Alignment.centerLeft : Alignment.center,
-              child: AppButton(
-                text: context.tr('sign_out_button'),
-                variant: AppButtonVariant.solid,
-                color: AppColors.error,
-                width: isDesktop ? 200.0 : double.infinity,
-                isLoading: _isSigningOut,
-                onPressed: _isSigningOut || _isSaving ? null : _showSignOutConfirmation,
-              ),
+            Wrap(
+              spacing: 12.0,
+              runSpacing: 12.0,
+              children: [
+                AppButton.outline(
+                  text: context.tr('sign_out_button'),
+                  textColor: context.textTheme.bodyMedium?.color ?? AppColors.textPrimary,
+                  width: isDesktop ? 180.0 : double.infinity,
+                  isLoading: _isSigningOut,
+                  onPressed: _isSigningOut || _isSaving ? null : _showSignOutConfirmation,
+                ),
+                AppButton(
+                  text: context.tr('delete_account'),
+                  variant: AppButtonVariant.outline,
+                  color: AppColors.error,
+                  borderColor: AppColors.error,
+                  textColor: AppColors.white,
+                  width: isDesktop ? 180.0 : double.infinity,
+                  onPressed: () => context.push(AppRoutes.deleteAccount),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16.0),
+            const Divider(color: AppColors.border),
+            const SizedBox(height: 8.0),
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () => context.push(AppRoutes.privacyPolicy),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(50, 30),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text(
+                    context.tr('privacy_policy'),
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text('•', style: TextStyle(color: AppColors.textSecondary)),
+                ),
+                TextButton(
+                  onPressed: () => context.push(AppRoutes.termsOfService),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(50, 30),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text(
+                    context.tr('terms_of_service'),
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

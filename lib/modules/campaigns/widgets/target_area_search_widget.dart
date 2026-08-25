@@ -228,41 +228,44 @@ class _TargetAreaSearchWidgetState extends State<TargetAreaSearchWidget> {
                         const Divider(height: 1.0, color: AppColors.border),
                     itemBuilder: (context, index) {
                       final item = filteredResults[index];
-                      return ListTile(
-                        dense: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16.0,
-                          vertical: 4.0,
-                        ),
-                        title: Text(
-                          item.fullArea,
-                          style: AppTextStyles.body2.copyWith(
-                            fontSize: 13.0,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.textPrimary,
+                      return Material(
+                        type: MaterialType.transparency,
+                        child: ListTile(
+                          dense: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 4.0,
                           ),
-                        ),
-                        trailing: Container(
-                          width: 28.0,
-                          height: 28.0,
-                          decoration: BoxDecoration(
-                            color: AppColors.primary,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.primary.withValues(alpha: 0.3),
-                                blurRadius: 6,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
+                          title: Text(
+                            item.fullArea,
+                            style: AppTextStyles.body2.copyWith(
+                              fontSize: 13.0,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.textPrimary,
+                            ),
                           ),
-                          child: const Icon(
-                            Icons.add_rounded,
-                            size: 18.0,
-                            color: Colors.white,
+                          trailing: Container(
+                            width: 28.0,
+                            height: 28.0,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.primary.withValues(alpha: 0.3),
+                                  blurRadius: 6,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: const Icon(
+                              Icons.add_rounded,
+                              size: 18.0,
+                              color: Colors.white,
+                            ),
                           ),
+                          onTap: () => _addArea(item),
                         ),
-                        onTap: () => _addArea(item),
                       );
                     },
                   ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/services/clarity_service.dart';
 import '../../core/supabase/supabase_config.dart';
 import '../../models/address_model.dart';
 import '../../models/property_model.dart';
@@ -150,6 +151,9 @@ class PropertyProvider extends ChangeNotifier {
             ? response
             : {};
         if (data['success'] == true) {
+          ClarityService.instance.sendCustomEvent(
+            isEdit ? 'feature_property_updated' : 'feature_property_created',
+          );
           final brokerIdStr = property.brokerId?.id;
           if (brokerIdStr != null && brokerIdStr.isNotEmpty) {
             await fetchProperties(brokerId: brokerIdStr, page: 1, searchQuery: _searchQuery);

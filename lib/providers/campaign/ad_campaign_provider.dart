@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../core/services/clarity_service.dart';
 
 import '../../models/models.dart';
 
@@ -80,6 +81,7 @@ class AdCampaignProvider extends ChangeNotifier {
           .single();
 
       _settings = AdCampaignSettingsModel.fromJson(response);
+      ClarityService.instance.sendCustomEvent('feature_save_ad_campaign_settings');
       _isSaving = false;
       notifyListeners();
       return true;
