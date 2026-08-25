@@ -18,3 +18,6 @@ export 'chat_room_model.dart';
 export 'chat_message_model.dart';
 export 'notification_model.dart';
 export 'notification_enums.dart';
+export 'target_area_model.dart';
+export 'ad_campaign_settings_model.dart';
+export 'campaign_enums.dart';

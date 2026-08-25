@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
+import '../../../../app/app_utils.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/supabase/supabase_config.dart';
 import '../../../../models/social_lead_model.dart';
@@ -75,6 +76,7 @@ class _AddLeadDialogState extends State<AddLeadDialog> {
   }
 
   Future<void> _handleSaveLead() async {
+    AppUtils.hideKeyboard(context);
     if (!_formKey.currentState!.validate()) {
       return;
     }

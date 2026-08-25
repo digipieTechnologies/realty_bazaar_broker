@@ -32,7 +32,6 @@ class AuthFooterLinkWidget extends StatelessWidget {
               style: AppTextStyles.body2.copyWith(
                 color: AppColors.primary,
                 fontWeight: FontWeight.bold,
-                decoration: TextDecoration.underline,
               ),
               recognizer: TapGestureRecognizer()..onTap = onTap,
             ),

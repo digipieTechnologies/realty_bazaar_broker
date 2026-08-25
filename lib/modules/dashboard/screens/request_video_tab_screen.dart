@@ -8,6 +8,7 @@ import '../../../core/localization/app_localizations.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../providers/video_request/video_request_provider.dart';
 import '../../../util/common_ext.dart';
+import '../../../widgets/common/common_app_bar.dart';
 import '../../../widgets/toast/app_toast.dart';
 import '../../../widgets/shimmer/video_request_list_shimmer_widget.dart';
 import '../widgets/video_requests/video_request_summary_section.dart';
@@ -86,9 +87,15 @@ class _RequestVideoTabScreenState extends State<RequestVideoTabScreen> {
   @override
   Widget build(BuildContext context) {
     final isMobile = context.isMobileUI;
+    final canPop = Navigator.of(context).canPop();
 
     return Scaffold(
       backgroundColor: AppColors.background,
+      appBar: canPop
+          ? CommonAppBar(
+              title: context.tr('video_requests'),
+            )
+          : null,
       body: SafeArea(
         child: Consumer<VideoRequestProvider>(
           builder: (context, provider, child) {

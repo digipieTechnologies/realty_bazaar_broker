@@ -24,6 +24,7 @@ import 'providers/lead/lead_provider.dart';
 import 'providers/property/property_provider.dart';
 import 'providers/video_request/video_request_provider.dart';
 import 'providers/chat/chat_provider.dart';
+import 'providers/campaign/ad_campaign_provider.dart';
 import 'core/localization/app_localizations.dart';
 import 'core/services/storage_service.dart';
 import 'core/services/notification_service.dart';
@@ -110,6 +111,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => VideoRequestProvider()),
         ChangeNotifierProvider(create: (_) => ChatProvider()),
         ChangeNotifierProvider(create: (_) => LeadProvider()),
+        ChangeNotifierProvider(create: (_) => AdCampaignProvider()),
       ],
       child: Consumer<LanguageProvider>(
         builder: (context, languageProvider, child) {

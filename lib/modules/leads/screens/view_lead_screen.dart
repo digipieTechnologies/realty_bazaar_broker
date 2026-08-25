@@ -71,7 +71,7 @@ class ViewLeadScreen extends StatelessWidget {
         title: context.tr('lead_details'),
       ),
       body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         child: LayoutBuilder(
           builder: (context, constraints) {
             final isDesktop = constraints.maxWidth > 900;
@@ -683,7 +683,7 @@ class ViewLeadScreen extends StatelessWidget {
               height: 120.0,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
+                physics: const ClampingScrollPhysics(),
                 itemCount: mediaUrls.length,
                 separatorBuilder: (context, index) => const SizedBox(width: 10.0),
                 itemBuilder: (context, index) {

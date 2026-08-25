@@ -183,11 +183,19 @@ class AppUtils {
 
   // --- UI INTERACTION OVERLAYS ---
 
-  static void dismissKeyboard(BuildContext context) {
-    final currentFocus = FocusScope.of(context);
-    if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-      FocusManager.instance.primaryFocus?.unfocus();
+  /// Centralized helper to dismiss/hide the soft keyboard before any API submission or form action.
+  static void hideKeyboard([BuildContext? context]) {
+    if (context != null) {
+      final currentFocus = FocusScope.of(context);
+      if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+        currentFocus.unfocus();
+      }
     }
+    FocusManager.instance.primaryFocus?.unfocus();
+  }
+
+  static void dismissKeyboard(BuildContext context) {
+    hideKeyboard(context);
   }
 
   static void showSnackBar(

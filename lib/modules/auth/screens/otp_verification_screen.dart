@@ -46,7 +46,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final _pinController = TextEditingController();
   final _pinFocusNode = FocusNode();
 
-  int _resendCountdown = 120; // 2 minutes expiry timer
+  int _resendCountdown = 30; // 30 seconds expiry timer
   Timer? _timer;
   bool _isResending = false;
 
@@ -67,7 +67,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   void _startResendTimer() {
     _timer?.cancel();
     setState(() {
-      _resendCountdown = 120;
+      _resendCountdown = 30;
     });
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_resendCountdown > 0) {
@@ -193,7 +193,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       if (success) {
         AppToast.showSuccess(
           'Code Sent',
-          'A new 6-digit verification code (valid for 2 mins) has been sent to your email.',
+          'A new 6-digit verification code (valid for 30 secs) has been sent to your email.',
         );
         _startResendTimer();
       } else {

@@ -27,6 +27,9 @@ import '../models/social_lead_model.dart';
 import '../modules/properties/screens/view_property_screen.dart';
 import '../modules/leads/screens/view_lead_screen.dart';
 
+import '../modules/dashboard/screens/ad_campaign_settings_screen.dart';
+import '../util/common_ext.dart';
+
 class AppRoutes {
   AppRoutes._();
 
@@ -43,6 +46,7 @@ class AppRoutes {
   static const String resetPassword = '/reset-password';
   static const String home = '/dashboard';
   static const String details = '/details';
+  static const String campaignSettings = '/campaign-settings';
 
   /// Navigates to Property Details full screen for a given property
   static void navigateToPropertyDetails(BuildContext context, PropertyModel property) {
@@ -58,6 +62,28 @@ class AppRoutes {
     Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
         builder: (context) => ViewLeadScreen(lead: lead),
+      ),
+    );
+  }
+
+  /// Navigates to Video Requests: switches tab if Desktop sidebar layout, or pushes full screen if Mobile.
+  static void navigateToVideoRequests(BuildContext context) {
+    if (context.isDesktopUI) {
+      context.go('/request-video');
+    } else {
+      Navigator.of(context, rootNavigator: true).push(
+        MaterialPageRoute(
+          builder: (context) => const RequestVideoTabScreen(),
+        ),
+      );
+    }
+  }
+
+  /// Navigates to Ad Campaign Settings full screen route
+  static void navigateToCampaignSettings(BuildContext context) {
+    Navigator.of(context, rootNavigator: true).push(
+      MaterialPageRoute(
+        builder: (context) => const AdCampaignSettingsScreen(),
       ),
     );
   }
@@ -219,6 +245,11 @@ class AppRoutes {
       ),
 
 
+      GoRoute(
+        path: campaignSettings,
+        name: 'campaign_settings',
+        builder: (context, state) => const AdCampaignSettingsScreen(),
+      ),
       GoRoute(
         path: details,
         name: 'details',

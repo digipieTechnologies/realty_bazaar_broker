@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../app/app_assets.dart';
 import '../../../app/app_colors.dart';
+import '../../../app/app_routes.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../providers/auth/auth_provider.dart';
@@ -61,6 +63,7 @@ class _DashboardSummaryWidgetState extends State<DashboardSummaryWidget> {
         iconBgColor: AppColors.accentCoral,
         iconColor: Colors.white,
         cardBgColor: AppColors.accentCoralLight,
+        onTap: () => context.go('/leads'),
       ),
       _StatItemData(
         title: context.tr('total_leads'),
@@ -71,6 +74,7 @@ class _DashboardSummaryWidgetState extends State<DashboardSummaryWidget> {
         iconBgColor: AppColors.primary500,
         iconColor: Colors.white,
         cardBgColor: AppColors.primary50,
+        onTap: () => context.go('/leads'),
       ),
       _StatItemData(
         title: context.tr('properties'),
@@ -81,6 +85,7 @@ class _DashboardSummaryWidgetState extends State<DashboardSummaryWidget> {
         iconBgColor: AppColors.accentGold,
         iconColor: Colors.white,
         cardBgColor: AppColors.accentGoldLight,
+        onTap: () => context.go('/properties'),
       ),
       _StatItemData(
         title: context.tr('video_requests'),
@@ -91,6 +96,7 @@ class _DashboardSummaryWidgetState extends State<DashboardSummaryWidget> {
         iconBgColor: AppColors.accentTeal,
         iconColor: Colors.white,
         cardBgColor: AppColors.accentTealLight,
+        onTap: () => AppRoutes.navigateToVideoRequests(context),
       ),
     ];
 
@@ -141,6 +147,7 @@ class _StatItemData {
   final Color iconBgColor;
   final Color iconColor;
   final Color cardBgColor;
+  final VoidCallback? onTap;
 
   const _StatItemData({
     required this.title,
@@ -152,6 +159,7 @@ class _StatItemData {
     required this.iconBgColor,
     required this.iconColor,
     required this.cardBgColor,
+    this.onTap,
   });
 }
 
@@ -166,91 +174,100 @@ class _StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: data.cardBgColor,
-        borderRadius: BorderRadius.circular(isDesktop ? 18.0 : 14.0),
-        border: Border.all(color: data.iconBgColor.withValues(alpha: 0.25), width: 1.0),
-        boxShadow: [
-          BoxShadow(
-            color: data.iconBgColor.withValues(alpha: 0.08),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      padding: EdgeInsets.all(isDesktop ? 16.0 : 12.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: EdgeInsets.all(isDesktop ? 8.0 : 6.0),
-                decoration: BoxDecoration(
-                  color: data.iconBgColor,
-                  shape: BoxShape.circle,
-                ),
-                child: data.svgAsset != null
-                    ? SvgPicture.asset(
-                        data.svgAsset!,
-                        width: isDesktop ? 18.0 : 15.0,
-                        height: isDesktop ? 18.0 : 15.0,
-                        colorFilter: ColorFilter.mode(
-                          data.iconColor,
-                          BlendMode.srcIn,
-                        ),
-                      )
-                    : Icon(
-                        data.icon,
-                        color: data.iconColor,
-                        size: isDesktop ? 18.0 : 15.0,
-                      ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: isDesktop ? 9.0 : 7.0,
-                  vertical: isDesktop ? 4.0 : 3.0,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                child: Text(
-                  data.tagText,
-                  style: AppTextStyles.caption.copyWith(
-                    color: data.tagColor,
-                    fontWeight: FontWeight.w800,
-                    fontSize: isDesktop ? 11.0 : 10.0,
-                  ),
-                ),
+    final borderRadius = BorderRadius.circular(isDesktop ? 18.0 : 14.0);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: data.onTap,
+        borderRadius: borderRadius,
+        child: Ink(
+          decoration: BoxDecoration(
+            color: data.cardBgColor,
+            borderRadius: borderRadius,
+            border: Border.all(color: data.iconBgColor.withValues(alpha: 0.25), width: 1.0),
+            boxShadow: [
+              BoxShadow(
+                color: data.iconBgColor.withValues(alpha: 0.08),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
               ),
             ],
           ),
-          SizedBox(height: isDesktop ? 12.0 : 8.0),
-          Text(
-            data.value,
-            style: AppTextStyles.heading1.copyWith(
-              fontSize: isDesktop ? 24.0 : 19.0,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textPrimary,
-              height: 1.1,
-            ),
+          padding: EdgeInsets.all(isDesktop ? 16.0 : 12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(isDesktop ? 8.0 : 6.0),
+                    decoration: BoxDecoration(
+                      color: data.iconBgColor,
+                      shape: BoxShape.circle,
+                    ),
+                    child: data.svgAsset != null
+                        ? SvgPicture.asset(
+                            data.svgAsset!,
+                            width: isDesktop ? 18.0 : 15.0,
+                            height: isDesktop ? 18.0 : 15.0,
+                            colorFilter: ColorFilter.mode(
+                              data.iconColor,
+                              BlendMode.srcIn,
+                            ),
+                          )
+                        : Icon(
+                            data.icon,
+                            color: data.iconColor,
+                            size: isDesktop ? 18.0 : 15.0,
+                          ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isDesktop ? 9.0 : 7.0,
+                      vertical: isDesktop ? 4.0 : 3.0,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    child: Text(
+                      data.tagText,
+                      style: AppTextStyles.caption.copyWith(
+                        color: data.tagColor,
+                        fontWeight: FontWeight.w800,
+                        fontSize: isDesktop ? 11.0 : 10.0,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: isDesktop ? 12.0 : 8.0),
+              Text(
+                data.value,
+                style: AppTextStyles.heading1.copyWith(
+                  fontSize: isDesktop ? 24.0 : 19.0,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textPrimary,
+                  height: 1.1,
+                ),
+              ),
+              const SizedBox(height: 3.0),
+              Text(
+                data.title,
+                style: AppTextStyles.caption.copyWith(
+                  color: AppColors.textSecondary,
+                  fontWeight: FontWeight.w600,
+                  fontSize: isDesktop ? 12.5 : 11.5,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ),
-          const SizedBox(height: 3.0),
-          Text(
-            data.title,
-            style: AppTextStyles.caption.copyWith(
-              color: AppColors.textSecondary,
-              fontWeight: FontWeight.w600,
-              fontSize: isDesktop ? 12.5 : 11.5,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
+        ),
       ),
     );
   }

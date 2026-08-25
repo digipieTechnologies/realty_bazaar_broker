@@ -9,9 +9,10 @@ class AppAssets {
   static const String logoTransparent = 'assets/logo/app_logo_transparent.png';
   static const String logoWhite = 'assets/logo/app_logo_white.png';
   static const String building = 'assets/logo/building.png';
-  static const String defaultAvatar = 'assets/images/default_avatar.png';
+  static String defaultAvatar = 'assets/images/default_avatar.png';
   static const String illustrationPlaceholder =
       'assets/images/illustration_placeholder.png';
+  static const String mapBanner = 'assets/images/map_banner.png';
 
   // Icons
   static const String iconLead = 'assets/icons/lead.svg';

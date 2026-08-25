@@ -1,8 +1,7 @@
 // File: supabase/functions/send-email/index.ts
-// Purpose: Supabase Edge Function to send emails via Resend REST API, supporting secure server-side OTP retrieval.
+// Purpose: Supabase Edge Function to send emails via Resend REST API with anti-spam deliverability compliance.
 
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -12,11 +11,11 @@ const corsHeaders = {
 
 interface SendEmailRequest {
   to: string | string[];
-  subject?: string;
+  subject: string;
   html?: string;
   text?: string;
   from?: string;
-  otp_type?: string;
+  reply_to?: string;
 }
 
 serve(async (req) => {
@@ -26,7 +25,7 @@ serve(async (req) => {
   }
 
   try {
-    // 1. Read Resend API Key from Environment Secrets
+    // 1. Read Resend API Key & Secrets from Environment Variables
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
     if (!resendApiKey) {
       return new Response(
@@ -42,73 +41,43 @@ serve(async (req) => {
 
     // 2. Parse request payload
     const body: SendEmailRequest = await req.json();
-    const { to, from, otp_type } = body;
-    let html = body.html;
-    let subject = body.subject || "Your The Realty Bazaar Verification Code";
+    const { to, subject, html, text, from, reply_to } = body;
 
-    // Format recipient email array
+    // Validate required fields
+    if (!to || !subject || (!html && !text)) {
+      return new Response(
+        JSON.stringify({
+          error: "Missing required fields. 'to', 'subject', and either 'html' or 'text' are required.",
+        }),
+        {
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+          status: 400,
+        }
+      );
+    }
+
+    // 3. Format recipient email array
     const recipients = Array.isArray(to) ? to : [to];
-    if (!to || recipients.length === 0) {
-      return new Response(
-        JSON.stringify({ error: "Missing required 'to' recipient email." }),
-        {
-          headers: { "Content-Type": "application/json", ...corsHeaders },
-          status: 400,
-        }
-      );
-    }
 
-    // 3. If otp_type is provided, retrieve active OTP securely server-side using Service Role Key
-    if (otp_type && !html) {
-      const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
-      const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
-
-      if (supabaseUrl && serviceRoleKey) {
-        const adminClient = createClient(supabaseUrl, serviceRoleKey);
-        const { data: otps, error: otpErr } = await adminClient
-          .from("user_otps")
-          .select("otp")
-          .eq("email", recipients[0].toLowerCase().trim())
-          .eq("otp_type", otp_type)
-          .gte("expiry_at", new Date().toISOString())
-          .order("created_at", { ascending: false })
-          .limit(1);
-
-        if (otpErr) {
-          console.error("Error querying OTP from DB:", otpErr);
-        }
-
-        if (otps && otps.length > 0) {
-          const otpCode = otps[0].otp;
-          html = `<h2>Your Verification Code is: <b>${otpCode}</b></h2><p>This code will expire in 2 minutes.</p>`;
-        } else {
-          return new Response(
-            JSON.stringify({ error: "No active verification code found for this email." }),
-            {
-              headers: { "Content-Type": "application/json", ...corsHeaders },
-              status: 404,
-            }
-          );
-        }
-      }
-    }
-
-    // Validate required fields for Resend API
-    if (!html && !body.text) {
-      return new Response(
-        JSON.stringify({ error: "Missing email content body." }),
-        {
-          headers: { "Content-Type": "application/json", ...corsHeaders },
-          status: 400,
-        }
-      );
-    }
-
-    // 4. Default sender email (Using verified domain: therealtybazaar.com)
-    const defaultFrom = Deno.env.get("RESEND_FROM_EMAIL") || "The Realty Bazaar <no-reply@therealtybazaar.com>";
+    // 4. Sender & Reply-To email (Prioritizes payload `from`, then `RESEND_FROM_EMAIL` secret)
+    const secretFrom = Deno.env.get("RESEND_FROM_EMAIL");
+    const defaultFrom = secretFrom || "The Realty Bazaar <no-reply@therealtybazaar.com>";
     const sender = from || defaultFrom;
 
-    // 5. Construct Resend payload (Include both HTML and plain text for spam filter compliance)
+    const secretReplyTo = Deno.env.get("RESEND_REPLY_TO");
+    const replyTo = reply_to || secretReplyTo;
+
+    // 5. Auto-generate plain text body from HTML if text is missing (crucial for Gmail Anti-Spam compliance)
+    let plainText = text;
+    if (!plainText && html) {
+      plainText = html
+        .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    // 6. Construct Resend payload with anti-spam compliance fields
     const resendPayload: Record<string, unknown> = {
       from: sender,
       to: recipients,
@@ -116,13 +85,10 @@ serve(async (req) => {
     };
 
     if (html) resendPayload.html = html;
-    if (body.text) {
-      resendPayload.text = body.text;
-    } else if (html) {
-      resendPayload.text = html.replace(/<[^>]*>?/gm, " ").replace(/\s+/g, " ").trim();
-    }
+    if (plainText) resendPayload.text = plainText;
+    if (replyTo) resendPayload.reply_to = replyTo;
 
-    // 6. Send email via Resend REST API
+    // 7. Send email via Resend REST API
     const resendResponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -148,7 +114,7 @@ serve(async (req) => {
       );
     }
 
-    // 7. Return success response
+    // 8. Return success response
     return new Response(
       JSON.stringify({
         success: true,

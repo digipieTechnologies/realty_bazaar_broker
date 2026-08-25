@@ -101,7 +101,7 @@ class PropertyCardWidget extends StatelessWidget {
                       ),
                       const SizedBox(width: 3.0),
                       Text(
-                        '${property.medias.isNotEmpty ? property.medias.length : 1}',
+                        '${property.medias.length}',
                         style: AppTextStyles.caption.copyWith(
                           color: Colors.white,
                           fontSize: 10.5,
@@ -389,8 +389,7 @@ class PropertyCardWidget extends StatelessWidget {
                           context.tr(
                             'photos_count',
                             arguments: {
-                              'count':
-                                  '${property.medias.isNotEmpty ? property.medias.length : 1}',
+                              'count': '${property.medias.length}',
                             },
                           ),
                           style: AppTextStyles.caption.copyWith(
@@ -574,8 +573,7 @@ class PropertyCardWidget extends StatelessWidget {
                   context.tr(
                     'photos_count',
                     arguments: {
-                      'count':
-                          '${property.medias.isNotEmpty ? property.medias.length : 1}',
+                      'count': '${property.medias.length}',
                     },
                   ),
                   style: AppTextStyles.caption.copyWith(

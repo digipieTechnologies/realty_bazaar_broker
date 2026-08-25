@@ -67,6 +67,7 @@ class _VideoRequestDialogState extends State<VideoRequestDialog> {
   }
 
   Future<void> _submitRequest() async {
+    AppUtils.hideKeyboard(context);
     setState(() => _isSubmitting = true);
     try {
       final provider = Provider.of<VideoRequestProvider>(context, listen: false);

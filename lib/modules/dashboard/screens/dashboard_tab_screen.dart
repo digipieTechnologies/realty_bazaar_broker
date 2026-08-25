@@ -17,6 +17,7 @@ import '../../../widgets/common/app_section_header.dart';
 import '../../../widgets/dialogs/app_dialog.dart';
 import '../../../widgets/shimmer/social_connect_shimmer_widget.dart';
 import '../../../widgets/toast/app_toast.dart';
+import '../widgets/ad_campaign_banner_widget.dart';
 import '../widgets/dashboard_header_banner_widget.dart';
 import '../widgets/dashboard_summary_widget.dart';
 import '../widgets/recent_leads_widget.dart';
@@ -164,6 +165,10 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
                               const Divider(height: 1.0, color: AppColors.border),
                               const SizedBox(height: 24.0),
                               const RecentPostsWidget(),
+                              const SizedBox(height: 24.0),
+                              const Divider(height: 1.0, color: AppColors.border),
+                              const SizedBox(height: 24.0),
+                              const AdCampaignBannerWidget(),
                             ],
                           ),
                         ),
@@ -207,7 +212,7 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
                     );
                   }
 
-                  // Mobile Column Layout: Summary -> Connected Channels -> Recent Leads -> Recent Posts -> Recent Properties
+                  // Mobile Column Layout: Summary -> Connected Channels -> Recent Leads -> Recent Posts -> Recent Properties -> Campaign Settings
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -259,6 +264,12 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
 
                       // Section 5: Recent Properties Widget (Top 3 Properties)
                       const RecentPropertiesWidget(),
+                      const SizedBox(height: 14.0),
+                      const Divider(height: 1.0, color: AppColors.border),
+                      const SizedBox(height: 14.0),
+
+                      // Section 6: Ad Campaign Settings Card
+                      const AdCampaignBannerWidget(),
                     ],
                   );
                 },

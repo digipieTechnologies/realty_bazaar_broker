@@ -115,6 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _saveChanges() async {
+    AppUtils.hideKeyboard(context);
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isSaving = true);
 
