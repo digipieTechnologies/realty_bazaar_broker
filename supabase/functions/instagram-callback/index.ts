@@ -169,6 +169,41 @@ serve(async (req) => {
       }
     }
 
+    // 4b. Check and update broker setup_details JSONB (instagram_connected)
+    try {
+      const { data: brokerRecord } = await supabase
+        .from("brokers")
+        .select("setup_details")
+        .eq("id", brokerId)
+        .maybeSingle();
+
+      const currentSetupDetails = brokerRecord?.setup_details || {};
+      if (!currentSetupDetails.instagram_connected) {
+        const updatedSetupDetails = {
+          ...currentSetupDetails,
+          account_created: currentSetupDetails.account_created ?? true,
+          business_info_added: currentSetupDetails.business_info_added ?? false,
+          facebook_connected: currentSetupDetails.facebook_connected ?? false,
+          instagram_connected: true,
+          properties_imported: currentSetupDetails.properties_imported ?? false,
+          team_invited: currentSetupDetails.team_invited ?? false,
+        };
+
+        const { error: updateSetupError } = await supabase
+          .from("brokers")
+          .update({ setup_details: updatedSetupDetails })
+          .eq("id", brokerId);
+
+        if (updateSetupError) {
+          console.warn(`[IG Callback] Warning updating broker setup_details:`, updateSetupError.message);
+        } else {
+          console.log(`[IG Callback] Successfully set setup_details.instagram_connected = true for broker ${brokerId}`);
+        }
+      }
+    } catch (setupErr) {
+      console.warn(`[IG Callback] Error handling setup_details check:`, setupErr);
+    }
+
     // 5. Success! Redirect user to the web success page
     const redirectUrl = `${webAppUrl}/social-connection-result?platform=instagram&connected=true`;
 

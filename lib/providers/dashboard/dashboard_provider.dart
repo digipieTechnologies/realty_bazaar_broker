@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
+
+import '../../app/app_colors.dart';
 import '../../core/supabase/supabase_config.dart';
+import '../../models/broker_setup_details_model.dart';
 
 class OnboardingStep {
   final String id;
   final String title;
+  final String description;
+  final String svgAssetPath;
+  final List<Color> gradientColors;
   final bool isCompleted;
+  final String routePath;
 
   const OnboardingStep({
     required this.id,
     required this.title,
+    required this.description,
+    required this.svgAssetPath,
+    required this.gradientColors,
     required this.isCompleted,
+    required this.routePath,
   });
 }
 
@@ -108,7 +119,9 @@ class DashboardProvider extends ChangeNotifier {
         params: {'p_broker_id': brokerId},
       );
       if (response != null && response is Map) {
-        _summary = DashboardSummaryModel.fromJson(Map<String, dynamic>.from(response));
+        _summary = DashboardSummaryModel.fromJson(
+          Map<String, dynamic>.from(response),
+        );
       }
     } catch (e) {
       debugPrint('[DashboardProvider] Error fetching summary RPC: $e');
@@ -117,54 +130,83 @@ class DashboardProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-  // Completion calculation: Starts at 25% (2 of 8 actions completed initially)
-  // Increases to 100% when everything is complete
-  double getCompletionPercentage(bool isFacebookConnected, bool isInstagramConnected) {
-    int completed = 2; // Initial checked: Account Created, Business Info Added
-    if (isFacebookConnected) completed++;
-    if (isInstagramConnected) completed++;
 
-    // There are 7 total items, we map completed items to percentage
-    return completed / 7;
+  // Completion calculation based on setupDetails
+  double getCompletionPercentage({BrokerSetupDetailsModel? setupDetails}) {
+    final steps = getOnboardingSteps(setupDetails: setupDetails);
+    final completedCount = steps.where((s) => s.isCompleted).length;
+    return completedCount / steps.length;
   }
 
-  // List of onboarding steps
-  List<OnboardingStep> getOnboardingSteps(bool isFacebookConnected, bool isInstagramConnected) => [
-    OnboardingStep(
-      id: 'account_created',
-      title: 'Account Created',
-      isCompleted: true,
-    ),
-    OnboardingStep(
-      id: 'business_info',
-      title: 'Business Info Added',
-      isCompleted: true,
-    ),
-    OnboardingStep(
-      id: 'connect_facebook',
-      title: 'Connect Facebook',
-      isCompleted: isFacebookConnected,
-    ),
-    OnboardingStep(
-      id: 'connect_instagram',
-      title: 'Connect Instagram',
-      isCompleted: isInstagramConnected,
-    ),
-    OnboardingStep(
-      id: 'import_properties',
-      title: 'Import Properties',
-      isCompleted: false,
-    ),
-    OnboardingStep(id: 'invite_team', title: 'Invite Team', isCompleted: false),
-    OnboardingStep(
-      id: 'configure_notifications',
-      title: 'Configure Notifications',
-      isCompleted: false,
-    ),
-  ];
+  // List of onboarding steps mapped directly from BrokerSetupDetailsModel
+  List<OnboardingStep> getOnboardingSteps({
+    BrokerSetupDetailsModel? setupDetails,
+  }) {
+    final details = setupDetails ?? const BrokerSetupDetailsModel();
+
+    return [
+      OnboardingStep(
+        id: 'account_created',
+        title: 'Account Created',
+        description: 'Broker profile and security credentials verified',
+        svgAssetPath: 'assets/icons/ic_profile_filled.svg',
+        gradientColors: AppColors.gradientEmerald,
+        isCompleted: details.accountCreated,
+        routePath: '/profile',
+      ),
+      OnboardingStep(
+        id: 'business_info',
+        title: 'Business Info Added',
+        description: 'Brokerage details, address & office contacts set up',
+        svgAssetPath: 'assets/icons/ic_business_center_filled.svg',
+        gradientColors: AppColors.gradientCyan,
+        isCompleted: details.businessInfoAdded,
+        routePath: '/profile',
+      ),
+      OnboardingStep(
+        id: 'connect_facebook',
+        title: 'Connect Facebook',
+        description: 'Sync Facebook Page to capture ad leads automatically',
+        svgAssetPath: 'assets/icons/ic_facebook_filled.svg',
+        gradientColors: AppColors.gradientFacebook,
+        isCompleted: details.facebookConnected,
+        routePath: '/dashboard',
+      ),
+      OnboardingStep(
+        id: 'connect_instagram',
+        title: 'Connect Instagram',
+        description: 'Manage DMs & story inquiries in unified inbox',
+        svgAssetPath: 'assets/icons/ic_instagram_filled.svg',
+        gradientColors: AppColors.gradientInstagramTile,
+        isCompleted: details.instagramConnected,
+        routePath: '/dashboard',
+      ),
+      OnboardingStep(
+        id: 'import_properties',
+        title: 'Import Properties',
+        description: 'Upload & publish property listings to marketplace',
+        svgAssetPath: 'assets/icons/ic_properties_filled.svg',
+        gradientColors: AppColors.gradientAmber,
+        isCompleted: details.propertiesImported,
+        routePath: '/properties',
+      ),
+      OnboardingStep(
+        id: 'invite_team',
+        title: 'Invite Team',
+        description: 'Add co-brokers, agents & team members to workspace',
+        svgAssetPath: 'assets/icons/ic_leads_filled.svg',
+        gradientColors: AppColors.gradientIndigo,
+        isCompleted: details.teamInvited,
+        routePath: '',
+      ),
+    ];
+  }
 
   // List of Quick Actions (dynamic lock state)
-  List<QuickActionItem> getQuickActions(bool isFacebookConnected, bool isInstagramConnected) => [
+  List<QuickActionItem> getQuickActions(
+    bool isFacebookConnected,
+    bool isInstagramConnected,
+  ) => [
     const QuickActionItem(
       id: 'profile',
       title: 'Profile',

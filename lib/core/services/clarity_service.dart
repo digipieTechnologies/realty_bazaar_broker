@@ -1,7 +1,8 @@
 // File: lib/core/services/clarity_service.dart
 // Purpose: Microsoft Clarity analytics & session replay wrapper service.
 
-import 'package:clarity_flutter/clarity_flutter.dart';
+import 'clarity_stub.dart'
+    if (dart.library.io) 'package:clarity_flutter/clarity_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 

@@ -2,37 +2,37 @@
 // Purpose: Routing table and GoRouter configuration with Navigator keys.
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:get_storage/get_storage.dart';
-import '../modules/auth/screens/login_screen.dart';
-import '../modules/auth/screens/otp_verification_screen.dart';
-import '../modules/auth/screens/splash_screen.dart';
-import '../modules/dashboard/screens/shell_layout_screen.dart';
-import '../modules/dashboard/screens/dashboard_tab_screen.dart';
-import '../modules/dashboard/screens/leads_tab_screen.dart';
-import '../modules/dashboard/screens/properties_tab_screen.dart';
-import '../modules/dashboard/screens/request_video_tab_screen.dart';
-import '../modules/dashboard/screens/referrals_tab_screen.dart';
-import '../modules/dashboard/screens/reports_tab_screen.dart';
-import '../modules/dashboard/screens/settings_tab_screen.dart';
-import '../modules/dashboard/screens/profile_screen.dart';
-import '../modules/dashboard/screens/posts_tab_screen.dart';
-import '../modules/dashboard/screens/help_tab_screen.dart';
+import 'package:go_router/go_router.dart';
 
-import '../modules/auth/screens/reset_password_screen.dart';
+import '../core/services/clarity_service.dart';
 import '../models/otp_type.dart';
-import '../widgets/common/common_app_bar.dart';
 import '../models/property_model.dart';
 import '../models/social_lead_model.dart';
-import '../modules/properties/screens/view_property_screen.dart';
-import '../modules/leads/screens/view_lead_screen.dart';
-
-import '../modules/dashboard/screens/ad_campaign_settings_screen.dart';
 import '../modules/auth/screens/delete_account_screen.dart';
+import '../modules/auth/screens/login_screen.dart';
+import '../modules/auth/screens/otp_verification_screen.dart';
+import '../modules/auth/screens/reset_password_screen.dart';
+import '../modules/auth/screens/splash_screen.dart';
+import '../modules/dashboard/screens/ad_campaign_settings_screen.dart';
+import '../modules/dashboard/screens/dashboard_tab_screen.dart';
+import '../modules/dashboard/screens/grow_tab_screen.dart';
+import '../modules/dashboard/screens/help_tab_screen.dart';
+import '../modules/dashboard/screens/leads_tab_screen.dart';
+import '../modules/dashboard/screens/posts_tab_screen.dart';
+import '../modules/dashboard/screens/profile_screen.dart';
+import '../modules/dashboard/screens/properties_tab_screen.dart';
+import '../modules/dashboard/screens/referrals_tab_screen.dart';
+import '../modules/dashboard/screens/reports_tab_screen.dart';
+import '../modules/dashboard/screens/request_video_tab_screen.dart';
+import '../modules/dashboard/screens/settings_tab_screen.dart';
+import '../modules/dashboard/screens/shell_layout_screen.dart';
+import '../modules/leads/screens/view_lead_screen.dart';
 import '../modules/legal/screens/privacy_policy_screen.dart';
 import '../modules/legal/screens/terms_of_service_screen.dart';
+import '../modules/properties/screens/view_property_screen.dart';
 import '../util/common_ext.dart';
-import '../core/services/clarity_service.dart';
+import '../widgets/common/common_app_bar.dart';
 
 class AppRoutes {
   AppRoutes._();
@@ -56,7 +56,10 @@ class AppRoutes {
   static const String campaignSettings = '/campaign-settings';
 
   /// Navigates to Property Details full screen for a given property
-  static void navigateToPropertyDetails(BuildContext context, PropertyModel property) {
+  static void navigateToPropertyDetails(
+    BuildContext context,
+    PropertyModel property,
+  ) {
     Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
         builder: (context) => ViewPropertyScreen(property: property),
@@ -65,12 +68,14 @@ class AppRoutes {
   }
 
   /// Navigates to Lead Details full screen for a given lead
-  static void navigateToLeadDetails(BuildContext context, SocialLeadModel lead) {
-    Navigator.of(context, rootNavigator: true).push(
-      MaterialPageRoute(
-        builder: (context) => ViewLeadScreen(lead: lead),
-      ),
-    );
+  static void navigateToLeadDetails(
+    BuildContext context,
+    SocialLeadModel lead,
+  ) {
+    Navigator.of(
+      context,
+      rootNavigator: true,
+    ).push(MaterialPageRoute(builder: (context) => ViewLeadScreen(lead: lead)));
   }
 
   /// Navigates to Video Requests: switches tab if Desktop sidebar layout, or pushes full screen if Mobile.
@@ -79,9 +84,7 @@ class AppRoutes {
       context.go('/request-video');
     } else {
       Navigator.of(context, rootNavigator: true).push(
-        MaterialPageRoute(
-          builder: (context) => const RequestVideoTabScreen(),
-        ),
+        MaterialPageRoute(builder: (context) => const RequestVideoTabScreen()),
       );
     }
   }
@@ -89,9 +92,7 @@ class AppRoutes {
   /// Navigates to Ad Campaign Settings full screen route
   static void navigateToCampaignSettings(BuildContext context) {
     Navigator.of(context, rootNavigator: true).push(
-      MaterialPageRoute(
-        builder: (context) => const AdCampaignSettingsScreen(),
-      ),
+      MaterialPageRoute(builder: (context) => const AdCampaignSettingsScreen()),
     );
   }
 
@@ -100,9 +101,7 @@ class AppRoutes {
     navigatorKey: rootNavigatorKey,
     initialLocation: initial,
     debugLogDiagnostics: true,
-    observers: [
-      ClarityRouteObserver(),
-    ],
+    observers: [ClarityRouteObserver()],
     redirect: (context, state) {
       final userId = GetStorage().read<String>('user_id');
       final isLoggedIn = userId != null && userId.isNotEmpty;
@@ -126,7 +125,10 @@ class AppRoutes {
           state.matchedLocation == signUp ||
           state.matchedLocation == forgotPassword;
 
-      if (!isLoggedIn && !goingToAuth && !goingToSplash && !goingToPublicLegal) {
+      if (!isLoggedIn &&
+          !goingToAuth &&
+          !goingToSplash &&
+          !goingToPublicLegal) {
         return login;
       }
 
@@ -191,7 +193,8 @@ class AppRoutes {
           final email = extra?['email'] as String?;
           final userId = extra?['userId'] as String?;
           final isPreSignup = extra?['isPreSignup'] as bool? ?? false;
-          final otpType = extra?['otpType'] as AppOtpType? ?? AppOtpType.emailVerify;
+          final otpType =
+              extra?['otpType'] as AppOtpType? ?? AppOtpType.emailVerify;
           final signUpData = extra?['signUpData'] as Map<String, String>?;
           return OtpVerificationScreen(
             email: email,
@@ -242,6 +245,11 @@ class AppRoutes {
             builder: (context, state) => const PropertiesTabScreen(),
           ),
           GoRoute(
+            path: '/grow',
+            name: 'grow',
+            builder: (context, state) => const GrowTabScreen(),
+          ),
+          GoRoute(
             path: '/request-video',
             name: 'request_video',
             builder: (context, state) => const RequestVideoTabScreen(),
@@ -273,7 +281,6 @@ class AppRoutes {
           ),
         ],
       ),
-
 
       GoRoute(
         path: campaignSettings,

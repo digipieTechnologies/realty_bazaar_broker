@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/containers/container_corner.dart';
 
@@ -24,27 +25,27 @@ class AutomationConfirmationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeColor = isEnabling ? AppColors.primary : AppColors.error;
-    final title = isEnabling ? 'Enable Post Automation' : 'Disable Post Automation';
+    final title = isEnabling ? context.tr('get_leads_title') : context.tr('pause_leads_title');
 
     final points = isEnabling
         ? const [
             _AutomationPoint(
               icon: Icons.chat_bubble_outline_rounded,
               iconColor: AppColors.primary,
-              title: 'Automatic Comment Replies',
-              description: 'AI will instantly reply to any user commenting on this social post.',
+              title: 'Instant Comment Replies',
+              description: 'Instantly reply to any user commenting on this social post.',
             ),
             _AutomationPoint(
               icon: Icons.person_add_alt_1_rounded,
               iconColor: AppColors.secondary,
-              title: 'Automated Lead Capture',
-              description: 'Interested commenters will be automatically captured as leads in your dashboard.',
+              title: 'Direct Lead Capture',
+              description: 'Interested commenters will be captured as leads in your dashboard.',
             ),
             _AutomationPoint(
               icon: Icons.insights_rounded,
               iconColor: AppColors.success,
               title: 'Real-Time Insights',
-              description: 'Track comment engagements, lead conversion, and post metrics automatically.',
+              description: 'Track comment engagements, lead conversion, and post metrics.',
             ),
           ]
         : const [
@@ -52,13 +53,13 @@ class AutomationConfirmationDialog extends StatelessWidget {
               icon: Icons.pause_circle_outline_rounded,
               iconColor: AppColors.warning,
               title: 'Pause Comment Replies',
-              description: 'AI will stop automatically responding to new comments on this post.',
+              description: 'Stop responding to new comments on this post.',
             ),
             _AutomationPoint(
               icon: Icons.person_off_rounded,
               iconColor: AppColors.error,
               title: 'Pause Lead Generation',
-              description: 'New comments will no longer create automated lead entries in your CRM.',
+              description: 'New comments will no longer create lead entries in your CRM.',
             ),
             _AutomationPoint(
               icon: Icons.verified_user_outlined,
@@ -112,8 +113,8 @@ class AutomationConfirmationDialog extends StatelessWidget {
                       const SizedBox(height: 2.0),
                       Text(
                         isEnabling
-                            ? 'Configure automated social media responses'
-                            : 'Pause automated actions on this post',
+                            ? context.tr('get_leads_subtitle')
+                            : context.tr('pause_leads_subtitle'),
                         style: AppTextStyles.caption.copyWith(
                           color: AppColors.textSecondary,
                         ),
@@ -202,7 +203,7 @@ class AutomationConfirmationDialog extends StatelessWidget {
               children: [
                 Expanded(
                   child: AppButton.outline(
-                    text: 'Cancel',
+                    text: context.tr('cancel'),
                     onPressed: () => Navigator.of(context).pop(false),
                     height: 42.0,
                     borderRadius: 10.0,
@@ -213,7 +214,7 @@ class AutomationConfirmationDialog extends StatelessWidget {
                 const SizedBox(width: 12.0),
                 Expanded(
                   child: AppButton.solid(
-                    text: isEnabling ? 'Enable Automation' : 'Disable Automation',
+                    text: isEnabling ? context.tr('get_leads') : context.tr('pause_leads'),
                     iconData: isEnabling ? Icons.auto_awesome_rounded : null,
                     onPressed: () => Navigator.of(context).pop(true),
                     height: 42.0,

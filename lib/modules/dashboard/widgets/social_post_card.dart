@@ -16,6 +16,7 @@ import '../../../widgets/images/cached_image.dart';
 import '../../../widgets/toast/app_toast.dart';
 import '../../../app/app_utils.dart';
 import '../../../util/common_ext.dart';
+import '../../../core/localization/app_localizations.dart';
 import 'automation_confirmation_dialog.dart';
 
 class SocialPostCard extends StatelessWidget {
@@ -408,8 +409,13 @@ class _PostMetricsRow extends StatelessWidget {
           ),
         ],
         if (showAutomationButton) ...[
-          const Spacer(),
-          _AutomationButton(post: post),
+          const SizedBox(width: 4.0),
+          Expanded(
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: _AutomationButton(post: post),
+            ),
+          ),
         ],
       ],
     );
@@ -515,38 +521,40 @@ class _AutomationButtonState extends State<_AutomationButton> {
   @override
   Widget build(BuildContext context) {
     final isEnabled = widget.post.isStoredInDb;
+    final text = isEnabled ? context.tr('pause_leads') : context.tr('get_leads');
 
-    if (isEnabled) {
-      return AppButton.outline(
-        text: 'Disable Automation',
-        isLoading: _isLoading,
-        onPressed: () => _toggleAutomation(context),
-        height: 34.0,
-        borderRadius: 8.0,
-        borderColor: AppColors.error,
-        textColor: AppColors.error,
-        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-        textStyle: AppTextStyles.caption.copyWith(
-          fontWeight: FontWeight.bold,
-          fontSize: 11.5,
-        ),
-      );
-    } else {
-      return AppButton.solid(
-        text: 'Enable Automation',
-        iconData: Icons.auto_awesome_rounded,
-        isLoading: _isLoading,
-        onPressed: () => _toggleAutomation(context),
-        height: 34.0,
-        borderRadius: 8.0,
-        color: AppColors.primary,
-        textColor: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-        textStyle: AppTextStyles.caption.copyWith(
-          fontWeight: FontWeight.bold,
-          fontSize: 11.5,
-        ),
-      );
-    }
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: isEnabled
+          ? AppButton.outline(
+              text: text,
+              isLoading: _isLoading,
+              onPressed: () => _toggleAutomation(context),
+              height: 32.0,
+              borderRadius: 8.0,
+              borderColor: AppColors.error,
+              textColor: AppColors.error,
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              textStyle: AppTextStyles.caption.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 11.0,
+              ),
+            )
+          : AppButton.solid(
+              text: text,
+              iconData: Icons.auto_awesome_rounded,
+              isLoading: _isLoading,
+              onPressed: () => _toggleAutomation(context),
+              height: 32.0,
+              borderRadius: 8.0,
+              color: AppColors.primary,
+              textColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              textStyle: AppTextStyles.caption.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 11.0,
+              ),
+            ),
+    );
   }
 }

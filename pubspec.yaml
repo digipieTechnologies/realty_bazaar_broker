@@ -63,6 +63,7 @@ dependencies:
   pinput: ^5.0.0
   firebase_core: ^4.13.0
   clarity_flutter: ^1.9.0
+  carousel_slider: ^5.1.2
 
 dev_dependencies:
   flutter_test:
@@ -135,5 +136,3 @@ flutter_launcher_icons:
   macos:
     generate: true
     image_path_macos: "assets/logo/app_logo_white.png"
-
-

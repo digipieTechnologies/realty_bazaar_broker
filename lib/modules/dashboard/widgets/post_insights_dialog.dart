@@ -164,7 +164,7 @@ class PostInsightsDialog extends StatelessWidget {
                 const SizedBox(width: 6.0),
                 Text(
                   post.isStoredInDb
-                      ? context.tr('automation_active')
+                      ? context.tr('leads_active')
                       : context.tr('live_meta_post'),
                   style: AppTextStyles.caption.copyWith(
                     color: post.isStoredInDb ? AppColors.success : AppColors.textMuted,

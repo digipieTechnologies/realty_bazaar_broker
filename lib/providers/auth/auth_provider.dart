@@ -1,21 +1,23 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
-import '../../core/services/notification_service.dart';
-import '../../core/services/clarity_service.dart';
-import '../../core/supabase/supabase_config.dart';
-import '../../util/common_ext.dart';
-import '../../models/models.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../app/app_routes.dart';
+import '../../core/services/clarity_service.dart';
+import '../../core/services/notification_service.dart';
+import '../../core/supabase/supabase_config.dart';
+import '../../models/models.dart';
+import '../../util/common_ext.dart';
 import '../../widgets/toast/app_toast.dart';
+import '../chat/chat_provider.dart';
 import '../dashboard/dashboard_provider.dart';
 import '../lead/lead_provider.dart';
 import '../property/property_provider.dart';
-import '../video_request/video_request_provider.dart';
-import '../chat/chat_provider.dart';
 import '../social/social_provider.dart';
+import '../video_request/video_request_provider.dart';
 
 class AuthProvider extends ChangeNotifier {
   static const String sessionKey = 'user_id';
@@ -136,10 +138,7 @@ class AuthProvider extends ChangeNotifier {
         email: email.trim(),
         password: password,
         emailRedirectTo: null,
-        data: {
-          'display_name': name.trim(),
-          'role': UserRole.broker.dbValue,
-        },
+        data: {'display_name': name.trim(), 'role': UserRole.broker.dbValue},
       );
 
       final user = response.user;
@@ -228,18 +227,23 @@ class AuthProvider extends ChangeNotifier {
   }
 
   /// Requests a 2-minute OTP for pre-signup verification using `generate_user_otp` RPC.
-  Future<bool> requestSignUpOtp(String email, [AppOtpType otpType = AppOtpType.emailVerify]) async {
+  Future<bool> requestSignUpOtp(
+    String email, [
+    AppOtpType otpType = AppOtpType.emailVerify,
+  ]) async {
     _setLoading(true);
     _setError(null);
     try {
       final cleanEmail = email.trim().toLowerCase();
-      debugPrint('🔑 [Frontend Log] Requesting OTP generation RPC for email: $cleanEmail, type: ${otpType.dbValue}');
+      debugPrint(
+        '🔑 [Frontend Log] Requesting OTP generation RPC for email: $cleanEmail, type: ${otpType.dbValue}',
+      );
 
       // Invoke SQL RPC function `generate_user_otp` to create OTP record in DB
-      final res = await SupabaseConfig.client.rpc('generate_user_otp', params: {
-        'p_email': cleanEmail,
-        'p_otp_type': otpType.dbValue,
-      });
+      final res = await SupabaseConfig.client.rpc(
+        'generate_user_otp',
+        params: {'p_email': cleanEmail, 'p_otp_type': otpType.dbValue},
+      );
 
       debugPrint('✅ [Frontend Log] generate_user_otp RPC Response: $res');
 
@@ -271,7 +275,9 @@ class AuthProvider extends ChangeNotifier {
         throw const AuthException('Invalid sign-up details provided.');
       }
 
-      debugPrint('🔍 [Frontend Log] Verifying OTP for completeSignUp: email=$email, otp=$otp, type=${otpType.dbValue}');
+      debugPrint(
+        '🔍 [Frontend Log] Verifying OTP for completeSignUp: email=$email, otp=$otp, type=${otpType.dbValue}',
+      );
 
       // 1. Server-Side Verification: Query user_otps directly matching email, otp, otp_type & non-expired time
       final nowIso = DateTime.now().toUtc().toIso8601String();
@@ -283,10 +289,14 @@ class AuthProvider extends ChangeNotifier {
           .eq('otp_type', otpType.dbValue)
           .gte('expiry_at', nowIso);
 
-      debugPrint('✅ [Frontend Log] OTP Verification records found: ${otpRecords.length}');
+      debugPrint(
+        '✅ [Frontend Log] OTP Verification records found: ${otpRecords.length}',
+      );
 
       if (otpRecords.isEmpty) {
-        throw const AuthException('Invalid or expired verification code. Please check and try again.');
+        throw const AuthException(
+          'Invalid or expired verification code. Please check and try again.',
+        );
       }
 
       final record = otpRecords.first;
@@ -296,19 +306,20 @@ class AuthProvider extends ChangeNotifier {
         email: email,
         password: password,
         emailRedirectTo: null,
-        data: {
-          'display_name': name,
-          'role': UserRole.broker.dbValue,
-        },
+        data: {'display_name': name, 'role': UserRole.broker.dbValue},
       );
 
       final user = response.user;
       if (user == null) {
-        throw const AuthException('Registration failed. No user profile returned.');
+        throw const AuthException(
+          'Registration failed. No user profile returned.',
+        );
       }
 
       if (user.identities?.isEmpty ?? false) {
-        throw const AuthException('An account with this email already exists. Please sign in instead.');
+        throw const AuthException(
+          'An account with this email already exists. Please sign in instead.',
+        );
       }
 
       // 3. Create linked Broker record
@@ -356,7 +367,9 @@ class AuthProvider extends ChangeNotifier {
 
       await _storage.write(sessionKey, user.id);
 
-      debugPrint('🎉 [Frontend Log] SignUp & OTP verification completed successfully for user ${user.id}');
+      debugPrint(
+        '🎉 [Frontend Log] SignUp & OTP verification completed successfully for user ${user.id}',
+      );
       _setLoading(false);
       return true;
     } catch (e) {
@@ -369,10 +382,15 @@ class AuthProvider extends ChangeNotifier {
 
   UserModel? _userProfile;
   UserModel? get userProfile => _userProfile;
-  bool get isAuthenticated => _userProfile != null || (_storage.read<String>(sessionKey)?.isNotEmpty ?? false);
+  bool get isAuthenticated =>
+      _userProfile != null ||
+      (_storage.read<String>(sessionKey)?.isNotEmpty ?? false);
 
   /// Checks email existence and role, then generates a 2-minute OTP for forgot password using `generate_user_otp` RPC.
-  Future<bool> requestForgotPasswordOtp(String email, {UserRole expectedRole = UserRole.broker}) async {
+  Future<bool> requestForgotPasswordOtp(
+    String email, {
+    UserRole expectedRole = UserRole.broker,
+  }) async {
     _setLoading(true);
     _setError(null);
     try {
@@ -386,21 +404,30 @@ class AuthProvider extends ChangeNotifier {
           .maybeSingle();
 
       if (userRecord == null) {
-        throw const AuthException('No registered account found with this email address.');
+        throw const AuthException(
+          'No registered account found with this email address.',
+        );
       }
 
       final roleStr = userRecord['role'] as String?;
       if (roleStr != expectedRole.dbValue) {
-        throw const AuthException('This account does not have permission for this portal.');
+        throw const AuthException(
+          'This account does not have permission for this portal.',
+        );
       }
 
       // 2. Invoke generate_user_otp RPC for forgot_password type
-      final res = await SupabaseConfig.client.rpc('generate_user_otp', params: {
-        'p_email': cleanEmail,
-        'p_otp_type': AppOtpType.forgotPassword.dbValue,
-      });
+      final res = await SupabaseConfig.client.rpc(
+        'generate_user_otp',
+        params: {
+          'p_email': cleanEmail,
+          'p_otp_type': AppOtpType.forgotPassword.dbValue,
+        },
+      );
 
-      debugPrint('✅ [Frontend Log] requestForgotPasswordOtp RPC Response: $res');
+      debugPrint(
+        '✅ [Frontend Log] requestForgotPasswordOtp RPC Response: $res',
+      );
       _setLoading(false);
       return true;
     } catch (e) {
@@ -412,15 +439,18 @@ class AuthProvider extends ChangeNotifier {
   }
 
   /// Updates user password in backend database via reset_user_password RPC.
-  Future<bool> resetPasswordWithOtp({required String email, required String newPassword}) async {
+  Future<bool> resetPasswordWithOtp({
+    required String email,
+    required String newPassword,
+  }) async {
     _setLoading(true);
     _setError(null);
     try {
       final cleanEmail = email.trim().toLowerCase();
-      final res = await SupabaseConfig.client.rpc('reset_user_password', params: {
-        'p_email': cleanEmail,
-        'p_new_password': newPassword,
-      });
+      final res = await SupabaseConfig.client.rpc(
+        'reset_user_password',
+        params: {'p_email': cleanEmail, 'p_new_password': newPassword},
+      );
 
       debugPrint('✅ [Frontend Log] resetPasswordWithOtp Response: $res');
       _setLoading(false);
@@ -447,10 +477,14 @@ class AuthProvider extends ChangeNotifier {
       final targetEmail = email ?? _userProfile?.email;
 
       if (targetUserId == null && targetEmail == null) {
-        throw const AuthException('No user session or email specified for OTP verification.');
+        throw const AuthException(
+          'No user session or email specified for OTP verification.',
+        );
       }
 
-      debugPrint('🔍 [Frontend Log] Verifying OTP: email=$targetEmail, userId=$targetUserId, otp=$otp, type=${otpType.dbValue}');
+      debugPrint(
+        '🔍 [Frontend Log] Verifying OTP: email=$targetEmail, userId=$targetUserId, otp=$otp, type=${otpType.dbValue}',
+      );
 
       // Server-Side Verification: Query user_otps directly matching email/userId, otp, otp_type & non-expired time
       final nowIso = DateTime.now().toUtc().toIso8601String();
@@ -468,10 +502,14 @@ class AuthProvider extends ChangeNotifier {
       }
 
       final otpRecords = await query;
-      debugPrint('✅ [Frontend Log] OTP Verification records found: ${otpRecords.length}');
+      debugPrint(
+        '✅ [Frontend Log] OTP Verification records found: ${otpRecords.length}',
+      );
 
       if (otpRecords.isEmpty) {
-        throw const AuthException('Invalid or expired verification code. Please check and try again.');
+        throw const AuthException(
+          'Invalid or expired verification code. Please check and try again.',
+        );
       }
 
       final record = otpRecords.first;
@@ -526,15 +564,19 @@ class AuthProvider extends ChangeNotifier {
         throw const AuthException('Email address is required to resend OTP.');
       }
 
-      debugPrint('🔑 [Frontend Log] Resending OTP for email: $targetEmail, type: ${otpType.dbValue}');
+      debugPrint(
+        '🔑 [Frontend Log] Resending OTP for email: $targetEmail, type: ${otpType.dbValue}',
+      );
 
       // Call generate_user_otp RPC function
-      final res = await SupabaseConfig.client.rpc('generate_user_otp', params: {
-        'p_email': targetEmail,
-        'p_otp_type': otpType.dbValue,
-      });
+      final res = await SupabaseConfig.client.rpc(
+        'generate_user_otp',
+        params: {'p_email': targetEmail, 'p_otp_type': otpType.dbValue},
+      );
 
-      debugPrint('✅ [Frontend Log] Resend generate_user_otp RPC Response: $res');
+      debugPrint(
+        '✅ [Frontend Log] Resend generate_user_otp RPC Response: $res',
+      );
 
       return true;
     } catch (e) {
@@ -559,7 +601,10 @@ class AuthProvider extends ChangeNotifier {
         await signOut();
         AppRoutes.router.go(AppRoutes.login);
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          AppToast.showError('Session Expired', 'User account not found on server.');
+          AppToast.showError(
+            'Session Expired',
+            'User account not found on server.',
+          );
         });
         return null;
       }
@@ -585,7 +630,10 @@ class AuthProvider extends ChangeNotifier {
         await signOut();
         AppRoutes.router.go(AppRoutes.login);
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          AppToast.showError('Auth Error', 'This account is currently deactivated.');
+          AppToast.showError(
+            'Auth Error',
+            'This account is currently deactivated.',
+          );
         });
         return null;
       }
@@ -612,7 +660,10 @@ class AuthProvider extends ChangeNotifier {
         await signOut();
         AppRoutes.router.go(AppRoutes.login);
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          AppToast.showError('Access Denied', 'Only Broker accounts can sign in to this application.');
+          AppToast.showError(
+            'Access Denied',
+            'Only Broker accounts can sign in to this application.',
+          );
         });
         return null;
       }
@@ -662,13 +713,25 @@ class AuthProvider extends ChangeNotifier {
             final updatedUser = UserModel.fromJson(newRecord);
 
             if (updatedUser.isDeleted ?? false) {
-              await _handleRemoteLogout('Auth Error', 'This account has been deleted.');
+              await _handleRemoteLogout(
+                'Auth Error',
+                'This account has been deleted.',
+              );
             } else if (!(updatedUser.isActive ?? true)) {
-              await _handleRemoteLogout('Auth Error', 'This account is currently deactivated.');
+              await _handleRemoteLogout(
+                'Auth Error',
+                'This account is currently deactivated.',
+              );
             } else if (!(updatedUser.isEmailVerified ?? false)) {
-              await _handleRemoteLogout('Email Verification Required', 'Your email verification status was modified. Please sign in again.');
+              await _handleRemoteLogout(
+                'Email Verification Required',
+                'Your email verification status was modified. Please sign in again.',
+              );
             } else if (updatedUser.role != UserRole.broker) {
-              await _handleRemoteLogout('Access Denied', 'Your user role has been modified.');
+              await _handleRemoteLogout(
+                'Access Denied',
+                'Your user role has been modified.',
+              );
             }
           },
         )
@@ -778,9 +841,7 @@ class AuthProvider extends ChangeNotifier {
         // Update broker business name
         await SupabaseConfig.client
             .from('brokers')
-            .update({
-              'business_name': businessName.trim(),
-            })
+            .update({'business_name': businessName.trim()})
             .eq('id', brokerId);
       }
 
@@ -806,6 +867,17 @@ class AuthProvider extends ChangeNotifier {
       _setLoading(false);
       return false;
     }
+  }
+
+  /// Updates local broker setupDetails in memory when a social connection is detected active.
+  void updateLocalBrokerSetupDetails({
+    required BrokerSetupDetailsModel setupDetails,
+  }) {
+    final currentBroker = _userProfile?.brokerId;
+    if (currentBroker == null) return;
+    final updatedBroker = currentBroker.copyWith(setupDetails: setupDetails);
+    _userProfile = _userProfile!.copyWith(brokerId: updatedBroker);
+    notifyListeners();
   }
 
   static const String fcmTokenKey = 'cached_fcm_token';
@@ -857,7 +929,8 @@ class AuthProvider extends ChangeNotifier {
       _errorMessage = null;
 
       // 7. Reset all feature provider in-memory data AFTER successful sign out
-      final targetContext = context ?? AppRoutes.rootNavigatorKey.currentContext;
+      final targetContext =
+          context ?? AppRoutes.rootNavigatorKey.currentContext;
       if (targetContext != null && targetContext.mounted) {
         try {
           targetContext.read<DashboardProvider>().clear();
@@ -880,20 +953,22 @@ class AuthProvider extends ChangeNotifier {
   }
 
   /// Permanently deletes / soft-deletes the current authenticated user's account via Edge Function
-  Future<bool> deleteAccount({required String reason, BuildContext? context}) async {
+  Future<bool> deleteAccount({
+    required String reason,
+    BuildContext? context,
+  }) async {
     _setLoading(true);
     _setError(null);
     try {
       final response = await SupabaseConfig.client.functions.invoke(
         'delete-account',
-        body: {
-          'action': 'request',
-          'reason': reason,
-        },
+        body: {'action': 'request', 'reason': reason},
       );
 
       if (response.status == 409) {
-        final msg = response.data?['message'] ?? 'A deletion request is already pending.';
+        final msg =
+            response.data?['message'] ??
+            'A deletion request is already pending.';
         _setError(msg);
         return false;
       }
@@ -915,7 +990,8 @@ class AuthProvider extends ChangeNotifier {
       await _storage.remove(sessionKey);
       _userProfile = null;
 
-      final targetContext = context ?? AppRoutes.rootNavigatorKey.currentContext;
+      final targetContext =
+          context ?? AppRoutes.rootNavigatorKey.currentContext;
       if (targetContext != null && targetContext.mounted) {
         try {
           targetContext.read<DashboardProvider>().clear();
@@ -960,13 +1036,16 @@ class AuthProvider extends ChangeNotifier {
       );
 
       if (response.status == 409) {
-        final msg = response.data?['message'] ?? 'A deletion request is already pending.';
+        final msg =
+            response.data?['message'] ??
+            'A deletion request is already pending.';
         _setError(msg);
         return false;
       }
 
       if (response.status != 200) {
-        final errorMsg = response.data?['error'] ?? 'Failed to submit deletion request.';
+        final errorMsg =
+            response.data?['error'] ?? 'Failed to submit deletion request.';
         _setError(errorMsg.toString());
         return false;
       }
@@ -974,7 +1053,9 @@ class AuthProvider extends ChangeNotifier {
       return true;
     } on FunctionException catch (fe) {
       debugPrint('Public delete account FunctionException: ${fe.details}');
-      final msg = fe.details is Map ? (fe.details['error'] ?? fe.reasonPhrase) : fe.reasonPhrase;
+      final msg = fe.details is Map
+          ? (fe.details['error'] ?? fe.reasonPhrase)
+          : fe.reasonPhrase;
       _setError(msg?.toString() ?? 'No account found matching these details.');
       return false;
     } catch (e) {

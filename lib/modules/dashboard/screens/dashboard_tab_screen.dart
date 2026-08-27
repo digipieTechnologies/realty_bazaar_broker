@@ -53,9 +53,11 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
         debugPrint(
           '[DashboardTabScreen] App resumed from background. Silent refresh social connections...',
         );
+        final auth = Provider.of<AuthProvider>(context, listen: false);
         _socialProvider!.fetchInitialConnections(
           _subscribedBrokerId!,
           forceShimmer: false,
+          authProvider: auth,
         );
       }
     }
@@ -70,7 +72,10 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
       if (brokerId != null && brokerId != _subscribedBrokerId) {
         _subscribedBrokerId = brokerId;
         _socialProvider = Provider.of<SocialProvider>(context, listen: false);
-        _socialProvider!.fetchInitialConnections(brokerId);
+        _socialProvider!.fetchInitialConnections(
+          brokerId,
+          authProvider: authProvider,
+        );
         _socialProvider!.subscribeToSocialAccounts(brokerId);
       }
     });
@@ -96,6 +101,7 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
               socialProvider.fetchInitialConnections(
                 brokerId,
                 forceShimmer: false,
+                authProvider: authProvider,
               );
             }
 
@@ -158,15 +164,24 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
                               ),
                               const DashboardSummaryWidget(),
                               const SizedBox(height: 24.0),
-                              const Divider(height: 1.0, color: AppColors.border),
+                              const Divider(
+                                height: 1.0,
+                                color: AppColors.border,
+                              ),
                               const SizedBox(height: 24.0),
                               const RecentPropertiesWidget(),
                               const SizedBox(height: 24.0),
-                              const Divider(height: 1.0, color: AppColors.border),
+                              const Divider(
+                                height: 1.0,
+                                color: AppColors.border,
+                              ),
                               const SizedBox(height: 24.0),
                               const RecentPostsWidget(),
                               const SizedBox(height: 24.0),
-                              const Divider(height: 1.0, color: AppColors.border),
+                              const Divider(
+                                height: 1.0,
+                                color: AppColors.border,
+                              ),
                               const SizedBox(height: 24.0),
                               const AdCampaignBannerWidget(),
                             ],
@@ -202,7 +217,10 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
                                 ),
                               ],
                               const SizedBox(height: 24.0),
-                              const Divider(height: 1.0, color: AppColors.border),
+                              const Divider(
+                                height: 1.0,
+                                color: AppColors.border,
+                              ),
                               const SizedBox(height: 24.0),
                               const RecentLeadsWidget(),
                             ],

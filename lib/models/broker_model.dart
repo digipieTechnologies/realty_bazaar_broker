@@ -1,5 +1,8 @@
+// Purpose: Broker entity model referencing standalone BrokerSetupDetailsModel JSONB configuration.
+
 import 'package:equatable/equatable.dart';
 import 'address_model.dart';
+import 'broker_setup_details_model.dart';
 
 class BrokerModel extends Equatable {
   static String tableName = "brokers";
@@ -15,6 +18,7 @@ class BrokerModel extends Equatable {
   final bool? isDeleted;
   final DateTime? deletedAt;
   final bool? autoApproveVideoRequests;
+  final BrokerSetupDetailsModel? setupDetails;
 
   static const String onboardingStatusPending = 'pending';
   static const String onboardingStatusInProgress = 'in_progress';
@@ -32,6 +36,7 @@ class BrokerModel extends Equatable {
     this.isDeleted,
     this.deletedAt,
     this.autoApproveVideoRequests,
+    this.setupDetails,
   });
 
   static BrokerModel fromJson(dynamic json) {
@@ -59,6 +64,9 @@ class BrokerModel extends Equatable {
           ? DateTime.tryParse(json['deleted_at'].toString())?.toLocal()
           : null,
       autoApproveVideoRequests: json['auto_approve_video_requests'] as bool? ?? false,
+      setupDetails: json['setup_details'] != null
+          ? BrokerSetupDetailsModel.fromJson(json['setup_details'])
+          : const BrokerSetupDetailsModel(),
     );
   }
 
@@ -81,6 +89,9 @@ class BrokerModel extends Equatable {
       data['deleted_at'] = deletedAt?.toUtc().toIso8601String();
     }
     data['auto_approve_video_requests'] = autoApproveVideoRequests ?? false;
+    if (setupDetails != null) {
+      data['setup_details'] = setupDetails?.toJson();
+    }
     return data;
   }
 
@@ -96,6 +107,7 @@ class BrokerModel extends Equatable {
     bool? isDeleted,
     DateTime? deletedAt,
     bool? autoApproveVideoRequests,
+    BrokerSetupDetailsModel? setupDetails,
   }) {
     return BrokerModel(
       id: id ?? this.id,
@@ -109,6 +121,7 @@ class BrokerModel extends Equatable {
       isDeleted: isDeleted ?? this.isDeleted,
       deletedAt: deletedAt ?? this.deletedAt,
       autoApproveVideoRequests: autoApproveVideoRequests ?? this.autoApproveVideoRequests,
+      setupDetails: setupDetails ?? this.setupDetails,
     );
   }
 
@@ -125,5 +138,6 @@ class BrokerModel extends Equatable {
     isDeleted,
     deletedAt,
     autoApproveVideoRequests,
+    setupDetails,
   ];
 }

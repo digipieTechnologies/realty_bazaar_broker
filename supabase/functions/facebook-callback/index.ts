@@ -274,6 +274,41 @@ serve(async (req) => {
       }
     }
 
+    // 5b. Check and update broker setup_details JSONB (facebook_connected)
+    try {
+      const { data: brokerRecord } = await supabase
+        .from("brokers")
+        .select("setup_details")
+        .eq("id", brokerId)
+        .maybeSingle();
+
+      const currentSetupDetails = brokerRecord?.setup_details || {};
+      if (!currentSetupDetails.facebook_connected) {
+        const updatedSetupDetails = {
+          ...currentSetupDetails,
+          account_created: currentSetupDetails.account_created ?? true,
+          business_info_added: currentSetupDetails.business_info_added ?? false,
+          facebook_connected: true,
+          instagram_connected: currentSetupDetails.instagram_connected ?? false,
+          properties_imported: currentSetupDetails.properties_imported ?? false,
+          team_invited: currentSetupDetails.team_invited ?? false,
+        };
+
+        const { error: updateSetupError } = await supabase
+          .from("brokers")
+          .update({ setup_details: updatedSetupDetails })
+          .eq("id", brokerId);
+
+        if (updateSetupError) {
+          console.warn(`[FB Callback] Warning updating broker setup_details:`, updateSetupError.message);
+        } else {
+          console.log(`[FB Callback] Successfully set setup_details.facebook_connected = true for broker ${brokerId}`);
+        }
+      }
+    } catch (setupErr) {
+      console.warn(`[FB Callback] Error handling setup_details check:`, setupErr);
+    }
+
     // 6. Success! Redirect user to the web success page
     const redirectUrl = `${webAppUrl}/social-connection-result?platform=facebook&connected=true`;
     

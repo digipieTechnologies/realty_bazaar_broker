@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../app/app_assets.dart';
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
@@ -41,16 +42,16 @@ class AppBottomNavigationBar extends StatelessWidget {
       outlineIconAsset: AppAssets.icPostsOutline,
     ),
     BottomNavItem(
+      titleKey: 'grow',
+      path: '/grow',
+      filledIconAsset: AppAssets.icGrowFilled,
+      outlineIconAsset: AppAssets.icGrowOutline,
+    ),
+    BottomNavItem(
       titleKey: 'leads',
       path: '/leads',
       filledIconAsset: AppAssets.icLeadsFilled,
       outlineIconAsset: AppAssets.icLeadsOutline,
-    ),
-    BottomNavItem(
-      titleKey: 'properties',
-      path: '/properties',
-      filledIconAsset: AppAssets.icPropertiesFilled,
-      outlineIconAsset: AppAssets.icPropertiesOutline,
     ),
     BottomNavItem(
       titleKey: 'profile',
@@ -60,10 +61,7 @@ class AppBottomNavigationBar extends StatelessWidget {
     ),
   ];
 
-  const AppBottomNavigationBar({
-    super.key,
-    required this.currentPath,
-  });
+  const AppBottomNavigationBar({super.key, required this.currentPath});
 
   int get _selectedIndex {
     for (int i = 0; i < items.length; i++) {
@@ -81,12 +79,7 @@ class AppBottomNavigationBar extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.surface,
-        border: Border(
-          top: BorderSide(
-            color: AppColors.border,
-            width: 1.0,
-          ),
-        ),
+        border: Border(top: BorderSide(color: AppColors.border, width: 1.0)),
       ),
       child: SafeArea(
         top: false,
@@ -121,7 +114,9 @@ class AppBottomNavigationBar extends StatelessWidget {
                         width: 24.0,
                         height: 24.0,
                         child: SvgPicture.asset(
-                          isSelected ? item.filledIconAsset : item.outlineIconAsset,
+                          isSelected
+                              ? item.filledIconAsset
+                              : item.outlineIconAsset,
                           width: 22.0,
                           height: 22.0,
                           colorFilter: ColorFilter.mode(
@@ -136,8 +131,12 @@ class AppBottomNavigationBar extends StatelessWidget {
                         context.tr(item.titleKey),
                         style: AppTextStyles.caption.copyWith(
                           fontSize: 11.0,
-                          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                          color: isSelected ? activeColor : AppColors.textSecondary,
+                          fontWeight: isSelected
+                              ? FontWeight.w700
+                              : FontWeight.w500,
+                          color: isSelected
+                              ? activeColor
+                              : AppColors.textSecondary,
                           height: 1.0,
                         ),
                         maxLines: 1,

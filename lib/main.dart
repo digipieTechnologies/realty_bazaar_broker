@@ -3,12 +3,12 @@
 
 // ignore_for_file: deprecated_member_use
 
-import 'package:clarity_flutter/clarity_flutter.dart';
+import 'core/services/clarity_stub.dart'
+    if (dart.library.io) 'package:clarity_flutter/clarity_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
 // ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:get/get.dart';
@@ -30,6 +30,7 @@ import 'providers/language/language_provider.dart';
 import 'providers/lead/lead_provider.dart';
 import 'providers/property/property_provider.dart';
 import 'providers/social/social_provider.dart';
+import 'providers/subscription/subscription_provider.dart';
 import 'providers/video_request/video_request_provider.dart';
 
 void main() async {
@@ -118,7 +119,9 @@ void main() async {
   // 5. Run the application (wrapped with Clarity if available)
   final clarityConfig = ClarityService.instance.createConfig();
   if (clarityConfig != null && ClarityService.instance.isSupportedPlatform) {
-    runApp(ClarityWidget(app: const RealtyBazaarApp(), clarityConfig: clarityConfig));
+    runApp(
+      ClarityWidget(app: const RealtyBazaarApp(), clarityConfig: clarityConfig),
+    );
   } else {
     runApp(const RealtyBazaarApp());
   }
@@ -140,6 +143,7 @@ class RealtyBazaarApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ChatProvider()),
         ChangeNotifierProvider(create: (_) => LeadProvider()),
         ChangeNotifierProvider(create: (_) => AdCampaignProvider()),
+        ChangeNotifierProvider(create: (_) => SubscriptionProvider()),
       ],
       child: Consumer<LanguageProvider>(
         builder: (context, languageProvider, child) {

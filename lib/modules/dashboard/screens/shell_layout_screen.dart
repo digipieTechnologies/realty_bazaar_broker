@@ -5,6 +5,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -13,19 +14,16 @@ import '../../../app/app_assets.dart';
 import '../../../app/app_colors.dart';
 import '../../../app/app_strings.dart';
 import '../../../app/app_text_styles.dart';
-
+import '../../../core/localization/app_localizations.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../util/common_ext.dart';
-import '../../../widgets/shimmer/app_shimmer_container.dart';
-import '../../../widgets/shimmer/dashboard_shimmer_widget.dart';
 import '../../../widgets/brand/app_logo.dart';
 import '../../../widgets/common/common_app_bar.dart';
-import '../widgets/compact_setup_progress_widget.dart';
-import '../../../core/localization/app_localizations.dart';
 import '../../../widgets/dialogs/language_dialog.dart';
-
 import '../../../widgets/navigation/app_bottom_navigation_bar.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import '../../../widgets/shimmer/app_shimmer_container.dart';
+import '../../../widgets/shimmer/dashboard_shimmer_widget.dart';
+import '../widgets/compact_setup_progress_widget.dart';
 
 class ShellLayoutScreen extends StatefulWidget {
   final Widget child;
@@ -68,6 +66,13 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
       path: '/properties',
       filledIconAsset: AppAssets.icPropertiesFilled,
       outlineIconAsset: AppAssets.icPropertiesOutline,
+    ),
+    _NavigationItem(
+      title: 'Grow',
+      titleKey: 'grow',
+      path: '/grow',
+      filledIconAsset: AppAssets.icGrowFilled,
+      outlineIconAsset: AppAssets.icGrowOutline,
     ),
     _NavigationItem(
       title: 'Request Video',
@@ -118,8 +123,8 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
     // Bind reactively to cached user profile from AuthProvider
     final profile = context.watch<AuthProvider>().userProfile;
     final String displayName = profile?.name ?? 'Alex Sterling';
-    final String displayRole = (profile?.role?.displayName ?? 'Principal Broker')
-        .toUpperCase();
+    final String displayRole =
+        (profile?.role?.displayName ?? 'Principal Broker').toUpperCase();
     final String displayEmail = profile?.email ?? 'alex@realtybazaar.com';
 
     if (isDesktop) {
@@ -172,6 +177,8 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
     String mobileTitle = context.tr('dashboard');
     if (location.startsWith('/profile')) {
       mobileTitle = context.tr('action_profile');
+    } else if (location.startsWith('/grow')) {
+      mobileTitle = context.tr('grow');
     } else {
       for (final item in _navItems) {
         if (location.startsWith(item.path)) {
@@ -359,9 +366,7 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
                     width: 20.0,
                     height: 20.0,
                     colorFilter: ColorFilter.mode(
-                      isSelected
-                          ? AppColors.primary
-                          : AppColors.textSecondary,
+                      isSelected ? AppColors.primary : AppColors.textSecondary,
                       BlendMode.srcIn,
                     ),
                   ),

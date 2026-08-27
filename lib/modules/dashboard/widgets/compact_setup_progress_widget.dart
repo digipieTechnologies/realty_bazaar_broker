@@ -3,39 +3,57 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../app/app_colors.dart';
+import '../../../../core/localization/app_localizations.dart';
+import '../../../../providers/auth/auth_provider.dart';
 import '../../../../providers/dashboard/dashboard_provider.dart';
-import '../../../../providers/social/social_provider.dart';
-import '../../../../widgets/common/app_card_container.dart';
+import '../../../../widgets/dialogs/app_base_dialog.dart';
 import 'setup_progress_card.dart';
+import 'setup_progress_circular_indicator_widget.dart';
 
 class CompactSetupProgressWidget extends StatefulWidget {
   const CompactSetupProgressWidget({super.key});
 
   @override
-  State<CompactSetupProgressWidget> createState() => _CompactSetupProgressWidgetState();
+  State<CompactSetupProgressWidget> createState() =>
+      _CompactSetupProgressWidgetState();
 }
 
-class _CompactSetupProgressWidgetState extends State<CompactSetupProgressWidget> {
+class _CompactSetupProgressWidgetState
+    extends State<CompactSetupProgressWidget> {
   void _showProgressDialog(BuildContext context) {
-    showDialog(
+    final dashboardProvider = context.read<DashboardProvider>();
+    final authProvider = context.read<AuthProvider>();
+    final setupDetails = authProvider.userProfile?.brokerId?.setupDetails;
+
+    final steps = dashboardProvider.getOnboardingSteps(
+      setupDetails: setupDetails,
+    );
+    final percentage = dashboardProvider.getCompletionPercentage(
+      setupDetails: setupDetails,
+    );
+    final completedCount = steps.where((s) => s.isCompleted).length;
+    final totalCount = steps.length;
+
+    AppBaseDialog.show(
       context: context,
-      barrierDismissible: true,
-      builder: (dialogContext) => Dialog(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        insetPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-          child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 580.0),
-          child: AppCardContainer(
-            child: SingleChildScrollView(
-              child: SetupProgressCard(
-                showHeader: true,
-                onClose: () => Navigator.of(dialogContext).pop(),
-              ),
-            ),
+      child: AppBaseDialog(
+        maxWidth: 680.0,
+        headerIconWidget: SetupProgressCircularIndicatorWidget(
+          percentage: percentage,
+          size: 42.0,
+          textStyle: const TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w900,
+            color: AppColors.primary,
+            letterSpacing: -0.4,
           ),
         ),
+        title: context.tr('finish_setup'),
+        subtitle:
+            '$completedCount / $totalCount ${context.tr('completed_status')}',
+        content: const SetupProgressCard(),
       ),
     );
   }
@@ -43,13 +61,12 @@ class _CompactSetupProgressWidgetState extends State<CompactSetupProgressWidget>
   @override
   Widget build(BuildContext context) {
     final dashboardProvider = context.watch<DashboardProvider>();
-    final socialProvider = context.watch<SocialProvider>();
+    final authProvider = context.watch<AuthProvider>();
+    final setupDetails = authProvider.userProfile?.brokerId?.setupDetails;
 
     final percentage = dashboardProvider.getCompletionPercentage(
-      socialProvider.isFacebookConnected,
-      socialProvider.isInstagramConnected,
+      setupDetails: setupDetails,
     );
-    final int percentInt = (percentage * 100).toInt();
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -70,35 +87,15 @@ class _CompactSetupProgressWidgetState extends State<CompactSetupProgressWidget>
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Mini Circular Loader with Percentage Digit
-              SizedBox(
-                width: 28.0,
-                height: 28.0,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    CircularProgressIndicator(
-                      value: percentage,
-                      strokeWidth: 2.5,
-                      backgroundColor: AppColors.border,
-                      valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(3.0),
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          '$percentInt%',
-                          style: const TextStyle(
-                            fontSize: 9.5,
-                            fontWeight: FontWeight.w900,
-                            color: AppColors.primary,
-                            letterSpacing: -0.4,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+              // Reusable Circular Loader Widget
+              SetupProgressCircularIndicatorWidget(
+                percentage: percentage,
+                size: 26.0,
+                textStyle: const TextStyle(
+                  fontSize: 9.0,
+                  fontWeight: FontWeight.w900,
+                  color: AppColors.primary,
+                  letterSpacing: -0.4,
                 ),
               ),
               const SizedBox(width: 6.0),
