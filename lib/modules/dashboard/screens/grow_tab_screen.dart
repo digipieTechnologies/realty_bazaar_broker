@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../../../app/app_colors.dart';
+import '../../../app/app_routes.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../providers/subscription/subscription_provider.dart';
@@ -59,6 +60,7 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
                     plans: provider.plans,
                     onSelectPlan: (plan) {
                       provider.setSelectedPlan(plan);
+                      AppRoutes.navigateToSubscriptionPackageDetail(context, plan);
                     },
                   )
                 else

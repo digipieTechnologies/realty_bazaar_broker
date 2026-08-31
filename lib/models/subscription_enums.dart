@@ -1,64 +1,57 @@
 // File: lib/models/subscription_enums.dart
-// Purpose: Type-safe enum representing subscription plan duration (month, year, one_time).
+// Purpose: Type-safe enum representing plan billing types (recurring, one_time, custom).
 
-enum SubscriptionDuration {
-  month,
-  year,
+enum PlanBillingType {
+  recurring,
   oneTime,
   custom;
 
   String get dbValue {
     switch (this) {
-      case SubscriptionDuration.month:
-        return 'month';
-      case SubscriptionDuration.year:
-        return 'year';
-      case SubscriptionDuration.oneTime:
+      case PlanBillingType.recurring:
+        return 'recurring';
+      case PlanBillingType.oneTime:
         return 'one_time';
-      case SubscriptionDuration.custom:
+      case PlanBillingType.custom:
         return 'custom';
     }
   }
 
   String get displayName {
     switch (this) {
-      case SubscriptionDuration.month:
-        return 'Monthly';
-      case SubscriptionDuration.year:
-        return 'Yearly';
-      case SubscriptionDuration.oneTime:
+      case PlanBillingType.recurring:
+        return 'Recurring';
+      case PlanBillingType.oneTime:
         return 'One-Time';
-      case SubscriptionDuration.custom:
+      case PlanBillingType.custom:
         return 'Custom';
     }
   }
 
   String get periodDisplay {
     switch (this) {
-      case SubscriptionDuration.month:
+      case PlanBillingType.recurring:
         return '/month';
-      case SubscriptionDuration.year:
-        return '/year';
-      case SubscriptionDuration.oneTime:
+      case PlanBillingType.oneTime:
         return 'one-time';
-      case SubscriptionDuration.custom:
+      case PlanBillingType.custom:
         return 'custom';
     }
   }
 
-  static SubscriptionDuration fromDbValue(dynamic value) {
-    if (value == null) return SubscriptionDuration.month;
-    if (value is SubscriptionDuration) return value;
+  static PlanBillingType fromDbValue(dynamic value) {
+    if (value == null) return PlanBillingType.recurring;
+    if (value is PlanBillingType) return value;
     final str = value.toString().toLowerCase().trim();
-    if (str == 'year' || str == 'yearly') {
-      return SubscriptionDuration.year;
-    }
     if (str == 'one_time' || str == 'onetime' || str == 'one-time') {
-      return SubscriptionDuration.oneTime;
+      return PlanBillingType.oneTime;
     }
     if (str == 'custom') {
-      return SubscriptionDuration.custom;
+      return PlanBillingType.custom;
     }
-    return SubscriptionDuration.month;
+    return PlanBillingType.recurring;
   }
 }
+
+/// Backward compatibility alias for SubscriptionDuration
+typedef SubscriptionDuration = PlanBillingType;

@@ -31,6 +31,8 @@ import '../modules/leads/screens/view_lead_screen.dart';
 import '../modules/legal/screens/privacy_policy_screen.dart';
 import '../modules/legal/screens/terms_of_service_screen.dart';
 import '../modules/properties/screens/view_property_screen.dart';
+import '../models/subscription_plan_model.dart';
+import '../modules/subscription/screens/subscription_package_detail_screen.dart';
 import '../util/common_ext.dart';
 import '../widgets/common/common_app_bar.dart';
 
@@ -93,6 +95,18 @@ class AppRoutes {
   static void navigateToCampaignSettings(BuildContext context) {
     Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(builder: (context) => const AdCampaignSettingsScreen()),
+    );
+  }
+
+  /// Navigates to Subscription Package Detail full screen route (hides bottom nav bar)
+  static void navigateToSubscriptionPackageDetail(
+    BuildContext context,
+    SubscriptionPlanModel plan,
+  ) {
+    Navigator.of(context, rootNavigator: true).push(
+      MaterialPageRoute(
+        builder: (context) => SubscriptionPackageDetailScreen(initialPlan: plan),
+      ),
     );
   }
 

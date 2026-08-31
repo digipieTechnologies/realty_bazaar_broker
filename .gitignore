@@ -1,5 +1,8 @@
 # Sensitive Configuration & API Keys
 config.json
+key.properties
+*.jks
+*.keystore
 
 # Miscellaneous & System
 .DS_Store
