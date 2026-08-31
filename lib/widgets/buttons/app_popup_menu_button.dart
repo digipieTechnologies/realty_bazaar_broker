@@ -2,6 +2,7 @@
 // Purpose: Unified popup menu helper and button widget across the application with accurate widget bounds positioning, upward opening support, and themed styling.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
 
@@ -84,10 +85,7 @@ class AppPopupMenu {
           overlay.size.height - dy,
         );
       } else {
-        relativePosition = RelativeRect.fromRect(
-          Rect.fromLTWH(dx, dy, 0, 0),
-          Offset.zero & overlay.size,
-        );
+        relativePosition = RelativeRect.fromRect(Rect.fromLTWH(dx, dy, 0, 0), Offset.zero & overlay.size);
       }
     } else {
       relativePosition = RelativeRect.fromRect(
@@ -113,11 +111,7 @@ class AppPopupMenu {
                 item.icon!,
                 const SizedBox(width: 10.0),
               ] else if (item.iconData != null) ...[
-                Icon(
-                  item.iconData,
-                  size: 18.0,
-                  color: item.iconColor ?? AppColors.primary,
-                ),
+                Icon(item.iconData, size: 18.0, color: item.iconColor ?? AppColors.primary),
                 const SizedBox(width: 12.0),
               ],
               Text(
@@ -170,9 +164,7 @@ class AppPopupMenuButton<T> extends StatelessWidget {
       padding: padding,
       child: PopupMenuButton<T>(
         position: position,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)),
         color: popupColor ?? AppColors.surface,
         elevation: elevation,
         onSelected: onSelected,
@@ -188,11 +180,7 @@ class AppPopupMenuButton<T> extends StatelessWidget {
                     item.icon!,
                     const SizedBox(width: 10.0),
                   ] else if (item.iconData != null) ...[
-                    Icon(
-                      item.iconData,
-                      size: 18.0,
-                      color: item.iconColor ?? AppColors.primary,
-                    ),
+                    Icon(item.iconData, size: 18.0, color: item.iconColor ?? AppColors.primary),
                     const SizedBox(width: 12.0),
                   ],
                   Text(
@@ -208,12 +196,9 @@ class AppPopupMenuButton<T> extends StatelessWidget {
             );
           }).toList();
         },
-        child: triggerWidget ??
-            Icon(
-              triggerIcon,
-              size: triggerIconSize,
-              color: triggerIconColor ?? AppColors.textPrimary,
-            ),
+        child:
+            triggerWidget ??
+            Icon(triggerIcon, size: triggerIconSize, color: triggerIconColor ?? AppColors.textPrimary),
       ),
     );
   }

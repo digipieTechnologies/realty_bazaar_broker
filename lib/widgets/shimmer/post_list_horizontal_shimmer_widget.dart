@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart' as package_shimmer;
+
 import '../../app/app_colors.dart';
 
 class PostListHorizontalShimmerWidget extends StatelessWidget {
@@ -28,10 +29,7 @@ class PostListHorizontalShimmerWidget extends StatelessWidget {
         children: List.generate(count, (index) {
           return SizedBox(
             width: cardWidth,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 14.0),
-              child: _buildPostCardSkeleton(),
-            ),
+            child: Padding(padding: const EdgeInsets.only(right: 14.0), child: _buildPostCardSkeleton()),
           );
         }),
       ),

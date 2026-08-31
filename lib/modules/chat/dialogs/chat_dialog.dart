@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../models/models.dart';
 import '../../../providers/chat/chat_provider.dart';
@@ -73,11 +74,7 @@ class _ChatDialogState extends State<ChatDialog> {
 
   void _scrollToBottom() {
     if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        0.0,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
+      _scrollController.animateTo(0.0, duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
     }
   }
 
@@ -147,7 +144,8 @@ class _ChatDialogState extends State<ChatDialog> {
                     children: [
                       // Header Widget (Title: 'Marketing Team' / 'Broker', Subtitle: Property Address / Title)
                       ChatHeaderWidget(
-                        title: widget.chatTitle ??
+                        title:
+                            widget.chatTitle ??
                             (widget.currentUserType == 'broker' ? 'Marketing Team' : 'Broker'),
                         subtitle: widget.propertyTitle ?? widget.propertyAddress,
                         onClose: () => Navigator.of(context).pop(),
@@ -160,101 +158,101 @@ class _ChatDialogState extends State<ChatDialog> {
                           child: provider.isLoading
                               ? const ChatShimmerWidget()
                               : provider.errorMessage != null
-                                  ? Center(
-                                      child: Text(
-                                        provider.errorMessage!,
-                                        style: const TextStyle(color: AppColors.error),
-                                      ),
-                                    )
-                                  : provider.messages.isEmpty
-                                      ? SayHelloWidget(
-                                          onSayHello: () {
-                                            provider.sendMessage(
-                                              senderId: widget.currentUserId,
-                                              senderType: widget.currentUserType,
-                                              message: 'Hello 👋',
-                                            );
-                                          },
-                                        )
-                                      : ListView.builder(
-                                          controller: _scrollController,
-                                          reverse: true,
-                                          padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
-                                          itemCount: provider.messages.length + (provider.isLoadingMore ? 1 : 0),
-                                          itemBuilder: (context, index) {
-                                            final messages = provider.messages;
+                              ? Center(
+                                  child: Text(
+                                    provider.errorMessage!,
+                                    style: const TextStyle(color: AppColors.error),
+                                  ),
+                                )
+                              : provider.messages.isEmpty
+                              ? SayHelloWidget(
+                                  onSayHello: () {
+                                    provider.sendMessage(
+                                      senderId: widget.currentUserId,
+                                      senderType: widget.currentUserType,
+                                      message: 'Hello 👋',
+                                    );
+                                  },
+                                )
+                              : ListView.builder(
+                                  controller: _scrollController,
+                                  reverse: true,
+                                  padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+                                  itemCount: provider.messages.length + (provider.isLoadingMore ? 1 : 0),
+                                  itemBuilder: (context, index) {
+                                    final messages = provider.messages;
 
-                                            if (index == messages.length && provider.isLoadingMore) {
-                                              return const Padding(
-                                                padding: EdgeInsets.symmetric(vertical: 8.0),
-                                                child: Center(
-                                                  child: SizedBox(
-                                                    width: 20.0,
-                                                    height: 20.0,
-                                                    child: CircularProgressIndicator(
-                                                      strokeWidth: 2.0,
-                                                      color: AppColors.primary,
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
-                                            }
-
-                                            final reversedIndex = messages.length - 1 - index;
-                                            final message = messages[reversedIndex];
-                                            final isMe = message.senderId == widget.currentUserId;
-
-                                            bool showDateHeader = false;
-                                            String dateStr = '';
-                                            final msgDate = message.createdAt.toLocal();
-
-                                            if (reversedIndex == 0) {
-                                              showDateHeader = true;
-                                            } else {
-                                              final prevDate = messages[reversedIndex - 1].createdAt.toLocal();
-                                              if (msgDate.year != prevDate.year ||
-                                                  msgDate.month != prevDate.month ||
-                                                  msgDate.day != prevDate.day) {
-                                                showDateHeader = true;
-                                              }
-                                            }
-                                            if (showDateHeader) {
-                                              dateStr = ChatDateSeparator.formatDateHeader(msgDate);
-                                            }
-
-                                            // Hide header for consecutive messages from the same sender sent within the same minute
-                                            bool showTimeHeader = true;
-                                            if (reversedIndex > 0 && !showDateHeader) {
-                                              final prevMessage = messages[reversedIndex - 1];
-                                              final prevDate = prevMessage.createdAt.toLocal();
-                                              final isSameSender = message.senderId == prevMessage.senderId;
-                                              final isSameMinute = msgDate.minute == prevDate.minute &&
-                                                  msgDate.hour == prevDate.hour &&
-                                                  msgDate.day == prevDate.day &&
-                                                  msgDate.month == prevDate.month &&
-                                                  msgDate.year == prevDate.year;
-
-                                              if (isSameSender && isSameMinute) {
-                                                showTimeHeader = false;
-                                              }
-                                            }
-
-                                            return Column(
-                                              children: [
-                                                if (showDateHeader)
-                                                  ChatDateSeparator(date: dateStr),
-                                                ChatBubbleWidget(
-                                                  message: message,
-                                                  isMe: isMe,
-                                                  showTimeHeader: showTimeHeader,
-                                                  onReply: () => _handleReplyMessage(message),
-                                                  onEdit: () => _handleEditMessage(message, provider),
-                                                  onDelete: () => _handleDeleteMessage(message, provider),
-                                                ),
-                                              ],
-                                            );
-                                          },
+                                    if (index == messages.length && provider.isLoadingMore) {
+                                      return const Padding(
+                                        padding: EdgeInsets.symmetric(vertical: 8.0),
+                                        child: Center(
+                                          child: SizedBox(
+                                            width: 20.0,
+                                            height: 20.0,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2.0,
+                                              color: AppColors.primary,
+                                            ),
+                                          ),
                                         ),
+                                      );
+                                    }
+
+                                    final reversedIndex = messages.length - 1 - index;
+                                    final message = messages[reversedIndex];
+                                    final isMe = message.senderId == widget.currentUserId;
+
+                                    bool showDateHeader = false;
+                                    String dateStr = '';
+                                    final msgDate = message.createdAt.toLocal();
+
+                                    if (reversedIndex == 0) {
+                                      showDateHeader = true;
+                                    } else {
+                                      final prevDate = messages[reversedIndex - 1].createdAt.toLocal();
+                                      if (msgDate.year != prevDate.year ||
+                                          msgDate.month != prevDate.month ||
+                                          msgDate.day != prevDate.day) {
+                                        showDateHeader = true;
+                                      }
+                                    }
+                                    if (showDateHeader) {
+                                      dateStr = ChatDateSeparator.formatDateHeader(msgDate);
+                                    }
+
+                                    // Hide header for consecutive messages from the same sender sent within the same minute
+                                    bool showTimeHeader = true;
+                                    if (reversedIndex > 0 && !showDateHeader) {
+                                      final prevMessage = messages[reversedIndex - 1];
+                                      final prevDate = prevMessage.createdAt.toLocal();
+                                      final isSameSender = message.senderId == prevMessage.senderId;
+                                      final isSameMinute =
+                                          msgDate.minute == prevDate.minute &&
+                                          msgDate.hour == prevDate.hour &&
+                                          msgDate.day == prevDate.day &&
+                                          msgDate.month == prevDate.month &&
+                                          msgDate.year == prevDate.year;
+
+                                      if (isSameSender && isSameMinute) {
+                                        showTimeHeader = false;
+                                      }
+                                    }
+
+                                    return Column(
+                                      children: [
+                                        if (showDateHeader) ChatDateSeparator(date: dateStr),
+                                        ChatBubbleWidget(
+                                          message: message,
+                                          isMe: isMe,
+                                          showTimeHeader: showTimeHeader,
+                                          onReply: () => _handleReplyMessage(message),
+                                          onEdit: () => _handleEditMessage(message, provider),
+                                          onDelete: () => _handleDeleteMessage(message, provider),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
                         ),
                       ),
 

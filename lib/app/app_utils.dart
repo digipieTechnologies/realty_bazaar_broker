@@ -2,12 +2,14 @@
 // Purpose: Centralized helper utility methods.
 
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../util/common_ext.dart';
-import '../widgets/toast/app_toast.dart';
 import '../widgets/dialogs/app_dialog.dart';
+import '../widgets/toast/app_toast.dart';
 
 class AppUtils {
   AppUtils._();
@@ -78,9 +80,7 @@ class AppUtils {
 
   static String? validateRequired(String? value, {String? fieldName}) {
     if (value == null || value.trim().isEmpty) {
-      return fieldName != null
-          ? '$fieldName is required'
-          : 'This field is required';
+      return fieldName != null ? '$fieldName is required' : 'This field is required';
     }
     return null;
   }
@@ -125,20 +125,14 @@ class AppUtils {
     final Uri url = Uri.parse(urlString.trim());
 
     try {
-      final bool launched = await launchUrl(
-        url,
-        mode: LaunchMode.externalApplication,
-      );
+      final bool launched = await launchUrl(url, mode: LaunchMode.externalApplication);
       if (launched) return true;
     } catch (e) {
       debugPrint('LaunchMode.externalApplication failed ($urlString): $e');
     }
 
     try {
-      final bool launched = await launchUrl(
-        url,
-        mode: LaunchMode.platformDefault,
-      );
+      final bool launched = await launchUrl(url, mode: LaunchMode.platformDefault);
       if (launched) return true;
     } catch (e) {
       debugPrint('LaunchMode.platformDefault failed ($urlString): $e');
@@ -151,10 +145,7 @@ class AppUtils {
       debugPrint('Basic launchUrl failed ($urlString): $e');
     }
 
-    AppToast.showError(
-      'Launch Failed',
-      'Could not open connection link in browser.',
-    );
+    AppToast.showError('Launch Failed', 'Could not open connection link in browser.');
     return false;
   }
 
@@ -165,13 +156,11 @@ class AppUtils {
 
   static bool isMobile(BuildContext context) => context.isMobileUI;
   static bool isTablet(BuildContext context) => context.isTabletUI;
-  static bool isDesktop(BuildContext context) => context.isDesktopUI;
+  static bool isDesktop(BuildContext context) => context.isDesktop;
 
   // --- DEBOUNCER ---
 
-  static void Function(void Function() action) debounce({
-    int milliseconds = 300,
-  }) {
+  static void Function(void Function() action) debounce({int milliseconds = 300}) {
     Timer? timer;
     return (void Function() action) {
       if (timer != null) {

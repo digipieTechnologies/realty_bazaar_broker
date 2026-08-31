@@ -32,6 +32,8 @@ class AppButton extends StatelessWidget {
   final double iconSpacing;
   final String? tooltip;
   final double elevation;
+  final FocusNode? focusNode;
+  final bool autofocus;
 
   const AppButton({
     super.key,
@@ -56,6 +58,8 @@ class AppButton extends StatelessWidget {
     this.iconSpacing = 8.0,
     this.tooltip,
     this.elevation = 0.0,
+    this.focusNode,
+    this.autofocus = false,
   });
 
   // Handy named constructors for clean code usage
@@ -75,6 +79,8 @@ class AppButton extends StatelessWidget {
     Color? textColor,
     TextStyle? textStyle,
     EdgeInsets? padding,
+    FocusNode? focusNode,
+    bool autofocus = false,
   }) {
     return AppButton(
       key: key,
@@ -93,6 +99,8 @@ class AppButton extends StatelessWidget {
       textColor: textColor,
       textStyle: textStyle,
       padding: padding,
+      focusNode: focusNode,
+      autofocus: autofocus,
     );
   }
 
@@ -112,6 +120,8 @@ class AppButton extends StatelessWidget {
     Color? textColor,
     TextStyle? textStyle,
     EdgeInsets? padding,
+    FocusNode? focusNode,
+    bool autofocus = false,
   }) {
     return AppButton(
       key: key,
@@ -130,6 +140,8 @@ class AppButton extends StatelessWidget {
       textColor: textColor,
       textStyle: textStyle,
       padding: padding,
+      focusNode: focusNode,
+      autofocus: autofocus,
     );
   }
 
@@ -148,6 +160,8 @@ class AppButton extends StatelessWidget {
     List<Color>? gradientColors,
     TextStyle? textStyle,
     EdgeInsets? padding,
+    FocusNode? focusNode,
+    bool autofocus = false,
   }) {
     return AppButton(
       key: key,
@@ -165,13 +179,14 @@ class AppButton extends StatelessWidget {
       gradientColors: gradientColors,
       textStyle: textStyle,
       padding: padding,
+      focusNode: focusNode,
+      autofocus: autofocus,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool effectivelyDisabled =
-        isDisabled || isLoading || onPressed == null;
+    final bool effectivelyDisabled = isDisabled || isLoading || onPressed == null;
 
     // Resolve colors & styles based on theme and variant
     Color resolvedBgColor = Colors.transparent;
@@ -179,8 +194,7 @@ class AppButton extends StatelessWidget {
     Color resolvedBorderColor = Colors.transparent;
 
     TextStyle defaultBaseStyle = textStyle ?? AppTextStyles.button;
-    Color resolvedTextColor =
-        textColor ?? defaultBaseStyle.color ?? AppColors.surface;
+    Color resolvedTextColor = textColor ?? defaultBaseStyle.color ?? AppColors.surface;
 
     if (effectivelyDisabled) {
       resolvedBgColor = AppColors.border;
@@ -234,17 +248,12 @@ class AppButton extends StatelessWidget {
     );
 
     // Calculate prominent icon size (default ~22.0)
-    final double defaultIconSize =
-        iconSize ?? ((resolvedStyle.fontSize ?? 14.0) + 7.0);
+    final double defaultIconSize = iconSize ?? ((resolvedStyle.fontSize ?? 14.0) + 7.0);
 
     // Build icon widget
     Widget? effectiveIcon = icon;
     if (effectiveIcon == null && iconData != null) {
-      effectiveIcon = Icon(
-        iconData,
-        size: defaultIconSize,
-        color: resolvedTextColor,
-      );
+      effectiveIcon = Icon(iconData, size: defaultIconSize, color: resolvedTextColor);
     }
 
     // Build internal content
@@ -253,19 +262,13 @@ class AppButton extends StatelessWidget {
       bodyContent = child!;
     } else {
       bodyContent = IconTheme(
-        data: IconThemeData(
-          color: resolvedTextColor,
-          size: defaultIconSize,
-        ),
+        data: IconThemeData(color: resolvedTextColor, size: defaultIconSize),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (isLoading) ...[
-              AppLoader(
-                size: defaultIconSize,
-                color: resolvedTextColor,
-              ),
+              AppLoader(size: defaultIconSize, color: resolvedTextColor),
               SizedBox(width: iconSpacing),
             ] else if (effectiveIcon != null) ...[
               effectiveIcon,
@@ -273,12 +276,7 @@ class AppButton extends StatelessWidget {
             ],
             if (text != null && text!.isNotEmpty)
               Flexible(
-                child: Text(
-                  text!,
-                  style: resolvedStyle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                child: Text(text!, style: resolvedStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
               ),
           ],
         ),
@@ -288,9 +286,7 @@ class AppButton extends StatelessWidget {
     Widget buttonWidget = ContainerCorner(
       width: width,
       height: height,
-      color: variant == AppButtonVariant.gradient && !effectivelyDisabled
-          ? null
-          : resolvedBgColor,
+      color: variant == AppButtonVariant.gradient && !effectivelyDisabled ? null : resolvedBgColor,
       colors: variant == AppButtonVariant.gradient && !effectivelyDisabled
           ? resolvedGradient
           : [Colors.transparent, Colors.transparent],
@@ -299,10 +295,19 @@ class AppButton extends StatelessWidget {
       borderRadius: borderRadius,
       padding: padding ?? const EdgeInsets.symmetric(horizontal: 10.0),
       alignment: Alignment.center,
-      onTap: effectivelyDisabled ? null : onPressed,
       tooltip: tooltip,
       child: bodyContent,
     );
+
+    if (!effectivelyDisabled && onPressed != null) {
+      return InkWell(
+        focusNode: focusNode,
+        autofocus: autofocus,
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(borderRadius),
+        child: buttonWidget,
+      );
+    }
 
     return buttonWidget;
   }

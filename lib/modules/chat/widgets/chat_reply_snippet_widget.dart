@@ -2,6 +2,7 @@
 // Purpose: Standalone reusable widget for rendering inline reply snippets inside chat bubbles.
 
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../models/chat_enums.dart';
 import '../../../models/chat_message_model.dart';
@@ -10,11 +11,7 @@ class ChatReplySnippetWidget extends StatelessWidget {
   final ChatMessageModel? replyMessage;
   final bool isMe;
 
-  const ChatReplySnippetWidget({
-    super.key,
-    required this.replyMessage,
-    required this.isMe,
-  });
+  const ChatReplySnippetWidget({super.key, required this.replyMessage, required this.isMe});
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +26,9 @@ class ChatReplySnippetWidget extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 6.0),
       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       decoration: BoxDecoration(
-        color: isMe
-            ? Colors.white.withValues(alpha: 0.18)
-            : AppColors.primary.withValues(alpha: 0.08),
+        color: isMe ? Colors.white.withValues(alpha: 0.18) : AppColors.primary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(8.0),
-        border: Border(
-          left: BorderSide(
-            color: isMe ? Colors.white : AppColors.primary,
-            width: 3.5,
-          ),
-        ),
+        border: Border(left: BorderSide(color: isMe ? Colors.white : AppColors.primary, width: 3.5)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,10 +50,7 @@ class ChatReplySnippetWidget extends StatelessWidget {
   }
 
   Widget _buildReplyContentWidget(ChatMessageModel? parent) {
-    final textStyle = TextStyle(
-      fontSize: 11.5,
-      color: isMe ? Colors.white70 : AppColors.textSecondary,
-    );
+    final textStyle = TextStyle(fontSize: 11.5, color: isMe ? Colors.white70 : AppColors.textSecondary);
     final iconColor = isMe ? Colors.white70 : AppColors.textSecondary;
 
     if (parent == null) {
@@ -93,7 +80,10 @@ class ChatReplySnippetWidget extends StatelessWidget {
 
       for (final m in medias) {
         final isVideo = m.isVideo;
-        final isDoc = m.type == 'document' || m.type == 'file' || (m.type != 'video' && m.type != 'image' && m.type != 'photo');
+        final isDoc =
+            m.type == 'document' ||
+            m.type == 'file' ||
+            (m.type != 'video' && m.type != 'image' && m.type != 'photo');
         if (isVideo) {
           hasVideo = true;
         } else if (isDoc) {
@@ -123,12 +113,7 @@ class ChatReplySnippetWidget extends StatelessWidget {
           Icon(iconData, size: 14.0, color: iconColor),
           const SizedBox(width: 4.0),
           Flexible(
-            child: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: textStyle,
-            ),
+            child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: textStyle),
           ),
         ],
       );
@@ -143,9 +128,7 @@ class ChatReplySnippetWidget extends StatelessWidget {
           const SizedBox(width: 4.0),
           Flexible(
             child: Text(
-              parent.message != null && parent.message!.isNotEmpty
-                  ? parent.message!
-                  : '1 Document',
+              parent.message != null && parent.message!.isNotEmpty ? parent.message! : '1 Document',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: textStyle,
@@ -156,11 +139,6 @@ class ChatReplySnippetWidget extends StatelessWidget {
     }
 
     // 4. Standard Text Message
-    return Text(
-      parent.message ?? '',
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: textStyle,
-    );
+    return Text(parent.message ?? '', maxLines: 1, overflow: TextOverflow.ellipsis, style: textStyle);
   }
 }

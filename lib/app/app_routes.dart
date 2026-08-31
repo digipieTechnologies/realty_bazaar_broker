@@ -1,5 +1,5 @@
 // File: lib/app/app_routes.dart
-// Purpose: Routing table and GoRouter configuration with Navigator keys.
+// Purpose: Routing table and GoRouter configuration with Navigator keys, deep linking, and return-url preservation.
 
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -9,6 +9,7 @@ import '../core/services/clarity_service.dart';
 import '../models/otp_type.dart';
 import '../models/property_model.dart';
 import '../models/social_lead_model.dart';
+import '../models/social_post_model.dart';
 import '../modules/auth/screens/delete_account_screen.dart';
 import '../modules/auth/screens/login_screen.dart';
 import '../modules/auth/screens/otp_verification_screen.dart';
@@ -27,6 +28,7 @@ import '../modules/dashboard/screens/reports_tab_screen.dart';
 import '../modules/dashboard/screens/request_video_tab_screen.dart';
 import '../modules/dashboard/screens/settings_tab_screen.dart';
 import '../modules/dashboard/screens/shell_layout_screen.dart';
+import '../modules/dashboard/screens/view_post_screen.dart';
 import '../modules/leads/screens/view_lead_screen.dart';
 import '../modules/legal/screens/privacy_policy_screen.dart';
 import '../modules/legal/screens/terms_of_service_screen.dart';
@@ -36,6 +38,9 @@ import '../widgets/common/common_app_bar.dart';
 
 class AppRoutes {
   AppRoutes._();
+
+  // Storage key for preserving deep link URL across auth flows
+  static const String pendingRedirectKey = 'pending_redirect_url';
 
   // Global Navigator Key for AppOverlay/Toasts access
   static final GlobalKey<NavigatorState> rootNavigatorKey =
@@ -54,33 +59,79 @@ class AppRoutes {
   static const String home = '/dashboard';
   static const String details = '/details';
   static const String campaignSettings = '/campaign-settings';
+  static const String propertyDetails = '/properties/:idOrCode';
+  static const String leadDetails = '/leads/:id';
+  static const String postDetails = '/posts/:id';
 
-  /// Navigates to Property Details full screen for a given property
+  /// Navigates to Property Details (URL deep link on Desktop, rootNavigator on Mobile)
   static void navigateToPropertyDetails(
     BuildContext context,
     PropertyModel property,
   ) {
-    Navigator.of(context, rootNavigator: true).push(
-      MaterialPageRoute(
-        builder: (context) => ViewPropertyScreen(property: property),
-      ),
-    );
+    final identifier = property.propertyCode?.isNotEmpty == true
+        ? property.propertyCode!
+        : (property.id ?? '');
+    if (context.isDesktop) {
+      if (identifier.isNotEmpty) {
+        context.go('/properties/$identifier', extra: property);
+      } else {
+        context.go('/properties');
+      }
+    } else {
+      Navigator.of(context, rootNavigator: true).push(
+        MaterialPageRoute(
+          builder: (context) =>
+              ViewPropertyScreen(property: property, propertyId: identifier),
+        ),
+      );
+    }
   }
 
-  /// Navigates to Lead Details full screen for a given lead
+  /// Navigates to Lead Details (URL deep link on Desktop, rootNavigator on Mobile)
   static void navigateToLeadDetails(
     BuildContext context,
     SocialLeadModel lead,
   ) {
-    Navigator.of(
-      context,
-      rootNavigator: true,
-    ).push(MaterialPageRoute(builder: (context) => ViewLeadScreen(lead: lead)));
+    final targetId = lead.id ?? '';
+    if (context.isDesktop) {
+      if (targetId.isNotEmpty) {
+        context.go('/leads/$targetId', extra: lead);
+      } else {
+        context.go('/leads');
+      }
+    } else {
+      Navigator.of(context, rootNavigator: true).push(
+        MaterialPageRoute(
+          builder: (context) => ViewLeadScreen(lead: lead, leadId: targetId),
+        ),
+      );
+    }
   }
 
-  /// Navigates to Video Requests: switches tab if Desktop sidebar layout, or pushes full screen if Mobile.
+  /// Navigates to Post Details (URL deep link on Desktop, rootNavigator on Mobile)
+  static void navigateToPostDetails(
+    BuildContext context,
+    SocialPostModel post,
+  ) {
+    final targetId = post.id ?? post.postId ?? post.platformPostId ?? '';
+    if (context.isDesktop) {
+      if (targetId.isNotEmpty) {
+        context.go('/posts/$targetId', extra: post);
+      } else {
+        context.go('/posts');
+      }
+    } else {
+      Navigator.of(context, rootNavigator: true).push(
+        MaterialPageRoute(
+          builder: (context) => ViewPostScreen(post: post, postId: targetId),
+        ),
+      );
+    }
+  }
+
+  /// Navigates to Video Requests: switches tab on Desktop, or pushes via rootNavigator on Mobile.
   static void navigateToVideoRequests(BuildContext context) {
-    if (context.isDesktopUI) {
+    if (context.isDesktop) {
       context.go('/request-video');
     } else {
       Navigator.of(context, rootNavigator: true).push(
@@ -89,11 +140,62 @@ class AppRoutes {
     }
   }
 
-  /// Navigates to Ad Campaign Settings full screen route
+  /// Navigates to Ad Campaign Settings (URL deep link on Desktop, rootNavigator on Mobile)
   static void navigateToCampaignSettings(BuildContext context) {
-    Navigator.of(context, rootNavigator: true).push(
-      MaterialPageRoute(builder: (context) => const AdCampaignSettingsScreen()),
-    );
+    if (context.isDesktop) {
+      context.push(campaignSettings);
+    } else {
+      Navigator.of(context, rootNavigator: true).push(
+        MaterialPageRoute(
+          builder: (context) => const AdCampaignSettingsScreen(),
+        ),
+      );
+    }
+  }
+
+  /// Navigates to Profile (Tab on Desktop, rootNavigator on Mobile)
+  static void navigateToProfile(BuildContext context) {
+    if (context.isDesktop) {
+      context.go('/profile');
+    } else {
+      Navigator.of(
+        context,
+        rootNavigator: true,
+      ).push(MaterialPageRoute(builder: (context) => const ProfileScreen()));
+    }
+  }
+
+  /// Navigates to Privacy Policy (URL link on Desktop, rootNavigator on Mobile)
+  static void navigateToPrivacyPolicy(BuildContext context) {
+    if (context.isDesktop) {
+      context.push(privacyPolicy);
+    } else {
+      Navigator.of(context, rootNavigator: true).push(
+        MaterialPageRoute(builder: (context) => const PrivacyPolicyScreen()),
+      );
+    }
+  }
+
+  /// Navigates to Terms of Service (URL link on Desktop, rootNavigator on Mobile)
+  static void navigateToTermsOfService(BuildContext context) {
+    if (context.isDesktop) {
+      context.push(termsOfService);
+    } else {
+      Navigator.of(context, rootNavigator: true).push(
+        MaterialPageRoute(builder: (context) => const TermsOfServiceScreen()),
+      );
+    }
+  }
+
+  /// Navigates to Delete Account (URL link on Desktop, rootNavigator on Mobile)
+  static void navigateToDeleteAccount(BuildContext context) {
+    if (context.isDesktop) {
+      context.push(deleteAccount);
+    } else {
+      Navigator.of(context, rootNavigator: true).push(
+        MaterialPageRoute(builder: (context) => const DeleteAccountScreen()),
+      );
+    }
   }
 
   // GoRouter Singleton Instance
@@ -103,7 +205,8 @@ class AppRoutes {
     debugLogDiagnostics: true,
     observers: [ClarityRouteObserver()],
     redirect: (context, state) {
-      final userId = GetStorage().read<String>('user_id');
+      final storage = GetStorage();
+      final userId = storage.read<String>('user_id');
       final isLoggedIn = userId != null && userId.isNotEmpty;
 
       final goingToAuth =
@@ -125,14 +228,29 @@ class AppRoutes {
           state.matchedLocation == signUp ||
           state.matchedLocation == forgotPassword;
 
+      // 1. Unauthenticated user trying to access protected content
       if (!isLoggedIn &&
           !goingToAuth &&
           !goingToSplash &&
           !goingToPublicLegal) {
+        // Save the intended destination URL so user returns here after login
+        final targetUri = state.uri.toString();
+        if (targetUri.isNotEmpty && targetUri != '/' && targetUri != '/login') {
+          storage.write(pendingRedirectKey, targetUri);
+        }
         return login;
       }
 
+      // 2. Authenticated user landing on login / signup screens
       if (isLoggedIn && goingToLoginOrSignup) {
+        final pendingUrl = storage.read<String>(pendingRedirectKey);
+        if (pendingUrl != null &&
+            pendingUrl.isNotEmpty &&
+            pendingUrl != '/login' &&
+            pendingUrl != '/') {
+          storage.remove(pendingRedirectKey);
+          return pendingUrl;
+        }
         return home;
       }
 
@@ -233,16 +351,61 @@ class AppRoutes {
             path: '/leads',
             name: 'leads',
             builder: (context, state) => const LeadsTabScreen(),
+            routes: [
+              GoRoute(
+                parentNavigatorKey: rootNavigatorKey,
+                path: ':id',
+                name: 'lead_details',
+                builder: (context, state) {
+                  final id = state.pathParameters['id'];
+                  final leadExtra = state.extra is SocialLeadModel
+                      ? state.extra as SocialLeadModel
+                      : null;
+                  return ViewLeadScreen(lead: leadExtra, leadId: id);
+                },
+              ),
+            ],
           ),
           GoRoute(
             path: '/posts',
             name: 'posts',
             builder: (context, state) => const PostsTabScreen(),
+            routes: [
+              GoRoute(
+                parentNavigatorKey: rootNavigatorKey,
+                path: ':id',
+                name: 'post_details',
+                builder: (context, state) {
+                  final id = state.pathParameters['id'];
+                  final postExtra = state.extra is SocialPostModel
+                      ? state.extra as SocialPostModel
+                      : null;
+                  return ViewPostScreen(post: postExtra, postId: id);
+                },
+              ),
+            ],
           ),
           GoRoute(
             path: '/properties',
             name: 'properties',
             builder: (context, state) => const PropertiesTabScreen(),
+            routes: [
+              GoRoute(
+                parentNavigatorKey: rootNavigatorKey,
+                path: ':idOrCode',
+                name: 'property_details',
+                builder: (context, state) {
+                  final idOrCode = state.pathParameters['idOrCode'];
+                  final propertyExtra = state.extra is PropertyModel
+                      ? state.extra as PropertyModel
+                      : null;
+                  return ViewPropertyScreen(
+                    property: propertyExtra,
+                    propertyId: idOrCode,
+                  );
+                },
+              ),
+            ],
           ),
           GoRoute(
             path: '/grow',

@@ -2,6 +2,7 @@
 // Purpose: Reusable avatar widget displaying user profile image or dynamic name initials circle with cached network images and optional border styling.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../images/cached_image.dart';
 
@@ -45,12 +46,7 @@ class UserAvatarWidget extends StatelessWidget {
   }
 
   static Color getAvatarTextColor(String name) {
-    final colors = [
-      AppColors.primaryDark,
-      AppColors.secondaryDark,
-      AppColors.info,
-      AppColors.warning,
-    ];
+    final colors = [AppColors.primaryDark, AppColors.secondaryDark, AppColors.info, AppColors.warning];
     final hash = name.codeUnits.fold(0, (prev, element) => prev + element);
     return colors[hash % colors.length];
   }
@@ -63,12 +59,7 @@ class UserAvatarWidget extends StatelessWidget {
     if (imageUrl != null && imageUrl!.trim().isNotEmpty) {
       avatarChild = ClipRRect(
         borderRadius: BorderRadius.circular(radius),
-        child: CachedImage(
-          imageUrl!,
-          width: diameter,
-          height: diameter,
-          fit: BoxFit.cover,
-        ),
+        child: CachedImage(imageUrl!, width: diameter, height: diameter, fit: BoxFit.cover),
       );
     } else {
       final initials = getInitials(name);
@@ -80,12 +71,8 @@ class UserAvatarWidget extends StatelessWidget {
         backgroundColor: bgColor,
         child: Text(
           initials,
-          style: textStyle ??
-              TextStyle(
-                fontSize: radius * 0.7,
-                fontWeight: FontWeight.bold,
-                color: textColor,
-              ),
+          style:
+              textStyle ?? TextStyle(fontSize: radius * 0.7, fontWeight: FontWeight.bold, color: textColor),
         ),
       );
     }

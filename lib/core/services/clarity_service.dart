@@ -1,10 +1,10 @@
 // File: lib/core/services/clarity_service.dart
 // Purpose: Microsoft Clarity analytics & session replay wrapper service.
 
-import 'clarity_stub.dart'
-    if (dart.library.io) 'package:clarity_flutter/clarity_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import 'clarity_stub.dart' if (dart.library.io) 'package:clarity_flutter/clarity_flutter.dart';
 
 class ClarityService {
   ClarityService._();
@@ -20,12 +20,15 @@ class ClarityService {
   bool get isSupportedPlatform {
     if (kIsWeb) return false;
     if (kDebugMode) return false; // Disable during dev/debug runs
-    return defaultTargetPlatform == TargetPlatform.android ||
-        defaultTargetPlatform == TargetPlatform.iOS;
+    return defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS;
   }
 
   /// Creates a ClarityConfig instance if a valid Project ID is provided and not in dev mode.
-  ClarityConfig? createConfig({String? projectId, LogLevel logLevel = LogLevel.None, bool forceEnableInDebug = false}) {
+  ClarityConfig? createConfig({
+    String? projectId,
+    LogLevel logLevel = LogLevel.None,
+    bool forceEnableInDebug = false,
+  }) {
     if (kDebugMode && !forceEnableInDebug) {
       debugPrint('ClarityService: Disabled in debug/dev mode.');
       return null;
@@ -35,10 +38,7 @@ class ClarityService {
       debugPrint('ClarityService: No Project ID configured. Clarity will be disabled.');
       return null;
     }
-    return ClarityConfig(
-      projectId: id,
-      logLevel: logLevel,
-    );
+    return ClarityConfig(projectId: id, logLevel: logLevel);
   }
 
   /// Initializes Clarity with a build context (optional fallback if not wrapped via ClarityWidget).
@@ -109,7 +109,7 @@ class ClarityService {
       final errorMsg = error.toString();
       sendCustomEvent('error_$errorType');
       setCustomTag('last_error_type', errorType);
-      
+
       // Limit tag length to safe limit (max 255 chars)
       final safeMsg = errorMsg.length > 200 ? errorMsg.substring(0, 200) : errorMsg;
       setCustomTag('last_error_msg', safeMsg);

@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import '../../../../app/app_colors.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../providers/dashboard/dashboard_provider.dart';
@@ -11,11 +12,7 @@ class SetupStepTileWidget extends StatelessWidget {
   final OnboardingStep step;
   final VoidCallback onTap;
 
-  const SetupStepTileWidget({
-    super.key,
-    required this.step,
-    required this.onTap,
-  });
+  const SetupStepTileWidget({super.key, required this.step, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +34,7 @@ class SetupStepTileWidget extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(12.0),
             decoration: BoxDecoration(
-              color: step.isCompleted
-                  ? AppColors.setupTileSuccessBg
-                  : primaryColor.withValues(alpha: 0.03),
+              color: step.isCompleted ? AppColors.setupTileSuccessBg : primaryColor.withValues(alpha: 0.03),
               borderRadius: BorderRadius.circular(14.0),
               border: Border.all(
                 color: step.isCompleted
@@ -82,10 +77,7 @@ class SetupStepTileWidget extends StatelessWidget {
                     step.svgAssetPath,
                     width: 22.0,
                     height: 22.0,
-                    colorFilter: const ColorFilter.mode(
-                      Colors.white,
-                      BlendMode.srcIn,
-                    ),
+                    colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                   ),
                 ),
                 const SizedBox(width: 12.0),
@@ -127,43 +119,25 @@ class SetupStepTileWidget extends StatelessWidget {
                 if (step.isCompleted)
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 4.0),
-                    child: Icon(
-                      Icons.check_circle_rounded,
-                      color: AppColors.statusSuccessText,
-                      size: 24.0,
-                    ),
+                    child: Icon(Icons.check_circle_rounded, color: AppColors.statusSuccessText, size: 24.0),
                   )
                 else
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 4.0,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                     decoration: BoxDecoration(
                       color: primaryColor.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(20.0),
-                      border: Border.all(
-                        color: primaryColor.withValues(alpha: 0.3),
-                        width: 1.0,
-                      ),
+                      border: Border.all(color: primaryColor.withValues(alpha: 0.3), width: 1.0),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           context.tr('start_setup'),
-                          style: TextStyle(
-                            fontSize: 10.5,
-                            fontWeight: FontWeight.bold,
-                            color: primaryColor,
-                          ),
+                          style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: primaryColor),
                         ),
                         const SizedBox(width: 2.0),
-                        Icon(
-                          Icons.chevron_right_rounded,
-                          color: primaryColor,
-                          size: 14.0,
-                        ),
+                        Icon(Icons.chevron_right_rounded, color: primaryColor, size: 14.0),
                       ],
                     ),
                   ),

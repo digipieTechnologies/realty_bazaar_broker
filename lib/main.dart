@@ -3,8 +3,6 @@
 
 // ignore_for_file: deprecated_member_use
 
-import 'core/services/clarity_stub.dart'
-    if (dart.library.io) 'package:clarity_flutter/clarity_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,6 +18,7 @@ import 'app/app_strings.dart';
 import 'app/app_theme.dart';
 import 'core/localization/app_localizations.dart';
 import 'core/services/clarity_service.dart';
+import 'core/services/clarity_stub.dart' if (dart.library.io) 'package:clarity_flutter/clarity_flutter.dart';
 import 'core/services/notification_service.dart';
 import 'core/services/storage_service.dart';
 import 'providers/auth/auth_provider.dart';
@@ -49,11 +48,7 @@ void main() async {
 
   // Global Async/Platform Error Handler (Isolate/Async unhandled exceptions)
   PlatformDispatcher.instance.onError = (error, stack) {
-    ClarityService.instance.logError(
-      error,
-      stackTrace: stack,
-      reason: 'PlatformDispatcher unhandled error',
-    );
+    ClarityService.instance.logError(error, stackTrace: stack, reason: 'PlatformDispatcher unhandled error');
     return false;
   };
 
@@ -71,8 +66,7 @@ void main() async {
 
   // Lock device orientation to portrait mode only on mobile (Android & iOS)
   if (!kIsWeb &&
-      (defaultTargetPlatform == TargetPlatform.android ||
-          defaultTargetPlatform == TargetPlatform.iOS)) {
+      (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS)) {
     try {
       await SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
@@ -84,8 +78,14 @@ void main() async {
   }
 
   // 1. Read Supabase credentials from compile-time environment defines
+  const environment = String.fromEnvironment('ENVIRONMENT', defaultValue: 'dev');
   const supabaseUrl = String.fromEnvironment('SUPABASE_URL');
   const supabaseAnonKey = String.fromEnvironment('SUPABASE_ANON_KEY');
+
+  debugPrint('====================================================');
+  debugPrint('🚀 Running Realty Bazaar [${environment.toUpperCase()}] Environment');
+  debugPrint('   Supabase URL: ${supabaseUrl.isNotEmpty ? supabaseUrl : "MISSING"}');
+  debugPrint('====================================================');
 
   // 2. Initialize Supabase
   if (supabaseUrl.isNotEmpty && supabaseAnonKey.isNotEmpty) {
@@ -96,9 +96,7 @@ void main() async {
       debugPrint('Failed to initialize Supabase: $e');
     }
   } else {
-    debugPrint(
-      'Supabase credentials missing or invalid in environment defines',
-    );
+    debugPrint('❌ Supabase credentials missing! Run with: --dart-define-from-file=.env.dev or .env.prod');
   }
 
   // 3. Initialize storage service via GetX Dependency Injection
@@ -119,9 +117,7 @@ void main() async {
   // 5. Run the application (wrapped with Clarity if available)
   final clarityConfig = ClarityService.instance.createConfig();
   if (clarityConfig != null && ClarityService.instance.isSupportedPlatform) {
-    runApp(
-      ClarityWidget(app: const RealtyBazaarApp(), clarityConfig: clarityConfig),
-    );
+    runApp(ClarityWidget(app: const RealtyBazaarApp(), clarityConfig: clarityConfig));
   } else {
     runApp(const RealtyBazaarApp());
   }
@@ -153,11 +149,7 @@ class RealtyBazaarApp extends StatelessWidget {
             routerConfig: AppRoutes.router,
             debugShowCheckedModeBanner: false,
             locale: languageProvider.locale,
-            supportedLocales: const [
-              Locale('en', ''),
-              Locale('hi', ''),
-              Locale('gu', ''),
-            ],
+            supportedLocales: const [Locale('en', ''), Locale('hi', ''), Locale('gu', '')],
             localizationsDelegates: const [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,

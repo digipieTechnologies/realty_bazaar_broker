@@ -2,6 +2,7 @@
 // Purpose: Modal dialog for selecting a property without media to request a video shoot.
 
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,24 +15,19 @@ import '../../providers/property/property_provider.dart';
 import '../buttons/app_button.dart';
 import '../inputs/app_textfield.dart';
 import '../shimmer/select_property_list_shimmer_widget.dart';
-import 'video_request_dialog.dart';
 import 'app_base_dialog.dart';
+import 'video_request_dialog.dart';
 
 class SelectPropertyForVideoRequestDialog extends StatefulWidget {
   final String brokerId;
 
-  const SelectPropertyForVideoRequestDialog({
-    super.key,
-    required this.brokerId,
-  });
+  const SelectPropertyForVideoRequestDialog({super.key, required this.brokerId});
 
   @override
-  State<SelectPropertyForVideoRequestDialog> createState() =>
-      _SelectPropertyForVideoRequestDialogState();
+  State<SelectPropertyForVideoRequestDialog> createState() => _SelectPropertyForVideoRequestDialogState();
 }
 
-class _SelectPropertyForVideoRequestDialogState
-    extends State<SelectPropertyForVideoRequestDialog> {
+class _SelectPropertyForVideoRequestDialogState extends State<SelectPropertyForVideoRequestDialog> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
   Timer? _debounce;
@@ -61,8 +57,7 @@ class _SelectPropertyForVideoRequestDialogState
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent - 150 &&
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 150 &&
         _hasMore &&
         !_isLoadingMore &&
         !_isInitialLoading) {
@@ -144,10 +139,7 @@ class _SelectPropertyForVideoRequestDialogState
     WidgetsBinding.instance.addPostFrameCallback((_) {
       showDialog(
         context: parentContext,
-        builder: (context) => VideoRequestDialog(
-          propertyId: selectedId,
-          brokerId: brokerId,
-        ),
+        builder: (context) => VideoRequestDialog(propertyId: selectedId, brokerId: brokerId),
       );
     });
   }
@@ -190,68 +182,66 @@ class _SelectPropertyForVideoRequestDialogState
           // Property List Content
           Expanded(
             child: _isInitialLoading
-                ? const SingleChildScrollView(
-                    child: SelectPropertyListShimmerWidget(itemCount: 5),
-                  )
+                ? const SingleChildScrollView(child: SelectPropertyListShimmerWidget(itemCount: 5))
                 : _properties.isEmpty
-                    ? Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.location_city_outlined,
-                                size: 48.0,
-                                color: AppColors.textSecondary,
-                              ),
-                              const SizedBox(height: 12.0),
-                              Text(
-                                context.tr('no_properties_without_media'),
-                                style: AppTextStyles.body1.copyWith(
-                                  color: AppColors.textSecondary,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+                ? Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.location_city_outlined,
+                            size: 48.0,
+                            color: AppColors.textSecondary,
                           ),
-                        ),
-                      )
-                    : ListView.builder(
-                        controller: _scrollController,
-                        itemCount: _properties.length + (_hasMore ? 1 : 0),
-                        itemBuilder: (context, index) {
-                          if (index == _properties.length) {
-                            return const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 16.0),
-                              child: Center(
-                                child: SizedBox(
-                                  width: 24.0,
-                                  height: 24.0,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2.5,
-                                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-                                  ),
-                                ),
-                              ),
-                            );
-                          }
-
-                          final property = _properties[index];
-                          final isSelected = _selectedProperty?.id == property.id;
-
-                          return SelectPropertyTileWidget(
-                            property: property,
-                            isSelected: isSelected,
-                            onTap: () {
-                              setState(() {
-                                _selectedProperty = isSelected ? null : property;
-                              });
-                            },
-                          );
-                        },
+                          const SizedBox(height: 12.0),
+                          Text(
+                            context.tr('no_properties_without_media'),
+                            style: AppTextStyles.body1.copyWith(
+                              color: AppColors.textSecondary,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ),
+                    ),
+                  )
+                : ListView.builder(
+                    controller: _scrollController,
+                    itemCount: _properties.length + (_hasMore ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index == _properties.length) {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16.0),
+                          child: Center(
+                            child: SizedBox(
+                              width: 24.0,
+                              height: 24.0,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+
+                      final property = _properties[index];
+                      final isSelected = _selectedProperty?.id == property.id;
+
+                      return SelectPropertyTileWidget(
+                        property: property,
+                        isSelected: isSelected,
+                        onTap: () {
+                          setState(() {
+                            _selectedProperty = isSelected ? null : property;
+                          });
+                        },
+                      );
+                    },
+                  ),
           ),
         ],
       ),

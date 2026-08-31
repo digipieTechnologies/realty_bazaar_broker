@@ -2,6 +2,7 @@
 // Purpose: Provider managing subscription plans fetched dynamically from Supabase database with smart sorting.
 
 import 'package:flutter/material.dart';
+
 import '../../core/supabase/supabase_config.dart';
 import '../../models/models.dart';
 
@@ -25,36 +26,28 @@ class SubscriptionProvider extends ChangeNotifier {
 
   /// Plans with one_time duration, sorted by price ascending
   List<SubscriptionPlanModel> get oneTimePlans {
-    final list = _plans
-        .where((p) => p.duration == SubscriptionDuration.oneTime)
-        .toList();
+    final list = _plans.where((p) => p.duration == SubscriptionDuration.oneTime).toList();
     list.sort((a, b) => a.amount.compareTo(b.amount));
     return list;
   }
 
   /// Plans with monthly duration, sorted by price ascending
   List<SubscriptionPlanModel> get monthlyPlans {
-    final list = _plans
-        .where((p) => p.duration == SubscriptionDuration.month)
-        .toList();
+    final list = _plans.where((p) => p.duration == SubscriptionDuration.month).toList();
     list.sort((a, b) => a.amount.compareTo(b.amount));
     return list;
   }
 
   /// Plans with yearly duration, sorted by price ascending
   List<SubscriptionPlanModel> get yearlyPlans {
-    final list = _plans
-        .where((p) => p.duration == SubscriptionDuration.year)
-        .toList();
+    final list = _plans.where((p) => p.duration == SubscriptionDuration.year).toList();
     list.sort((a, b) => a.amount.compareTo(b.amount));
     return list;
   }
 
   /// Plans with custom duration
   List<SubscriptionPlanModel> get customPlans {
-    return _plans
-        .where((p) => p.duration == SubscriptionDuration.custom)
-        .toList();
+    return _plans.where((p) => p.duration == SubscriptionDuration.custom).toList();
   }
 
   /// Returns the designated Most Popular plan if available

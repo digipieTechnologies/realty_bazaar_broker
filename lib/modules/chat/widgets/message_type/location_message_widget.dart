@@ -2,9 +2,9 @@
 // Purpose: WhatsApp style Location sharing message bubble component with map background thumbnail, pin, location name, and Google Maps URL launcher.
 
 import 'package:flutter/material.dart';
+
 import '../../../../app/app_colors.dart';
 import '../../../../util/app_utils.dart';
-
 import '../../../../widgets/toast/app_toast.dart';
 
 class LocationMessageWidget extends StatelessWidget {
@@ -38,7 +38,8 @@ class LocationMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayText = (locationText.isNotEmpty && locationText != 'Shared Location' && locationText != 'Current Location')
+    final displayText =
+        (locationText.isNotEmpty && locationText != 'Shared Location' && locationText != 'Current Location')
         ? locationText
         : (locationData?['address'] ?? locationData?['name'] ?? 'Location');
 
@@ -84,19 +85,9 @@ class LocationMessageWidget extends StatelessWidget {
                       decoration: const BoxDecoration(
                         color: Colors.white,
                         shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 6.0,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
+                        boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 6.0, offset: Offset(0, 2))],
                       ),
-                      child: const Icon(
-                        Icons.location_on_rounded,
-                        color: AppColors.error,
-                        size: 24.0,
-                      ),
+                      child: const Icon(Icons.location_on_rounded, color: AppColors.error, size: 24.0),
                     ),
                   ),
                 ],
@@ -121,11 +112,7 @@ class LocationMessageWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 6.0),
-                  const Icon(
-                    Icons.chevron_right_rounded,
-                    size: 18.0,
-                    color: AppColors.textMuted,
-                  ),
+                  const Icon(Icons.chevron_right_rounded, size: 18.0, color: AppColors.textMuted),
                 ],
               ),
             ),

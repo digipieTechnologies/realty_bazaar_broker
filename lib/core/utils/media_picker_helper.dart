@@ -3,6 +3,7 @@
 
 import 'dart:io' as io;
 import 'dart:ui' as ui;
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -26,11 +27,7 @@ class MediaPickerHelper {
       frameInfo.image.dispose();
       codec.dispose();
       if (width > 0 && height > 0) {
-        return {
-          'width': width,
-          'height': height,
-          'aspectRatio': width / height,
-        };
+        return {'width': width, 'height': height, 'aspectRatio': width / height};
       }
     } catch (e) {
       debugPrint('[MediaPickerHelper] Error decoding dimensions: $e');
@@ -50,10 +47,7 @@ class MediaPickerHelper {
 
     final currentCount = currentMedias.length;
     if (currentCount >= maxMedia) {
-      AppToast.showError(
-        'Attachment Limit',
-        'Maximum $maxMedia media attachments allowed at a time.',
-      );
+      AppToast.showError('Attachment Limit', 'Maximum $maxMedia media attachments allowed at a time.');
       return [];
     }
 
@@ -61,7 +55,20 @@ class MediaPickerHelper {
       final result = await FilePicker.pickFiles(
         allowMultiple: true,
         type: FileType.custom,
-        allowedExtensions: ['jpg', 'jpeg', 'png', 'webp', 'heic', 'gif', 'mp4', 'mov', 'avi', 'mkv', 'webm', '3gp'],
+        allowedExtensions: [
+          'jpg',
+          'jpeg',
+          'png',
+          'webp',
+          'heic',
+          'gif',
+          'mp4',
+          'mov',
+          'avi',
+          'mkv',
+          'webm',
+          '3gp',
+        ],
         withData: kIsWeb,
       );
 
@@ -69,10 +76,7 @@ class MediaPickerHelper {
 
       final allowedCount = maxMedia - currentCount;
       if (result.files.length > allowedCount) {
-        AppToast.showError(
-          'Attachment Limit',
-          'Maximum $maxMedia media attachments allowed at a time.',
-        );
+        AppToast.showError('Attachment Limit', 'Maximum $maxMedia media attachments allowed at a time.');
       }
 
       final filesToProcess = result.files.take(allowedCount).toList();
@@ -90,8 +94,8 @@ class MediaPickerHelper {
           }
           final typeStr = isVideo ? 'video' : 'image';
 
-          final isDuplicate = currentMedias.any((m) => m.url == pathOrName) ||
-              newMediaList.any((m) => m.url == pathOrName);
+          final isDuplicate =
+              currentMedias.any((m) => m.url == pathOrName) || newMediaList.any((m) => m.url == pathOrName);
 
           if (isDuplicate) {
             duplicateFound = true;
@@ -157,10 +161,7 @@ class MediaPickerHelper {
       }
 
       if (duplicateFound) {
-        AppToast.showError(
-          'Duplicate File',
-          'Some files were ignored because they are already added.',
-        );
+        AppToast.showError('Duplicate File', 'Some files were ignored because they are already added.');
       }
 
       return newMediaList;
@@ -182,10 +183,7 @@ class MediaPickerHelper {
 
     final currentImageCount = currentMedias.where((m) => m.type == 'image').length;
     if (currentImageCount >= maxImages) {
-      AppToast.showError(
-        'Photo Limit Reached',
-        'You can upload a maximum of $maxImages property photos.',
-      );
+      AppToast.showError('Photo Limit Reached', 'You can upload a maximum of $maxImages property photos.');
       return [];
     }
 
@@ -201,10 +199,7 @@ class MediaPickerHelper {
 
       final allowedCount = maxImages - currentImageCount;
       if (result.files.length > allowedCount) {
-        AppToast.showError(
-          'Photo Limit Reached',
-          'Maximum $maxImages photos allowed.',
-        );
+        AppToast.showError('Photo Limit Reached', 'Maximum $maxImages photos allowed.');
       }
 
       final filesToProcess = result.files.take(allowedCount).toList();
@@ -213,8 +208,8 @@ class MediaPickerHelper {
 
       for (final file in filesToProcess) {
         final pathOrName = file.path ?? file.name;
-        final isDuplicate = currentMedias.any((m) => m.url == pathOrName) ||
-            newMediaList.any((m) => m.url == pathOrName);
+        final isDuplicate =
+            currentMedias.any((m) => m.url == pathOrName) || newMediaList.any((m) => m.url == pathOrName);
 
         if (isDuplicate) {
           duplicateFound = true;
@@ -244,10 +239,7 @@ class MediaPickerHelper {
       }
 
       if (duplicateFound) {
-        AppToast.showError(
-          'Duplicate File',
-          'Some files were ignored because they are already added.',
-        );
+        AppToast.showError('Duplicate File', 'Some files were ignored because they are already added.');
       }
 
       return newMediaList;
@@ -269,10 +261,7 @@ class MediaPickerHelper {
 
     final currentVideoCount = currentMedias.where((m) => m.type == 'video').length;
     if (currentVideoCount >= maxVideos) {
-      AppToast.showError(
-        'Video Limit Reached',
-        'You can upload a maximum of $maxVideos property videos.',
-      );
+      AppToast.showError('Video Limit Reached', 'You can upload a maximum of $maxVideos property videos.');
       return [];
     }
 
@@ -288,10 +277,7 @@ class MediaPickerHelper {
 
       final allowedCount = maxVideos - currentVideoCount;
       if (result.files.length > allowedCount) {
-        AppToast.showError(
-          'Video Limit Reached',
-          'Maximum $maxVideos videos allowed.',
-        );
+        AppToast.showError('Video Limit Reached', 'Maximum $maxVideos videos allowed.');
       }
 
       final filesToProcess = result.files.take(allowedCount).toList();
@@ -300,8 +286,8 @@ class MediaPickerHelper {
 
       for (final file in filesToProcess) {
         final filePath = file.path ?? file.name;
-        final isDuplicate = currentMedias.any((m) => m.url == filePath) ||
-            newMediaList.any((m) => m.url == filePath);
+        final isDuplicate =
+            currentMedias.any((m) => m.url == filePath) || newMediaList.any((m) => m.url == filePath);
 
         if (isDuplicate) {
           duplicateFound = true;
@@ -347,10 +333,7 @@ class MediaPickerHelper {
       }
 
       if (duplicateFound) {
-        AppToast.showError(
-          'Duplicate File',
-          'Some videos were ignored because they are already added.',
-        );
+        AppToast.showError('Duplicate File', 'Some videos were ignored because they are already added.');
       }
 
       return newMediaList;

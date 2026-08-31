@@ -2,6 +2,7 @@
 // Purpose: Document and file attachment message bubble component featuring extension badge box, filename, preview action (eye icon), and download action.
 
 import 'package:flutter/material.dart';
+
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
 import '../../../../core/utils/common_ext.dart';
@@ -41,18 +42,14 @@ class FileMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rawName = (fileName != null && fileName!.trim().isNotEmpty)
-        ? fileName!
-        : mediaUrl.fileNameFromUrl;
+    final rawName = (fileName != null && fileName!.trim().isNotEmpty) ? fileName! : mediaUrl.fileNameFromUrl;
     final name = rawName.isNotEmpty ? rawName : 'Attachment';
     final ext = name.fileExtension.isNotEmpty ? name.fileExtension.toLowerCase() : 'file';
     final extLabel = ext.toUpperCase();
     final fileIcon = _getFileIcon(ext);
     final typeSubtitle = fileSize ?? name.fileTypeLabel;
 
-    final Color badgeBg = isMe
-        ? Colors.white.withValues(alpha: 0.25)
-        : AppColors.primary100;
+    final Color badgeBg = isMe ? Colors.white.withValues(alpha: 0.25) : AppColors.primary100;
     final Color badgeIconColor = isMe ? Colors.white : AppColors.primary;
     final Color textColor = isMe ? Colors.white : AppColors.textPrimary;
     final Color subtitleColor = isMe ? Colors.white.withValues(alpha: 0.8) : AppColors.textMuted;
@@ -62,15 +59,9 @@ class FileMessageWidget extends StatelessWidget {
       constraints: const BoxConstraints(maxWidth: 320.0),
       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
       decoration: BoxDecoration(
-        color: isMe
-            ? Colors.white.withValues(alpha: 0.12)
-            : AppColors.background,
+        color: isMe ? Colors.white.withValues(alpha: 0.12) : AppColors.background,
         borderRadius: BorderRadius.circular(12.0),
-        border: Border.all(
-          color: isMe
-              ? Colors.white.withValues(alpha: 0.2)
-              : AppColors.border,
-        ),
+        border: Border.all(color: isMe ? Colors.white.withValues(alpha: 0.2) : AppColors.border),
       ),
       child: Row(
         children: [
@@ -78,18 +69,11 @@ class FileMessageWidget extends StatelessWidget {
           Container(
             width: 48.0,
             height: 48.0,
-            decoration: BoxDecoration(
-              color: badgeBg,
-              borderRadius: BorderRadius.circular(10.0),
-            ),
+            decoration: BoxDecoration(color: badgeBg, borderRadius: BorderRadius.circular(10.0)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  fileIcon,
-                  color: badgeIconColor,
-                  size: 20.0,
-                ),
+                Icon(fileIcon, color: badgeIconColor, size: 20.0),
                 const SizedBox(height: 2.0),
                 Text(
                   extLabel,
@@ -126,10 +110,7 @@ class FileMessageWidget extends StatelessWidget {
                 const SizedBox(height: 3.0),
                 Text(
                   typeSubtitle,
-                  style: AppTextStyles.caption.copyWith(
-                    fontSize: 11.0,
-                    color: subtitleColor,
-                  ),
+                  style: AppTextStyles.caption.copyWith(fontSize: 11.0, color: subtitleColor),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -142,19 +123,11 @@ class FileMessageWidget extends StatelessWidget {
           InkWell(
             borderRadius: BorderRadius.circular(20.0),
             onTap: () {
-              AppFilePreviewDialog.show(
-                context,
-                fileUrl: mediaUrl,
-                fileName: name,
-              );
+              AppFilePreviewDialog.show(context, fileUrl: mediaUrl, fileName: name);
             },
             child: Padding(
               padding: const EdgeInsets.all(6.0),
-              child: Icon(
-                Icons.visibility_outlined,
-                color: actionIconColor,
-                size: 20.0,
-              ),
+              child: Icon(Icons.visibility_outlined, color: actionIconColor, size: 20.0),
             ),
           ),
 
@@ -164,11 +137,7 @@ class FileMessageWidget extends StatelessWidget {
             onTap: () => AppUtils.launchAppUrl(mediaUrl),
             child: Padding(
               padding: const EdgeInsets.all(6.0),
-              child: Icon(
-                Icons.file_download_outlined,
-                color: actionIconColor,
-                size: 20.0,
-              ),
+              child: Icon(Icons.file_download_outlined, color: actionIconColor, size: 20.0),
             ),
           ),
         ],

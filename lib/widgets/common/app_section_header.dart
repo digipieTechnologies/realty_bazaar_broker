@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
 
@@ -29,8 +30,7 @@ class AppSectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final effectiveIconColor = iconColor ?? AppColors.primary;
-    final effectiveIconBgColor =
-        iconBgColor ?? AppColors.primary.withValues(alpha: 0.1);
+    final effectiveIconBgColor = iconBgColor ?? AppColors.primary.withValues(alpha: 0.1);
 
     Widget iconWidget;
     if (svgAsset != null) {
@@ -42,11 +42,7 @@ class AppSectionHeader extends StatelessWidget {
         fit: BoxFit.contain,
       );
     } else {
-      iconWidget = Icon(
-        icon ?? Icons.label_important_rounded,
-        size: 16.0,
-        color: effectiveIconColor,
-      );
+      iconWidget = Icon(icon ?? Icons.label_important_rounded, size: 16.0, color: effectiveIconColor);
     }
 
     return Padding(
@@ -55,15 +51,8 @@ class AppSectionHeader extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.all(6.0),
-            decoration: BoxDecoration(
-              color: effectiveIconBgColor,
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: SizedBox(
-              width: 16.0,
-              height: 16.0,
-              child: Center(child: iconWidget),
-            ),
+            decoration: BoxDecoration(color: effectiveIconBgColor, borderRadius: BorderRadius.circular(8.0)),
+            child: SizedBox(width: 16.0, height: 16.0, child: Center(child: iconWidget)),
           ),
           const SizedBox(width: 10.0),
           Expanded(
@@ -79,10 +68,7 @@ class AppSectionHeader extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          if (trailing != null) ...[
-            const SizedBox(width: 12.0),
-            trailing!,
-          ],
+          if (trailing != null) ...[const SizedBox(width: 12.0), trailing!],
         ],
       ),
     );

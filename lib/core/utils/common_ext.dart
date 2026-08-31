@@ -90,10 +90,12 @@ extension FileStringExtension on String {
   String toTitleCase() {
     if (trim().isEmpty) return this;
     final words = trim().split(RegExp(r'\s+'));
-    return words.map((word) {
-      if (word.isEmpty) return '';
-      return word[0].toUpperCase() + word.substring(1).toLowerCase();
-    }).join(' ');
+    return words
+        .map((word) {
+          if (word.isEmpty) return '';
+          return word[0].toUpperCase() + word.substring(1).toLowerCase();
+        })
+        .join(' ');
   }
 }
 

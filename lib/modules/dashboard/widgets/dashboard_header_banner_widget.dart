@@ -12,12 +12,10 @@ class DashboardHeaderBannerWidget extends StatefulWidget {
   const DashboardHeaderBannerWidget({super.key});
 
   @override
-  State<DashboardHeaderBannerWidget> createState() =>
-      _DashboardHeaderBannerWidgetState();
+  State<DashboardHeaderBannerWidget> createState() => _DashboardHeaderBannerWidgetState();
 }
 
-class _DashboardHeaderBannerWidgetState
-    extends State<DashboardHeaderBannerWidget>
+class _DashboardHeaderBannerWidgetState extends State<DashboardHeaderBannerWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _animController;
   late Animation<double> _floatAnim;
@@ -25,14 +23,13 @@ class _DashboardHeaderBannerWidgetState
   @override
   void initState() {
     super.initState();
-    _animController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 4),
-    )..repeat(reverse: true);
+    _animController = AnimationController(vsync: this, duration: const Duration(seconds: 4))
+      ..repeat(reverse: true);
 
-    _floatAnim = Tween<double>(begin: -6.0, end: 6.0).animate(
-      CurvedAnimation(parent: _animController, curve: Curves.easeInOut),
-    );
+    _floatAnim = Tween<double>(
+      begin: -6.0,
+      end: 6.0,
+    ).animate(CurvedAnimation(parent: _animController, curve: Curves.easeInOut));
   }
 
   @override
@@ -44,12 +41,12 @@ class _DashboardHeaderBannerWidgetState
   @override
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthProvider>();
-    final name = authProvider.userProfile?.name ??
-        authProvider.userProfile?.email?.split('@').first ??
-        'Broker';
-    
+    final name =
+        authProvider.userProfile?.name ?? authProvider.userProfile?.email?.split('@').first ?? 'Broker';
+
     final rawBusinessName = authProvider.userProfile?.brokerId?.businessName;
-    final categoryTag = (rawBusinessName != null &&
+    final categoryTag =
+        (rawBusinessName != null &&
             rawBusinessName.isNotEmpty &&
             !rawBusinessName.toLowerCase().contains(name.toLowerCase()))
         ? rawBusinessName.toUpperCase()
@@ -143,10 +140,7 @@ class _DashboardHeaderBannerWidgetState
                       children: [
                         // Professional Account Category Pill Tag
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0,
-                            vertical: 4.0,
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(20.0),
@@ -154,11 +148,7 @@ class _DashboardHeaderBannerWidgetState
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(
-                                Icons.stars_rounded,
-                                color: AppColors.accentGold,
-                                size: 13.0,
-                              ),
+                              const Icon(Icons.stars_rounded, color: AppColors.accentGold, size: 13.0),
                               const SizedBox(width: 4.0),
                               Text(
                                 categoryTag,
@@ -203,10 +193,7 @@ class _DashboardHeaderBannerWidgetState
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white.withValues(alpha: 0.2),
-                      border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.4),
-                        width: 1.5,
-                      ),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.4), width: 1.5),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withValues(alpha: 0.1),

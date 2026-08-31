@@ -10,8 +10,7 @@ class AppStrings {
 
   // Splash & Onboarding Placeholder
   static const String welcome = 'Welcome to Broker CRM';
-  static const String loadingConfig =
-      'Initializing configuration and services...';
+  static const String loadingConfig = 'Initializing configuration and services...';
 
   // Common UI Button Text
   static const String ok = 'OK';
@@ -31,12 +30,10 @@ class AppStrings {
 
   // Error States
   static const String errorGeneric = 'Something went wrong. Please try again.';
-  static const String errorNetwork =
-      'Network connection issue. Check your internet.';
+  static const String errorNetwork = 'Network connection issue. Check your internet.';
   static const String errorTimeout = 'Request timed out. Please try again.';
 
   // Placeholder Screens
   static const String dashboardTitle = 'Broker Flow Dashboard';
-  static const String dashboardSubtitle =
-      'Your reusable CRM architecture components';
+  static const String dashboardSubtitle = 'Your reusable CRM architecture components';
 }

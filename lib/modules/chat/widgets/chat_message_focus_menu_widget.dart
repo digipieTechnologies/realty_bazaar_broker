@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../models/chat_enums.dart';
 import '../../../models/chat_message_model.dart';
@@ -30,7 +31,8 @@ class ChatMessageFocusMenuWidget extends StatelessWidget {
   });
 
   void _showFocusMenu(BuildContext context, Offset globalPosition) async {
-    final isTextOnlyMessage = message.messageType == ChatMessageMessageType.text &&
+    final isTextOnlyMessage =
+        message.messageType == ChatMessageMessageType.text &&
         message.medias.isEmpty &&
         message.locationData == null;
 

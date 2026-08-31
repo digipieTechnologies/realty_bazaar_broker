@@ -3,15 +3,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import '../../../app/app_colors.dart';
 
 class ChatDateSeparator extends StatelessWidget {
   final String date;
 
-  const ChatDateSeparator({
-    super.key,
-    required this.date,
-  });
+  const ChatDateSeparator({super.key, required this.date});
 
   /// Formats a DateTime into Today, Yesterday, "dd, MMMM", or "dd, MMMM yyyy".
   static String formatDateHeader(DateTime date) {

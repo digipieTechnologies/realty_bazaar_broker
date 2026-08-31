@@ -4,8 +4,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../core/services/clarity_service.dart';
 
+import '../../core/services/clarity_service.dart';
 import '../../models/models.dart';
 
 class AdCampaignProvider extends ChangeNotifier {
@@ -106,10 +106,7 @@ class AdCampaignProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _supabase.functions.invoke(
-        'search-target-areas',
-        body: {'query': query.trim()},
-      );
+      final response = await _supabase.functions.invoke('search-target-areas', body: {'query': query.trim()});
 
       if (response.status == 200 && response.data != null) {
         final Map<String, dynamic> body = response.data is Map

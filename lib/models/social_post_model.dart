@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+
 import 'broker_model.dart';
 import 'media_model.dart';
 import 'property_model.dart';
@@ -56,15 +57,15 @@ class PostInsightsModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        impressions,
-        reach,
-        engagement,
-        savedCount,
-        videoViews,
-        likeCount,
-        commentCount,
-        shareCount,
-      ];
+    impressions,
+    reach,
+    engagement,
+    savedCount,
+    videoViews,
+    likeCount,
+    commentCount,
+    shareCount,
+  ];
 }
 
 class SocialPostModel extends Equatable {
@@ -126,9 +127,7 @@ class SocialPostModel extends Equatable {
     List<MediaModel> mediaList = [];
     if (json['media_urls'] != null) {
       if (json['media_urls'] is List) {
-        mediaList = (json['media_urls'] as List)
-            .map((item) => MediaModel.fromJson(item))
-            .toList();
+        mediaList = (json['media_urls'] as List).map((item) => MediaModel.fromJson(item)).toList();
       }
     }
 
@@ -158,9 +157,10 @@ class SocialPostModel extends Equatable {
       parsedDbPost = SocialPostModel.fromJson(json['social_post']);
     }
 
-    final singleMediaUrl = json['media_url']?.toString() ??
-        (mediaList.isNotEmpty ? mediaList.first.url : null);
-    final singleThumbnailUrl = json['thumbnail_url']?.toString() ??
+    final singleMediaUrl =
+        json['media_url']?.toString() ?? (mediaList.isNotEmpty ? mediaList.first.url : null);
+    final singleThumbnailUrl =
+        json['thumbnail_url']?.toString() ??
         (mediaList.isNotEmpty ? mediaList.first.thumbnail : singleMediaUrl);
 
     final model = SocialPostModel(
@@ -168,9 +168,7 @@ class SocialPostModel extends Equatable {
       platformPostId: (json['platform_post_id'] ?? json['post_id'] ?? json['id'])?.toString(),
       brokerId: parsedBroker,
       propertyId: parsedProperty,
-      platform: json['platform'] != null
-          ? SocialPlatform.fromDbValue(json['platform'])
-          : null,
+      platform: json['platform'] != null ? SocialPlatform.fromDbValue(json['platform']) : null,
       pageId: json['page_id']?.toString(),
       postId: (json['post_id'] ?? json['id'])?.toString(),
       caption: json['caption']?.toString() ?? json['message']?.toString(),
@@ -185,9 +183,7 @@ class SocialPostModel extends Equatable {
       shareCount: (json['share_count'] ?? json['shares_count']) as int? ?? 0,
       publishedAt: json['published_at'] != null
           ? DateTime.tryParse(json['published_at'].toString())?.toLocal()
-          : (json['created_at'] != null
-              ? DateTime.tryParse(json['created_at'].toString())?.toLocal()
-              : null),
+          : (json['created_at'] != null ? DateTime.tryParse(json['created_at'].toString())?.toLocal() : null),
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'].toString())?.toLocal()
           : null,
@@ -271,9 +267,7 @@ class SocialPostModel extends Equatable {
     Object? dbSocialPost = _sentinel,
   }) {
     final metaId = platformPostId ?? this.platformPostId ?? postId ?? this.postId;
-    final newDbPost = dbSocialPost == _sentinel
-        ? this.dbSocialPost
-        : (dbSocialPost as SocialPostModel?);
+    final newDbPost = dbSocialPost == _sentinel ? this.dbSocialPost : (dbSocialPost as SocialPostModel?);
 
     final resolvedId = id ?? (newDbPost == null ? metaId : this.id);
 
@@ -317,27 +311,27 @@ class SocialPostModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        platformPostId,
-        brokerId,
-        propertyId,
-        platform,
-        pageId,
-        postId,
-        caption,
-        mediaUrl,
-        thumbnailUrl,
-        mediaType,
-        mediaUrls,
-        permalink,
-        viewsCount,
-        commentCount,
-        likesCount,
-        shareCount,
-        publishedAt,
-        createdAt,
-        updatedAt,
-        insights,
-        dbSocialPost,
-      ];
+    id,
+    platformPostId,
+    brokerId,
+    propertyId,
+    platform,
+    pageId,
+    postId,
+    caption,
+    mediaUrl,
+    thumbnailUrl,
+    mediaType,
+    mediaUrls,
+    permalink,
+    viewsCount,
+    commentCount,
+    likesCount,
+    shareCount,
+    publishedAt,
+    createdAt,
+    updatedAt,
+    insights,
+    dbSocialPost,
+  ];
 }

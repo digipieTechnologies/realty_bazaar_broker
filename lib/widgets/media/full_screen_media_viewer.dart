@@ -2,22 +2,20 @@
 // Purpose: Reusable full-screen media viewer for images (with zoom) and videos (with playback controls).
 
 import 'dart:io' as io;
+
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import '../../models/media_model.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
+import '../../models/media_model.dart';
 import '../images/cached_image.dart';
 
 class FullScreenMediaViewer extends StatefulWidget {
   final List<MediaModel> medias;
   final int initialIndex;
 
-  const FullScreenMediaViewer({
-    super.key,
-    required this.medias,
-    this.initialIndex = 0,
-  });
+  const FullScreenMediaViewer({super.key, required this.medias, this.initialIndex = 0});
 
   @override
   State<FullScreenMediaViewer> createState() => _FullScreenMediaViewerState();
@@ -81,10 +79,7 @@ class _FullScreenMediaViewerState extends State<FullScreenMediaViewer> {
                 ),
                 Text(
                   '${_currentIndex + 1} of ${widget.medias.length}',
-                  style: AppTextStyles.body1.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: AppTextStyles.body1.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(width: 48.0), // Spacer matching back button size
               ],
@@ -229,9 +224,7 @@ class _VideoPageItemState extends State<_VideoPageItem> {
     }
 
     if (!_isInitialized || _controller == null) {
-      return const Center(
-        child: CircularProgressIndicator(color: Colors.white),
-      );
+      return const Center(child: CircularProgressIndicator(color: Colors.white));
     }
 
     return Center(
@@ -345,10 +338,7 @@ class _VideoControlsOverlayState extends State<_VideoControlsOverlay> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [
-                        Colors.transparent,
-                        Colors.black.withValues(alpha: 0.6),
-                      ],
+                      colors: [Colors.transparent, Colors.black.withValues(alpha: 0.6)],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                     ),
@@ -441,10 +431,7 @@ class _ErrorStateWidget extends StatelessWidget {
         children: [
           const Icon(Icons.error_outline_rounded, color: Colors.white38, size: 48.0),
           const SizedBox(height: 12.0),
-          Text(
-            message,
-            style: AppTextStyles.body2.copyWith(color: Colors.white70),
-          ),
+          Text(message, style: AppTextStyles.body2.copyWith(color: Colors.white70)),
         ],
       ),
     );

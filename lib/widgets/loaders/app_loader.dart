@@ -4,7 +4,9 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
 
@@ -26,8 +28,7 @@ class AppLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final indicatorColor =
-        color ?? (isDark ? AppColors.primary : AppColors.surface);
+    final indicatorColor = color ?? (isDark ? AppColors.primary : AppColors.surface);
 
     final Widget spinner = SizedBox(
       width: size,
@@ -45,12 +46,7 @@ class AppLoader extends StatelessWidget {
           children: [
             spinner,
             const SizedBox(height: 12.0),
-            Text(
-              loadingText!,
-              style: AppTextStyles.body2.copyWith(
-                color: AppColors.textSecondary,
-              ),
-            ),
+            Text(loadingText!, style: AppTextStyles.body2.copyWith(color: AppColors.textSecondary)),
           ],
         );
       }
@@ -68,19 +64,12 @@ class AppLoader extends StatelessWidget {
         ),
         Center(
           child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 32.0,
-              vertical: 24.0,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
             decoration: BoxDecoration(
               color: AppColors.surface,
               borderRadius: BorderRadius.circular(16.0),
               boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 15.0,
-                  spreadRadius: 2.0,
-                ),
+                BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 15.0, spreadRadius: 2.0),
               ],
             ),
             child: Column(
@@ -98,12 +87,7 @@ class AppLoader extends StatelessWidget {
                   ),
                 ] else ...[
                   const SizedBox(height: 12.0),
-                  Text(
-                    'Loading...',
-                    style: AppTextStyles.body2.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
+                  Text('Loading...', style: AppTextStyles.body2.copyWith(color: AppColors.textSecondary)),
                 ],
               ],
             ),

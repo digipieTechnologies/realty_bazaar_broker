@@ -10,7 +10,7 @@ class DashboardSummaryShimmerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDesktop = context.isDesktopUI;
+    final isDesktop = context.isDesktop;
 
     return isDesktop
         ? const Row(

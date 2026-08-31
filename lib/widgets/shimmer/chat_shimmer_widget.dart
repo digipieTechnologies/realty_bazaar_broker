@@ -2,35 +2,31 @@
 // Purpose: Standalone reusable shimmer loading placeholder for chat dialogs and screens.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 
 class ChatShimmerWidget extends StatefulWidget {
   final bool showHeader;
 
-  const ChatShimmerWidget({
-    super.key,
-    this.showHeader = false,
-  });
+  const ChatShimmerWidget({super.key, this.showHeader = false});
 
   @override
   State<ChatShimmerWidget> createState() => _ChatShimmerWidgetState();
 }
 
-class _ChatShimmerWidgetState extends State<ChatShimmerWidget>
-    with SingleTickerProviderStateMixin {
+class _ChatShimmerWidgetState extends State<ChatShimmerWidget> with SingleTickerProviderStateMixin {
   late AnimationController _animController;
   late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
-    _animController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    )..repeat(reverse: true);
-    _animation = Tween<double>(begin: 0.3, end: 0.85).animate(
-      CurvedAnimation(parent: _animController, curve: Curves.easeInOut),
-    );
+    _animController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000))
+      ..repeat(reverse: true);
+    _animation = Tween<double>(
+      begin: 0.3,
+      end: 0.85,
+    ).animate(CurvedAnimation(parent: _animController, curve: Curves.easeInOut));
   }
 
   @override

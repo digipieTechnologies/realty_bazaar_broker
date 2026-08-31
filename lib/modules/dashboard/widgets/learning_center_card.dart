@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../providers/dashboard/dashboard_provider.dart';
 import '../../../../widgets/toast/app_toast.dart';
-import '../../../../core/localization/app_localizations.dart';
 
 class LearningCenterCard extends StatelessWidget {
   const LearningCenterCard({super.key});
@@ -34,7 +35,7 @@ class LearningCenterCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16.0),
-            
+
             // List of guide links
             ListView.separated(
               shrinkWrap: true,
@@ -73,11 +74,7 @@ class LearningCenterCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        const Icon(
-                          Icons.chevron_right_rounded,
-                          size: 18.0,
-                          color: AppColors.textSecondary,
-                        ),
+                        const Icon(Icons.chevron_right_rounded, size: 18.0, color: AppColors.textSecondary),
                       ],
                     ),
                   ),

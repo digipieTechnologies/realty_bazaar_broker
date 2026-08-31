@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../providers/auth/auth_provider.dart';
 import '../../../../providers/dashboard/dashboard_provider.dart';
 import '../../../../widgets/common/app_card_container.dart';
@@ -14,12 +15,7 @@ class SetupProgressCard extends StatelessWidget {
   final bool showCardBorder;
   final VoidCallback? onClose;
 
-  const SetupProgressCard({
-    super.key,
-    this.showHeader = false,
-    this.showCardBorder = false,
-    this.onClose,
-  });
+  const SetupProgressCard({super.key, this.showHeader = false, this.showCardBorder = false, this.onClose});
 
   void _handleStepTap(BuildContext context, OnboardingStep step) {
     if (step.routePath.isEmpty) return;
@@ -60,10 +56,10 @@ class SetupProgressCard extends StatelessWidget {
                   if (!useTwoColumns) {
                     return Column(
                       children: steps
-                          .map((step) => SetupStepTileWidget(
-                                step: step,
-                                onTap: () => _handleStepTap(context, step),
-                              ))
+                          .map(
+                            (step) =>
+                                SetupStepTileWidget(step: step, onTap: () => _handleStepTap(context, step)),
+                          )
                           .toList(),
                     );
                   }
@@ -85,10 +81,12 @@ class SetupProgressCard extends StatelessWidget {
                       Expanded(
                         child: Column(
                           children: leftSteps
-                              .map((step) => SetupStepTileWidget(
-                                    step: step,
-                                    onTap: () => _handleStepTap(context, step),
-                                  ))
+                              .map(
+                                (step) => SetupStepTileWidget(
+                                  step: step,
+                                  onTap: () => _handleStepTap(context, step),
+                                ),
+                              )
                               .toList(),
                         ),
                       ),
@@ -96,10 +94,12 @@ class SetupProgressCard extends StatelessWidget {
                       Expanded(
                         child: Column(
                           children: rightSteps
-                              .map((step) => SetupStepTileWidget(
-                                    step: step,
-                                    onTap: () => _handleStepTap(context, step),
-                                  ))
+                              .map(
+                                (step) => SetupStepTileWidget(
+                                  step: step,
+                                  onTap: () => _handleStepTap(context, step),
+                                ),
+                              )
                               .toList(),
                         ),
                       ),
@@ -114,10 +114,7 @@ class SetupProgressCard extends StatelessWidget {
     );
 
     if (showCardBorder) {
-      return AppCardContainer(
-        padding: EdgeInsets.zero,
-        child: content,
-      );
+      return AppCardContainer(padding: EdgeInsets.zero, child: content);
     }
 
     return content;

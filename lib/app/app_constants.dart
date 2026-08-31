@@ -4,7 +4,6 @@
 import 'package:flutter/widgets.dart';
 
 class AppConstants {
-
   AppConstants._();
 
   // Layout Dimensions (Paddings, Margins, Spacings)
@@ -24,7 +23,6 @@ class AppConstants {
     final vPadding = isMobile ? 12.0 : 24.0;
     return EdgeInsets.fromLTRB(hPadding, vPadding, hPadding, vPadding + bottomExtra);
   }
-
 
   static const double borderRadiusS = 4.0;
   static const double borderRadiusM = 8.0;

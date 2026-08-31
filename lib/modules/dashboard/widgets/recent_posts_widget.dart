@@ -62,7 +62,8 @@ class _RecentPostsWidgetState extends State<RecentPostsWidget> {
     });
 
     final recentPosts = combinedPosts.take(3).toList();
-    final isLoading = (socialProvider.isFetchingFacebookPosts || socialProvider.isFetchingInstagramPosts) &&
+    final isLoading =
+        (socialProvider.isFetchingFacebookPosts || socialProvider.isFetchingInstagramPosts) &&
         combinedPosts.isEmpty;
 
     return AppCardContainer(
@@ -78,10 +79,7 @@ class _RecentPostsWidgetState extends State<RecentPostsWidget> {
               onTap: () => context.go('/posts'),
               borderRadius: BorderRadius.circular(6.0),
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 6.0,
-                  vertical: 3.0,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -94,11 +92,7 @@ class _RecentPostsWidgetState extends State<RecentPostsWidget> {
                       ),
                     ),
                     const SizedBox(width: 2.0),
-                    const Icon(
-                      Icons.chevron_right_rounded,
-                      size: 16.0,
-                      color: AppColors.primary,
-                    ),
+                    const Icon(Icons.chevron_right_rounded, size: 16.0, color: AppColors.primary),
                   ],
                 ),
               ),
@@ -108,10 +102,7 @@ class _RecentPostsWidgetState extends State<RecentPostsWidget> {
 
           // Content Area: Loading, Empty, or Horizontal Post List
           if (isLoading)
-            const Padding(
-              padding: EdgeInsets.all(12.0),
-              child: PostListHorizontalShimmerWidget(count: 3),
-            )
+            const Padding(padding: EdgeInsets.all(12.0), child: PostListHorizontalShimmerWidget(count: 3))
           else if (recentPosts.isEmpty)
             AppEmptyStateWidget(
               icon: Icons.dynamic_feed_rounded,
@@ -133,10 +124,7 @@ class _RecentPostsWidgetState extends State<RecentPostsWidget> {
                         width: 260.0,
                         child: Padding(
                           padding: const EdgeInsets.only(right: 12.0),
-                          child: SocialPostCard(
-                            post: post,
-                            isMinimalView: true,
-                          ),
+                          child: SocialPostCard(post: post, isMinimalView: true),
                         ),
                       );
                     }).toList(),

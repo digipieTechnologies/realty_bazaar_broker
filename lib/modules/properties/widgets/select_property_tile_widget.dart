@@ -2,8 +2,10 @@
 // Purpose: Minimal tile component for property candidates in the selection modal dialog.
 
 import 'package:flutter/material.dart';
+
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
+import '../../../../core/extensions/currency_extensions.dart';
 import '../../../../models/models.dart';
 
 class SelectPropertyTileWidget extends StatelessWidget {
@@ -17,17 +19,6 @@ class SelectPropertyTileWidget extends StatelessWidget {
     required this.isSelected,
     required this.onTap,
   });
-
-  String _formatPrice(double amount) {
-    if (amount >= 10000000) {
-      return '₹${(amount / 10000000).toStringAsFixed(2)} Cr';
-    } else if (amount >= 100000) {
-      return '₹${(amount / 100000).toStringAsFixed(2)} Lakh';
-    } else if (amount > 0) {
-      return '₹${amount.toStringAsFixed(0)}';
-    }
-    return '';
-  }
 
   String _formatLocation(AddressModel? address) {
     if (address == null) return 'Location not specified';
@@ -46,7 +37,7 @@ class SelectPropertyTileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final priceStr = _formatPrice(property.price);
+    final priceStr = property.price > 0 ? property.price.toCompactCurrency() : '';
     final locationStr = _formatLocation(property.address);
     final bhkStr = property.bedrooms > 0 ? '${property.bedrooms} BHK' : '';
     final typeStr = property.propertyType.displayName.toUpperCase();
@@ -54,9 +45,7 @@ class SelectPropertyTileWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 10.0),
       decoration: BoxDecoration(
-        color: isSelected
-            ? AppColors.primary.withValues(alpha: 0.05)
-            : AppColors.surface,
+        color: isSelected ? AppColors.primary.withValues(alpha: 0.05) : AppColors.surface,
         borderRadius: BorderRadius.circular(12.0),
         border: Border.all(
           color: isSelected ? AppColors.primary : AppColors.border,
@@ -72,9 +61,7 @@ class SelectPropertyTileWidget extends StatelessWidget {
             children: [
               // Checkbox indicator
               Icon(
-                isSelected
-                    ? Icons.check_circle_rounded
-                    : Icons.radio_button_unchecked_rounded,
+                isSelected ? Icons.check_circle_rounded : Icons.radio_button_unchecked_rounded,
                 color: isSelected ? AppColors.primary : AppColors.textSecondary,
                 size: 22.0,
               ),
@@ -98,11 +85,7 @@ class SelectPropertyTileWidget extends StatelessWidget {
                     const SizedBox(height: 4.0),
                     Row(
                       children: [
-                        const Icon(
-                          Icons.location_on_outlined,
-                          size: 14.0,
-                          color: AppColors.textSecondary,
-                        ),
+                        const Icon(Icons.location_on_outlined, size: 14.0, color: AppColors.textSecondary),
                         const SizedBox(width: 4.0),
                         Expanded(
                           child: Text(
@@ -125,9 +108,12 @@ class SelectPropertyTileWidget extends StatelessWidget {
                       runSpacing: 4.0,
                       children: [
                         if (priceStr.isNotEmpty)
-                          _buildBadge(priceStr, AppColors.primary),
-                        if (bhkStr.isNotEmpty)
-                          _buildBadge(bhkStr, AppColors.secondary),
+                          _buildBadge(
+                            priceStr,
+                            AppColors.primary,
+                            tooltip: property.price.toFullIndianCurrency(),
+                          ),
+                        if (bhkStr.isNotEmpty) _buildBadge(bhkStr, AppColors.secondary),
                         _buildBadge(typeStr, AppColors.textSecondary),
                       ],
                     ),
@@ -141,8 +127,8 @@ class SelectPropertyTileWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildBadge(String text, Color color) {
-    return Container(
+  Widget _buildBadge(String text, Color color, {String? tooltip}) {
+    final badge = Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.08),
@@ -150,12 +136,13 @@ class SelectPropertyTileWidget extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: TextStyle(
-          fontSize: 11.0,
-          fontWeight: FontWeight.bold,
-          color: color,
-        ),
+        style: TextStyle(fontSize: 11.0, fontWeight: FontWeight.bold, color: color),
       ),
     );
+
+    if (tooltip != null && tooltip.isNotEmpty) {
+      return Tooltip(message: tooltip, preferBelow: false, child: badge);
+    }
+    return badge;
   }
 }

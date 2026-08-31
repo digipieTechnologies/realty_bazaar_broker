@@ -162,9 +162,7 @@ class AppDialog extends StatelessWidget {
                         text: cancelText,
                         variant: AppButtonVariant.outline,
                         borderColor: AppColors.border,
-                        textStyle: AppTextStyles.button.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
+                        textStyle: AppTextStyles.button.copyWith(color: AppColors.textSecondary),
                         onPressed: () => Navigator.of(ctx).pop(false),
                       ),
                     ),
@@ -243,19 +241,11 @@ class AppDialog extends StatelessWidget {
               const SizedBox(height: 20.0),
 
               // Title
-              Text(
-                title,
-                style: AppTextStyles.heading3,
-                textAlign: TextAlign.center,
-              ),
+              Text(title, style: AppTextStyles.heading3, textAlign: TextAlign.center),
               const SizedBox(height: 10.0),
 
               // Description
-              Text(
-                description,
-                style: AppTextStyles.body2,
-                textAlign: TextAlign.center,
-              ),
+              Text(description, style: AppTextStyles.body2, textAlign: TextAlign.center),
               const SizedBox(height: 24.0),
 
               // Buttons Row
@@ -267,9 +257,7 @@ class AppDialog extends StatelessWidget {
                         text: cancelText!,
                         variant: AppButtonVariant.outline,
                         borderColor: AppColors.border,
-                        textStyle: AppTextStyles.button.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
+                        textStyle: AppTextStyles.button.copyWith(color: AppColors.textSecondary),
                         onPressed: () {
                           Navigator.of(context).pop();
                           if (onCancel != null) onCancel!();

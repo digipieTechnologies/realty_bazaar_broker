@@ -1,5 +1,7 @@
 # Sensitive Configuration & API Keys
 config.json
+.env*
+!.env*.example
 
 # Miscellaneous & System
 .DS_Store
@@ -54,3 +56,4 @@ ios/Pods/
 ios/.symlinks/
 macos/Flutter/ephemeral/
 macos/Pods/
+/supabase/.temp/

@@ -2,6 +2,7 @@
 // Purpose: Reusable property details key-value list widget shared across property view and preview dialogs.
 
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/property_localizer.dart';
@@ -10,14 +11,13 @@ import '../../../models/property_model.dart';
 class PropertyDetailsGrid extends StatelessWidget {
   final PropertyModel property;
 
-  const PropertyDetailsGrid({
-    super.key,
-    required this.property,
-  });
+  const PropertyDetailsGrid({super.key, required this.property});
 
   @override
   Widget build(BuildContext context) {
     final details = <_DetailItem>[
+      if (property.propertyCode != null && property.propertyCode!.isNotEmpty)
+        _DetailItem(icon: Icons.code_outlined, label: 'Code', value: property.propertyCode!),
       _DetailItem(
         icon: Icons.chair_outlined,
         label: 'Furnishing',
@@ -37,11 +37,7 @@ class PropertyDetailsGrid extends StatelessWidget {
               : '${property.floorNumber}',
         ),
       if (property.totalFloors != null && property.floorNumber == null)
-        _DetailItem(
-          icon: Icons.apartment_outlined,
-          label: 'Total Floors',
-          value: '${property.totalFloors}',
-        ),
+        _DetailItem(icon: Icons.apartment_outlined, label: 'Total Floors', value: '${property.totalFloors}'),
       _DetailItem(
         icon: Icons.category_outlined,
         label: 'Property Type',
@@ -75,12 +71,9 @@ class PropertyDetailsGrid extends StatelessWidget {
               ),
               const SizedBox(width: 14.0),
               Expanded(
-                child: Text(
-                  item.label,
-                  style: AppTextStyles.body2.copyWith(color: AppColors.textSecondary),
-                ),
+                child: Text(item.label, style: AppTextStyles.body2.copyWith(color: AppColors.textSecondary)),
               ),
-              Text(
+              SelectableText(
                 item.value,
                 style: AppTextStyles.body2.copyWith(
                   fontWeight: FontWeight.w600,

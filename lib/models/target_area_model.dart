@@ -64,14 +64,5 @@ class TargetAreaModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-        fullArea,
-        area,
-        city,
-        state,
-        county,
-        pincode,
-        latitude,
-        longitude,
-      ];
+  List<Object?> get props => [fullArea, area, city, state, county, pincode, latitude, longitude];
 }

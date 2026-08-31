@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
 
@@ -24,6 +25,8 @@ class AppTextField extends StatefulWidget {
   final FocusNode? focusNode;
   final TextInputAction textInputAction;
   final List<TextInputFormatter>? inputFormatters;
+  final ValueChanged<String>? onFieldSubmitted;
+  final Iterable<String>? autofillHints;
 
   const AppTextField({
     super.key,
@@ -44,6 +47,8 @@ class AppTextField extends StatefulWidget {
     this.focusNode,
     this.textInputAction = TextInputAction.next,
     this.inputFormatters,
+    this.onFieldSubmitted,
+    this.autofillHints,
   });
 
   @override
@@ -87,6 +92,8 @@ class _AppTextFieldState extends State<AppTextField> {
           maxLines: widget.maxLines,
           onTap: widget.onTap,
           textInputAction: widget.textInputAction,
+          onFieldSubmitted: widget.onFieldSubmitted,
+          autofillHints: widget.autofillHints,
           validator: widget.validator,
           inputFormatters: widget.inputFormatters,
           style: widget.readOnly
@@ -100,18 +107,17 @@ class _AppTextFieldState extends State<AppTextField> {
             hoverColor: Colors.transparent,
             focusColor: Colors.transparent,
             suffixIcon: widget.obscureText
-                ? IconButton(
-                    icon: Icon(
-                      _obscured
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
-                      color: AppColors.iconDefault,
+                ? ExcludeFocusTraversal(
+                    child: IconButton(
+                      icon: Icon(
+                        _obscured ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                        color: AppColors.iconDefault,
+                      ),
+                      onPressed: _toggleObscurity,
                     ),
-                    onPressed: _toggleObscurity,
                   )
                 : widget.suffixIcon,
-            counterText:
-                '', // Hide default character counter to keep UI clean, can use custom if needed
+            counterText: '', // Hide default character counter to keep UI clean, can use custom if needed
           ),
         ),
       ],

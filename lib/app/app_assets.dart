@@ -10,8 +10,7 @@ class AppAssets {
   static const String logoWhite = 'assets/logo/app_logo_white.png';
   static const String building = 'assets/logo/building.png';
   static String defaultAvatar = 'assets/images/default_avatar.png';
-  static const String illustrationPlaceholder =
-      'assets/images/illustration_placeholder.png';
+  static const String illustrationPlaceholder = 'assets/images/illustration_placeholder.png';
   static const String mapBanner = 'assets/images/map_banner.png';
   static const String facebookCover = 'assets/images/facebook_cover.png';
 
@@ -20,18 +19,14 @@ class AppAssets {
   static const String iconWorkflow = 'assets/icons/workflow.svg';
 
   // Navigation SVG Icons
-  static const String icDashboardFilled =
-      'assets/icons/ic_dashboard_filled.svg';
-  static const String icDashboardOutline =
-      'assets/icons/ic_dashboard_outline.svg';
+  static const String icDashboardFilled = 'assets/icons/ic_dashboard_filled.svg';
+  static const String icDashboardOutline = 'assets/icons/ic_dashboard_outline.svg';
   static const String icPostsFilled = 'assets/icons/ic_posts_filled.svg';
   static const String icPostsOutline = 'assets/icons/ic_posts_outline.svg';
   static const String icLeadsFilled = 'assets/icons/ic_leads_filled.svg';
   static const String icLeadsOutline = 'assets/icons/ic_leads_outline.svg';
-  static const String icPropertiesFilled =
-      'assets/icons/ic_properties_filled.svg';
-  static const String icPropertiesOutline =
-      'assets/icons/ic_properties_outline.svg';
+  static const String icPropertiesFilled = 'assets/icons/ic_properties_filled.svg';
+  static const String icPropertiesOutline = 'assets/icons/ic_properties_outline.svg';
   static const String icProfileFilled = 'assets/icons/ic_profile_filled.svg';
   static const String icProfileOutline = 'assets/icons/ic_profile_outline.svg';
   static const String icVideoFilled = 'assets/icons/ic_video_filled.svg';

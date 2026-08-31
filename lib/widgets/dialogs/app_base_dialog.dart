@@ -2,6 +2,7 @@
 // Purpose: Premium common dialog template enforcing consistent theme, fixed header with icon & close button, edge-to-edge dividers, scrollable body, and optional fixed footer across the app.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
 
@@ -70,18 +71,17 @@ class AppBaseDialog extends StatelessWidget {
     final dialogWidth = isDesktop ? maxWidth : mediaQuery.size.width * 0.94;
     final dialogMaxHeight = mediaQuery.size.height * (isDesktop ? maxHeightFactor : 0.92);
 
-    final resolvedHeaderPadding = headerPadding ??
+    final resolvedHeaderPadding =
+        headerPadding ??
         (isDesktop
             ? const EdgeInsets.fromLTRB(20.0, 18.0, 16.0, 14.0)
             : const EdgeInsets.fromLTRB(14.0, 12.0, 10.0, 10.0));
 
-    final resolvedContentPadding = contentPadding ??
-        padding ??
-        (isDesktop
-            ? const EdgeInsets.all(20.0)
-            : const EdgeInsets.all(12.0));
+    final resolvedContentPadding =
+        contentPadding ?? padding ?? (isDesktop ? const EdgeInsets.all(20.0) : const EdgeInsets.all(12.0));
 
-    final resolvedFooterPadding = footerPadding ??
+    final resolvedFooterPadding =
+        footerPadding ??
         (isDesktop
             ? const EdgeInsets.all(16.0)
             : const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0));
@@ -101,9 +101,7 @@ class AppBaseDialog extends StatelessWidget {
         ),
         clipBehavior: Clip.antiAlias,
         child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxHeight: dialogMaxHeight,
-          ),
+          constraints: BoxConstraints(maxHeight: dialogMaxHeight),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,11 +122,7 @@ class AppBaseDialog extends StatelessWidget {
                           color: AppColors.primary.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(10.0),
                         ),
-                        child: Icon(
-                          headerIcon,
-                          color: AppColors.primary,
-                          size: 20.0,
-                        ),
+                        child: Icon(headerIcon, color: AppColors.primary, size: 20.0),
                       ),
                       const SizedBox(width: 10.0),
                     ],
@@ -170,10 +164,7 @@ class AppBaseDialog extends StatelessWidget {
                     // Header Actions (if any)
                     if (headerActions != null && headerActions!.isNotEmpty) ...[
                       const SizedBox(width: 8.0),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: headerActions!,
-                      ),
+                      Row(mainAxisSize: MainAxisSize.min, children: headerActions!),
                     ],
 
                     // Close button icon
@@ -192,29 +183,20 @@ class AppBaseDialog extends StatelessWidget {
               ),
 
               // Header Divider Line (Full Width)
-              if (showDivider)
-                const Divider(height: 1.0, thickness: 1.0, color: AppColors.border),
+              if (showDivider) const Divider(height: 1.0, thickness: 1.0, color: AppColors.border),
 
               // 2. Body Content
               Flexible(
                 child: Padding(
                   padding: resolvedContentPadding,
-                  child: isScrollable
-                      ? SingleChildScrollView(
-                          child: content,
-                        )
-                      : content,
+                  child: isScrollable ? SingleChildScrollView(child: content) : content,
                 ),
               ),
 
               // 3. Fixed Footer (if provided)
               if (footer != null) ...[
-                if (showFooterDivider)
-                  const Divider(height: 1.0, thickness: 1.0, color: AppColors.border),
-                Padding(
-                  padding: resolvedFooterPadding,
-                  child: footer!,
-                ),
+                if (showFooterDivider) const Divider(height: 1.0, thickness: 1.0, color: AppColors.border),
+                Padding(padding: resolvedFooterPadding, child: footer!),
               ],
             ],
           ),

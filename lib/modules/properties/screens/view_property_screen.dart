@@ -8,34 +8,30 @@ import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/localization/property_localizer.dart';
-import '../../../models/property_model.dart';
 import '../../../models/property_enums.dart';
+import '../../../models/property_model.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../providers/property/property_provider.dart';
 import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/common/common_app_bar.dart';
+import '../../../widgets/common/currency_text.dart';
 import '../../../widgets/dialogs/app_dialog.dart';
 import '../../../widgets/dialogs/video_request_dialog.dart';
-import '../../../widgets/toast/app_toast.dart';
 import '../../../widgets/shimmer/property_view_shimmer_widget.dart';
-
+import '../../../widgets/toast/app_toast.dart';
 import '../widgets/post_property_dialog.dart';
-import '../widgets/property_preview_media_gallery.dart';
-import '../widgets/property_preview_specs_grid.dart';
+import '../widgets/property_amenities_wrap.dart';
 import '../widgets/property_details_grid.dart';
 import '../widgets/property_location_card.dart';
-import '../widgets/property_amenities_wrap.dart';
+import '../widgets/property_preview_media_gallery.dart';
+import '../widgets/property_preview_specs_grid.dart';
 import 'add_edit_property_screen.dart';
 
 class ViewPropertyScreen extends StatefulWidget {
   final PropertyModel? property;
   final String? propertyId;
 
-  const ViewPropertyScreen({
-    super.key,
-    this.property,
-    this.propertyId,
-  });
+  const ViewPropertyScreen({super.key, this.property, this.propertyId});
 
   @override
   State<ViewPropertyScreen> createState() => _ViewPropertyScreenState();
@@ -80,22 +76,10 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
     }
   }
 
-  String _formatCurrency(double amount) {
-    if (amount >= 10000000) {
-      return '₹ ${(amount / 10000000).toStringAsFixed(2)} Cr';
-    } else if (amount >= 100000) {
-      return '₹ ${(amount / 100000).toStringAsFixed(2)} Lakh';
-    } else {
-      return '₹ ${amount.toStringAsFixed(0)}';
-    }
-  }
-
   Future<void> _onEditTap() async {
     if (_property == null) return;
     final updated = await Navigator.of(context, rootNavigator: true).push<PropertyModel>(
-      MaterialPageRoute(
-        builder: (context) => AddEditPropertyScreen(propertyToEdit: _property),
-      ),
+      MaterialPageRoute(builder: (context) => AddEditPropertyScreen(propertyToEdit: _property)),
     );
     if (updated != null && mounted) {
       setState(() {
@@ -111,10 +95,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (dialogCtx) => PostPropertyDialog(
-        property: _property!,
-        brokerId: brokerId,
-      ),
+      builder: (dialogCtx) => PostPropertyDialog(property: _property!, brokerId: brokerId),
     );
   }
 
@@ -129,10 +110,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
     }
     showDialog(
       context: context,
-      builder: (dialogCtx) => VideoRequestDialog(
-        propertyId: propertyId,
-        brokerId: brokerId,
-      ),
+      builder: (dialogCtx) => VideoRequestDialog(propertyId: propertyId, brokerId: brokerId),
     );
   }
 
@@ -202,9 +180,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
     if (_isLoading) {
       return Scaffold(
         backgroundColor: AppColors.background,
-        appBar: CommonAppBar(
-          title: context.tr('loading'),
-        ),
+        appBar: CommonAppBar(title: context.tr('loading')),
         body: const PropertyViewShimmerWidget(),
       );
     }
@@ -212,9 +188,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
     if (_property == null) {
       return Scaffold(
         backgroundColor: AppColors.background,
-        appBar: CommonAppBar(
-          title: context.tr('property_details'),
-        ),
+        appBar: CommonAppBar(title: context.tr('property_details')),
         body: Center(
           child: Text(
             _errorMessage ?? context.tr('no_properties_found'),
@@ -231,10 +205,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: CommonAppBar(
-        title: property.propertyTitle,
-        actions: _buildAppBarActions(context),
-      ),
+      appBar: CommonAppBar(title: property.propertyTitle, actions: _buildAppBarActions(context)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(14.0),
         child: isDesktop
@@ -322,17 +293,10 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
   Widget _buildStickyBottomPostBar(BuildContext context, {required bool isTablet}) {
     final bottomPadding = MediaQuery.of(context).padding.bottom;
     return Container(
-      padding: EdgeInsets.fromLTRB(
-        16.0,
-        12.0,
-        16.0,
-        12.0 + (bottomPadding > 0 ? bottomPadding : 4.0),
-      ),
+      padding: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0 + (bottomPadding > 0 ? bottomPadding : 4.0)),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        border: const Border(
-          top: BorderSide(color: AppColors.border, width: 1.0),
-        ),
+        border: const Border(top: BorderSide(color: AppColors.border, width: 1.0)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.06),
@@ -357,11 +321,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                               color: AppColors.primary.withValues(alpha: 0.1),
                               shape: BoxShape.circle,
                             ),
-                            child: const Icon(
-                              Icons.campaign_outlined,
-                              color: AppColors.primary,
-                              size: 16.0,
-                            ),
+                            child: const Icon(Icons.campaign_outlined, color: AppColors.primary, size: 16.0),
                           ),
                           const SizedBox(width: 8.0),
                           Text(
@@ -414,11 +374,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                         color: AppColors.primary.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
-                        Icons.campaign_outlined,
-                        color: AppColors.primary,
-                        size: 16.0,
-                      ),
+                      child: const Icon(Icons.campaign_outlined, color: AppColors.primary, size: 16.0),
                     ),
                     const SizedBox(width: 8.0),
                     Expanded(
@@ -464,8 +420,14 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
   Widget _buildMainInfoCard(PropertyModel property) {
     final categoryLabel = PropertyLocalizer.getLocalizedPropertyType(context, property.propertyType);
     final listingLabel = PropertyLocalizer.getLocalizedListingType(context, property.listingType);
-    final constStatusLabel = PropertyLocalizer.getLocalizedConstructionStatus(context, property.constructionStatus);
-    final propertyStatusLabel = PropertyLocalizer.getLocalizedPropertyStatus(context, property.propertyStatus);
+    final constStatusLabel = PropertyLocalizer.getLocalizedConstructionStatus(
+      context,
+      property.constructionStatus,
+    );
+    final propertyStatusLabel = PropertyLocalizer.getLocalizedPropertyStatus(
+      context,
+      property.propertyStatus,
+    );
 
     return Container(
       width: double.infinity,
@@ -483,6 +445,8 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
             spacing: 8.0,
             runSpacing: 8.0,
             children: [
+              if (property.propertyCode != null && property.propertyCode!.isNotEmpty)
+                _buildBadge('${property.propertyCode}', AppColors.tagIndigo),
               _buildBadge(categoryLabel, AppColors.primary),
               _buildBadge(listingLabel, AppColors.secondary),
               _buildBadge(constStatusLabel, AppColors.success),
@@ -492,8 +456,8 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
           const SizedBox(height: 14.0),
 
           // Price & Title
-          Text(
-            _formatCurrency(property.price),
+          CurrencyText(
+            amount: property.price,
             style: AppTextStyles.heading1.copyWith(
               color: AppColors.primary,
               fontWeight: FontWeight.w800,
@@ -501,15 +465,9 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
             ),
           ),
           if (property.listingType == ListingType.rent)
-            Text(
-              'Per Month',
-              style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary),
-            ),
+            Text('Per Month', style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary)),
           const SizedBox(height: 6.0),
-          Text(
-            property.propertyTitle,
-            style: AppTextStyles.heading2.copyWith(fontWeight: FontWeight.bold),
-          ),
+          Text(property.propertyTitle, style: AppTextStyles.heading2.copyWith(fontWeight: FontWeight.bold)),
 
           // Property Description
           if (property.propertyDescription != null && property.propertyDescription!.trim().isNotEmpty) ...[
@@ -545,15 +503,8 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
             children: [
               Container(
                 padding: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  icon,
-                  color: color,
-                  size: 22.0,
-                ),
+                decoration: BoxDecoration(color: color.withValues(alpha: 0.1), shape: BoxShape.circle),
+                child: Icon(icon, color: color, size: 22.0),
               ),
               const SizedBox(width: 12.0),
               Expanded(
@@ -571,17 +522,10 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
           const SizedBox(height: 10.0),
           Text(
             description,
-            style: AppTextStyles.body2.copyWith(
-              color: AppColors.textSecondary,
-              fontSize: 12.5,
-              height: 1.45,
-            ),
+            style: AppTextStyles.body2.copyWith(color: AppColors.textSecondary, fontSize: 12.5, height: 1.45),
           ),
           const SizedBox(height: 16.0),
-          SizedBox(
-            width: double.infinity,
-            child: actionButton,
-          ),
+          SizedBox(width: double.infinity, child: actionButton),
         ],
       ),
     );
@@ -626,13 +570,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
       builder: (context, constraints) {
         final isNarrow = constraints.maxWidth < 640;
         if (isNarrow) {
-          return Column(
-            children: [
-              postCard,
-              const SizedBox(height: 14.0),
-              videoCard,
-            ],
-          );
+          return Column(children: [postCard, const SizedBox(height: 14.0), videoCard]);
         }
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -683,11 +621,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
       ),
       child: Text(
         text,
-        style: AppTextStyles.caption.copyWith(
-          color: color,
-          fontWeight: FontWeight.bold,
-          fontSize: 11.0,
-        ),
+        style: AppTextStyles.caption.copyWith(color: color, fontWeight: FontWeight.bold, fontSize: 11.0),
       ),
     );
   }

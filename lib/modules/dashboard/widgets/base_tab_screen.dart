@@ -9,18 +9,12 @@ import '../../../app/app_colors.dart';
 import '../../../app/app_constants.dart';
 import '../../../app/app_text_styles.dart';
 
-
 class BaseTabScreen extends StatelessWidget {
   final String title;
   final String description;
   final IconData icon;
 
-  const BaseTabScreen({
-    super.key,
-    required this.title,
-    required this.description,
-    required this.icon,
-  });
+  const BaseTabScreen({super.key, required this.title, required this.description, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +24,6 @@ class BaseTabScreen extends StatelessWidget {
         child: SingleChildScrollView(
           padding: AppConstants.getTabPadding(context),
           child: Column(
-
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -40,25 +33,18 @@ class BaseTabScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: AppColors.primary.withOpacity(0.08),
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppColors.primary.withOpacity(0.12),
-                    width: 1.5,
-                  ),
+                  border: Border.all(color: AppColors.primary.withOpacity(0.12), width: 1.5),
                 ),
                 child: Icon(icon, size: 48.0, color: AppColors.primary),
               ),
               const SizedBox(height: 20.0),
 
               // Description
-
               ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 400.0),
                 child: Text(
                   description,
-                  style: AppTextStyles.subtitle.copyWith(
-                    fontSize: 14.0,
-                    color: AppColors.textSecondary,
-                  ),
+                  style: AppTextStyles.subtitle.copyWith(fontSize: 14.0, color: AppColors.textSecondary),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -73,20 +59,14 @@ class BaseTabScreen extends StatelessWidget {
                   side: const BorderSide(color: AppColors.border, width: 1.0),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                    vertical: 16.0,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
                         width: 8.0,
                         height: 8.0,
-                        decoration: const BoxDecoration(
-                          color: AppColors.success,
-                          shape: BoxShape.circle,
-                        ),
+                        decoration: const BoxDecoration(color: AppColors.success, shape: BoxShape.circle),
                       ),
                       const SizedBox(width: 8.0),
                       Text(

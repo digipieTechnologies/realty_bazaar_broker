@@ -2,6 +2,7 @@
 // Purpose: Type-safe model for notifications supporting VideoRequestModel relations, receiverIds array, metadata JSON, and copyWith.
 
 import 'package:equatable/equatable.dart';
+
 import 'notification_enums.dart';
 import 'user_model.dart';
 import 'video_request_model.dart';
@@ -90,9 +91,7 @@ class NotificationModel extends Equatable {
       senderId: parsedSender,
       receiverIds: parsedReceiverIds,
       videoRequest: parsedVideoRequest,
-      type: NotificationType.fromDbValue(
-        json['notification_type']?.toString() ?? json['type']?.toString(),
-      ),
+      type: NotificationType.fromDbValue(json['notification_type']?.toString() ?? json['type']?.toString()),
       title: json['title']?.toString() ?? '',
       description: json['description']?.toString() ?? json['body']?.toString() ?? '',
       data: parsedData,
@@ -146,14 +145,14 @@ class NotificationModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        senderId,
-        receiverIds,
-        videoRequest,
-        type,
-        title,
-        description,
-        data,
-        createdAt,
-      ];
+    id,
+    senderId,
+    receiverIds,
+    videoRequest,
+    type,
+    title,
+    description,
+    data,
+    createdAt,
+  ];
 }

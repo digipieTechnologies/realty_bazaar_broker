@@ -17,23 +17,17 @@ class CompactSetupProgressWidget extends StatefulWidget {
   const CompactSetupProgressWidget({super.key});
 
   @override
-  State<CompactSetupProgressWidget> createState() =>
-      _CompactSetupProgressWidgetState();
+  State<CompactSetupProgressWidget> createState() => _CompactSetupProgressWidgetState();
 }
 
-class _CompactSetupProgressWidgetState
-    extends State<CompactSetupProgressWidget> {
+class _CompactSetupProgressWidgetState extends State<CompactSetupProgressWidget> {
   void _showProgressDialog(BuildContext context) {
     final dashboardProvider = context.read<DashboardProvider>();
     final authProvider = context.read<AuthProvider>();
     final setupDetails = authProvider.userProfile?.brokerId?.setupDetails;
 
-    final steps = dashboardProvider.getOnboardingSteps(
-      setupDetails: setupDetails,
-    );
-    final percentage = dashboardProvider.getCompletionPercentage(
-      setupDetails: setupDetails,
-    );
+    final steps = dashboardProvider.getOnboardingSteps(setupDetails: setupDetails);
+    final percentage = dashboardProvider.getCompletionPercentage(setupDetails: setupDetails);
     final completedCount = steps.where((s) => s.isCompleted).length;
     final totalCount = steps.length;
 
@@ -52,8 +46,7 @@ class _CompactSetupProgressWidgetState
           ),
         ),
         title: context.tr('finish_setup'),
-        subtitle:
-            '$completedCount / $totalCount ${context.tr('completed_status')}',
+        subtitle: '$completedCount / $totalCount ${context.tr('completed_status')}',
         content: const SetupProgressCard(),
       ),
     );
@@ -66,18 +59,12 @@ class _CompactSetupProgressWidgetState
 
     // Show shimmer placeholder until user/broker profile finishes loading
     if (authProvider.isLoading || authProvider.userProfile == null) {
-      return const AppShimmerContainer(
-        width: 120.0,
-        height: 34.0,
-        borderRadius: 17.0,
-      );
+      return const AppShimmerContainer(width: 120.0, height: 34.0, borderRadius: 17.0);
     }
 
     final setupDetails = authProvider.userProfile?.brokerId?.setupDetails;
 
-    final percentage = dashboardProvider.getCompletionPercentage(
-      setupDetails: setupDetails,
-    );
+    final percentage = dashboardProvider.getCompletionPercentage(setupDetails: setupDetails);
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -89,10 +76,7 @@ class _CompactSetupProgressWidgetState
           decoration: BoxDecoration(
             color: AppColors.primary.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(17.0),
-            border: Border.all(
-              color: AppColors.primary.withValues(alpha: 0.25),
-              width: 1.0,
-            ),
+            border: Border.all(color: AppColors.primary.withValues(alpha: 0.25), width: 1.0),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,

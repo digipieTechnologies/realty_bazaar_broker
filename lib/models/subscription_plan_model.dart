@@ -2,6 +2,7 @@
 // Purpose: Model class representing subscription plans in database (Supabase subscription_plans table).
 
 import 'package:equatable/equatable.dart';
+
 import 'subscription_enums.dart';
 
 class SubscriptionPlanModel extends Equatable {
@@ -38,9 +39,7 @@ class SubscriptionPlanModel extends Equatable {
 
     List<String> parsedBenefits = [];
     if (json['benefits'] != null && json['benefits'] is List) {
-      parsedBenefits = (json['benefits'] as List)
-          .map((e) => e.toString())
-          .toList();
+      parsedBenefits = (json['benefits'] as List).map((e) => e.toString()).toList();
     }
 
     return SubscriptionPlanModel(
@@ -104,15 +103,15 @@ class SubscriptionPlanModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        title,
-        amount,
-        duration,
-        description,
-        benefits,
-        isActive,
-        isPopular,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    title,
+    amount,
+    duration,
+    description,
+    benefits,
+    isActive,
+    isPopular,
+    createdAt,
+    updatedAt,
+  ];
 }

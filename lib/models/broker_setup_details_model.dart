@@ -30,12 +30,12 @@ class BrokerSetupDetailsModel extends Equatable {
   }
 
   Map<String, dynamic> toJson() => {
-        'account_created': accountCreated,
-        'business_info_added': businessInfoAdded,
-        'facebook_connected': facebookConnected,
-        'instagram_connected': instagramConnected,
-        'properties_imported': propertiesImported,
-      };
+    'account_created': accountCreated,
+    'business_info_added': businessInfoAdded,
+    'facebook_connected': facebookConnected,
+    'instagram_connected': instagramConnected,
+    'properties_imported': propertiesImported,
+  };
 
   BrokerSetupDetailsModel copyWith({
     bool? accountCreated,
@@ -55,10 +55,10 @@ class BrokerSetupDetailsModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        accountCreated,
-        businessInfoAdded,
-        facebookConnected,
-        instagramConnected,
-        propertiesImported,
-      ];
+    accountCreated,
+    businessInfoAdded,
+    facebookConnected,
+    instagramConnected,
+    propertiesImported,
+  ];
 }

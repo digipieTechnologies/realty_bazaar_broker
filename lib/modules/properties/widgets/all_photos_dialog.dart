@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
-import '../../../models/media_model.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
+import '../../../models/media_model.dart';
+import '../../../widgets/images/cached_image.dart';
 import '../../../widgets/inputs/app_square_media_picker.dart';
 import '../../../widgets/media/full_screen_media_viewer.dart';
-import '../../../widgets/images/cached_image.dart';
 
 class AllPhotosDialog extends StatelessWidget {
   final List<MediaModel> medias;
   final String title;
 
-  const AllPhotosDialog({
-    super.key,
-    required this.medias,
-    required this.title,
-  });
+  const AllPhotosDialog({super.key, required this.medias, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +66,8 @@ class AllPhotosDialog extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => FullScreenMediaViewer(
-                                medias: medias,
-                                initialIndex: index,
-                              ),
+                              builder: (context) =>
+                                  FullScreenMediaViewer(medias: medias, initialIndex: index),
                             ),
                           );
                         },
@@ -108,22 +103,11 @@ class AllPhotosDialog extends StatelessWidget {
   Widget _buildMediaThumbnail(MediaModel media) {
     if (media.type == 'video') {
       if (media.thumbnailBytes != null) {
-        return CachedImage(
-          null,
-          imageBytes: media.thumbnailBytes,
-          fit: BoxFit.cover,
-        );
+        return CachedImage(null, imageBytes: media.thumbnailBytes, fit: BoxFit.cover);
       }
-      return VideoThumbnailWidget(
-        videoUrl: media.url ?? '',
-        videoBytes: media.bytes,
-      );
+      return VideoThumbnailWidget(videoUrl: media.url ?? '', videoBytes: media.bytes);
     }
 
-    return CachedImage(
-      media.url,
-      imageBytes: media.bytes,
-      fit: BoxFit.cover,
-    );
+    return CachedImage(media.url, imageBytes: media.bytes, fit: BoxFit.cover);
   }
 }

@@ -2,11 +2,12 @@
 // Purpose: Premium theme info dialog using AppBaseDialog for field help, good examples, and pro tips.
 
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
-import '../../../widgets/dialogs/app_base_dialog.dart';
 import '../../../widgets/buttons/app_button.dart';
+import '../../../widgets/dialogs/app_base_dialog.dart';
 
 class FieldInfoDialog extends StatelessWidget {
   final String title;
@@ -31,12 +32,8 @@ class FieldInfoDialog extends StatelessWidget {
   }) {
     showDialog(
       context: context,
-      builder: (context) => FieldInfoDialog(
-        title: title,
-        description: description,
-        examples: examples,
-        tip: tip,
-      ),
+      builder: (context) =>
+          FieldInfoDialog(title: title, description: description, examples: examples, tip: tip),
     );
   }
 
@@ -60,13 +57,7 @@ class FieldInfoDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Description Body
-          Text(
-            description,
-            style: AppTextStyles.body1.copyWith(
-              color: AppColors.textSecondary,
-              height: 1.5,
-            ),
-          ),
+          Text(description, style: AppTextStyles.body1.copyWith(color: AppColors.textSecondary, height: 1.5)),
 
           // Examples Section
           if (examples.isNotEmpty) ...[
@@ -96,13 +87,14 @@ class FieldInfoDialog extends StatelessWidget {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('• ', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)),
+                            const Text(
+                              '• ',
+                              style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
+                            ),
                             Expanded(
                               child: Text(
                                 ex,
-                                style: AppTextStyles.body2.copyWith(
-                                  color: AppColors.textPrimary,
-                                ),
+                                style: AppTextStyles.body2.copyWith(color: AppColors.textPrimary),
                               ),
                             ),
                           ],

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import 'app_shimmer_container.dart';
 
 class PropertyListShimmerWidget extends StatelessWidget {
   final int count;
 
-  const PropertyListShimmerWidget({
-    super.key,
-    this.count = 4,
-  });
+  const PropertyListShimmerWidget({super.key, this.count = 4});
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +42,7 @@ class PropertyListShimmerWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Left Image Shimmer (Matches 260px wide PropertyCardWeb image)
-          AppShimmerContainer(
-            width: 260.0,
-            height: 180.0,
-            borderRadius: 12.0,
-          ),
+          AppShimmerContainer(width: 260.0, height: 180.0, borderRadius: 12.0),
           SizedBox(width: 20.0),
 
           // Right Content Column Shimmer
@@ -61,19 +55,11 @@ class PropertyListShimmerWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Title Shimmer
-                    AppShimmerContainer(
-                      width: 280.0,
-                      height: 22.0,
-                      borderRadius: 4.0,
-                    ),
+                    AppShimmerContainer(width: 280.0, height: 22.0, borderRadius: 4.0),
                     SizedBox(height: 10.0),
 
                     // Address Shimmer
-                    AppShimmerContainer(
-                      width: 190.0,
-                      height: 14.0,
-                      borderRadius: 4.0,
-                    ),
+                    AppShimmerContainer(width: 190.0, height: 14.0, borderRadius: 4.0),
                     SizedBox(height: 14.0),
 
                     // Amenities / Status Chips Row Shimmer
@@ -107,11 +93,7 @@ class PropertyListShimmerWidget extends StatelessWidget {
                     ),
 
                     // Price Tag Shimmer
-                    AppShimmerContainer(
-                      width: 120.0,
-                      height: 24.0,
-                      borderRadius: 6.0,
-                    ),
+                    AppShimmerContainer(width: 120.0, height: 24.0, borderRadius: 6.0),
                   ],
                 ),
               ],
@@ -138,27 +120,15 @@ class PropertyListShimmerWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Image Shimmer
-          AppShimmerContainer(
-            width: double.infinity,
-            height: 200.0,
-            borderRadius: 12.0,
-          ),
+          AppShimmerContainer(width: double.infinity, height: 200.0, borderRadius: 12.0),
           SizedBox(height: 16.0),
 
           // Title Shimmer
-          AppShimmerContainer(
-            width: 220.0,
-            height: 20.0,
-            borderRadius: 4.0,
-          ),
+          AppShimmerContainer(width: 220.0, height: 20.0, borderRadius: 4.0),
           SizedBox(height: 8.0),
 
           // Address Shimmer
-          AppShimmerContainer(
-            width: 160.0,
-            height: 14.0,
-            borderRadius: 4.0,
-          ),
+          AppShimmerContainer(width: 160.0, height: 14.0, borderRadius: 4.0),
           SizedBox(height: 14.0),
 
           // Chips Row Shimmer

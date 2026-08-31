@@ -1,17 +1,12 @@
-import 'dart:typed_data';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/services/clarity_service.dart';
 import '../../core/services/supabase_storage_service.dart';
 import '../../core/supabase/supabase_config.dart';
 import '../../models/models.dart';
-import '../../models/social_account_model.dart';
 import '../../models/social_enums.dart';
-import '../../models/social_post_model.dart';
 import '../../util/app_utils.dart';
 import '../../widgets/toast/app_toast.dart';
 import '../auth/auth_provider.dart';
@@ -51,8 +46,7 @@ class SocialProvider extends ChangeNotifier {
 
   String? get disconnectingPlatform => _disconnectingPlatform;
 
-  bool isPlatformDisconnecting(String platform) =>
-      _isDisconnecting && _disconnectingPlatform == platform;
+  bool isPlatformDisconnecting(String platform) => _isDisconnecting && _disconnectingPlatform == platform;
 
   bool _isSyncingPosts = false;
 
@@ -105,18 +99,14 @@ class SocialProvider extends ChangeNotifier {
   // Realtime subscription management
   void subscribeToSocialAccounts(String brokerId) {
     if (_currentBrokerId == brokerId && _socialSubscription != null) {
-      debugPrint(
-        '[SocialProvider] Already subscribed to social accounts for broker: $brokerId',
-      );
+      debugPrint('[SocialProvider] Already subscribed to social accounts for broker: $brokerId');
       return;
     }
 
     _currentBrokerId = brokerId;
     _socialSubscription?.unsubscribe();
 
-    debugPrint(
-      '[SocialProvider] Subscribing to realtime social_accounts changes for broker: $brokerId',
-    );
+    debugPrint('[SocialProvider] Subscribing to realtime social_accounts changes for broker: $brokerId');
 
     // Subscribe to all changes on social_accounts table and filter in Dart for 100% reliability
     _socialSubscription = SupabaseConfig.client
@@ -133,9 +123,7 @@ class SocialProvider extends ChangeNotifier {
             final oldBrokerId = payload.oldRecord['broker_id']?.toString();
 
             // Match current brokerId or if record is updated
-            if (newBrokerId == brokerId ||
-                oldBrokerId == brokerId ||
-                newBrokerId == null) {
+            if (newBrokerId == brokerId || oldBrokerId == brokerId || newBrokerId == null) {
               _handleRealtimePayload(payload);
             }
           },
@@ -184,9 +172,7 @@ class SocialProvider extends ChangeNotifier {
         body: {'broker_id': brokerId},
       );
 
-      debugPrint(
-        'Fetch-social-connections edge function status: ${response.status}',
-      );
+      debugPrint('Fetch-social-connections edge function status: ${response.status}');
 
       _facebookAccount = null;
       _isFacebookConnected = false;
@@ -199,8 +185,7 @@ class SocialProvider extends ChangeNotifier {
           // Process Facebook account object
           if (data['facebook'] != null) {
             final fbAccount = SocialAccountModel.fromJson(data['facebook']);
-            final isConnected =
-                (fbAccount.isConnected ?? true) && (fbAccount.isActive ?? true);
+            final isConnected = (fbAccount.isConnected ?? true) && (fbAccount.isActive ?? true);
             _facebookAccount = isConnected ? fbAccount : null;
             _isFacebookConnected = isConnected;
           }
@@ -208,8 +193,7 @@ class SocialProvider extends ChangeNotifier {
           // Process Instagram account object
           if (data['instagram'] != null) {
             final igAccount = SocialAccountModel.fromJson(data['instagram']);
-            final isConnected =
-                (igAccount.isConnected ?? true) && (igAccount.isActive ?? true);
+            final isConnected = (igAccount.isConnected ?? true) && (igAccount.isActive ?? true);
             _instagramAccount = isConnected ? igAccount : null;
             _isInstagramConnected = isConnected;
           }
@@ -217,34 +201,23 @@ class SocialProvider extends ChangeNotifier {
           // If connected is true and broker setupDetails is currently false, update setupDetails locally
           if (authProvider != null) {
             BrokerSetupDetailsModel currentSetup =
-                authProvider.userProfile?.brokerId?.setupDetails ??
-                const BrokerSetupDetailsModel();
+                authProvider.userProfile?.brokerId?.setupDetails ?? const BrokerSetupDetailsModel();
 
             if (!currentSetup.instagramConnected && _isInstagramConnected) {
-              currentSetup = currentSetup.copyWith(
-                instagramConnected: _isInstagramConnected,
-              );
+              currentSetup = currentSetup.copyWith(instagramConnected: _isInstagramConnected);
             }
             if (!currentSetup.facebookConnected && _isFacebookConnected) {
-              currentSetup = currentSetup.copyWith(
-                facebookConnected: _isFacebookConnected,
-              );
+              currentSetup = currentSetup.copyWith(facebookConnected: _isFacebookConnected);
             }
 
-            authProvider.updateLocalBrokerSetupDetails(
-              setupDetails: currentSetup,
-            );
+            authProvider.updateLocalBrokerSetupDetails(setupDetails: currentSetup);
           }
         } else {
-          final errorMsg = data is Map
-              ? data['message']
-              : 'Failed to fetch social connections';
+          final errorMsg = data is Map ? data['message'] : 'Failed to fetch social connections';
           debugPrint('Error response from fetch-social-connections: $errorMsg');
         }
       } else {
-        debugPrint(
-          'Fetch-social-connections returned non-200 status: ${response.status}',
-        );
+        debugPrint('Fetch-social-connections returned non-200 status: ${response.status}');
       }
     } catch (e) {
       debugPrint('Error fetching social connections via edge function: $e');
@@ -267,9 +240,7 @@ class SocialProvider extends ChangeNotifier {
         body: {'broker_id': brokerId, 'platform': platform},
       );
 
-      debugPrint(
-        'Disconnect $platform edge function status: ${response.status}',
-      );
+      debugPrint('Disconnect $platform edge function status: ${response.status}');
 
       if (response.status == 200) {
         final data = response.data;
@@ -283,9 +254,7 @@ class SocialProvider extends ChangeNotifier {
           }
           notifyListeners();
 
-          final platformName = platform == 'facebook'
-              ? 'Facebook Page'
-              : 'Instagram Business';
+          final platformName = platform == 'facebook' ? 'Facebook Page' : 'Instagram Business';
           AppToast.showSuccess(
             'Account Disconnected',
             'Successfully disconnected $platformName, unsubscribed webhooks, and revoked Meta access permissions.',
@@ -295,25 +264,16 @@ class SocialProvider extends ChangeNotifier {
           final errorMsg = data is Map
               ? (data['message'] ?? data['error'])?.toString()
               : 'Failed to disconnect $platform.';
-          AppToast.showError(
-            'Disconnect Failed',
-            errorMsg ?? 'An unexpected server response was received.',
-          );
+          AppToast.showError('Disconnect Failed', errorMsg ?? 'An unexpected server response was received.');
           return false;
         }
       } else {
-        AppToast.showError(
-          'Disconnect Failed',
-          'Server returned status code: ${response.status}',
-        );
+        AppToast.showError('Disconnect Failed', 'Server returned status code: ${response.status}');
         return false;
       }
     } catch (e) {
       debugPrint('Error calling disconnect-social-account edge function: $e');
-      AppToast.showError(
-        'Disconnect Error',
-        'Could not contact server: ${e.toString()}',
-      );
+      AppToast.showError('Disconnect Error', 'Could not contact server: ${e.toString()}');
       return false;
     } finally {
       _isDisconnecting = false;
@@ -340,32 +300,20 @@ class SocialProvider extends ChangeNotifier {
           if (url.isNotEmpty) {
             await AppUtils.launchAppUrl(url);
           } else {
-            AppToast.showError(
-              'Connection Error',
-              'No connection link was returned by the server.',
-            );
+            AppToast.showError('Connection Error', 'No connection link was returned by the server.');
           }
         } else {
           final errorMsg = data is Map
               ? (data['error'] ?? data['message'])?.toString()
               : 'Failed to retrieve connection link.';
-          AppToast.showError(
-            'Connection Failed',
-            errorMsg ?? 'An unexpected response was received.',
-          );
+          AppToast.showError('Connection Failed', errorMsg ?? 'An unexpected response was received.');
         }
       } else {
-        AppToast.showError(
-          'Connection Failed',
-          'Server returned status code: ${response.status}',
-        );
+        AppToast.showError('Connection Failed', 'Server returned status code: ${response.status}');
       }
     } catch (e) {
       debugPrint('Error calling instagram-connect edge function: $e');
-      AppToast.showError(
-        'Connection Failed',
-        'Could not contact connection server: ${e.toString()}',
-      );
+      AppToast.showError('Connection Failed', 'Could not contact connection server: ${e.toString()}');
     }
   }
 
@@ -390,32 +338,20 @@ class SocialProvider extends ChangeNotifier {
           if (url.isNotEmpty) {
             await AppUtils.launchAppUrl(url);
           } else {
-            AppToast.showError(
-              'Connection Error',
-              'No connection link was returned by the server.',
-            );
+            AppToast.showError('Connection Error', 'No connection link was returned by the server.');
           }
         } else {
           final errorMsg = data is Map
               ? (data['error'] ?? data['message'])?.toString()
               : 'Failed to retrieve connection link.';
-          AppToast.showError(
-            'Connection Failed',
-            errorMsg ?? 'An unexpected response was received.',
-          );
+          AppToast.showError('Connection Failed', errorMsg ?? 'An unexpected response was received.');
         }
       } else {
-        AppToast.showError(
-          'Connection Failed',
-          'Server returned status code: ${response.status}',
-        );
+        AppToast.showError('Connection Failed', 'Server returned status code: ${response.status}');
       }
     } catch (e) {
       debugPrint('Error calling meta-connect edge function: $e');
-      AppToast.showError(
-        'Connection Failed',
-        'Could not contact connection server: ${e.toString()}',
-      );
+      AppToast.showError('Connection Failed', 'Could not contact connection server: ${e.toString()}');
     }
   }
 
@@ -425,13 +361,9 @@ class SocialProvider extends ChangeNotifier {
     notifyListeners();
 
     if (brokerId != null && brokerId.isNotEmpty) {
-      if (tab == SocialPlatform.facebook &&
-          _facebookPosts.isEmpty &&
-          !_isFetchingFacebookPosts) {
+      if (tab == SocialPlatform.facebook && _facebookPosts.isEmpty && !_isFetchingFacebookPosts) {
         fetchFacebookPosts(brokerId, page: 1);
-      } else if (tab == SocialPlatform.instagram &&
-          _instagramPosts.isEmpty &&
-          !_isFetchingInstagramPosts) {
+      } else if (tab == SocialPlatform.instagram && _instagramPosts.isEmpty && !_isFetchingInstagramPosts) {
         fetchInstagramPosts(brokerId, page: 1);
       }
     }
@@ -455,9 +387,7 @@ class SocialProvider extends ChangeNotifier {
           _facebookTotalItems = data['total_items'] ?? 0;
           _facebookTotalPages = data['total_pages'] ?? 1;
           final List rawList = data['posts'] ?? [];
-          _facebookPosts = rawList
-              .map((item) => SocialPostModel.fromJson(item))
-              .toList();
+          _facebookPosts = rawList.map((item) => SocialPostModel.fromJson(item)).toList();
         }
       }
     } catch (e) {
@@ -486,9 +416,7 @@ class SocialProvider extends ChangeNotifier {
           _instagramTotalItems = data['total_items'] ?? 0;
           _instagramTotalPages = data['total_pages'] ?? 1;
           final List rawList = data['posts'] ?? [];
-          _instagramPosts = rawList
-              .map((item) => SocialPostModel.fromJson(item))
-              .toList();
+          _instagramPosts = rawList.map((item) => SocialPostModel.fromJson(item)).toList();
         }
       }
     } catch (e) {
@@ -511,16 +439,10 @@ class SocialProvider extends ChangeNotifier {
         await fetchFacebookPosts(brokerId, page: _facebookCurrentPage);
       }
 
-      AppToast.showSuccess(
-        'Refresh Complete',
-        'Successfully loaded your social media posts.',
-      );
+      AppToast.showSuccess('Refresh Complete', 'Successfully loaded your social media posts.');
     } catch (e) {
       debugPrint('Error loading social posts: $e');
-      AppToast.showError(
-        'Refresh Failed',
-        'Could not load social posts: ${e.toString()}',
-      );
+      AppToast.showError('Refresh Failed', 'Could not load social posts: ${e.toString()}');
     } finally {
       _isSyncingPosts = false;
       notifyListeners();
@@ -543,11 +465,49 @@ class SocialProvider extends ChangeNotifier {
     }
   }
 
+  /// Fetches a specific post by ID from active lists or Supabase database table
+  Future<SocialPostModel?> fetchPostById(String postId) async {
+    // 1. Check in-memory lists first
+    for (final p in [..._posts, ..._facebookPosts, ..._instagramPosts]) {
+      if (p.id == postId || p.postId == postId || p.platformPostId == postId) {
+        return p;
+      }
+    }
+
+    // 2. Fetch from DB if not in memory
+    try {
+      final isUuid = RegExp(
+        r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$',
+      ).hasMatch(postId.trim());
+
+      Map<String, dynamic>? data;
+      if (isUuid) {
+        data = await SupabaseConfig.client
+            .from('social_posts')
+            .select()
+            .eq('id', postId.trim())
+            .maybeSingle();
+      }
+
+      if (data == null) {
+        data = await SupabaseConfig.client
+            .from('social_posts')
+            .select()
+            .or('post_id.eq.$postId,platform_post_id.eq.$postId')
+            .maybeSingle();
+      }
+
+      if (data != null) {
+        return SocialPostModel.fromJson(data);
+      }
+    } catch (e) {
+      debugPrint('Error fetching post by ID ($postId): $e');
+    }
+    return null;
+  }
+
   // Enable automation by saving post into local DB schema (social_posts)
-  Future<SocialPostModel?> enablePostAutomation(
-    SocialPostModel post,
-    String brokerId,
-  ) async {
+  Future<SocialPostModel?> enablePostAutomation(SocialPostModel post, String brokerId) async {
     try {
       // Prepare media_urls list matching schema jsonb format
       final List<Map<String, dynamic>> mediaUrlsList = [];
@@ -569,9 +529,7 @@ class SocialProvider extends ChangeNotifier {
 
       final pageId = (post.pageId != null && post.pageId!.isNotEmpty)
           ? post.pageId!
-          : (targetPostId.contains('_')
-                ? targetPostId.split('_').first
-                : 'main_page');
+          : (targetPostId.contains('_') ? targetPostId.split('_').first : 'main_page');
 
       final payload = <String, dynamic>{
         'broker_id': brokerId,
@@ -584,31 +542,20 @@ class SocialProvider extends ChangeNotifier {
         'views_count': post.viewsCount ?? 0,
         'comment_count': post.commentCount ?? 0,
         'likes_count': post.likesCount ?? 0,
-        if (post.publishedAt != null)
-          'published_at': post.publishedAt?.toUtc().toIso8601String(),
+        if (post.publishedAt != null) 'published_at': post.publishedAt?.toUtc().toIso8601String(),
         if (post.propertyId?.id != null) 'property_id': post.propertyId!.id,
       };
 
-      final response = await SupabaseConfig.client
-          .from('social_posts')
-          .insert(payload)
-          .select()
-          .single();
+      final response = await SupabaseConfig.client.from('social_posts').insert(payload).select().single();
 
       final insertedPost = SocialPostModel.fromJson(response);
-      final updatedPost = post.copyWith(
-        id: insertedPost.id,
-        dbSocialPost: insertedPost,
-      );
+      final updatedPost = post.copyWith(id: insertedPost.id, dbSocialPost: insertedPost);
 
       _updatePostInLists(updatedPost);
 
       ClarityService.instance.sendCustomEvent('feature_enable_post_automation');
 
-      AppToast.showSuccess(
-        'Leads Activated',
-        'Lead capture is now active for this post.',
-      );
+      AppToast.showSuccess('Leads Activated', 'Lead capture is now active for this post.');
       return updatedPost;
     } catch (e) {
       debugPrint('[SocialProvider] Error enabling post automation: $e');
@@ -632,15 +579,9 @@ class SocialProvider extends ChangeNotifier {
 
           if (existing != null) {
             final dbPost = SocialPostModel.fromJson(existing);
-            final updatedPost = post.copyWith(
-              id: dbPost.id,
-              dbSocialPost: dbPost,
-            );
+            final updatedPost = post.copyWith(id: dbPost.id, dbSocialPost: dbPost);
             _updatePostInLists(updatedPost);
-            AppToast.showSuccess(
-              'Leads Active',
-              'Lead capture is already active for this post.',
-            );
+            AppToast.showSuccess('Leads Active', 'Lead capture is already active for this post.');
             return updatedPost;
           }
         } catch (fetchErr) {
@@ -648,31 +589,21 @@ class SocialProvider extends ChangeNotifier {
         }
       }
 
-      AppToast.showError(
-        'Error',
-        'Could not activate leads. Please try again.',
-      );
+      AppToast.showError('Error', 'Could not activate leads. Please try again.');
       return null;
     }
   }
 
   // Disable automation by deleting post record
-  Future<SocialPostModel?> disablePostAutomation(
-    SocialPostModel post,
-    String brokerId,
-  ) async {
+  Future<SocialPostModel?> disablePostAutomation(SocialPostModel post, String brokerId) async {
     try {
       final dbId =
-          post.dbSocialPost?.id ??
-          (post.id != null && post.id != post.platformPostId ? post.id : null);
+          post.dbSocialPost?.id ?? (post.id != null && post.id != post.platformPostId ? post.id : null);
       final targetPostId = post.postId ?? post.platformPostId ?? post.id;
       final platformVal = post.platform?.dbValue;
 
       if (dbId != null && dbId.isNotEmpty) {
-        await SupabaseConfig.client
-            .from('social_posts')
-            .delete()
-            .eq('id', dbId);
+        await SupabaseConfig.client.from('social_posts').delete().eq('id', dbId);
       } else if (targetPostId != null && targetPostId.isNotEmpty) {
         var query = SupabaseConfig.client
             .from('social_posts')
@@ -689,35 +620,24 @@ class SocialProvider extends ChangeNotifier {
 
       _updatePostInLists(updatedPost);
 
-      AppToast.showSuccess(
-        'Leads Paused',
-        'Lead capture has been paused for this post.',
-      );
+      AppToast.showSuccess('Leads Paused', 'Lead capture has been paused for this post.');
       return updatedPost;
     } catch (e) {
       debugPrint('[SocialProvider] Error disabling post automation: $e');
-      AppToast.showError(
-        'Error',
-        'Could not pause leads. Please try again.',
-      );
+      AppToast.showError('Error', 'Could not pause leads. Please try again.');
       return null;
     }
   }
 
   void _updatePostInLists(SocialPostModel updatedPost) {
-    final targetId =
-        updatedPost.platformPostId ?? updatedPost.postId ?? updatedPost.id;
+    final targetId = updatedPost.platformPostId ?? updatedPost.postId ?? updatedPost.id;
 
-    final fbIdx = _facebookPosts.indexWhere(
-      (p) => (p.platformPostId ?? p.postId ?? p.id) == targetId,
-    );
+    final fbIdx = _facebookPosts.indexWhere((p) => (p.platformPostId ?? p.postId ?? p.id) == targetId);
     if (fbIdx != -1) {
       _facebookPosts[fbIdx] = updatedPost;
     }
 
-    final igIdx = _instagramPosts.indexWhere(
-      (p) => (p.platformPostId ?? p.postId ?? p.id) == targetId,
-    );
+    final igIdx = _instagramPosts.indexWhere((p) => (p.platformPostId ?? p.postId ?? p.id) == targetId);
     if (igIdx != -1) {
       _instagramPosts[igIdx] = updatedPost;
     }
@@ -746,11 +666,7 @@ class SocialProvider extends ChangeNotifier {
   }
 
   // Upload an asset file to Supabase Storage using centralized SupabaseStorageService
-  Future<String> uploadAsset(
-    String fileName,
-    Uint8List bytes, {
-    String mimeType = 'image/jpeg',
-  }) async {
+  Future<String> uploadAsset(String fileName, Uint8List bytes, {String mimeType = 'image/jpeg'}) async {
     final publicUrl = await SupabaseStorageService.uploadFile(
       filePath: fileName,
       bucketName: 'social_assets',
@@ -762,24 +678,13 @@ class SocialProvider extends ChangeNotifier {
   }
 
   // Helper method to resolve a valid public URL for a media item
-  Future<String> _resolvePublicMediaUrl(
-    PickedMedia media,
-    String mimeType,
-  ) async {
+  Future<String> _resolvePublicMediaUrl(PickedMedia media, String mimeType) async {
     // Case 1: Bytes are present (e.g. newly exported sticker overlay or picked file with bytes)
     if (media.bytes.isNotEmpty) {
-      final sanitizedMediaName = media.name.replaceAll(
-        RegExp(r'[^a-zA-Z0-9._-]'),
-        '_',
-      );
-      final uniqueName =
-          '${DateTime.now().millisecondsSinceEpoch}_$sanitizedMediaName';
+      final sanitizedMediaName = media.name.replaceAll(RegExp(r'[^a-zA-Z0-9._-]'), '_');
+      final uniqueName = '${DateTime.now().millisecondsSinceEpoch}_$sanitizedMediaName';
 
-      return await uploadAsset(
-        uniqueName,
-        media.bytes,
-        mimeType: mimeType,
-      );
+      return await uploadAsset(uniqueName, media.bytes, mimeType: mimeType);
     }
 
     // Case 2: Path is ALREADY a valid HTTP / HTTPS public URL (e.g. property image from Supabase storage)
@@ -796,18 +701,10 @@ class SocialProvider extends ChangeNotifier {
         );
         if (response.data != null && response.data!.isNotEmpty) {
           final fileBytes = Uint8List.fromList(response.data!);
-          final sanitizedMediaName = media.name.replaceAll(
-            RegExp(r'[^a-zA-Z0-9._-]'),
-            '_',
-          );
-          final uniqueName =
-              '${DateTime.now().millisecondsSinceEpoch}_$sanitizedMediaName';
+          final sanitizedMediaName = media.name.replaceAll(RegExp(r'[^a-zA-Z0-9._-]'), '_');
+          final uniqueName = '${DateTime.now().millisecondsSinceEpoch}_$sanitizedMediaName';
 
-          return await uploadAsset(
-            uniqueName,
-            fileBytes,
-            mimeType: mimeType,
-          );
+          return await uploadAsset(uniqueName, fileBytes, mimeType: mimeType);
         }
       } catch (e) {
         debugPrint('[SocialProvider] Error reading media path for upload: $e');
@@ -820,19 +717,15 @@ class SocialProvider extends ChangeNotifier {
   // Helper method to resolve cover URL for videos
   Future<String?> _resolvePublicCoverUrl(PickedMedia media) async {
     if (media.thumbnailBytes != null && media.thumbnailBytes!.isNotEmpty) {
-      final sanitizedCoverName = (media.thumbnailName ?? "cover.jpg")
-          .replaceAll(RegExp(r'[^a-zA-Z0-9._-]'), '_');
-      final coverName =
-          '${DateTime.now().millisecondsSinceEpoch}_cover_$sanitizedCoverName';
-
-      return await uploadAsset(
-        coverName,
-        media.thumbnailBytes!,
-        mimeType: 'image/jpeg',
+      final sanitizedCoverName = (media.thumbnailName ?? "cover.jpg").replaceAll(
+        RegExp(r'[^a-zA-Z0-9._-]'),
+        '_',
       );
+      final coverName = '${DateTime.now().millisecondsSinceEpoch}_cover_$sanitizedCoverName';
+
+      return await uploadAsset(coverName, media.thumbnailBytes!, mimeType: 'image/jpeg');
     } else if (media.thumbnailName != null &&
-        (media.thumbnailName!.startsWith('http://') ||
-            media.thumbnailName!.startsWith('https://'))) {
+        (media.thumbnailName!.startsWith('http://') || media.thumbnailName!.startsWith('https://'))) {
       return media.thumbnailName;
     }
     return null;
@@ -852,16 +745,13 @@ class SocialProvider extends ChangeNotifier {
 
       for (int i = 0; i < medias.length; i++) {
         final media = medias[i];
-        final isVideo =
-            media.type == 'video' || media.name.toLowerCase().endsWith('.mp4');
+        final isVideo = media.type == 'video' || media.name.toLowerCase().endsWith('.mp4');
         final mimeType = isVideo ? 'video/mp4' : 'image/jpeg';
 
         final mediaUrl = await _resolvePublicMediaUrl(media, mimeType);
 
         if (mediaUrl.isEmpty) {
-          throw Exception(
-            'Could not resolve a valid public image URL for ${media.name}',
-          );
+          throw Exception('Could not resolve a valid public image URL for ${media.name}');
         }
 
         // Test public accessibility of the uploaded URL
@@ -886,11 +776,7 @@ class SocialProvider extends ChangeNotifier {
           coverUrl = await _resolvePublicCoverUrl(media);
         }
 
-        mediaUrlsPayload.add({
-          'media_url': mediaUrl,
-          'thumbnail_url': coverUrl,
-          'type': media.type,
-        });
+        mediaUrlsPayload.add({'media_url': mediaUrl, 'thumbnail_url': coverUrl, 'type': media.type});
       }
 
       // 2. Invoking publish edge function
@@ -908,9 +794,7 @@ class SocialProvider extends ChangeNotifier {
 
       if (response.status != 200) {
         final data = response.data;
-        final errorMsg = data is Map
-            ? (data['message'] ?? 'Failed to publish.')
-            : 'Server error.';
+        final errorMsg = data is Map ? (data['message'] ?? 'Failed to publish.') : 'Server error.';
         throw Exception(errorMsg.toString());
       }
 
@@ -922,15 +806,10 @@ class SocialProvider extends ChangeNotifier {
         await fetchPosts(brokerId);
 
         _updatePublishingState(false, '', 1.0);
-        AppToast.showSuccess(
-          'Publish Complete',
-          'Your post is now live on Instagram!',
-        );
+        AppToast.showSuccess('Publish Complete', 'Your post is now live on Instagram!');
         return true;
       } else {
-        final msg = data is Map
-            ? (data['message'] ?? 'Unknown error')
-            : 'Publishing failed.';
+        final msg = data is Map ? (data['message'] ?? 'Unknown error') : 'Publishing failed.';
         throw Exception(msg.toString());
       }
     } catch (e) {
@@ -955,16 +834,13 @@ class SocialProvider extends ChangeNotifier {
 
       for (int i = 0; i < medias.length; i++) {
         final media = medias[i];
-        final isVideo =
-            media.type == 'video' || media.name.toLowerCase().endsWith('.mp4');
+        final isVideo = media.type == 'video' || media.name.toLowerCase().endsWith('.mp4');
         final mimeType = isVideo ? 'video/mp4' : 'image/jpeg';
 
         final mediaUrl = await _resolvePublicMediaUrl(media, mimeType);
 
         if (mediaUrl.isEmpty) {
-          throw Exception(
-            'Could not resolve a valid public image URL for ${media.name}',
-          );
+          throw Exception('Could not resolve a valid public image URL for ${media.name}');
         }
 
         // Test public accessibility of the uploaded URL
@@ -989,11 +865,7 @@ class SocialProvider extends ChangeNotifier {
           coverUrl = await _resolvePublicCoverUrl(media);
         }
 
-        mediaUrlsPayload.add({
-          'media_url': mediaUrl,
-          'thumbnail_url': coverUrl,
-          'type': media.type,
-        });
+        mediaUrlsPayload.add({'media_url': mediaUrl, 'thumbnail_url': coverUrl, 'type': media.type});
       }
 
       // 2. Invoking publish edge function
@@ -1011,9 +883,7 @@ class SocialProvider extends ChangeNotifier {
 
       if (response.status != 200) {
         final data = response.data;
-        final errorMsg = data is Map
-            ? (data['message'] ?? 'Failed to publish.')
-            : 'Server error.';
+        final errorMsg = data is Map ? (data['message'] ?? 'Failed to publish.') : 'Server error.';
         throw Exception(errorMsg.toString());
       }
 
@@ -1025,15 +895,10 @@ class SocialProvider extends ChangeNotifier {
         await fetchPosts(brokerId);
 
         _updatePublishingState(false, '', 1.0);
-        AppToast.showSuccess(
-          'Publish Complete',
-          'Your post is now live on Facebook!',
-        );
+        AppToast.showSuccess('Publish Complete', 'Your post is now live on Facebook!');
         return true;
       } else {
-        final msg = data is Map
-            ? (data['message'] ?? 'Unknown error')
-            : 'Publishing failed.';
+        final msg = data is Map ? (data['message'] ?? 'Unknown error') : 'Publishing failed.';
         throw Exception(msg.toString());
       }
     } catch (e) {

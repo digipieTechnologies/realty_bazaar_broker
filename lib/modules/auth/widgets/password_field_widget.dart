@@ -2,8 +2,9 @@
 // Purpose: Dedicated password input wrapper built on AppTextField.
 
 import 'package:flutter/material.dart';
-import '../../../widgets/inputs/app_textfield.dart';
+
 import '../../../app/app_colors.dart';
+import '../../../widgets/inputs/app_textfield.dart';
 
 class PasswordFieldWidget extends StatelessWidget {
   final TextEditingController? controller;
@@ -13,6 +14,8 @@ class PasswordFieldWidget extends StatelessWidget {
   final FocusNode? focusNode;
   final TextInputAction textInputAction;
   final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onFieldSubmitted;
+  final Iterable<String>? autofillHints;
 
   const PasswordFieldWidget({
     super.key,
@@ -23,6 +26,8 @@ class PasswordFieldWidget extends StatelessWidget {
     this.focusNode,
     this.textInputAction = TextInputAction.next,
     this.onChanged,
+    this.onFieldSubmitted,
+    this.autofillHints,
   });
 
   @override
@@ -36,10 +41,9 @@ class PasswordFieldWidget extends StatelessWidget {
       keyboardType: TextInputType.visiblePassword,
       textInputAction: textInputAction,
       onChanged: onChanged,
-      prefixIcon: const Icon(
-        Icons.lock_outline_rounded,
-        color: AppColors.iconDefault,
-      ),
+      onFieldSubmitted: onFieldSubmitted,
+      autofillHints: autofillHints,
+      prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.iconDefault),
       validator: validator,
     );
   }

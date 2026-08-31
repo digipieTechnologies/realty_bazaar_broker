@@ -2,6 +2,7 @@
 // Purpose: Reusable circular chevron icon toggle button widget for expanding/collapsing cards, dropdowns, and sections.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 
 class AppCircularChevron extends StatelessWidget {
@@ -37,30 +38,18 @@ class AppCircularChevron extends StatelessWidget {
         color: effectiveBgColor,
         shape: BoxShape.circle,
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 4.0,
-            offset: const Offset(0, 1),
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 4.0, offset: const Offset(0, 1)),
         ],
       ),
       child: AnimatedRotation(
         turns: isExpanded ? 0.5 : 0.0,
         duration: const Duration(milliseconds: 200),
-        child: Icon(
-          collapsedIcon,
-          color: effectiveIconColor,
-          size: iconSize,
-        ),
+        child: Icon(collapsedIcon, color: effectiveIconColor, size: iconSize),
       ),
     );
 
     if (onTap != null) {
-      return InkWell(
-        onTap: onTap,
-        customBorder: const CircleBorder(),
-        child: chevronWidget,
-      );
+      return InkWell(onTap: onTap, customBorder: const CircleBorder(), child: chevronWidget);
     }
 
     return chevronWidget;

@@ -2,6 +2,7 @@
 // Purpose: Modern reusable 24-hour Time Schedule slider component with Whole Day checkbox toggle.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
 import '../../core/localization/app_localizations.dart';
@@ -35,9 +36,7 @@ class TimeScheduleSliderWidget extends StatelessWidget {
     final startStr = _formatHour(values.start);
     final endStr = _formatHour(values.end);
 
-    final displayTimeStr = isWholeDay
-        ? context.tr('whole_day_range')
-        : '$startStr - $endStr';
+    final displayTimeStr = isWholeDay ? context.tr('whole_day_range') : '$startStr - $endStr';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,11 +74,7 @@ class TimeScheduleSliderWidget extends StatelessWidget {
         const SizedBox(height: 8.0),
 
         // Whole Day Checkbox
-        AppCheckboxTile(
-          value: isWholeDay,
-          label: context.tr('whole_day'),
-          onChanged: onWholeDayChanged,
-        ),
+        AppCheckboxTile(value: isWholeDay, label: context.tr('whole_day'), onChanged: onWholeDayChanged),
         const SizedBox(height: 10.0),
 
         // Time Range Slider (Disabled when Whole Day is checked)
@@ -96,10 +91,7 @@ class TimeScheduleSliderWidget extends StatelessWidget {
                 thumbColor: AppColors.primary,
                 overlayColor: AppColors.primary.withValues(alpha: 0.2),
                 trackHeight: 4.0,
-                rangeThumbShape: const RoundRangeSliderThumbShape(
-                  enabledThumbRadius: 9.0,
-                  elevation: 3,
-                ),
+                rangeThumbShape: const RoundRangeSliderThumbShape(enabledThumbRadius: 9.0, elevation: 3),
               ),
               child: RangeSlider(
                 values: isWholeDay ? const RangeValues(0, 24) : values,

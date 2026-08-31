@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../core/supabase/supabase_config.dart';
 import '../../models/social_lead_model.dart';
 
@@ -97,15 +98,11 @@ class LeadProvider extends ChangeNotifier {
       );
 
       if (response != null) {
-        final Map<String, dynamic> resMap = response is Map<String, dynamic>
-            ? response
-            : {};
+        final Map<String, dynamic> resMap = response is Map<String, dynamic> ? response : {};
 
         if (resMap['success'] == true && resMap['data'] is List) {
           final rawList = resMap['data'] as List;
-          _leads = rawList
-              .map((json) => SocialLeadModel.fromJson(json))
-              .toList();
+          _leads = rawList.map((json) => SocialLeadModel.fromJson(json)).toList();
 
           final pagination = resMap['pagination'] as Map<String, dynamic>? ?? {};
           _totalItems = int.tryParse(pagination['total_items']?.toString() ?? '0') ?? _leads.length;
@@ -155,7 +152,9 @@ class LeadProvider extends ChangeNotifier {
             value: brokerId,
           ),
           callback: (payload) {
-            debugPrint('[LeadProvider] Smart Realtime change event (${payload.eventType}) for broker: $brokerId');
+            debugPrint(
+              '[LeadProvider] Smart Realtime change event (${payload.eventType}) for broker: $brokerId',
+            );
             fetchLeads(
               brokerId: _currentBrokerId,
               page: _currentPage,
@@ -166,6 +165,30 @@ class LeadProvider extends ChangeNotifier {
         );
 
     _leadSubscription!.subscribe();
+  }
+
+  /// Fetches a single lead by its ID
+  Future<SocialLeadModel?> fetchLeadById(String leadId) async {
+    // 1. Check cached list
+    for (final l in _leads) {
+      if (l.id == leadId) return l;
+    }
+
+    // 2. Fetch from DB
+    try {
+      final response = await SupabaseConfig.client
+          .from('social_leads')
+          .select('*, social_post:social_posts(*, property:properties(*, address:addresses(*)))')
+          .eq('id', leadId.trim())
+          .maybeSingle();
+
+      if (response != null) {
+        return SocialLeadModel.fromJson(response);
+      }
+    } catch (e) {
+      debugPrint('[LeadProvider] Error fetching lead by ID ($leadId): $e');
+    }
+    return null;
   }
 
   /// Unsubscribe from social_leads real-time changes

@@ -224,5 +224,3 @@ class PermissionService {
     return result ?? false;
   }
 }
-
-

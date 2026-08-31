@@ -2,6 +2,7 @@
 // Purpose: Reusable property amenities wrap widget shared across property preview and view dialogs.
 
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/property_localizer.dart';
@@ -10,10 +11,7 @@ import '../../../core/utils/property_amenity_helper.dart';
 class PropertyAmenitiesWrap extends StatelessWidget {
   final List<String> amenities;
 
-  const PropertyAmenitiesWrap({
-    super.key,
-    required this.amenities,
-  });
+  const PropertyAmenitiesWrap({super.key, required this.amenities});
 
   @override
   Widget build(BuildContext context) {

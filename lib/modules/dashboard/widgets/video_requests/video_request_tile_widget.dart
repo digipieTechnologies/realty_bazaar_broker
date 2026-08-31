@@ -4,6 +4,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
 import '../../../../core/localization/app_localizations.dart';
@@ -17,12 +18,7 @@ class VideoRequestTileWidget extends StatelessWidget {
   final bool isMobile;
   final VoidCallback? onCancelPressed;
 
-  const VideoRequestTileWidget({
-    super.key,
-    required this.req,
-    this.isMobile = false,
-    this.onCancelPressed,
-  });
+  const VideoRequestTileWidget({super.key, required this.req, this.isMobile = false, this.onCancelPressed});
 
   Color _getStatusColor(VideoRequestStatus status) {
     switch (status) {
@@ -38,8 +34,6 @@ class VideoRequestTileWidget extends StatelessWidget {
         return AppColors.textMuted;
     }
   }
-
-
 
   String _getStatusLabel(BuildContext context, VideoRequestStatus status) {
     switch (status) {
@@ -80,9 +74,7 @@ class VideoRequestTileWidget extends StatelessWidget {
       if (addr.fullAddress.trim().isNotEmpty) {
         return addr.fullAddress.trim();
       }
-      final parts = [addr.city, addr.state]
-          .where((e) => e != null && e.trim().isNotEmpty)
-          .join(', ');
+      final parts = [addr.city, addr.state].where((e) => e != null && e.trim().isNotEmpty).join(', ');
       return parts.isNotEmpty ? parts : 'No Address';
     }();
 
@@ -109,11 +101,7 @@ class VideoRequestTileWidget extends StatelessWidget {
                     color: AppColors.primary.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  child: const Icon(
-                    Icons.apartment_rounded,
-                    color: AppColors.primary,
-                    size: 16.0,
-                  ),
+                  child: const Icon(Icons.apartment_rounded, color: AppColors.primary, size: 16.0),
                 ),
                 const SizedBox(width: 10.0),
                 Expanded(
@@ -140,20 +128,13 @@ class VideoRequestTileWidget extends StatelessWidget {
               children: [
                 const Padding(
                   padding: EdgeInsets.only(top: 2.0),
-                  child: Icon(
-                    Icons.location_on_outlined,
-                    size: 14.0,
-                    color: AppColors.error,
-                  ),
+                  child: Icon(Icons.location_on_outlined, size: 14.0, color: AppColors.error),
                 ),
                 const SizedBox(width: 4.0),
                 Expanded(
                   child: Text(
                     addressStr,
-                    style: AppTextStyles.caption.copyWith(
-                      color: AppColors.textSecondary,
-                      fontSize: 12.0,
-                    ),
+                    style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary, fontSize: 12.0),
                   ),
                 ),
               ],
@@ -167,11 +148,7 @@ class VideoRequestTileWidget extends StatelessWidget {
                 // Created Date
                 Row(
                   children: [
-                    const Icon(
-                      Icons.calendar_today_outlined,
-                      size: 12.0,
-                      color: AppColors.textSecondary,
-                    ),
+                    const Icon(Icons.calendar_today_outlined, size: 12.0, color: AppColors.textSecondary),
                     const SizedBox(width: 4.0),
                     Text(
                       formattedDate,
@@ -239,9 +216,7 @@ class VideoRequestTileWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 14.0),
       decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: AppColors.border, width: 1.0),
-        ),
+        border: Border(bottom: BorderSide(color: AppColors.border, width: 1.0)),
       ),
       child: Row(
         children: [
@@ -274,10 +249,7 @@ class VideoRequestTileWidget extends StatelessWidget {
                       const SizedBox(height: 2.0),
                       Text(
                         req.property?.address?.fullAddress ?? 'No Address',
-                        style: AppTextStyles.caption.copyWith(
-                          color: AppColors.textMuted,
-                          fontSize: 12.0,
-                        ),
+                        style: AppTextStyles.caption.copyWith(color: AppColors.textMuted, fontSize: 12.0),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -318,10 +290,7 @@ class VideoRequestTileWidget extends StatelessWidget {
               padding: const EdgeInsets.only(right: 16.0),
               child: Text(
                 req.notes == null || req.notes!.trim().isEmpty ? '--' : req.notes!,
-                style: AppTextStyles.body2.copyWith(
-                  color: AppColors.textSecondary,
-                  fontSize: 13.0,
-                ),
+                style: AppTextStyles.body2.copyWith(color: AppColors.textSecondary, fontSize: 13.0),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -333,20 +302,14 @@ class VideoRequestTileWidget extends StatelessWidget {
             flex: 2,
             child: Text(
               formattedDate,
-              style: AppTextStyles.caption.copyWith(
-                color: AppColors.textSecondary,
-                fontSize: 12.0,
-              ),
+              style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary, fontSize: 12.0),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ),
 
           // Action Menu
-          SizedBox(
-            width: 40,
-            child: _buildPopupMenu(context),
-          ),
+          SizedBox(width: 40, child: _buildPopupMenu(context)),
         ],
       ),
     );
@@ -363,10 +326,8 @@ class VideoRequestTileWidget extends StatelessWidget {
         } else if (value == 'view_details') {
           showDialog(
             context: context,
-            builder: (dialogCtx) => VideoRequestDialog(
-              propertyId: req.propertyId ?? '',
-              brokerId: req.brokerId ?? '',
-            ),
+            builder: (dialogCtx) =>
+                VideoRequestDialog(propertyId: req.propertyId ?? '', brokerId: req.brokerId ?? ''),
           );
         }
       },

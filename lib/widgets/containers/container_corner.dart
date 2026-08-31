@@ -84,18 +84,10 @@ class ContainerCorner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final radius = BorderRadius.only(
-      topRight: Radius.circular(
-        borderRadius != null ? borderRadius! : radiusTopRight!,
-      ),
-      bottomRight: Radius.circular(
-        borderRadius != null ? borderRadius! : radiusBottomRight!,
-      ),
-      topLeft: Radius.circular(
-        borderRadius != null ? borderRadius! : radiusTopLeft!,
-      ),
-      bottomLeft: Radius.circular(
-        borderRadius != null ? borderRadius! : radiusBottomLeft!,
-      ),
+      topRight: Radius.circular(borderRadius != null ? borderRadius! : radiusTopRight!),
+      bottomRight: Radius.circular(borderRadius != null ? borderRadius! : radiusBottomRight!),
+      topLeft: Radius.circular(borderRadius != null ? borderRadius! : radiusTopLeft!),
+      bottomLeft: Radius.circular(borderRadius != null ? borderRadius! : radiusBottomLeft!),
     );
 
     Widget normalChild = Container(
@@ -129,14 +121,10 @@ class ContainerCorner extends StatelessWidget {
               ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: shadowColor != null
-                ? shadowColor!.withOpacity(shadowColorOpacity!)
-                : Colors.transparent,
+            color: shadowColor != null ? shadowColor!.withOpacity(shadowColorOpacity!) : Colors.transparent,
             blurRadius: blurRadius!,
             spreadRadius: spreadRadius!,
-            offset: setShadowToBottom!
-                ? const Offset(0, 2)
-                : const Offset(0.0, 0.75),
+            offset: setShadowToBottom! ? const Offset(0, 2) : const Offset(0.0, 0.75),
           ),
         ],
         borderRadius: borderRadiusShape ?? radius,

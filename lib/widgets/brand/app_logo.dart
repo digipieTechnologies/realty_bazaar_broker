@@ -1,8 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import '../../app/app_colors.dart';
+
 import '../../app/app_assets.dart';
+import '../../app/app_colors.dart';
 
 class AppLogo extends StatelessWidget {
   final double size;
@@ -25,18 +26,13 @@ class AppLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final effectiveIconSize = iconSize ?? (size * 0.75);
-    final effectiveBorderRadius =
-        borderRadius ?? BorderRadius.circular(size * 0.28);
-    final effectiveBgColor =
-        backgroundColor ?? AppColors.primary.withOpacity(0.08);
+    final effectiveBorderRadius = borderRadius ?? BorderRadius.circular(size * 0.28);
+    final effectiveBgColor = backgroundColor ?? AppColors.primary.withOpacity(0.08);
 
     return Container(
       width: size,
       height: size,
-      decoration: BoxDecoration(
-        color: effectiveBgColor,
-        borderRadius: effectiveBorderRadius,
-      ),
+      decoration: BoxDecoration(color: effectiveBgColor, borderRadius: effectiveBorderRadius),
       alignment: Alignment.center,
       child: Image.asset(
         useWhiteLogo ? AppAssets.logoWhite : AppAssets.logoTransparent,

@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/utils/common_ext.dart';
@@ -38,9 +39,7 @@ class ChatBubbleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final timeFormatted = DateFormat('hh:mm a').format(message.createdAt.toLocal());
     final isMarketing = message.senderType == 'marketing' || message.senderType == 'admin';
-    final senderLabel = isMe
-        ? 'You'
-        : (isMarketing ? 'Marketing Team' : 'Broker');
+    final senderLabel = isMe ? 'You' : (isMarketing ? 'Marketing Team' : 'Broker');
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -87,10 +86,7 @@ class ChatBubbleWidget extends StatelessWidget {
                       ],
                       Text(
                         timeFormatted,
-                        style: AppTextStyles.caption.copyWith(
-                          fontSize: 10.0,
-                          color: AppColors.textMuted,
-                        ),
+                        style: AppTextStyles.caption.copyWith(fontSize: 10.0, color: AppColors.textMuted),
                       ),
                     ],
                   ),
@@ -105,7 +101,8 @@ class ChatBubbleWidget extends StatelessWidget {
                   onDelete: onDelete,
                   child: Container(
                     constraints: const BoxConstraints(maxWidth: 320.0),
-                    padding: message.medias.isNotEmpty || message.messageType == ChatMessageMessageType.document
+                    padding:
+                        message.medias.isNotEmpty || message.messageType == ChatMessageMessageType.document
                         ? const EdgeInsets.all(4.0)
                         : const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
                     decoration: BoxDecoration(
@@ -129,10 +126,7 @@ class ChatBubbleWidget extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         if (message.replyMessageId != null || message.replyMessage != null)
-                          ChatReplySnippetWidget(
-                            replyMessage: message.replyMessage,
-                            isMe: isMe,
-                          ),
+                          ChatReplySnippetWidget(replyMessage: message.replyMessage, isMe: isMe),
                         _buildMessageContent(),
                         if (message.isEdited) ...[
                           const SizedBox(height: 2.0),
@@ -141,9 +135,7 @@ class ChatBubbleWidget extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 9.5,
                               fontStyle: FontStyle.italic,
-                              color: isMe
-                                  ? Colors.white.withValues(alpha: 0.75)
-                                  : AppColors.textMuted,
+                              color: isMe ? Colors.white.withValues(alpha: 0.75) : AppColors.textMuted,
                             ),
                           ),
                         ],
@@ -175,7 +167,9 @@ class ChatBubbleWidget extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 4.0),
                 child: FileMessageWidget(
                   mediaUrl: doc.url ?? '',
-                  fileName: (doc.url != null && doc.url!.isNotEmpty) ? doc.url!.fileNameFromUrl : message.message,
+                  fileName: (doc.url != null && doc.url!.isNotEmpty)
+                      ? doc.url!.fileNameFromUrl
+                      : message.message,
                   isMe: isMe,
                 ),
               ),
@@ -194,18 +188,16 @@ class ChatBubbleWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            MediaGridMessageWidget(
-              medias: visualMedias,
-              caption: null,
-              isMe: isMe,
-            ),
+            MediaGridMessageWidget(medias: visualMedias, caption: null, isMe: isMe),
             const SizedBox(height: 6.0),
             ...documentMedias.map(
               (doc) => Padding(
                 padding: const EdgeInsets.only(bottom: 4.0),
                 child: FileMessageWidget(
                   mediaUrl: doc.url ?? '',
-                  fileName: (doc.url != null && doc.url!.isNotEmpty) ? doc.url!.fileNameFromUrl : message.message,
+                  fileName: (doc.url != null && doc.url!.isNotEmpty)
+                      ? doc.url!.fileNameFromUrl
+                      : message.message,
                   isMe: isMe,
                 ),
               ),
@@ -219,11 +211,7 @@ class ChatBubbleWidget extends StatelessWidget {
         );
       }
 
-      return MediaGridMessageWidget(
-        medias: visualMedias,
-        caption: message.message,
-        isMe: isMe,
-      );
+      return MediaGridMessageWidget(medias: visualMedias, caption: message.message, isMe: isMe);
     }
 
     // 2. Text or document/location messages
@@ -231,18 +219,14 @@ class ChatBubbleWidget extends StatelessWidget {
       case ChatMessageMessageType.document:
         final docUrl = message.medias.isNotEmpty
             ? message.medias.first.url
-            : (message.message != null && (message.message!.startsWith('http') || message.message!.isDocumentUrl) ? message.message : null);
+            : (message.message != null &&
+                      (message.message!.startsWith('http') || message.message!.isDocumentUrl)
+                  ? message.message
+                  : null);
         if (docUrl != null && docUrl.isNotEmpty) {
-          return FileMessageWidget(
-            mediaUrl: docUrl,
-            fileName: docUrl.fileNameFromUrl,
-            isMe: isMe,
-          );
+          return FileMessageWidget(mediaUrl: docUrl, fileName: docUrl.fileNameFromUrl, isMe: isMe);
         }
-        return TextMessageWidget(
-          text: message.message ?? '',
-          isMe: isMe,
-        );
+        return TextMessageWidget(text: message.message ?? '', isMe: isMe);
 
       case ChatMessageMessageType.location:
         return LocationMessageWidget(
@@ -256,16 +240,9 @@ class ChatBubbleWidget extends StatelessWidget {
       case ChatMessageMessageType.text:
         final textMsg = message.message ?? '';
         if (textMsg.startsWith('http') && textMsg.isDocumentUrl) {
-          return FileMessageWidget(
-            mediaUrl: textMsg,
-            fileName: textMsg.fileNameFromUrl,
-            isMe: isMe,
-          );
+          return FileMessageWidget(mediaUrl: textMsg, fileName: textMsg.fileNameFromUrl, isMe: isMe);
         }
-        return TextMessageWidget(
-          text: textMsg,
-          isMe: isMe,
-        );
+        return TextMessageWidget(text: textMsg, isMe: isMe);
     }
   }
 }

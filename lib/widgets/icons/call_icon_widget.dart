@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import '../../app/app_assets.dart';
 import '../../app/app_colors.dart';
 
@@ -10,11 +11,7 @@ class CallIconWidget extends StatelessWidget {
   final double size;
   final Color? color;
 
-  const CallIconWidget({
-    super.key,
-    this.size = 20.0,
-    this.color,
-  });
+  const CallIconWidget({super.key, this.size = 20.0, this.color});
 
   @override
   Widget build(BuildContext context) {

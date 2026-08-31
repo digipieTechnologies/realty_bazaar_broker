@@ -3,16 +3,17 @@
 
 import 'dart:convert';
 import 'dart:io' as io;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
-import '../../../../models/property_model.dart';
-import '../../../../models/media_model.dart';
-import '../../../../providers/social/social_provider.dart';
 import '../../../../core/localization/app_localizations.dart';
+import '../../../../models/media_model.dart';
+import '../../../../models/property_model.dart';
+import '../../../../providers/social/social_provider.dart';
 import '../../../../widgets/images/cached_image.dart';
 
 class StepMediaSelection extends StatelessWidget {
@@ -40,12 +41,14 @@ class StepMediaSelection extends StatelessWidget {
     if (existingIndex >= 0) {
       updated.removeAt(existingIndex);
     } else {
-      updated.add(PickedMedia(
-        path: url,
-        name: 'property_media_${index + 1}.jpg',
-        bytes: media.bytes ?? Uint8List(0),
-        type: media.type ?? 'image',
-      ));
+      updated.add(
+        PickedMedia(
+          path: url,
+          name: 'property_media_${index + 1}.jpg',
+          bytes: media.bytes ?? Uint8List(0),
+          type: media.type ?? 'image',
+        ),
+      );
     }
     onMediaSelectionChanged(updated);
   }
@@ -56,12 +59,14 @@ class StepMediaSelection extends StatelessWidget {
     for (final m in allMedias) {
       if (m.url != null && m.url!.isNotEmpty) {
         idx++;
-        updated.add(PickedMedia(
-          path: m.url!,
-          name: 'property_media_$idx.jpg',
-          bytes: m.bytes ?? Uint8List(0),
-          type: m.type ?? 'image',
-        ));
+        updated.add(
+          PickedMedia(
+            path: m.url!,
+            name: 'property_media_$idx.jpg',
+            bytes: m.bytes ?? Uint8List(0),
+            type: m.type ?? 'image',
+          ),
+        );
       }
     }
     onMediaSelectionChanged(updated);
@@ -86,7 +91,8 @@ class StepMediaSelection extends StatelessWidget {
     }
     // 4. If media URL is a normal web image
     final url = media.url ?? '';
-    final isVideoExtension = url.toLowerCase().endsWith('.mp4') || url.toLowerCase().endsWith('.mov') || isVideo;
+    final isVideoExtension =
+        url.toLowerCase().endsWith('.mp4') || url.toLowerCase().endsWith('.mov') || isVideo;
     if (url.startsWith('http') && !isVideoExtension) {
       return CachedImage(url, fit: BoxFit.cover);
     }
@@ -224,12 +230,14 @@ class StepMediaSelection extends StatelessWidget {
                 final media = medias[index];
                 final isSelected = _isMediaSelected(media);
                 final urlLower = media.url?.toLowerCase() ?? '';
-                final isImgExt = urlLower.endsWith('.jpg') ||
+                final isImgExt =
+                    urlLower.endsWith('.jpg') ||
                     urlLower.endsWith('.jpeg') ||
                     urlLower.endsWith('.png') ||
                     urlLower.endsWith('.webp') ||
                     urlLower.endsWith('.gif');
-                final isVideo = !isImgExt &&
+                final isVideo =
+                    !isImgExt &&
                     ((media.type?.toLowerCase() == 'video') ||
                         urlLower.endsWith('.mp4') ||
                         urlLower.endsWith('.mov'));
@@ -251,7 +259,7 @@ class StepMediaSelection extends StatelessWidget {
                                 color: AppColors.primary.withValues(alpha: 0.2),
                                 blurRadius: 8.0,
                                 offset: const Offset(0, 3),
-                              )
+                              ),
                             ]
                           : [],
                     ),
@@ -260,9 +268,7 @@ class StepMediaSelection extends StatelessWidget {
                         // Thumbnail Image/Video Cover
                         ClipRRect(
                           borderRadius: BorderRadius.circular(9.0),
-                          child: SizedBox.expand(
-                            child: _buildMediaThumbnail(media, isVideo),
-                          ),
+                          child: SizedBox.expand(child: _buildMediaThumbnail(media, isVideo)),
                         ),
 
                         // Dimming overlay when selected
@@ -287,11 +293,7 @@ class StepMediaSelection extends StatelessWidget {
                                 color: Colors.black.withValues(alpha: 0.65),
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(
-                                Icons.play_arrow_rounded,
-                                size: 14.0,
-                                color: Colors.white,
-                              ),
+                              child: const Icon(Icons.play_arrow_rounded, size: 14.0, color: Colors.white),
                             ),
                           ),
 
@@ -342,10 +344,7 @@ class StepMediaSelection extends StatelessWidget {
         children: [
           const Icon(Icons.photo_library_outlined, size: 44.0, color: AppColors.textMuted),
           const SizedBox(height: 12.0),
-          Text(
-            'No Listing Media Attached',
-            style: AppTextStyles.body1.copyWith(fontWeight: FontWeight.bold),
-          ),
+          Text('No Listing Media Attached', style: AppTextStyles.body1.copyWith(fontWeight: FontWeight.bold)),
           const SizedBox(height: 4.0),
           Text(
             'No photos or videos are attached to this property listing.',
@@ -362,11 +361,7 @@ class VideoThumbnailWidget extends StatefulWidget {
   final String videoUrl;
   final Uint8List? videoBytes;
 
-  const VideoThumbnailWidget({
-    super.key,
-    required this.videoUrl,
-    this.videoBytes,
-  });
+  const VideoThumbnailWidget({super.key, required this.videoUrl, this.videoBytes});
 
   @override
   State<VideoThumbnailWidget> createState() => _VideoThumbnailWidgetState();
@@ -390,8 +385,8 @@ class _VideoThumbnailWidgetState extends State<VideoThumbnailWidget> {
               Uri.parse('data:video/mp4;base64,${base64Encode(widget.videoBytes!)}'),
             )
           : (widget.videoUrl.startsWith('http')
-              ? VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
-              : VideoPlayerController.file(io.File(widget.videoUrl)));
+                ? VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
+                : VideoPlayerController.file(io.File(widget.videoUrl)));
 
       _controller = controller;
       await controller.initialize();
@@ -421,13 +416,7 @@ class _VideoThumbnailWidgetState extends State<VideoThumbnailWidget> {
     if (_hasError) {
       return Container(
         color: AppColors.primary.withValues(alpha: 0.05),
-        child: const Center(
-          child: Icon(
-            Icons.videocam_rounded,
-            color: AppColors.primary,
-            size: 28.0,
-          ),
-        ),
+        child: const Center(child: Icon(Icons.videocam_rounded, color: AppColors.primary, size: 28.0)),
       );
     }
 

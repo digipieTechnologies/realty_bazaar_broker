@@ -21,8 +21,7 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
   late AnimationController _entranceController;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
@@ -32,18 +31,17 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
 
     // 1. Entrance animation (fade & scale up)
-    _entranceController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );
+    _entranceController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000));
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _entranceController, curve: Curves.easeOut),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _entranceController, curve: Curves.easeOut));
 
-    _scaleAnimation = Tween<double>(begin: 0.92, end: 1.0).animate(
-      CurvedAnimation(parent: _entranceController, curve: Curves.easeOutCubic),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 0.92,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _entranceController, curve: Curves.easeOutCubic));
 
     _entranceController.forward();
 
@@ -54,8 +52,15 @@ class _SplashScreenState extends State<SplashScreen>
   void _checkSessionAndRoute() {
     if (!mounted) return;
 
-    final userId = GetStorage().read<String>('user_id');
+    final storage = GetStorage();
+    final userId = storage.read<String>('user_id');
     if (userId != null && userId.isNotEmpty) {
+      final pendingUrl = storage.read<String>(AppRoutes.pendingRedirectKey);
+      if (pendingUrl != null && pendingUrl.isNotEmpty && pendingUrl != '/' && pendingUrl != '/login') {
+        storage.remove(AppRoutes.pendingRedirectKey);
+        context.go(pendingUrl);
+        return;
+      }
       context.go(AppRoutes.home);
     } else {
       context.go(AppRoutes.login);
@@ -119,10 +124,7 @@ class _SplashScreenState extends State<SplashScreen>
                       decoration: BoxDecoration(
                         color: AppColors.surface,
                         shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.primary.withValues(alpha: 0.15),
-                          width: 1.5,
-                        ),
+                        border: Border.all(color: AppColors.primary.withValues(alpha: 0.15), width: 1.5),
                         boxShadow: [
                           BoxShadow(
                             color: AppColors.primary.withValues(alpha: 0.1),
@@ -131,10 +133,7 @@ class _SplashScreenState extends State<SplashScreen>
                           ),
                         ],
                       ),
-                      child: const AppLogo(
-                        size: 84.0,
-                        backgroundColor: Colors.transparent,
-                      ),
+                      child: const AppLogo(size: 84.0, backgroundColor: Colors.transparent),
                     ),
                     const SizedBox(height: 24.0),
 
@@ -153,31 +152,19 @@ class _SplashScreenState extends State<SplashScreen>
 
                     // Subtitle / Platform Pill Badge
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14.0,
-                        vertical: 6.0,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 6.0),
                       decoration: BoxDecoration(
                         color: AppColors.primary.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(20.0),
-                        border: Border.all(
-                          color: AppColors.primary.withValues(alpha: 0.15),
-                          width: 1.0,
-                        ),
+                        border: Border.all(color: AppColors.primary.withValues(alpha: 0.15), width: 1.0),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(
-                            Icons.verified_rounded,
-                            size: 14.0,
-                            color: AppColors.primary,
-                          ),
+                          const Icon(Icons.verified_rounded, size: 14.0, color: AppColors.primary),
                           const SizedBox(width: 6.0),
                           Text(
-                            context
-                                .tr('real_estate_growth_platform')
-                                .toUpperCase(),
+                            context.tr('real_estate_growth_platform').toUpperCase(),
                             style: AppTextStyles.caption.copyWith(
                               color: AppColors.primary,
                               fontWeight: FontWeight.w800,
@@ -209,9 +196,7 @@ class _SplashScreenState extends State<SplashScreen>
                         child: const LinearProgressIndicator(
                           minHeight: 3.0,
                           backgroundColor: AppColors.border,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            AppColors.primary,
-                          ),
+                          valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
                         ),
                       ),
                     ),
@@ -219,11 +204,7 @@ class _SplashScreenState extends State<SplashScreen>
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(
-                          Icons.lock_outline_rounded,
-                          size: 13.0,
-                          color: AppColors.textMuted,
-                        ),
+                        const Icon(Icons.lock_outline_rounded, size: 13.0, color: AppColors.textMuted),
                         const SizedBox(width: 4.0),
                         Text(
                           'Secured & Encrypted Broker Nexus',

@@ -18,12 +18,7 @@ class GrowPlanCardWidget extends StatelessWidget {
   final VoidCallback? onSelect;
   final double? cardWidth;
 
-  const GrowPlanCardWidget({
-    super.key,
-    required this.plan,
-    this.onSelect,
-    this.cardWidth,
-  });
+  const GrowPlanCardWidget({super.key, required this.plan, this.onSelect, this.cardWidth});
 
   /// Format amount to Indian currency: ₹4,499
   String _formatAmount(double amount) {
@@ -36,11 +31,7 @@ class GrowPlanCardWidget extends StatelessWidget {
   /// Returns gradient colors based on plan duration
   List<Color> _getCardGradient() {
     if (plan.isPopular) {
-      return [
-        const Color(0xFF0B1A3B),
-        const Color(0xFF132D5E),
-        const Color(0xFF1A3F7A),
-      ];
+      return [const Color(0xFF0B1A3B), const Color(0xFF132D5E), const Color(0xFF1A3F7A)];
     }
     return [AppColors.surface, AppColors.surface];
   }
@@ -74,18 +65,12 @@ class GrowPlanCardWidget extends StatelessWidget {
           margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
           decoration: BoxDecoration(
             gradient: isPopular
-                ? LinearGradient(
-                    colors: gradient,
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  )
+                ? LinearGradient(colors: gradient, begin: Alignment.topLeft, end: Alignment.bottomRight)
                 : null,
             color: isPopular ? null : AppColors.surface,
             borderRadius: BorderRadius.circular(22.0),
             border: Border.all(
-              color: isPopular
-                  ? AppColors.primary300
-                  : accent.withValues(alpha: 0.22),
+              color: isPopular ? AppColors.primary300 : accent.withValues(alpha: 0.22),
               width: isPopular ? 1.5 : 1.2,
             ),
             boxShadow: [
@@ -113,12 +98,7 @@ class GrowPlanCardWidget extends StatelessWidget {
             ],
           ),
           child: Padding(
-            padding: EdgeInsets.fromLTRB(
-              20.0,
-              isPopular ? 24.0 : 20.0,
-              20.0,
-              20.0,
-            ),
+            padding: EdgeInsets.fromLTRB(20.0, isPopular ? 24.0 : 20.0, 20.0, 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -134,9 +114,7 @@ class GrowPlanCardWidget extends StatelessWidget {
                 Text(
                   plan.description,
                   style: AppTextStyles.caption.copyWith(
-                    color: isPopular
-                        ? AppColors.slate400
-                        : AppColors.textSecondary,
+                    color: isPopular ? AppColors.slate400 : AppColors.textSecondary,
                     height: 1.45,
                   ),
                   maxLines: 3,
@@ -166,9 +144,7 @@ class GrowPlanCardWidget extends StatelessWidget {
                 const SizedBox(height: 16.0),
 
                 // Benefits List
-                Expanded(
-                  child: _buildBenefitsList(context),
-                ),
+                Expanded(child: _buildBenefitsList(context)),
 
                 const SizedBox(height: 16.0),
 
@@ -187,14 +163,9 @@ class GrowPlanCardWidget extends StatelessWidget {
             right: 0,
             child: Center(
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 6.0,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF3B82F6), Color(0xFF2563EB)],
-                  ),
+                  gradient: const LinearGradient(colors: [Color(0xFF3B82F6), Color(0xFF2563EB)]),
                   borderRadius: BorderRadius.circular(20.0),
                   boxShadow: [
                     BoxShadow(
@@ -207,11 +178,7 @@ class GrowPlanCardWidget extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(
-                      Icons.star_rounded,
-                      size: 14.0,
-                      color: Color(0xFFFBBF24),
-                    ),
+                    const Icon(Icons.star_rounded, size: 14.0, color: Color(0xFFFBBF24)),
                     const SizedBox(width: 4.0),
                     Text(
                       context.tr('grow_most_popular'),
@@ -255,33 +222,19 @@ class GrowPlanCardWidget extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: isPopular
             ? LinearGradient(
-                colors: [
-                  Colors.white.withValues(alpha: 0.15),
-                  Colors.white.withValues(alpha: 0.05),
-                ],
+                colors: [Colors.white.withValues(alpha: 0.15), Colors.white.withValues(alpha: 0.05)],
               )
-            : LinearGradient(
-                colors: [
-                  accent.withValues(alpha: 0.12),
-                  accent.withValues(alpha: 0.04),
-                ],
-              ),
+            : LinearGradient(colors: [accent.withValues(alpha: 0.12), accent.withValues(alpha: 0.04)]),
         borderRadius: BorderRadius.circular(30.0),
         border: Border.all(
-          color: isPopular
-              ? Colors.white.withValues(alpha: 0.2)
-              : accent.withValues(alpha: 0.25),
+          color: isPopular ? Colors.white.withValues(alpha: 0.2) : accent.withValues(alpha: 0.25),
           width: 1.0,
         ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            titleIcon,
-            size: 13.0,
-            color: isPopular ? const Color(0xFF93C5FD) : accent,
-          ),
+          Icon(titleIcon, size: 13.0, color: isPopular ? const Color(0xFF93C5FD) : accent),
           const SizedBox(width: 5.0),
           Flexible(
             child: Text(
@@ -341,9 +294,7 @@ class GrowPlanCardWidget extends StatelessWidget {
           Text(
             plan.duration.periodDisplay,
             style: AppTextStyles.body2.copyWith(
-              color: isPopular
-                  ? AppColors.slate400
-                  : AppColors.textMuted,
+              color: isPopular ? AppColors.slate400 : AppColors.textMuted,
               fontWeight: FontWeight.w500,
               fontSize: 13.0,
             ),
@@ -368,25 +319,17 @@ class GrowPlanCardWidget extends StatelessWidget {
               width: 20.0,
               height: 20.0,
               decoration: BoxDecoration(
-                color: isPopular
-                    ? const Color(0xFF10B981).withValues(alpha: 0.15)
-                    : AppColors.successLight,
+                color: isPopular ? const Color(0xFF10B981).withValues(alpha: 0.15) : AppColors.successLight,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
-                Icons.check_rounded,
-                size: 13.0,
-                color: AppColors.success,
-              ),
+              child: const Icon(Icons.check_rounded, size: 13.0, color: AppColors.success),
             ),
             const SizedBox(width: 10.0),
             Expanded(
               child: Text(
                 plan.benefits[index],
                 style: AppTextStyles.body2.copyWith(
-                  color: isPopular
-                      ? const Color(0xFFE2E8F0)
-                      : AppColors.textPrimary,
+                  color: isPopular ? const Color(0xFFE2E8F0) : AppColors.textPrimary,
                   fontSize: 13.0,
                   height: 1.4,
                 ),

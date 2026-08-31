@@ -2,6 +2,7 @@
 // Purpose: Text message bubble component supporting multiline text.
 
 import 'package:flutter/material.dart';
+
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
 
@@ -9,11 +10,7 @@ class TextMessageWidget extends StatelessWidget {
   final String text;
   final bool isMe;
 
-  const TextMessageWidget({
-    super.key,
-    required this.text,
-    required this.isMe,
-  });
+  const TextMessageWidget({super.key, required this.text, required this.isMe});
 
   @override
   Widget build(BuildContext context) {

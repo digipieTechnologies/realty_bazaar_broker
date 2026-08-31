@@ -2,6 +2,7 @@
 // Purpose: Reusable shimmer placeholder loading widget for the Social Posts feed in mobile list & web grid layouts.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import 'app_shimmer_container.dart';
 
@@ -9,11 +10,7 @@ class SocialPostListShimmerWidget extends StatelessWidget {
   final bool isMobile;
   final int count;
 
-  const SocialPostListShimmerWidget({
-    super.key,
-    this.isMobile = false,
-    this.count = 4,
-  });
+  const SocialPostListShimmerWidget({super.key, this.isMobile = false, this.count = 4});
 
   Widget _buildShimmerCard() {
     return Container(
@@ -24,11 +21,7 @@ class SocialPostListShimmerWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
         border: Border.all(color: AppColors.border, width: 1.0),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 8, offset: const Offset(0, 2)),
         ],
       ),
       child: Column(
@@ -41,31 +34,19 @@ class SocialPostListShimmerWidget extends StatelessWidget {
             child: Stack(
               children: const [
                 Positioned.fill(
-                  child: AppShimmerContainer(
-                    width: double.infinity,
-                    height: 230.0,
-                    borderRadius: 0.0,
-                  ),
+                  child: AppShimmerContainer(width: double.infinity, height: 230.0, borderRadius: 0.0),
                 ),
                 // Top-Right Date Pill Overlay Shimmer
                 Positioned(
                   top: 10.0,
                   right: 10.0,
-                  child: AppShimmerContainer(
-                    width: 70.0,
-                    height: 22.0,
-                    borderRadius: 20.0,
-                  ),
+                  child: AppShimmerContainer(width: 70.0, height: 22.0, borderRadius: 20.0),
                 ),
                 // Bottom-Right Open Icon Pill Overlay Shimmer
                 Positioned(
                   bottom: 10.0,
                   right: 10.0,
-                  child: AppShimmerContainer(
-                    width: 28.0,
-                    height: 28.0,
-                    borderRadius: 14.0,
-                  ),
+                  child: AppShimmerContainer(width: 28.0, height: 28.0, borderRadius: 14.0),
                 ),
               ],
             ),

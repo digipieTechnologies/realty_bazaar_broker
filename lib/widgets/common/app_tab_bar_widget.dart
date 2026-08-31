@@ -2,6 +2,7 @@
 // Purpose: Generic reusable segment tab bar widget supporting title, nullable asset image/icon, soft selected color styling, and responsive layouts.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
 
@@ -12,13 +13,7 @@ class AppTabItem<T> {
   final IconData? icon;
   final Color? brandColor;
 
-  const AppTabItem({
-    required this.key,
-    required this.title,
-    this.assetIcon,
-    this.icon,
-    this.brandColor,
-  });
+  const AppTabItem({required this.key, required this.title, this.assetIcon, this.icon, this.brandColor});
 }
 
 class AppTabBarWidget<T> extends StatelessWidget {
@@ -59,9 +54,7 @@ class AppTabBarWidget<T> extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.0),
           border: Border.all(color: AppColors.border, width: 1.0),
         ),
-        child: Row(
-          children: tabButtons.map((btn) => Expanded(child: btn)).toList(),
-        ),
+        child: Row(children: tabButtons.map((btn) => Expanded(child: btn)).toList()),
       );
     }
 
@@ -72,10 +65,7 @@ class AppTabBarWidget<T> extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
         border: Border.all(color: AppColors.border, width: 1.0),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: tabButtons,
-      ),
+      child: Row(mainAxisSize: MainAxisSize.min, children: tabButtons),
     );
   }
 
@@ -106,10 +96,7 @@ class AppTabBarWidget<T> extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(12.0),
         child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: isMobile ? 8.0 : 16.0,
-            vertical: 8.0,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: isMobile ? 8.0 : 16.0, vertical: 8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: isMobile ? MainAxisSize.max : MainAxisSize.min,

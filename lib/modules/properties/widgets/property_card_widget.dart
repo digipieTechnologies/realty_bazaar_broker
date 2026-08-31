@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../models/property_enums.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_routes.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/localization/property_localizer.dart';
+import '../../../models/property_enums.dart';
 import '../../../models/property_model.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../providers/property/property_provider.dart';
 import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/buttons/app_popup_menu_button.dart';
 import '../../../widgets/common/app_card_container.dart';
+import '../../../widgets/common/currency_text.dart';
 import '../../../widgets/dialogs/app_dialog.dart';
 import '../../../widgets/images/cached_image.dart';
 import '../../../widgets/toast/app_toast.dart';
@@ -58,9 +59,9 @@ class PropertyCardWidget extends StatelessWidget {
 
   Widget _buildDashboardMinimalCard(BuildContext context) {
     final imageUrl = property.medias.isNotEmpty ? property.medias.first.url : null;
-    final addressText = property.address?.fullAddress ??
+    final addressText =
+        property.address?.fullAddress ??
         '${property.address?.city ?? "Surat"}, ${property.address?.state ?? "Gujarat"}';
-    final formattedPrice = _formatCurrency(property.price);
 
     return AppCardContainer(
       borderRadius: 14.0,
@@ -78,9 +79,7 @@ class PropertyCardWidget extends StatelessWidget {
                 height: 120.0,
                 width: double.infinity,
                 fit: BoxFit.cover,
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(14.0),
-                ),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(14.0)),
               ),
               // Photo Counter Badge
               Positioned(
@@ -94,11 +93,7 @@ class PropertyCardWidget extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      const Icon(
-                        Icons.photo_camera_outlined,
-                        color: Colors.white,
-                        size: 11.0,
-                      ),
+                      const Icon(Icons.photo_camera_outlined, color: Colors.white, size: 11.0),
                       const SizedBox(width: 3.0),
                       Text(
                         '${property.medias.length}',
@@ -136,8 +131,8 @@ class PropertyCardWidget extends StatelessWidget {
                 const SizedBox(height: 2.0),
 
                 // Price
-                Text(
-                  formattedPrice,
+                CurrencyText(
+                  amount: property.price,
                   style: AppTextStyles.heading3.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppColors.primary,
@@ -161,9 +156,9 @@ class PropertyCardWidget extends StatelessWidget {
   // -----------------------------------------------------------------------------
   Widget _buildWebLayout(BuildContext context) {
     final imageUrl = property.medias.isNotEmpty ? property.medias.first.url : null;
-    final addressText = property.address?.fullAddress ??
+    final addressText =
+        property.address?.fullAddress ??
         '${property.address?.city ?? "Surat"}, ${property.address?.state ?? "Gujarat"}';
-    final formattedPrice = _formatCurrency(property.price);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
@@ -218,10 +213,7 @@ class PropertyCardWidget extends StatelessWidget {
                             isOutline: true,
                           ),
                           _buildChip(
-                            label: PropertyLocalizer.getLocalizedPropertyType(
-                              context,
-                              property.propertyType,
-                            ),
+                            label: PropertyLocalizer.getLocalizedPropertyType(context, property.propertyType),
                             color: AppColors.textSecondary,
                             isOutline: true,
                           ),
@@ -270,9 +262,7 @@ class PropertyCardWidget extends StatelessWidget {
               width: 180.0,
               padding: const EdgeInsets.only(left: 16.0),
               decoration: const BoxDecoration(
-                border: Border(
-                  left: BorderSide(color: AppColors.border, width: 1.0),
-                ),
+                border: Border(left: BorderSide(color: AppColors.border, width: 1.0)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -282,8 +272,8 @@ class PropertyCardWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       const SizedBox(height: 16.0),
-                      Text(
-                        formattedPrice,
+                      CurrencyText(
+                        amount: property.price,
                         style: AppTextStyles.heading2.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppColors.primary,
@@ -295,18 +285,12 @@ class PropertyCardWidget extends StatelessWidget {
                         property.listingType == ListingType.rent
                             ? context.tr('per_month')
                             : context.tr('total_price'),
-                        style: AppTextStyles.caption.copyWith(
-                          color: AppColors.textSecondary,
-                          fontSize: 12.0,
-                        ),
+                        style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary, fontSize: 12.0),
                       ),
                       const SizedBox(height: 6.0),
                       Text(
                         '₹ ${(property.price / (property.area > 0 ? property.area : 1)).toStringAsFixed(0)} / ${PropertyLocalizer.getLocalizedAreaUnit(context, property.areaUnit)}',
-                        style: AppTextStyles.caption.copyWith(
-                          color: AppColors.textMuted,
-                          fontSize: 11.0,
-                        ),
+                        style: AppTextStyles.caption.copyWith(color: AppColors.textMuted, fontSize: 11.0),
                       ),
                     ],
                   ),
@@ -342,9 +326,9 @@ class PropertyCardWidget extends StatelessWidget {
   // -----------------------------------------------------------------------------
   Widget _buildMobileLayout(BuildContext context) {
     final imageUrl = property.medias.isNotEmpty ? property.medias.first.url : null;
-    final addressText = property.address?.fullAddress ??
+    final addressText =
+        property.address?.fullAddress ??
         '${property.address?.city ?? "Surat"}, ${property.address?.state ?? "Gujarat"}';
-    final formattedPrice = _formatCurrency(property.price);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
@@ -361,37 +345,23 @@ class PropertyCardWidget extends StatelessWidget {
                   height: 180.0,
                   width: double.infinity,
                   fit: BoxFit.cover,
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(16.0),
-                  ),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
                 ),
                 Positioned(
                   bottom: 10,
                   right: 10,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 4.0,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                     decoration: BoxDecoration(
                       color: Colors.black.withValues(alpha: 0.65),
                       borderRadius: BorderRadius.circular(6.0),
                     ),
                     child: Row(
                       children: [
-                        const Icon(
-                          Icons.photo_camera_outlined,
-                          color: Colors.white,
-                          size: 12.0,
-                        ),
+                        const Icon(Icons.photo_camera_outlined, color: Colors.white, size: 12.0),
                         const SizedBox(width: 4.0),
                         Text(
-                          context.tr(
-                            'photos_count',
-                            arguments: {
-                              'count': '${property.medias.length}',
-                            },
-                          ),
+                          context.tr('photos_count', arguments: {'count': '${property.medias.length}'}),
                           style: AppTextStyles.caption.copyWith(
                             color: Colors.white,
                             fontSize: 11.0,
@@ -428,8 +398,8 @@ class PropertyCardWidget extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Text(
-                            formattedPrice,
+                          CurrencyText(
+                            amount: property.price,
                             style: AppTextStyles.heading3.copyWith(
                               fontWeight: FontWeight.bold,
                               color: AppColors.primary,
@@ -440,10 +410,7 @@ class PropertyCardWidget extends StatelessWidget {
                             property.listingType == ListingType.rent
                                 ? context.tr('per_month')
                                 : context.tr('total_price'),
-                            style: AppTextStyles.caption.copyWith(
-                              color: AppColors.textMuted,
-                              fontSize: 10.0,
-                            ),
+                            style: AppTextStyles.caption.copyWith(color: AppColors.textMuted, fontSize: 10.0),
                           ),
                         ],
                       ),
@@ -465,10 +432,7 @@ class PropertyCardWidget extends StatelessWidget {
                         isOutline: true,
                       ),
                       _buildChip(
-                        label: PropertyLocalizer.getLocalizedPropertyType(
-                          context,
-                          property.propertyType,
-                        ),
+                        label: PropertyLocalizer.getLocalizedPropertyType(context, property.propertyType),
                         color: AppColors.textSecondary,
                         isOutline: true,
                       ),
@@ -513,19 +477,12 @@ class PropertyCardWidget extends StatelessWidget {
   Widget _buildAddressRow(String addressText, {double iconSize = 14.0, double fontSize = 12.0}) {
     return Row(
       children: [
-        Icon(
-          Icons.location_on_outlined,
-          size: iconSize,
-          color: AppColors.primary,
-        ),
+        Icon(Icons.location_on_outlined, size: iconSize, color: AppColors.primary),
         const SizedBox(width: 4.0),
         Expanded(
           child: Text(
             addressText,
-            style: AppTextStyles.body2.copyWith(
-              color: AppColors.textSecondary,
-              fontSize: fontSize,
-            ),
+            style: AppTextStyles.body2.copyWith(color: AppColors.textSecondary, fontSize: fontSize),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -534,12 +491,7 @@ class PropertyCardWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildImageSection(
-    BuildContext context,
-    String? imageUrl,
-    double width,
-    double height,
-  ) {
+  Widget _buildImageSection(BuildContext context, String? imageUrl, double width, double height) {
     return Stack(
       children: [
         CachedImage(
@@ -553,29 +505,17 @@ class PropertyCardWidget extends StatelessWidget {
           bottom: 8,
           right: 8,
           child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 8.0,
-              vertical: 4.0,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
             decoration: BoxDecoration(
               color: Colors.black.withValues(alpha: 0.65),
               borderRadius: BorderRadius.circular(6.0),
             ),
             child: Row(
               children: [
-                const Icon(
-                  Icons.photo_camera_outlined,
-                  color: Colors.white,
-                  size: 12.0,
-                ),
+                const Icon(Icons.photo_camera_outlined, color: Colors.white, size: 12.0),
                 const SizedBox(width: 4.0),
                 Text(
-                  context.tr(
-                    'photos_count',
-                    arguments: {
-                      'count': '${property.medias.length}',
-                    },
-                  ),
+                  context.tr('photos_count', arguments: {'count': '${property.medias.length}'}),
                   style: AppTextStyles.caption.copyWith(
                     color: Colors.white,
                     fontSize: 11.0,
@@ -662,11 +602,7 @@ class PropertyCardWidget extends StatelessWidget {
     }
   }
 
-  Widget _buildChip({
-    required String label,
-    required Color color,
-    bool isOutline = false,
-  }) {
+  Widget _buildChip({required String label, required Color color, bool isOutline = false}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
       decoration: BoxDecoration(
@@ -683,15 +619,5 @@ class PropertyCardWidget extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _formatCurrency(double amount) {
-    if (amount >= 10000000) {
-      return '₹ ${(amount / 10000000).toStringAsFixed(2)} Cr';
-    } else if (amount >= 100000) {
-      return '₹ ${(amount / 100000).toStringAsFixed(2)} Lakh';
-    } else {
-      return '₹ ${amount.toStringAsFixed(0)}';
-    }
   }
 }

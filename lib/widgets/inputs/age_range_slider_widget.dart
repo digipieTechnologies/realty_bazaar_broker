@@ -2,10 +2,10 @@
 // Purpose: Modern reusable Age Range slider component displaying selected range values.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
 import '../../core/localization/app_localizations.dart';
-
 import 'full_width_range_slider_track_shape.dart';
 
 class AgeRangeSliderWidget extends StatelessWidget {
@@ -68,10 +68,7 @@ class AgeRangeSliderWidget extends StatelessWidget {
             thumbColor: AppColors.primary,
             overlayColor: AppColors.primary.withValues(alpha: 0.2),
             trackHeight: 4.0,
-            rangeThumbShape: const RoundRangeSliderThumbShape(
-              enabledThumbRadius: 9.0,
-              elevation: 3,
-            ),
+            rangeThumbShape: const RoundRangeSliderThumbShape(enabledThumbRadius: 9.0, elevation: 3),
           ),
           child: RangeSlider(
             values: values,

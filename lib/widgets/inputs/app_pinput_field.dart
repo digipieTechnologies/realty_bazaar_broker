@@ -35,10 +35,7 @@ class AppPinputField extends StatelessWidget {
     final defaultPinTheme = PinTheme(
       width: 48.0,
       height: 56.0,
-      textStyle: AppTextStyles.heading3.copyWith(
-        color: AppColors.textPrimary,
-        fontWeight: FontWeight.bold,
-      ),
+      textStyle: AppTextStyles.heading3.copyWith(color: AppColors.textPrimary, fontWeight: FontWeight.bold),
       decoration: BoxDecoration(
         color: AppColors.surfaceLight,
         borderRadius: BorderRadius.circular(12.0),
@@ -80,19 +77,13 @@ class AppPinputField extends StatelessWidget {
       validator: validator,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       keyboardType: TextInputType.number,
-      inputFormatters: [
-        FilteringTextInputFormatter.digitsOnly,
-      ],
+      autofillHints: const [AutofillHints.oneTimeCode],
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       hapticFeedbackType: HapticFeedbackType.lightImpact,
       cursor: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Container(
-            margin: const EdgeInsets.only(bottom: 9),
-            width: 18,
-            height: 2,
-            color: AppColors.primary,
-          ),
+          Container(margin: const EdgeInsets.only(bottom: 9), width: 18, height: 2, color: AppColors.primary),
         ],
       ),
     );

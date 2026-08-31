@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
 import 'app_card_container.dart';
@@ -12,10 +13,7 @@ class AppTableContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppCardContainer(
-      borderRadius: 16.0,
-      child: child,
-    );
+    return AppCardContainer(borderRadius: 16.0, child: child);
   }
 }
 
@@ -25,11 +23,7 @@ class AppTableColumnDef {
   final int flex;
   final Alignment alignment;
 
-  const AppTableColumnDef({
-    required this.title,
-    this.flex = 1,
-    this.alignment = Alignment.centerLeft,
-  });
+  const AppTableColumnDef({required this.title, this.flex = 1, this.alignment = Alignment.centerLeft});
 }
 
 /// Themed header row for desktop table layout.
@@ -37,11 +31,7 @@ class AppTableHeaderRow extends StatelessWidget {
   final List<AppTableColumnDef> columns;
   final double endSpacing;
 
-  const AppTableHeaderRow({
-    super.key,
-    required this.columns,
-    this.endSpacing = 40.0,
-  });
+  const AppTableHeaderRow({super.key, required this.columns, this.endSpacing = 40.0});
 
   @override
   Widget build(BuildContext context) {
@@ -86,11 +76,7 @@ class AppTableSearchField extends StatelessWidget {
   final ValueChanged<String>? onSearchChanged;
   final String hintText;
 
-  const AppTableSearchField({
-    super.key,
-    this.onSearchChanged,
-    this.hintText = 'Search...',
-  });
+  const AppTableSearchField({super.key, this.onSearchChanged, this.hintText = 'Search...'});
 
   @override
   Widget build(BuildContext context) {
@@ -107,11 +93,7 @@ class AppTableSearchField extends StatelessWidget {
           isDense: true,
           contentPadding: const EdgeInsets.symmetric(vertical: 10.0),
           hintText: hintText,
-          prefixIcon: const Icon(
-            Icons.search_rounded,
-            size: 18.0,
-            color: AppColors.textMuted,
-          ),
+          prefixIcon: const Icon(Icons.search_rounded, size: 18.0, color: AppColors.textMuted),
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,

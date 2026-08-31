@@ -16,11 +16,7 @@ class GrowPlanCarouselWidget extends StatefulWidget {
   final List<SubscriptionPlanModel> plans;
   final Function(SubscriptionPlanModel)? onSelectPlan;
 
-  const GrowPlanCarouselWidget({
-    super.key,
-    required this.plans,
-    this.onSelectPlan,
-  });
+  const GrowPlanCarouselWidget({super.key, required this.plans, this.onSelectPlan});
 
   @override
   State<GrowPlanCarouselWidget> createState() => _GrowPlanCarouselWidgetState();
@@ -28,15 +24,13 @@ class GrowPlanCarouselWidget extends StatefulWidget {
 
 class _GrowPlanCarouselWidgetState extends State<GrowPlanCarouselWidget> {
   int _currentIndex = 0;
-  final CarouselSliderController _carouselController =
-      CarouselSliderController();
+  final CarouselSliderController _carouselController = CarouselSliderController();
 
   @override
   void initState() {
     super.initState();
     // Default to popular plan index
-    final popularIndex =
-        widget.plans.indexWhere((p) => p.isPopular);
+    final popularIndex = widget.plans.indexWhere((p) => p.isPopular);
     if (popularIndex != -1) {
       _currentIndex = popularIndex;
     }
@@ -63,7 +57,7 @@ class _GrowPlanCarouselWidgetState extends State<GrowPlanCarouselWidget> {
   Widget _buildCarouselLayout({required double maxWidth}) {
     final bool isMobile = maxWidth < 600;
     final bool isTablet = maxWidth >= 600 && maxWidth < 950;
-    
+
     // Smooth viewportFraction based on available screen width
     double viewportFraction = 0.82;
     if (isTablet) {
@@ -124,9 +118,7 @@ class _GrowPlanCarouselWidgetState extends State<GrowPlanCarouselWidget> {
         children: List.generate(widget.plans.length, (index) {
           return Expanded(
             child: Padding(
-              padding: EdgeInsets.only(
-                right: index < widget.plans.length - 1 ? spacing : 0,
-              ),
+              padding: EdgeInsets.only(right: index < widget.plans.length - 1 ? spacing : 0),
               child: SizedBox(
                 height: 520.0,
                 child: GrowPlanCardWidget(
@@ -161,9 +153,7 @@ class _GrowPlanCarouselWidgetState extends State<GrowPlanCarouselWidget> {
             height: 8.0,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4.0),
-              color: isActive
-                  ? AppColors.primary
-                  : AppColors.border,
+              color: isActive ? AppColors.primary : AppColors.border,
               boxShadow: isActive
                   ? [
                       BoxShadow(

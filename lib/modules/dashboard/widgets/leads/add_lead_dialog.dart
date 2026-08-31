@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
 import '../../../../app/app_utils.dart';
@@ -12,9 +13,9 @@ import '../../../../core/supabase/supabase_config.dart';
 import '../../../../models/social_lead_model.dart';
 import '../../../../providers/auth/auth_provider.dart';
 import '../../../../widgets/buttons/app_button.dart';
+import '../../../../widgets/dialogs/app_base_dialog.dart';
 import '../../../../widgets/inputs/app_textfield.dart';
 import '../../../../widgets/toast/app_toast.dart';
-import '../../../../widgets/dialogs/app_base_dialog.dart';
 
 class AddLeadDialog extends StatefulWidget {
   const AddLeadDialog({super.key});
@@ -160,20 +161,14 @@ class _AddLeadDialogState extends State<AddLeadDialog> {
               keyboardType: TextInputType.phone,
               validator: _validatePhone,
               textInputAction: TextInputAction.next,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(10),
-              ],
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)],
               prefixIcon: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(width: 12.0),
                   const Icon(Icons.phone_outlined, size: 20.0, color: AppColors.primary),
                   const SizedBox(width: 8.0),
-                  Text(
-                    '+91 ',
-                    style: AppTextStyles.textField.copyWith(fontWeight: FontWeight.bold),
-                  ),
+                  Text('+91 ', style: AppTextStyles.textField.copyWith(fontWeight: FontWeight.bold)),
                   Container(width: 1.0, height: 16.0, color: AppColors.border),
                   const SizedBox(width: 12.0),
                 ],

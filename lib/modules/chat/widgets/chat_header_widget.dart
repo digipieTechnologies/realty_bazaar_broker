@@ -2,6 +2,7 @@
 // Purpose: Standalone reusable chat header widget displaying title, subtitle/property, status badge, and close button.
 
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 
@@ -27,9 +28,7 @@ class ChatHeaderWidget extends StatelessWidget implements PreferredSizeWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       decoration: const BoxDecoration(
         color: AppColors.surface,
-        border: Border(
-          bottom: BorderSide(color: AppColors.border, width: 1.0),
-        ),
+        border: Border(bottom: BorderSide(color: AppColors.border, width: 1.0)),
       ),
       child: Row(
         children: [
@@ -40,11 +39,7 @@ class ChatHeaderWidget extends StatelessWidget implements PreferredSizeWidget {
                   color: AppColors.primary.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
-                  Icons.chat_bubble_outline_rounded,
-                  color: AppColors.primary,
-                  size: 20.0,
-                ),
+                child: const Icon(Icons.chat_bubble_outline_rounded, color: AppColors.primary, size: 20.0),
               ),
           const SizedBox(width: 12.0),
           Expanded(
@@ -62,10 +57,7 @@ class ChatHeaderWidget extends StatelessWidget implements PreferredSizeWidget {
                   const SizedBox(height: 2.0),
                   Text(
                     subtitle!,
-                    style: AppTextStyles.caption.copyWith(
-                      fontSize: 11.5,
-                      color: AppColors.textMuted,
-                    ),
+                    style: AppTextStyles.caption.copyWith(fontSize: 11.5, color: AppColors.textMuted),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),

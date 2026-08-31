@@ -2,9 +2,10 @@
 // Purpose: Unified, robust image caching widget handling network URLs, local image files, asset images, memory bytes, and video file fallbacks cleanly without raw decoding exceptions.
 
 import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../app/app_assets.dart';
 import '../../app/app_colors.dart';
@@ -48,25 +49,20 @@ class CachedImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget defaultFallback = errorWidget ??
+    final Widget defaultFallback =
+        errorWidget ??
         Container(
           height: height,
           width: width,
-          decoration: BoxDecoration(
-            color: backgroundColor ?? Colors.transparent,
-            borderRadius: borderRadius,
-          ),
+          decoration: BoxDecoration(color: backgroundColor ?? Colors.transparent, borderRadius: borderRadius),
           child: Center(
             child: Image.asset(
               placeholder ?? AppAssets.logoTransparent,
               height: height,
               width: width,
               fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) => const Icon(
-                Icons.image_not_supported_outlined,
-                color: AppColors.textMuted,
-                size: 28.0,
-              ),
+              errorBuilder: (context, error, stackTrace) =>
+                  const Icon(Icons.image_not_supported_outlined, color: AppColors.textMuted, size: 28.0),
             ),
           ),
         );
@@ -124,13 +120,7 @@ class CachedImage extends StatelessWidget {
                 end: Alignment.bottomRight,
               ),
             ),
-            child: const Center(
-              child: Icon(
-                Icons.videocam_rounded,
-                color: Colors.white70,
-                size: 30.0,
-              ),
-            ),
+            child: const Center(child: Icon(Icons.videocam_rounded, color: Colors.white70, size: 30.0)),
           );
         }
 
@@ -154,15 +144,10 @@ class CachedImage extends StatelessWidget {
       height: height,
       width: width,
       decoration: BoxDecoration(
-        border: borderColor != null
-            ? Border.all(color: borderColor!, width: borderWidth)
-            : null,
+        border: borderColor != null ? Border.all(color: borderColor!, width: borderWidth) : null,
         borderRadius: borderRadius,
       ),
-      child: ClipRRect(
-        borderRadius: borderRadius,
-        child: content,
-      ),
+      child: ClipRRect(borderRadius: borderRadius, child: content),
     );
   }
 }

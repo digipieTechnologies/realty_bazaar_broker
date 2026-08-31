@@ -2,6 +2,7 @@
 // Purpose: Reusable popover dropdown filter button using Overlay portals to avoid standard dialogues.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
 import '../buttons/app_button.dart';
@@ -111,11 +112,9 @@ class _AppFilterButtonState extends State<AppFilterButton> {
             GestureDetector(
               onTap: _closePopup,
               behavior: HitTestBehavior.translucent,
-              child: Container(
-                color: Colors.transparent,
-              ),
+              child: Container(color: Colors.transparent),
             ),
-            
+
             // Positioned follower right below the anchor
             CompositedTransformFollower(
               link: _layerLink,
@@ -168,7 +167,7 @@ class _AppFilterButtonState extends State<AppFilterButton> {
                           ),
                         ),
                         const Divider(height: 1.0, thickness: 1.0, color: AppColors.border),
-                        
+
                         // Body: Custom children widgets
                         Padding(
                           padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
@@ -241,10 +240,7 @@ class _AppFilterButtonState extends State<AppFilterButton> {
         decoration: BoxDecoration(
           color: _isOpen ? AppColors.primary.withValues(alpha: 0.08) : AppColors.surface,
           borderRadius: BorderRadius.circular(10.0),
-          border: Border.all(
-            color: _isOpen ? AppColors.primary : AppColors.border,
-            width: 1.0,
-          ),
+          border: Border.all(color: _isOpen ? AppColors.primary : AppColors.border, width: 1.0),
         ),
         child: InkWell(
           onTap: _togglePopup,

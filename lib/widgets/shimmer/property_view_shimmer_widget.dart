@@ -2,6 +2,7 @@
 // Purpose: Dedicated shimmer loading placeholder for ViewPropertyDialog detailing media gallery, specs, location, and amenities.
 
 import 'package:flutter/material.dart';
+
 import 'app_shimmer_container.dart';
 
 class PropertyViewShimmerWidget extends StatelessWidget {
@@ -14,10 +15,7 @@ class PropertyViewShimmerWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         // 1. Media Gallery Shimmer Placeholder
-        const AppShimmerContainer(
-          height: 240.0,
-          borderRadius: 16.0,
-        ),
+        const AppShimmerContainer(height: 240.0, borderRadius: 16.0),
         const SizedBox(height: 20.0),
 
         // 2. Badges Row Shimmer

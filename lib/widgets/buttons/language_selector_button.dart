@@ -35,11 +35,7 @@ class LanguageSelectorButton extends StatelessWidget {
         ),
         child: Row(
           children: [
-            const Icon(
-              Icons.translate_rounded,
-              size: 20.0,
-              color: AppColors.textSecondary,
-            ),
+            const Icon(Icons.translate_rounded, size: 20.0, color: AppColors.textSecondary),
             const SizedBox(width: 12.0),
             Expanded(
               child: Column(
@@ -70,11 +66,7 @@ class LanguageSelectorButton extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(
-              Icons.chevron_right_rounded,
-              size: 18.0,
-              color: AppColors.textMuted,
-            ),
+            const Icon(Icons.chevron_right_rounded, size: 18.0, color: AppColors.textMuted),
           ],
         ),
       ),

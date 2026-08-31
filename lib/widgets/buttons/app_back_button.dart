@@ -2,6 +2,7 @@
 // Purpose: Modular reusable App Back Button widget with consistent size, icon, mouse cursor, tooltip, and pop action across the app.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 
 class AppBackButton extends StatelessWidget {
@@ -25,11 +26,7 @@ class AppBackButton extends StatelessWidget {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: IconButton(
-        icon: Icon(
-          icon,
-          color: effectiveColor,
-          size: size,
-        ),
+        icon: Icon(icon, color: effectiveColor, size: size),
         tooltip: MaterialLocalizations.of(context).backButtonTooltip,
         onPressed: () {
           if (onPressed != null) {

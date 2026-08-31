@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
@@ -73,10 +74,7 @@ class _TargetingSuggestionsWidgetState extends State<TargetingSuggestionsWidget>
         const SizedBox(height: 4.0),
         Text(
           context.tr('targeting_suggestions_desc'),
-          style: AppTextStyles.caption.copyWith(
-            fontSize: 12.0,
-            color: AppColors.textMuted,
-          ),
+          style: AppTextStyles.caption.copyWith(fontSize: 12.0, color: AppColors.textMuted),
         ),
         const SizedBox(height: 12.0),
 
@@ -100,15 +98,9 @@ class _TargetingSuggestionsWidgetState extends State<TargetingSuggestionsWidget>
             style: AppTextStyles.body2.copyWith(fontSize: 13.5),
             decoration: InputDecoration(
               hintText: context.tr('targeting_suggestions_placeholder'),
-              hintStyle: AppTextStyles.body2.copyWith(
-                color: AppColors.textMuted,
-                fontSize: 13.0,
-              ),
+              hintStyle: AppTextStyles.body2.copyWith(color: AppColors.textMuted, fontSize: 13.0),
               border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 14.0,
-              ),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
             ),
           ),
         ),
@@ -120,10 +112,7 @@ class _TargetingSuggestionsWidgetState extends State<TargetingSuggestionsWidget>
             spacing: 6.0,
             runSpacing: 6.0,
             children: widget.suggestions.map((tag) {
-              return AppTagChip(
-                label: tag,
-                onDelete: () => _removeSuggestion(tag),
-              );
+              return AppTagChip(label: tag, onDelete: () => _removeSuggestion(tag));
             }).toList(),
           ),
         ],

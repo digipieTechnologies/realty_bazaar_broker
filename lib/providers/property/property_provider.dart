@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../core/services/clarity_service.dart';
 import '../../core/supabase/supabase_config.dart';
 import '../../models/address_model.dart';
@@ -59,10 +60,8 @@ class PropertyProvider extends ChangeNotifier {
       );
 
       if (response != null) {
-        final Map<String, dynamic> resMap = response is Map<String, dynamic>
-            ? response
-            : {};
-        
+        final Map<String, dynamic> resMap = response is Map<String, dynamic> ? response : {};
+
         if (resMap['success'] == true && resMap['data'] is List) {
           final rawList = resMap['data'] as List;
           _properties = rawList.map((json) => PropertyModel.fromJson(json)).toList();
@@ -118,22 +117,14 @@ class PropertyProvider extends ChangeNotifier {
           final hasMore = pagination['has_more'] as bool? ?? false;
           final totalItems = int.tryParse(pagination['total_items']?.toString() ?? '0') ?? properties.length;
 
-          return {
-            'properties': properties,
-            'hasMore': hasMore,
-            'totalItems': totalItems,
-          };
+          return {'properties': properties, 'hasMore': hasMore, 'totalItems': totalItems};
         }
       }
     } catch (e) {
       debugPrint('[PropertyProvider] Error fetching properties page: $e');
     }
 
-    return {
-      'properties': <PropertyModel>[],
-      'hasMore': false,
-      'totalItems': 0,
-    };
+    return {'properties': <PropertyModel>[], 'hasMore': false, 'totalItems': 0};
   }
 
   Future<PropertyModel?> saveProperty(
@@ -146,24 +137,19 @@ class PropertyProvider extends ChangeNotifier {
       debugPrint('[PropertyProvider] saveProperty payload: $payload');
       final response = await SupabaseConfig.client.rpc(
         'publish_property',
-        params: {
-          'p_property': payload,
-          'p_is_edit': isEdit,
-        },
+        params: {'p_property': payload, 'p_is_edit': isEdit},
       );
 
       if (response != null) {
-        final Map<String, dynamic> data = response is Map<String, dynamic>
-            ? response
-            : {};
+        final Map<String, dynamic> data = response is Map<String, dynamic> ? response : {};
         if (data['success'] == true) {
           ClarityService.instance.sendCustomEvent(
             isEdit ? 'feature_property_updated' : 'feature_property_created',
           );
 
           if (authProvider != null) {
-            final currentSetup = authProvider.userProfile?.brokerId?.setupDetails ??
-                const BrokerSetupDetailsModel();
+            final currentSetup =
+                authProvider.userProfile?.brokerId?.setupDetails ?? const BrokerSetupDetailsModel();
             if (!currentSetup.propertiesImported) {
               final updatedSetup = currentSetup.copyWith(propertiesImported: true);
               authProvider.updateLocalBrokerSetupDetails(setupDetails: updatedSetup);
@@ -202,9 +188,7 @@ class PropertyProvider extends ChangeNotifier {
     try {
       final response = await SupabaseConfig.client.functions.invoke(
         'generate-caption',
-        body: {
-          'propertyId': propertyId,
-        },
+        body: {'propertyId': propertyId},
       );
 
       if (response.status == 200 && response.data != null) {
@@ -220,29 +204,49 @@ class PropertyProvider extends ChangeNotifier {
     }
   }
 
-  Future<PropertyModel?> fetchPropertyById(String id) async {
+  /// Fetches a property by either UUID [id] or [property_code].
+  Future<PropertyModel?> fetchPropertyById(String idOrCode) async {
+    return fetchPropertyByIdOrCode(idOrCode);
+  }
+
+  /// Fetches a property by either UUID or human-readable property code.
+  Future<PropertyModel?> fetchPropertyByIdOrCode(String identifier) async {
     try {
-      final response = await SupabaseConfig.client
-          .from('properties')
-          .select('*, address:addresses(*)')
-          .eq('id', id)
-          .maybeSingle();
+      final cleanIdentifier = identifier.trim();
+      final isUuid = RegExp(
+        r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$',
+      ).hasMatch(cleanIdentifier);
+
+      var query = SupabaseConfig.client.from('properties').select('*, address:addresses(*)');
+
+      Map<String, dynamic>? response;
+      if (isUuid) {
+        response = await query.eq('id', cleanIdentifier).maybeSingle();
+      } else {
+        response = await query.eq('property_code', cleanIdentifier).maybeSingle();
+      }
+
+      // Fallback: if not found by UUID, try matching property_code as well
+      if (response == null && isUuid) {
+        response = await SupabaseConfig.client
+            .from('properties')
+            .select('*, address:addresses(*)')
+            .eq('property_code', cleanIdentifier)
+            .maybeSingle();
+      }
 
       if (response != null) {
         return PropertyModel.fromJson(response);
       }
     } catch (e) {
-      debugPrint('[PropertyProvider] Error fetching property by ID: $e');
+      debugPrint('[PropertyProvider] Error fetching property by ID/Code ($identifier): $e');
     }
     return null;
   }
 
   Future<bool> deleteProperty(String propertyId, {required String brokerId}) async {
     try {
-      await SupabaseConfig.client.rpc(
-        'soft_delete_property',
-        params: {'p_property_id': propertyId},
-      );
+      await SupabaseConfig.client.rpc('soft_delete_property', params: {'p_property_id': propertyId});
 
       await fetchProperties(brokerId: brokerId, page: _currentPage, searchQuery: _searchQuery);
       return true;

@@ -7,14 +7,13 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:dio/dio.dart';
 import 'package:ffmpeg_kit_flutter_new_min_gpl/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter_new_min_gpl/return_code.dart';
-import 'package:dio/dio.dart';
-
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
+import 'package:path_provider/path_provider.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../core/utils/video_thumbnail_helper.dart';
@@ -67,15 +66,15 @@ class MediaExportService {
       onProgress?.call(baseProgress);
 
       final pathLower = media.path.toLowerCase();
-      final isImgExt = pathLower.endsWith('.jpg') ||
+      final isImgExt =
+          pathLower.endsWith('.jpg') ||
           pathLower.endsWith('.jpeg') ||
           pathLower.endsWith('.png') ||
           pathLower.endsWith('.webp') ||
           pathLower.endsWith('.gif');
-      final isVideo = !isImgExt &&
-          (media.type.toLowerCase() == 'video' ||
-              pathLower.endsWith('.mp4') ||
-              pathLower.endsWith('.mov'));
+      final isVideo =
+          !isImgExt &&
+          (media.type.toLowerCase() == 'video' || pathLower.endsWith('.mp4') || pathLower.endsWith('.mov'));
 
       // Start a timer to simulate progress for this item during heavy export tasks
       double currentItemProgress = 0.0;
@@ -107,10 +106,7 @@ class MediaExportService {
 
   // ── Image Export (dart:ui Canvas) ─────────────────────────────────────────
 
-  static Future<PickedMedia> _exportImage(
-    PickedMedia media,
-    StickerConfig config,
-  ) async {
+  static Future<PickedMedia> _exportImage(PickedMedia media, StickerConfig config) async {
     try {
       // 1. Decode the source image
       Uint8List sourceBytes = media.bytes;
@@ -168,8 +164,7 @@ class MediaExportService {
       // 4. Export to image bytes
       final picture = recorder.endRecording();
       final outputImage = await picture.toImage(targetW.toInt(), targetH.toInt());
-      final byteData =
-          await outputImage.toByteData(format: ui.ImageByteFormat.png);
+      final byteData = await outputImage.toByteData(format: ui.ImageByteFormat.png);
 
       sourceImage.dispose();
       outputImage.dispose();
@@ -203,39 +198,26 @@ class MediaExportService {
     }
   }
 
-  static void _drawStickersOnCanvas(
-    Canvas canvas,
-    double imgW,
-    double imgH,
-    StickerConfig config,
-  ) {
+  static void _drawStickersOnCanvas(Canvas canvas, double imgW, double imgH, StickerConfig config) {
     final double scaleFactor = imgW / 360.0; // Scale relative to 360px preview
     final double hPad = 14.0 * scaleFactor;
     final double vPad = 16.0 * scaleFactor;
 
     // Top gradient
     final topGradientPaint = Paint()
-      ..shader = ui.Gradient.linear(
-        Offset(0, 0),
-        Offset(0, 90 * scaleFactor),
-        [Colors.black.withValues(alpha: 0.5), Colors.transparent],
-      );
-    canvas.drawRect(
-      Rect.fromLTWH(0, 0, imgW, 90 * scaleFactor),
-      topGradientPaint,
-    );
+      ..shader = ui.Gradient.linear(Offset(0, 0), Offset(0, 90 * scaleFactor), [
+        Colors.black.withValues(alpha: 0.5),
+        Colors.transparent,
+      ]);
+    canvas.drawRect(Rect.fromLTWH(0, 0, imgW, 90 * scaleFactor), topGradientPaint);
 
     // Bottom gradient
     final bottomGradientPaint = Paint()
-      ..shader = ui.Gradient.linear(
-        Offset(0, imgH - 120 * scaleFactor),
-        Offset(0, imgH),
-        [Colors.transparent, Colors.black.withValues(alpha: 0.6)],
-      );
-    canvas.drawRect(
-      Rect.fromLTWH(0, imgH - 120 * scaleFactor, imgW, 120 * scaleFactor),
-      bottomGradientPaint,
-    );
+      ..shader = ui.Gradient.linear(Offset(0, imgH - 120 * scaleFactor), Offset(0, imgH), [
+        Colors.transparent,
+        Colors.black.withValues(alpha: 0.6),
+      ]);
+    canvas.drawRect(Rect.fromLTWH(0, imgH - 120 * scaleFactor, imgW, 120 * scaleFactor), bottomGradientPaint);
 
     double topY = vPad + 16 * scaleFactor;
 
@@ -352,11 +334,8 @@ class MediaExportService {
         height: 1.25,
       ),
     );
-    final tp = TextPainter(
-      text: textSpan,
-      textDirection: TextDirection.ltr,
-      maxLines: 3,
-    )..layout(maxWidth: imgW - hPad * 2 - paddingH * scale * 2);
+    final tp = TextPainter(text: textSpan, textDirection: TextDirection.ltr, maxLines: 3)
+      ..layout(maxWidth: imgW - hPad * 2 - paddingH * scale * 2);
 
     final badgeW = tp.width + paddingH * scale * 2;
     final badgeH = tp.height + paddingV * scale * 2;
@@ -403,11 +382,8 @@ class MediaExportService {
         height: 1.2,
       ),
     );
-    final tp = TextPainter(
-      text: textSpan,
-      textDirection: TextDirection.ltr,
-      maxLines: 3,
-    )..layout(maxWidth: imgW - hPad * 2 - paddingH * scale * 2);
+    final tp = TextPainter(text: textSpan, textDirection: TextDirection.ltr, maxLines: 3)
+      ..layout(maxWidth: imgW - hPad * 2 - paddingH * scale * 2);
 
     final badgeW = tp.width + paddingH * scale * 2;
     final badgeH = tp.height + paddingV * scale * 2;
@@ -420,19 +396,14 @@ class MediaExportService {
     );
 
     canvas.drawRRect(rrect, Paint()..color = bgColor);
-    tp.paint(
-        canvas, Offset(badgeX + paddingH * scale, badgeY + paddingV * scale));
+    tp.paint(canvas, Offset(badgeX + paddingH * scale, badgeY + paddingV * scale));
 
     return badgeY;
   }
 
   // ── Video Export (FFmpeg drawtext) ────────────────────────────────────────
 
-  static Future<PickedMedia> _exportVideo(
-    PickedMedia media,
-    StickerConfig config,
-    int index,
-  ) async {
+  static Future<PickedMedia> _exportVideo(PickedMedia media, StickerConfig config, int index) async {
     if (kIsWeb) {
       // FFmpeg not available on web
       return media;
@@ -503,15 +474,9 @@ class MediaExportService {
         // Generate thumbnail
         Uint8List? thumbBytes;
         if (!kIsWeb) {
-          thumbBytes = await VideoThumbnailHelper.generateThumbnail(
-            filePath: outputPath,
-          );
-          
-          thumbBytes ??= await _extractThumbnailWithFFmpeg(
-            outputPath,
-            tempDir,
-            index,
-          );
+          thumbBytes = await VideoThumbnailHelper.generateThumbnail(filePath: outputPath);
+
+          thumbBytes ??= await _extractThumbnailWithFFmpeg(outputPath, tempDir, index);
         }
 
         return PickedMedia(
@@ -542,11 +507,11 @@ class MediaExportService {
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final thumbPath = '${tempDir.path}/thumb_${timestamp}_$index.jpg';
       final command = '-ss 00:00:00.000 -i "$videoPath" -vframes 1 -q:v 2 -y "$thumbPath"';
-      
+
       debugPrint('[MediaExportService] Extracting thumbnail with FFmpeg: $command');
       final session = await FFmpegKit.execute(command);
       final returnCode = await session.getReturnCode();
-      
+
       if (ReturnCode.isSuccess(returnCode)) {
         final file = File(thumbPath);
         if (await file.exists()) {

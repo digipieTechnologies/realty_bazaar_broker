@@ -2,7 +2,9 @@
 // Purpose: Multi-attachment horizontal preview strip rendering images/videos as thumbnails and non-image files as grey extension cards (matching SS 3).
 
 import 'dart:io' as io;
+
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../models/models.dart';
 import '../../../widgets/media/full_screen_media_viewer.dart';
@@ -11,19 +13,12 @@ class ChatAttachmentPreviewWidget extends StatelessWidget {
   final List<MediaModel> attachments;
   final Function(int index) onRemoveAttachment;
 
-  const ChatAttachmentPreviewWidget({
-    super.key,
-    required this.attachments,
-    required this.onRemoveAttachment,
-  });
+  const ChatAttachmentPreviewWidget({super.key, required this.attachments, required this.onRemoveAttachment});
 
   void _openAttachmentViewer(BuildContext context, int initialIndex) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => FullScreenMediaViewer(
-          medias: attachments,
-          initialIndex: initialIndex,
-        ),
+        builder: (_) => FullScreenMediaViewer(medias: attachments, initialIndex: initialIndex),
       ),
     );
   }
@@ -51,8 +46,11 @@ class ChatAttachmentPreviewWidget extends StatelessWidget {
         itemBuilder: (context, index) {
           final item = attachments[index];
           final isVideo = item.isVideo;
-          final isImage = item.type == 'image' || item.thumbnailBytes != null ||
-              (item.url != null && (item.url!.endsWith('.png') || item.url!.endsWith('.jpg') || item.url!.endsWith('.jpeg')));
+          final isImage =
+              item.type == 'image' ||
+              item.thumbnailBytes != null ||
+              (item.url != null &&
+                  (item.url!.endsWith('.png') || item.url!.endsWith('.jpg') || item.url!.endsWith('.jpeg')));
 
           final ext = _getFileExtension(item.url);
 
@@ -60,9 +58,7 @@ class ChatAttachmentPreviewWidget extends StatelessWidget {
             clipBehavior: Clip.none,
             children: [
               GestureDetector(
-                onTap: (isImage || isVideo)
-                    ? () => _openAttachmentViewer(context, index)
-                    : null,
+                onTap: (isImage || isVideo) ? () => _openAttachmentViewer(context, index) : null,
                 child: Container(
                   width: 76.0,
                   height: 76.0,
@@ -77,21 +73,17 @@ class ChatAttachmentPreviewWidget extends StatelessWidget {
                           alignment: Alignment.center,
                           children: [
                             if (item.thumbnailBytes != null)
-                              Image.memory(
-                                item.thumbnailBytes!,
-                                width: 76.0,
-                                height: 76.0,
-                                fit: BoxFit.cover,
-                              )
-                            else if (item.url != null && item.url!.isNotEmpty && !item.url!.startsWith('http'))
-                              Image.file(
-                                io.File(item.url!),
-                                width: 76.0,
-                                height: 76.0,
-                                fit: BoxFit.cover,
-                              )
+                              Image.memory(item.thumbnailBytes!, width: 76.0, height: 76.0, fit: BoxFit.cover)
+                            else if (item.url != null &&
+                                item.url!.isNotEmpty &&
+                                !item.url!.startsWith('http'))
+                              Image.file(io.File(item.url!), width: 76.0, height: 76.0, fit: BoxFit.cover)
                             else
-                              const Icon(Icons.insert_drive_file_rounded, size: 28.0, color: AppColors.textMuted),
+                              const Icon(
+                                Icons.insert_drive_file_rounded,
+                                size: 28.0,
+                                color: AppColors.textMuted,
+                              ),
                             if (isVideo)
                               Container(
                                 padding: const EdgeInsets.all(4.0),
@@ -106,11 +98,7 @@ class ChatAttachmentPreviewWidget extends StatelessWidget {
                       : Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
-                              Icons.article_rounded,
-                              size: 32.0,
-                              color: AppColors.textDarkSlate,
-                            ),
+                            const Icon(Icons.article_rounded, size: 32.0, color: AppColors.textDarkSlate),
                             const SizedBox(height: 4.0),
                             Text(
                               ext,
@@ -145,11 +133,7 @@ class ChatAttachmentPreviewWidget extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: const Icon(
-                      Icons.close_rounded,
-                      size: 13.0,
-                      color: Colors.white,
-                    ),
+                    child: const Icon(Icons.close_rounded, size: 13.0, color: Colors.white),
                   ),
                 ),
               ),

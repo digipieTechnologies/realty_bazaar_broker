@@ -2,6 +2,7 @@
 // Purpose: Shimmer skeleton placeholder for the Dashboard top welcome header banner widget.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../util/common_ext.dart';
 import 'app_shimmer_container.dart';
@@ -21,10 +22,7 @@ class DashboardHeaderBannerShimmerWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(22.0),
         border: Border.all(color: AppColors.border, width: 1.0),
       ),
-      padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 14.0 : 22.0,
-        vertical: isMobile ? 14.0 : 20.0,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: isMobile ? 14.0 : 22.0, vertical: isMobile ? 14.0 : 20.0),
       child: Row(
         children: [
           Expanded(
@@ -57,11 +55,7 @@ class DashboardHeaderBannerShimmerWidget extends StatelessWidget {
           ),
           SizedBox(width: isMobile ? 10.0 : 16.0),
           // Verified Avatar Circle Skeleton
-          AppShimmerContainer(
-            width: isMobile ? 44 : 56,
-            height: isMobile ? 44 : 56,
-            borderRadius: 28.0,
-          ),
+          AppShimmerContainer(width: isMobile ? 44 : 56, height: isMobile ? 44 : 56, borderRadius: 28.0),
         ],
       ),
     );

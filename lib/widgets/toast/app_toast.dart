@@ -4,7 +4,9 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_routes.dart';
 
@@ -13,8 +15,7 @@ enum ToastType { success, error }
 class AppToast {
   static OverlayEntry? _overlayEntry;
   static Timer? _timer;
-  static final GlobalKey<_AppToastWidgetState> _toastKey =
-      GlobalKey<_AppToastWidgetState>();
+  static final GlobalKey<_AppToastWidgetState> _toastKey = GlobalKey<_AppToastWidgetState>();
 
   /// Show a success toast notification
   static void showSuccess(String title, [String? description]) {
@@ -36,7 +37,8 @@ class AppToast {
         lowerDesc.contains('exceeded the maximum allowed size') ||
         lowerDesc.contains('413')) {
       finalTitle = 'File Too Large';
-      finalDesc = 'The selected file/video exceeds the allowed size limit. Please select a smaller file or compress your video.';
+      finalDesc =
+          'The selected file/video exceeds the allowed size limit. Please select a smaller file or compress your video.';
     }
 
     _show(finalTitle, finalDesc, ToastType.error);
@@ -121,8 +123,7 @@ class _AppToastWidget extends StatefulWidget {
   State<_AppToastWidget> createState() => _AppToastWidgetState();
 }
 
-class _AppToastWidgetState extends State<_AppToastWidget>
-    with SingleTickerProviderStateMixin {
+class _AppToastWidgetState extends State<_AppToastWidget> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
@@ -138,10 +139,7 @@ class _AppToastWidgetState extends State<_AppToastWidget>
     _description = widget.initialDescription;
     _type = widget.initialType;
 
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    );
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 400));
 
     _fadeAnimation = Tween<double>(
       begin: 0.0,
@@ -184,9 +182,7 @@ class _AppToastWidgetState extends State<_AppToastWidget>
 
     final bgColor = isError ? AppColors.errorLight : AppColors.successLight;
     final iconColor = isError ? AppColors.error : AppColors.success;
-    final iconData = isError
-        ? Icons.priority_high_rounded
-        : Icons.check_rounded;
+    final iconData = isError ? Icons.priority_high_rounded : Icons.check_rounded;
 
     return Material(
       color: Colors.transparent,
@@ -202,11 +198,7 @@ class _AppToastWidgetState extends State<_AppToastWidget>
                 color: bgColor,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
+                  BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 4)),
                 ],
               ),
               child: ClipRRect(
@@ -241,20 +233,14 @@ class _AppToastWidgetState extends State<_AppToastWidget>
 
                     // Content
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 14.0,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           // Icon Container
                           Container(
                             padding: const EdgeInsets.all(6),
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                            ),
+                            decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                             child: Icon(iconData, color: iconColor, size: 20),
                           ),
                           const SizedBox(width: 16),
@@ -273,8 +259,7 @@ class _AppToastWidgetState extends State<_AppToastWidget>
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                                if (_description != null &&
-                                    _description!.isNotEmpty) ...[
+                                if (_description != null && _description!.isNotEmpty) ...[
                                   const SizedBox(height: 2),
                                   Text(
                                     _description!,
@@ -295,11 +280,7 @@ class _AppToastWidgetState extends State<_AppToastWidget>
                             onTap: widget.onClose,
                             child: const Padding(
                               padding: EdgeInsets.all(4.0),
-                              child: Icon(
-                                Icons.close_rounded,
-                                color: Colors.black38,
-                                size: 18,
-                              ),
+                              child: Icon(Icons.close_rounded, color: Colors.black38, size: 18),
                             ),
                           ),
                         ],

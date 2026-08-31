@@ -35,22 +35,13 @@ class AddressModel extends Equatable {
 
   static AddressModel fromJson(dynamic json) {
     if (json is! Map) {
-      return AddressModel(
-        id: json?.toString(),
-        fullAddress: '',
-        entityType: 'broker',
-        entityId: null,
-      );
+      return AddressModel(id: json?.toString(), fullAddress: '', entityType: 'broker', entityId: null);
     }
     return AddressModel(
       id: json['id']?.toString(),
       fullAddress: json['full_address']?.toString() ?? '',
-      latitude: json['latitude'] != null
-          ? double.tryParse(json['latitude'].toString())
-          : null,
-      longitude: json['longitude'] != null
-          ? double.tryParse(json['longitude'].toString())
-          : null,
+      latitude: json['latitude'] != null ? double.tryParse(json['latitude'].toString()) : null,
+      longitude: json['longitude'] != null ? double.tryParse(json['longitude'].toString()) : null,
       city: json['city']?.toString(),
       pincode: json['pincode']?.toString(),
       state: json['state']?.toString(),

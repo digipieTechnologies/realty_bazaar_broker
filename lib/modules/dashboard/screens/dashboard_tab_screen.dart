@@ -32,8 +32,7 @@ class DashboardTabScreen extends StatefulWidget {
   State<DashboardTabScreen> createState() => _DashboardTabScreenState();
 }
 
-class _DashboardTabScreenState extends State<DashboardTabScreen>
-    with WidgetsBindingObserver {
+class _DashboardTabScreenState extends State<DashboardTabScreen> with WidgetsBindingObserver {
   String? _subscribedBrokerId;
   SocialProvider? _socialProvider;
 
@@ -50,9 +49,7 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       if (_subscribedBrokerId != null && _socialProvider != null) {
-        debugPrint(
-          '[DashboardTabScreen] App resumed from background. Silent refresh social connections...',
-        );
+        debugPrint('[DashboardTabScreen] App resumed from background. Silent refresh social connections...');
         final auth = Provider.of<AuthProvider>(context, listen: false);
         _socialProvider!.fetchInitialConnections(
           _subscribedBrokerId!,
@@ -72,10 +69,7 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
       if (brokerId != null && brokerId != _subscribedBrokerId) {
         _subscribedBrokerId = brokerId;
         _socialProvider = Provider.of<SocialProvider>(context, listen: false);
-        _socialProvider!.fetchInitialConnections(
-          brokerId,
-          authProvider: authProvider,
-        );
+        _socialProvider!.fetchInitialConnections(brokerId, authProvider: authProvider);
         _socialProvider!.subscribeToSocialAccounts(brokerId);
       }
     });
@@ -105,10 +99,7 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
               );
             }
 
-            AppToast.showSuccess(
-              'Connection Successful',
-              'Successfully connected your $platform account!',
-            );
+            AppToast.showSuccess('Connection Successful', 'Successfully connected your $platform account!');
           } else if (error != null) {
             AppToast.showError('Connection Failed', Uri.decodeComponent(error));
           }
@@ -133,10 +124,7 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: AppConstants.getTabPadding(
-            context,
-            bottomExtra: isMobile ? 80.0 : 24.0,
-          ),
+          padding: AppConstants.getTabPadding(context, bottomExtra: isMobile ? 80.0 : 24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -164,24 +152,15 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
                               ),
                               const DashboardSummaryWidget(),
                               const SizedBox(height: 24.0),
-                              const Divider(
-                                height: 1.0,
-                                color: AppColors.border,
-                              ),
+                              const Divider(height: 1.0, color: AppColors.border),
                               const SizedBox(height: 24.0),
                               const RecentPropertiesWidget(),
                               const SizedBox(height: 24.0),
-                              const Divider(
-                                height: 1.0,
-                                color: AppColors.border,
-                              ),
+                              const Divider(height: 1.0, color: AppColors.border),
                               const SizedBox(height: 24.0),
                               const RecentPostsWidget(),
                               const SizedBox(height: 24.0),
-                              const Divider(
-                                height: 1.0,
-                                color: AppColors.border,
-                              ),
+                              const Divider(height: 1.0, color: AppColors.border),
                               const SizedBox(height: 24.0),
                               const AdCampaignBannerWidget(),
                             ],
@@ -195,32 +174,16 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const AppSectionHeader(
-                                title: 'Connected Channels',
-                                icon: Icons.link_rounded,
-                              ),
+                              const AppSectionHeader(title: 'Connected Channels', icon: Icons.link_rounded),
                               if (socialProvider.isFetchingConnections)
-                                const SocialConnectShimmerWidget(
-                                  isVertical: true,
-                                )
+                                const SocialConnectShimmerWidget(isVertical: true)
                               else ...[
-                                _buildFacebookCard(
-                                  context,
-                                  authProvider,
-                                  socialProvider,
-                                ),
+                                _buildFacebookCard(context, authProvider, socialProvider),
                                 const SizedBox(height: 12.0),
-                                _buildInstagramCard(
-                                  context,
-                                  authProvider,
-                                  socialProvider,
-                                ),
+                                _buildInstagramCard(context, authProvider, socialProvider),
                               ],
                               const SizedBox(height: 24.0),
-                              const Divider(
-                                height: 1.0,
-                                color: AppColors.border,
-                              ),
+                              const Divider(height: 1.0, color: AppColors.border),
                               const SizedBox(height: 24.0),
                               const RecentLeadsWidget(),
                             ],
@@ -245,24 +208,13 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
                       const SizedBox(height: 14.0),
 
                       // Section 2: Connected Channels (Social Channels)
-                      const AppSectionHeader(
-                        title: 'Connected Channels',
-                        icon: Icons.link_rounded,
-                      ),
+                      const AppSectionHeader(title: 'Connected Channels', icon: Icons.link_rounded),
                       if (socialProvider.isFetchingConnections)
                         const SocialConnectShimmerWidget(isVertical: true)
                       else ...[
-                        _buildFacebookCard(
-                          context,
-                          authProvider,
-                          socialProvider,
-                        ),
+                        _buildFacebookCard(context, authProvider, socialProvider),
                         const SizedBox(height: 10.0),
-                        _buildInstagramCard(
-                          context,
-                          authProvider,
-                          socialProvider,
-                        ),
+                        _buildInstagramCard(context, authProvider, socialProvider),
                       ],
                       const SizedBox(height: 14.0),
                       const Divider(height: 1.0, color: AppColors.border),
@@ -305,9 +257,7 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
     String platform,
     SocialProvider provider,
   ) {
-    final platformDisplayName = platform == 'facebook'
-        ? 'Facebook Page'
-        : 'Instagram Business';
+    final platformDisplayName = platform == 'facebook' ? 'Facebook Page' : 'Instagram Business';
 
     AppDialog.show(
       context,
@@ -323,18 +273,12 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
     );
   }
 
-  Widget _buildFacebookCard(
-    BuildContext context,
-    AuthProvider authProvider,
-    SocialProvider provider,
-  ) {
+  Widget _buildFacebookCard(BuildContext context, AuthProvider authProvider, SocialProvider provider) {
     final brokerId = authProvider.userProfile?.brokerId?.id;
     final String? pageId = provider.facebookAccount?.pageId;
     final String? imageUrl =
         provider.facebookAccount?.profilePictureUrl ??
-        (pageId != null
-            ? 'https://graph.facebook.com/$pageId/picture?type=large'
-            : null);
+        (pageId != null ? 'https://graph.facebook.com/$pageId/picture?type=large' : null);
 
     return SocialConnectCard(
       platformName: context.tr('facebook_pages'),
@@ -355,21 +299,12 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
           }
         }
       },
-      logo: Image.asset(
-        'assets/icons/facebook.png',
-        width: 40.0,
-        height: 40.0,
-        fit: BoxFit.contain,
-      ),
+      logo: Image.asset('assets/icons/facebook.png', width: 40.0, height: 40.0, fit: BoxFit.contain),
       buttonColor: AppColors.facebook,
     );
   }
 
-  Widget _buildInstagramCard(
-    BuildContext context,
-    AuthProvider authProvider,
-    SocialProvider provider,
-  ) {
+  Widget _buildInstagramCard(BuildContext context, AuthProvider authProvider, SocialProvider provider) {
     final brokerId = authProvider.userProfile?.brokerId?.id;
     final String? imageUrl = provider.instagramAccount?.profilePictureUrl;
 
@@ -392,12 +327,7 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
           }
         }
       },
-      logo: Image.asset(
-        'assets/icons/instagram.png',
-        width: 40.0,
-        height: 40.0,
-        fit: BoxFit.contain,
-      ),
+      logo: Image.asset('assets/icons/instagram.png', width: 40.0, height: 40.0, fit: BoxFit.contain),
       buttonGradient: AppColors.instagramGradient,
     );
   }

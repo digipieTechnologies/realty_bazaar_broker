@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../models/chat_enums.dart';
 import '../../../models/chat_message_model.dart';
@@ -7,11 +8,7 @@ class ChatReplyPreviewWidget extends StatelessWidget {
   final ChatMessageModel replyingToMessage;
   final VoidCallback onCancelReply;
 
-  const ChatReplyPreviewWidget({
-    super.key,
-    required this.replyingToMessage,
-    required this.onCancelReply,
-  });
+  const ChatReplyPreviewWidget({super.key, required this.replyingToMessage, required this.onCancelReply});
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +18,7 @@ class ChatReplyPreviewWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.primary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10.0),
-        border: const Border(
-          left: BorderSide(color: AppColors.primary, width: 3.5),
-        ),
+        border: const Border(left: BorderSide(color: AppColors.primary, width: 3.5)),
       ),
       child: Row(
         children: [
@@ -36,11 +31,7 @@ class ChatReplyPreviewWidget extends StatelessWidget {
               children: [
                 const Text(
                   'Replying to message',
-                  style: TextStyle(
-                    fontSize: 11.0,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
-                  ),
+                  style: TextStyle(fontSize: 11.0, fontWeight: FontWeight.bold, color: AppColors.primary),
                 ),
                 const SizedBox(height: 2.0),
                 _buildReplyContentWidget(replyingToMessage),
@@ -59,10 +50,7 @@ class ChatReplyPreviewWidget extends StatelessWidget {
   }
 
   static Widget _buildReplyContentWidget(ChatMessageModel message) {
-    const textStyle = TextStyle(
-      fontSize: 12.0,
-      color: AppColors.textSecondary,
-    );
+    const textStyle = TextStyle(fontSize: 12.0, color: AppColors.textSecondary);
     const iconColor = AppColors.textSecondary;
 
     // 1. Location Message
@@ -88,7 +76,10 @@ class ChatReplyPreviewWidget extends StatelessWidget {
 
       for (final m in medias) {
         final isVideo = m.isVideo;
-        final isDoc = m.type == 'document' || m.type == 'file' || (m.type != 'video' && m.type != 'image' && m.type != 'photo');
+        final isDoc =
+            m.type == 'document' ||
+            m.type == 'file' ||
+            (m.type != 'video' && m.type != 'image' && m.type != 'photo');
         if (isVideo) {
           hasVideo = true;
         } else if (isDoc) {
@@ -118,12 +109,7 @@ class ChatReplyPreviewWidget extends StatelessWidget {
           Icon(iconData, size: 14.0, color: iconColor),
           const SizedBox(width: 4.0),
           Flexible(
-            child: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: textStyle,
-            ),
+            child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: textStyle),
           ),
         ],
       );
@@ -138,9 +124,7 @@ class ChatReplyPreviewWidget extends StatelessWidget {
           const SizedBox(width: 4.0),
           Flexible(
             child: Text(
-              message.message != null && message.message!.isNotEmpty
-                  ? message.message!
-                  : '1 Document',
+              message.message != null && message.message!.isNotEmpty ? message.message! : '1 Document',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: textStyle,
@@ -151,11 +135,6 @@ class ChatReplyPreviewWidget extends StatelessWidget {
     }
 
     // 4. Standard Text Message
-    return Text(
-      message.message ?? '',
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: textStyle,
-    );
+    return Text(message.message ?? '', maxLines: 1, overflow: TextOverflow.ellipsis, style: textStyle);
   }
 }

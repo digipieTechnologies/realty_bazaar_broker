@@ -2,6 +2,7 @@
 // Purpose: Reusable, modern explanation dialog shown when requesting permissions or guiding users to Settings when permanently denied.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
 import '../buttons/app_button.dart';
@@ -29,9 +30,7 @@ class PermissionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       elevation: 8,
       backgroundColor: AppColors.surface,
       child: SingleChildScrollView(
@@ -46,11 +45,7 @@ class PermissionDialog extends StatelessWidget {
                 color: AppColors.primary.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                icon,
-                color: AppColors.primary,
-                size: 36.0,
-              ),
+              child: Icon(icon, color: AppColors.primary, size: 36.0),
             ),
             const SizedBox(height: 18.0),
 

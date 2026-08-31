@@ -9,12 +9,11 @@ import '../../../providers/auth/auth_provider.dart';
 import '../../../providers/video_request/video_request_provider.dart';
 import '../../../util/common_ext.dart';
 import '../../../widgets/common/common_app_bar.dart';
-import '../../../widgets/toast/app_toast.dart';
+import '../../../widgets/dialogs/select_property_for_video_request_dialog.dart';
 import '../../../widgets/shimmer/video_request_list_shimmer_widget.dart';
+import '../../../widgets/toast/app_toast.dart';
 import '../widgets/video_requests/video_request_summary_section.dart';
 import '../widgets/video_requests/video_request_table_widget.dart';
-
-import '../../../widgets/dialogs/select_property_for_video_request_dialog.dart';
 
 class RequestVideoTabScreen extends StatefulWidget {
   const RequestVideoTabScreen({super.key});
@@ -64,10 +63,7 @@ class _RequestVideoTabScreenState extends State<RequestVideoTabScreen> {
         context.tr('toast_request_cancelled_desc'),
       );
     } else {
-      AppToast.showError(
-        context.tr('toast_action_failed_title'),
-        context.tr('toast_action_failed_desc'),
-      );
+      AppToast.showError(context.tr('toast_action_failed_title'), context.tr('toast_action_failed_desc'));
     }
   }
 
@@ -91,19 +87,12 @@ class _RequestVideoTabScreenState extends State<RequestVideoTabScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: canPop
-          ? CommonAppBar(
-              title: context.tr('video_requests'),
-            )
-          : null,
+      appBar: canPop ? CommonAppBar(title: context.tr('video_requests')) : null,
       body: SafeArea(
         child: Consumer<VideoRequestProvider>(
           builder: (context, provider, child) {
             return SingleChildScrollView(
-              padding: AppConstants.getTabPadding(
-                context,
-                bottomExtra: isMobile ? 80.0 : 24.0,
-              ),
+              padding: AppConstants.getTabPadding(context, bottomExtra: isMobile ? 80.0 : 24.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -134,11 +123,7 @@ class _RequestVideoTabScreenState extends State<RequestVideoTabScreen> {
                     totalItems: provider.totalItems,
                     itemsPerPage: provider.itemsPerPage,
                     onSearchChanged: (value) {
-                      provider.fetchVideoRequests(
-                        brokerId: _brokerId,
-                        page: 1,
-                        searchQuery: value,
-                      );
+                      provider.fetchVideoRequests(brokerId: _brokerId, page: 1, searchQuery: value);
                     },
                     onPageChanged: (newPage) {
                       provider.fetchVideoRequests(
