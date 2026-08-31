@@ -145,6 +145,15 @@ class _PostPropertyDialogState extends State<PostPropertyDialog> {
       return;
     }
 
+    final videoCount = _selectedMedia.where((m) => m.type == 'video').length;
+    if (_selectFacebook && videoCount > 1) {
+      AppToast.showError(
+        'Facebook Video Limit',
+        'Facebook supports at most 1 video per post. Please select 1 video or uncheck Facebook in the first step.',
+      );
+      return;
+    }
+
     // Already fetched — skip to overlay editor immediately.
     if (_postContent != null) {
       setState(() => _currentStep = 2);

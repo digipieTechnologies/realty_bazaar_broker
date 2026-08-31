@@ -15,7 +15,9 @@ class NotificationService {
   /// Initializes OneSignal SDK using ONE_SIGNAL_APP_ID passed via --dart-define-from-file=config.json.
   Future<void> initialize() async {
     if (defaultTargetPlatform != TargetPlatform.android) {
-      debugPrint('OneSignal is only enabled for Android. Skipping initialization on this platform.');
+      debugPrint(
+        'OneSignal is only enabled for Android. Skipping initialization on this platform.',
+      );
       return;
     }
 
@@ -37,9 +39,13 @@ class NotificationService {
         });
 
         _isInitialized = true;
-        debugPrint('OneSignal NotificationService initialized successfully with App ID: $oneSignalAppId');
+        debugPrint(
+          'OneSignal NotificationService initialized successfully with App ID: $oneSignalAppId',
+        );
       } else {
-        debugPrint('ONE_SIGNAL_APP_ID missing from String.fromEnvironment. Make sure to build/run with --dart-define-from-file=config.json');
+        debugPrint(
+          'ONE_SIGNAL_APP_ID missing from String.fromEnvironment. Make sure to build/run with --dart-define-from-file=config.json',
+        );
       }
     } catch (e) {
       debugPrint('Error initializing OneSignal NotificationService: $e');
@@ -84,10 +90,13 @@ class NotificationService {
   /// Routes user according to NotificationType payload data.
   void _handleNotificationClick(Map<String, dynamic> data) {
     try {
-      final rawType = data['notification_type']?.toString() ?? data['type']?.toString();
+      final rawType =
+          data['notification_type']?.toString() ?? data['type']?.toString();
       final notificationType = NotificationType.fromDbValue(rawType);
 
-      debugPrint('Routing notification type: $notificationType with data: $data');
+      debugPrint(
+        'Routing notification type: $notificationType with data: $data',
+      );
 
       switch (notificationType) {
         case NotificationType.videoRequest:
