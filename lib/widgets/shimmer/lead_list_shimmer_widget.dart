@@ -8,25 +8,27 @@ import '../../util/common_ext.dart';
 
 class LeadListShimmerWidget extends StatelessWidget {
   final int count;
+  final bool? isCompact;
 
   const LeadListShimmerWidget({
     super.key,
     this.count = 4,
+    this.isCompact,
   });
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = context.isMobileUI;
+    final useMobileTile = isCompact ?? context.isMobileUI;
 
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding: isMobile
-          ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0)
+      padding: useMobileTile
+          ? const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0)
           : EdgeInsets.zero,
       itemCount: count,
       itemBuilder: (context, index) {
-        return isMobile ? _buildMobileTileShimmer() : _buildDesktopRowShimmer();
+        return useMobileTile ? _buildMobileTileShimmer() : _buildDesktopRowShimmer();
       },
     );
   }
@@ -40,76 +42,92 @@ class LeadListShimmerWidget extends StatelessWidget {
         border: Border.all(color: AppColors.border, width: 1.0),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(10.0),
         child: package_shimmer.Shimmer.fromColors(
           baseColor: AppColors.shimmerBase,
           highlightColor: AppColors.shimmerHighlight,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Top Row: Avatar + Name + Platform Badge & Date + Popup Menu
+              // Top Row: Avatar + Name + Platform Badge & Date
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    width: 40.0,
-                    height: 40.0,
+                    width: 36.0,
+                    height: 36.0,
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.circle,
                     ),
                   ),
-                  const SizedBox(width: 12.0),
+                  const SizedBox(width: 10.0),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(height: 14.0, width: 140.0, color: Colors.white),
-                        const SizedBox(height: 6.0),
+                        Container(height: 13.0, width: 110.0, color: Colors.white),
+                        const SizedBox(height: 5.0),
                         Row(
                           children: [
-                            Container(width: 16.0, height: 16.0, decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle)),
+                            Container(
+                              width: 14.0,
+                              height: 14.0,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
                             const SizedBox(width: 6.0),
-                            Container(height: 11.0, width: 80.0, color: Colors.white),
+                            Container(height: 10.0, width: 60.0, color: Colors.white),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  Container(
-                    width: 24.0,
-                    height: 24.0,
-                    decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                  ),
                 ],
               ),
-              const SizedBox(height: 10.0),
+              const SizedBox(height: 8.0),
               // Contact Number Box & Quick Action Icons
               Row(
                 children: [
                   Expanded(
                     child: Container(
-                      height: 34.0,
+                      height: 28.0,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(8.0),
+                        borderRadius: BorderRadius.circular(6.0),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8.0),
-                  Container(width: 32.0, height: 32.0, decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle)),
+                  const SizedBox(width: 6.0),
+                  Container(
+                    width: 26.0,
+                    height: 26.0,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
                   const SizedBox(width: 4.0),
-                  Container(width: 32.0, height: 32.0, decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle)),
+                  Container(
+                    width: 26.0,
+                    height: 26.0,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
                 ],
               ),
-              const SizedBox(height: 10.0),
+              const SizedBox(height: 8.0),
               // Property Details Box
               Container(
-                height: 38.0,
+                height: 30.0,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(8.0),
+                  borderRadius: BorderRadius.circular(6.0),
                 ),
               ),
             ],

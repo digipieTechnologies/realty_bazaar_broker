@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import '../../core/services/clarity_service.dart';
 import '../../core/supabase/supabase_config.dart';
 import '../../models/address_model.dart';
+import '../../models/broker_setup_details_model.dart';
 import '../../models/property_model.dart';
+import '../auth/auth_provider.dart';
 
 class PropertyProvider extends ChangeNotifier {
   bool _isLoading = false;
@@ -134,7 +136,11 @@ class PropertyProvider extends ChangeNotifier {
     };
   }
 
-  Future<PropertyModel?> saveProperty(PropertyModel property, {bool isEdit = false}) async {
+  Future<PropertyModel?> saveProperty(
+    PropertyModel property, {
+    bool isEdit = false,
+    AuthProvider? authProvider,
+  }) async {
     try {
       final payload = property.toJson();
       debugPrint('[PropertyProvider] saveProperty payload: $payload');
@@ -154,6 +160,16 @@ class PropertyProvider extends ChangeNotifier {
           ClarityService.instance.sendCustomEvent(
             isEdit ? 'feature_property_updated' : 'feature_property_created',
           );
+
+          if (authProvider != null) {
+            final currentSetup = authProvider.userProfile?.brokerId?.setupDetails ??
+                const BrokerSetupDetailsModel();
+            if (!currentSetup.propertiesImported) {
+              final updatedSetup = currentSetup.copyWith(propertiesImported: true);
+              authProvider.updateLocalBrokerSetupDetails(setupDetails: updatedSetup);
+            }
+          }
+
           final brokerIdStr = property.brokerId?.id;
           if (brokerIdStr != null && brokerIdStr.isNotEmpty) {
             await fetchProperties(brokerId: brokerIdStr, page: 1, searchQuery: _searchQuery);

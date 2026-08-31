@@ -44,7 +44,7 @@ CREATE TABLE public.brokers (
   search_text text,
   fts tsvector,
   auto_approve_video_requests boolean NOT NULL DEFAULT false,
-  setup_details jsonb DEFAULT '{"team_invited": false, "account_created": true, "facebook_connected": false, "business_info_added": false, "instagram_connected": false, "properties_imported": false}'::jsonb,
+  setup_details jsonb DEFAULT '{"account_created": true, "facebook_connected": false, "business_info_added": false, "instagram_connected": false, "properties_imported": false}'::jsonb,
   CONSTRAINT brokers_pkey PRIMARY KEY (id),
   CONSTRAINT brokers_address_id_fkey FOREIGN KEY (address_id) REFERENCES public.addresses(id)
 );

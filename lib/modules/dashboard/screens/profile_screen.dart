@@ -15,6 +15,7 @@ import '../../../models/models.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../util/common_ext.dart';
 import '../../../widgets/buttons/app_button.dart';
+import '../../../widgets/buttons/language_selector_button.dart';
 import '../../../widgets/dialogs/app_dialog.dart';
 import '../../../widgets/dividers/app_divider.dart';
 import '../../../widgets/inputs/app_textfield.dart';
@@ -244,6 +245,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(height: isDesktop ? 20.0 : 14.0),
                 const AppDivider(),
                 SizedBox(height: isDesktop ? 20.0 : 14.0),
+
+                // Change Language Option (Mobile & Tablet view only)
+                if (!isDesktop) ...[
+                  const LanguageSelectorButton(),
+                  SizedBox(height: isMobile ? 14.0 : 16.0),
+                  const AppDivider(),
+                  SizedBox(height: isMobile ? 14.0 : 16.0),
+                ],
 
                 // Account Actions Section (Downside)
                 _buildAccountActionsCard(isDesktop),

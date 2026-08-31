@@ -42,6 +42,10 @@ extension StringX on String? {
 }
 
 extension ContextX on BuildContext {
+  /// Responsive Breakpoint Constants
+  static const double desktopBreakpoint = 950.0;
+  static const double mobileBreakpoint = 600.0;
+
   /// Shorthand screen width.
   double get width => MediaQuery.sizeOf(this).width;
 
@@ -52,9 +56,12 @@ extension ContextX on BuildContext {
   double get bottomPadding => MediaQuery.viewPaddingOf(this).bottom;
 
   /// Responsive Breakpoint checkers
-  bool get isMobileUI => width < 600;
-  bool get isTabletUI => width >= 600 && width < 950;
-  bool get isDesktopUI => width >= 950;
+  bool get isMobileUI => width < mobileBreakpoint;
+  bool get isTabletUI => width >= mobileBreakpoint && width < desktopBreakpoint;
+  bool get isDesktopUI => width >= desktopBreakpoint;
+
+  /// Helper to evaluate desktop layout state from constraints width.
+  static bool isDesktopWidth(double maxWidth) => maxWidth >= desktopBreakpoint;
 
   /// Safely pops the current route if possible.
   void popIfCan() {

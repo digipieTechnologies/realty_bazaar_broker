@@ -146,7 +146,7 @@ class _DashboardTabScreenState extends State<DashboardTabScreen>
               // Responsive Main Content Layout
               LayoutBuilder(
                 builder: (context, constraints) {
-                  final isDesktop = constraints.maxWidth > 950.0;
+                  final isDesktop = ContextX.isDesktopWidth(constraints.maxWidth);
 
                   if (isDesktop) {
                     return Row(

@@ -9,7 +9,6 @@ class BrokerSetupDetailsModel extends Equatable {
   final bool facebookConnected;
   final bool instagramConnected;
   final bool propertiesImported;
-  final bool teamInvited;
 
   const BrokerSetupDetailsModel({
     this.accountCreated = true,
@@ -17,7 +16,6 @@ class BrokerSetupDetailsModel extends Equatable {
     this.facebookConnected = false,
     this.instagramConnected = false,
     this.propertiesImported = false,
-    this.teamInvited = false,
   });
 
   factory BrokerSetupDetailsModel.fromJson(dynamic json) {
@@ -28,7 +26,6 @@ class BrokerSetupDetailsModel extends Equatable {
       facebookConnected: json['facebook_connected'] as bool? ?? false,
       instagramConnected: json['instagram_connected'] as bool? ?? false,
       propertiesImported: json['properties_imported'] as bool? ?? false,
-      teamInvited: json['team_invited'] as bool? ?? false,
     );
   }
 
@@ -38,7 +35,6 @@ class BrokerSetupDetailsModel extends Equatable {
         'facebook_connected': facebookConnected,
         'instagram_connected': instagramConnected,
         'properties_imported': propertiesImported,
-        'team_invited': teamInvited,
       };
 
   BrokerSetupDetailsModel copyWith({
@@ -47,7 +43,6 @@ class BrokerSetupDetailsModel extends Equatable {
     bool? facebookConnected,
     bool? instagramConnected,
     bool? propertiesImported,
-    bool? teamInvited,
   }) {
     return BrokerSetupDetailsModel(
       accountCreated: accountCreated ?? this.accountCreated,
@@ -55,7 +50,6 @@ class BrokerSetupDetailsModel extends Equatable {
       facebookConnected: facebookConnected ?? this.facebookConnected,
       instagramConnected: instagramConnected ?? this.instagramConnected,
       propertiesImported: propertiesImported ?? this.propertiesImported,
-      teamInvited: teamInvited ?? this.teamInvited,
     );
   }
 
@@ -66,6 +60,5 @@ class BrokerSetupDetailsModel extends Equatable {
         facebookConnected,
         instagramConnected,
         propertiesImported,
-        teamInvited,
       ];
 }

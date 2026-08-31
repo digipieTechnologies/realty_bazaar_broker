@@ -9,6 +9,7 @@ import '../../../../core/localization/app_localizations.dart';
 import '../../../../providers/auth/auth_provider.dart';
 import '../../../../providers/dashboard/dashboard_provider.dart';
 import '../../../../widgets/dialogs/app_base_dialog.dart';
+import '../../../../widgets/shimmer/app_shimmer_container.dart';
 import 'setup_progress_card.dart';
 import 'setup_progress_circular_indicator_widget.dart';
 
@@ -62,6 +63,16 @@ class _CompactSetupProgressWidgetState
   Widget build(BuildContext context) {
     final dashboardProvider = context.watch<DashboardProvider>();
     final authProvider = context.watch<AuthProvider>();
+
+    // Show shimmer placeholder until user/broker profile finishes loading
+    if (authProvider.isLoading || authProvider.userProfile == null) {
+      return const AppShimmerContainer(
+        width: 120.0,
+        height: 34.0,
+        borderRadius: 17.0,
+      );
+    }
+
     final setupDetails = authProvider.userProfile?.brokerId?.setupDetails;
 
     final percentage = dashboardProvider.getCompletionPercentage(

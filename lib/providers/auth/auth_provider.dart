@@ -857,7 +857,17 @@ class AuthProvider extends ChangeNotifier {
           })
           .eq('id', userId);
 
-      // Re-fetch profile with updated details to sync cache
+      // 3. Update broker setup_details in Supabase if business_info_added is false
+      final currentSetup = broker?.setupDetails ?? const BrokerSetupDetailsModel();
+      if (!currentSetup.businessInfoAdded) {
+        final updatedSetup = currentSetup.copyWith(businessInfoAdded: true);
+        await SupabaseConfig.client
+            .from('brokers')
+            .update({'setup_details': updatedSetup.toJson()})
+            .eq('id', brokerId);
+      }
+
+      // Re-fetch profile with updated details to sync cache and local state
       await fetchCurrentUserProfile(userId);
 
       _setLoading(false);

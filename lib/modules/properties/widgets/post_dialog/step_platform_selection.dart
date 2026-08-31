@@ -3,7 +3,6 @@
 
 import 'package:the_realty_bazaar/models/property_enums.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
@@ -444,6 +443,13 @@ class StepPlatformSelection extends StatelessWidget {
   }
 
   Widget _buildConnectionErrorBanner(BuildContext context) {
+    final showIgConnect = selectInstagram && !socialProvider.isInstagramConnected;
+    final showFbConnect = selectFacebook && !socialProvider.isFacebookConnected;
+
+    if (!showIgConnect && !showFbConnect) {
+      return const SizedBox.shrink();
+    }
+
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
@@ -472,36 +478,41 @@ class StepPlatformSelection extends StatelessWidget {
           ),
           const SizedBox(height: 6.0),
           Text(
-            connectionErrorMessage!,
+            connectionErrorMessage ?? '',
             style: AppTextStyles.caption.copyWith(color: AppColors.error, fontSize: 11.0),
           ),
           const SizedBox(height: 10.0),
-          Wrap(
-            spacing: 8.0,
-            runSpacing: 8.0,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (selectInstagram && !socialProvider.isInstagramConnected)
-                AppButton(
+              if (showIgConnect)
+                AppButton.solid(
                   text: context.tr('connect_instagram_business'),
                   iconData: Icons.link_rounded,
                   color: AppColors.instagram,
-                  height: 36.0,
-                  borderRadius: 8.0,
+                  height: 42.0,
+                  borderRadius: 10.0,
+                  width: double.infinity,
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    context.go('/dashboard');
+                    if (brokerId.isNotEmpty) {
+                      socialProvider.connectInstagramDirectly(brokerId);
+                    }
                   },
                 ),
-              if (selectFacebook && !socialProvider.isFacebookConnected)
-                AppButton(
+              if (showIgConnect && showFbConnect)
+                const SizedBox(height: 8.0),
+              if (showFbConnect)
+                AppButton.solid(
                   text: context.tr('connect_facebook_page'),
                   iconData: Icons.link_rounded,
                   color: AppColors.facebook,
-                  height: 36.0,
-                  borderRadius: 8.0,
+                  height: 42.0,
+                  borderRadius: 10.0,
+                  width: double.infinity,
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    context.go('/dashboard');
+                    if (brokerId.isNotEmpty) {
+                      socialProvider.connectFacebook(brokerId);
+                    }
                   },
                 ),
             ],

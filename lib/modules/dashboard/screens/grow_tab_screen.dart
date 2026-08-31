@@ -5,6 +5,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../../../app/app_colors.dart';
@@ -43,14 +44,12 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
           final bool isMobile = MediaQuery.of(context).size.width < 600;
 
           return SingleChildScrollView(
-            padding: EdgeInsets.symmetric(
-              vertical: isMobile ? 12.0 : 20.0,
-            ),
+            padding: EdgeInsets.symmetric(vertical: isMobile ? 12.0 : 20.0),
             child: Column(
               children: [
                 // Header Section
                 _buildHeader(context),
-                SizedBox(height: isMobile ? 14.0 : 24.0),
+                SizedBox(height: context.height * 0.06),
 
                 // Plans Section
                 if (provider.isLoading)
@@ -80,9 +79,7 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
         final bool isMobile = constraints.maxWidth < 600;
 
         return Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: isMobile ? 24.0 : 40.0,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: isMobile ? 24.0 : 40.0),
           child: Column(
             children: [
               // Top Sparkle Badge Pill
@@ -184,9 +181,7 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
           const SizedBox(height: 4.0),
           Text(
             context.tr('grow_check_back'),
-            style: AppTextStyles.caption.copyWith(
-              color: AppColors.textMuted,
-            ),
+            style: AppTextStyles.caption.copyWith(color: AppColors.textMuted),
           ),
         ],
       ),

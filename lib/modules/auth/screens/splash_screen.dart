@@ -1,4 +1,5 @@
-// ignore_for_file: deprecated_member_use
+// File: lib/modules/auth/screens/splash_screen.dart
+// Purpose: Modern light-mode professional splash screen with direct clean branding layout on canvas.
 
 import 'dart:async';
 
@@ -6,9 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../app/app_assets.dart';
+import '../../../app/app_colors.dart';
 import '../../../app/app_routes.dart';
 import '../../../app/app_strings.dart';
+import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../widgets/brand/app_logo.dart';
 
@@ -20,29 +22,32 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen>
-    with TickerProviderStateMixin {
-  late AnimationController _fadeController;
-  late Animation<double> _logoFadeAnimation;
+    with SingleTickerProviderStateMixin {
+  late AnimationController _entranceController;
+  late Animation<double> _fadeAnimation;
+  late Animation<double> _scaleAnimation;
 
   @override
   void initState() {
     super.initState();
 
-    // 1. Logo and text fade-in animation (1.2 seconds)
-    _fadeController = AnimationController(
+    // 1. Entrance animation (fade & scale up)
+    _entranceController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 1000),
     );
 
-    _logoFadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeIn));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _entranceController, curve: Curves.easeOut),
+    );
 
-    // Start fade animation immediately
-    _fadeController.forward();
+    _scaleAnimation = Tween<double>(begin: 0.92, end: 1.0).animate(
+      CurvedAnimation(parent: _entranceController, curve: Curves.easeOutCubic),
+    );
 
-    // 2. Route check after 2.5 seconds total
+    _entranceController.forward();
+
+    // 2. Navigation Timer (2.5 seconds)
     Timer(const Duration(milliseconds: 2500), _checkSessionAndRoute);
   }
 
@@ -59,80 +64,179 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void dispose() {
-    _fadeController.dispose();
+    _entranceController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isMobile = size.width < 600;
+
     return Scaffold(
-      backgroundColor: const Color(
-        0xFF0F172A,
-      ), // Slate 900: Premium deep backdrop
+      backgroundColor: AppColors.background,
       body: SizedBox.expand(
         child: Stack(
           alignment: Alignment.center,
           children: [
-            // 1. Static Building Banner aligned to bottom
-            Positioned.fill(
-              child: Opacity(
-                opacity: 0.25, // Subtle backdrop style
-                child: Container(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(AppAssets.building),
-                      fit: BoxFit.cover,
-                      alignment: Alignment.bottomCenter,
-                    ),
-                  ),
+            // 1. Soft Ambient Background Glow Circles
+            Positioned(
+              top: -80,
+              left: -80,
+              child: Container(
+                width: 300,
+                height: 300,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.primary.withValues(alpha: 0.06),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: -100,
+              right: -100,
+              child: Container(
+                width: 380,
+                height: 380,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.primary700.withValues(alpha: 0.05),
                 ),
               ),
             ),
 
-            // 2. Branding Content (Logo + App Name)
+            // 2. Central Hero Branding (Direct on Canvas, No Container Box)
             FadeTransition(
-              opacity: _logoFadeAnimation,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Glass logo container
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.12),
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.20),
-                        width: 1.5,
+              opacity: _fadeAnimation,
+              child: ScaleTransition(
+                scale: _scaleAnimation,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // App Logo surrounded by soft glow circular container
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.primary.withValues(alpha: 0.15),
+                          width: 1.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primary.withValues(alpha: 0.1),
+                            blurRadius: 28.0,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: const AppLogo(
+                        size: 84.0,
+                        backgroundColor: Colors.transparent,
                       ),
                     ),
-                    child: const AppLogo(
-                      size: 80.0,
-                      backgroundColor: Colors.transparent,
+                    const SizedBox(height: 24.0),
+
+                    // App Title (Direct Text)
+                    Text(
+                      AppStrings.appName,
+                      style: AppTextStyles.heading1.copyWith(
+                        color: AppColors.textPrimary,
+                        fontSize: isMobile ? 30.0 : 36.0,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -0.5,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  const SizedBox(height: 24.0),
-                  Text(
-                    AppStrings.appName,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 36.0,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 1.5,
+                    const SizedBox(height: 10.0),
+
+                    // Subtitle / Platform Pill Badge
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14.0,
+                        vertical: 6.0,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(20.0),
+                        border: Border.all(
+                          color: AppColors.primary.withValues(alpha: 0.15),
+                          width: 1.0,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.verified_rounded,
+                            size: 14.0,
+                            color: AppColors.primary,
+                          ),
+                          const SizedBox(width: 6.0),
+                          Text(
+                            context
+                                .tr('real_estate_growth_platform')
+                                .toUpperCase(),
+                            style: AppTextStyles.caption.copyWith(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 10.5,
+                              letterSpacing: 0.6,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8.0),
-                  Text(
-                    context.tr('real_estate_growth_platform'),
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.6),
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2.0,
+                  ],
+                ),
+              ),
+            ),
+
+            // 3. Bottom Footer Security & Progress Indicator
+            Positioned(
+              bottom: isMobile ? 32.0 : 40.0,
+              child: FadeTransition(
+                opacity: _fadeAnimation,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Thin Indeterminate Progress Bar
+                    SizedBox(
+                      width: 140.0,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4.0),
+                        child: const LinearProgressIndicator(
+                          minHeight: 3.0,
+                          backgroundColor: AppColors.border,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            AppColors.primary,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 12.0),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.lock_outline_rounded,
+                          size: 13.0,
+                          color: AppColors.textMuted,
+                        ),
+                        const SizedBox(width: 4.0),
+                        Text(
+                          'Secured & Encrypted Broker Nexus',
+                          style: AppTextStyles.caption.copyWith(
+                            color: AppColors.textMuted,
+                            fontSize: 11.0,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

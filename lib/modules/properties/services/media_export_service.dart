@@ -136,15 +136,17 @@ class MediaExportService {
       final imgW = sourceImage.width.toDouble();
       final imgH = sourceImage.height.toDouble();
 
-      // Centered 9:16 portrait crop calculation
+      // Instagram Feed compliant crop calculation (4:5 portrait aspect ratio = 0.80)
+      // Meta Graph API requires feed image aspect ratios between 4:5 (0.80) and 1.91:1 (1.91).
+      const double targetAspectRatio = 4.0 / 5.0; // 0.80 (Instagram Feed Standard)
       double targetW = imgW;
       double targetH = imgH;
-      if (imgW / imgH > 9.0 / 16.0) {
-        // Wider than 9:16, crop sides
-        targetW = imgH * (9.0 / 16.0);
+      if (imgW / imgH > targetAspectRatio) {
+        // Wider than 4:5, crop sides to 4:5
+        targetW = imgH * targetAspectRatio;
       } else {
-        // Taller than 9:16, crop top/bottom
-        targetH = imgW * (16.0 / 9.0);
+        // Taller than 4:5, crop top/bottom to 4:5
+        targetH = imgW / targetAspectRatio;
       }
 
       final double srcX = (imgW - targetW) / 2.0;

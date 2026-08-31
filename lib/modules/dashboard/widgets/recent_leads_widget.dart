@@ -91,7 +91,10 @@ class _RecentLeadsWidgetState extends State<RecentLeadsWidget> {
           if (isLoading)
             const Padding(
               padding: EdgeInsets.all(12.0),
-              child: LeadListShimmerWidget(count: 3),
+              child: LeadListShimmerWidget(
+                count: 3,
+                isCompact: true,
+              ),
             )
           else if (leads.isEmpty)
             AppEmptyStateWidget(

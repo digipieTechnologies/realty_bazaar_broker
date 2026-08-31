@@ -186,7 +186,6 @@ serve(async (req) => {
           facebook_connected: currentSetupDetails.facebook_connected ?? false,
           instagram_connected: true,
           properties_imported: currentSetupDetails.properties_imported ?? false,
-          team_invited: currentSetupDetails.team_invited ?? false,
         };
 
         const { error: updateSetupError } = await supabase

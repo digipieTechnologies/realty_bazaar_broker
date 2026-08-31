@@ -68,6 +68,10 @@ class _AddEditPropertyScreenState extends State<AddEditPropertyScreen> {
   void initState() {
     super.initState();
     final p = widget.propertyToEdit;
+    final isEdit = p != null;
+
+    // Start directly from Step 1 (Details & Specs) when editing an existing property
+    _currentStep = isEdit ? 1 : 0;
 
     // Step 1 Init
     _propertyType = p?.propertyType ?? PropertyType.apartment;
@@ -210,7 +214,10 @@ class _AddEditPropertyScreenState extends State<AddEditPropertyScreen> {
   }
 
   Future<void> _previousStep() async {
-    if (_currentStep > 0) {
+    final isEdit = widget.propertyToEdit != null;
+    final minStep = isEdit ? 1 : 0;
+
+    if (_currentStep > minStep) {
       setState(() => _currentStep--);
       _scrollToTop();
     } else {
@@ -422,8 +429,8 @@ class _AddEditPropertyScreenState extends State<AddEditPropertyScreen> {
               child: Container(
                 constraints: const BoxConstraints(maxWidth: 900.0),
                 child: WizardFooterWidget(
-                  currentStep: _currentStep,
-                  totalSteps: 3,
+                  currentStep: isEdit ? _currentStep - 1 : _currentStep,
+                  totalSteps: isEdit ? 2 : 3,
                   onBackPressed: _previousStep,
                   onNextPressed: _nextStep,
                   isSaving: _isSaving,

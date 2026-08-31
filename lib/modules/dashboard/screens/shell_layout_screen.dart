@@ -19,7 +19,7 @@ import '../../../providers/auth/auth_provider.dart';
 import '../../../util/common_ext.dart';
 import '../../../widgets/brand/app_logo.dart';
 import '../../../widgets/common/common_app_bar.dart';
-import '../../../widgets/dialogs/language_dialog.dart';
+import '../../../widgets/buttons/language_selector_button.dart';
 import '../../../widgets/navigation/app_bottom_navigation_bar.dart';
 import '../../../widgets/shimmer/app_shimmer_container.dart';
 import '../../../widgets/shimmer/dashboard_shimmer_widget.dart';
@@ -284,56 +284,11 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
             ),
 
             // Language selector button
-            _buildLanguageSelectorButton(),
+            const LanguageSelectorButton(),
             const SizedBox(height: 12.0),
 
             // Footer User Profile Card
             _buildUserCard(name, role, email, isProfileSelected, isLoading),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLanguageSelectorButton() {
-    return InkWell(
-      onTap: () {
-        if (_scaffoldKey.currentState?.isDrawerOpen ?? false) {
-          _scaffoldKey.currentState?.closeDrawer();
-        }
-        LanguageDialog.show(context);
-      },
-      borderRadius: BorderRadius.circular(8.0),
-      child: Container(
-        height: 44.0,
-        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          border: Border.all(color: AppColors.border, width: 1.0),
-        ),
-        child: Row(
-          children: [
-            const Icon(
-              Icons.translate_rounded,
-              size: 18.0,
-              color: AppColors.textSecondary,
-            ),
-            const SizedBox(width: 12.0),
-            Expanded(
-              child: Text(
-                context.tr('change_language'),
-                style: const TextStyle(
-                  fontSize: 13.0,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.textSecondary,
-                ),
-              ),
-            ),
-            const Icon(
-              Icons.chevron_right_rounded,
-              size: 16.0,
-              color: AppColors.textMuted,
-            ),
           ],
         ),
       ),

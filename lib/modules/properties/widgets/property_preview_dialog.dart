@@ -2,12 +2,14 @@
 // Purpose: A standalone premium dialog for reviewing listing details and managing multi-stage uploads.
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/services/supabase_storage_service.dart';
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../models/property_model.dart';
 import '../../../models/media_model.dart';
+import '../../../providers/auth/auth_provider.dart';
 import '../../../providers/property/property_provider.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/localization/property_localizer.dart';
@@ -68,6 +70,7 @@ class _PropertyPreviewDialogState extends State<PropertyPreviewDialog> {
   Future<void> _uploadAndSaveProperty(BuildContext dialogContext) async {
     final isEdit = widget.isEdit;
     final property = widget.property;
+    final authProvider = Provider.of<AuthProvider>(dialogContext, listen: false);
 
     final successTitle = isEdit
         ? dialogContext.tr('toast_property_updated_title')
@@ -147,6 +150,7 @@ class _PropertyPreviewDialogState extends State<PropertyPreviewDialog> {
       final savedProperty = await widget.propertyProvider.saveProperty(
         finalProperty,
         isEdit: isEdit,
+        authProvider: authProvider,
       );
 
       if (!mounted) return;

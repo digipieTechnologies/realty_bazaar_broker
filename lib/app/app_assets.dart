@@ -13,6 +13,7 @@ class AppAssets {
   static const String illustrationPlaceholder =
       'assets/images/illustration_placeholder.png';
   static const String mapBanner = 'assets/images/map_banner.png';
+  static const String facebookCover = 'assets/images/facebook_cover.png';
 
   // Icons
   static const String iconLead = 'assets/icons/lead.svg';

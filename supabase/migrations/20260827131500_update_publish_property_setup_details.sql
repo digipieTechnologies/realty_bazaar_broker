@@ -1,4 +1,4 @@
--- Migration: Create RPC function for publishing (creating/editing) a property and its nested address details.
+-- Migration: Update publish_property RPC to set setup_details.properties_imported = true upon property publishing
 
 CREATE OR REPLACE FUNCTION public.publish_property(
   p_property JSONB,

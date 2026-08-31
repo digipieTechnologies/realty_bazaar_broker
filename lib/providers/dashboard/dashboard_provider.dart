@@ -133,6 +133,9 @@ class DashboardProvider extends ChangeNotifier {
 
   // Completion calculation based on setupDetails
   double getCompletionPercentage({BrokerSetupDetailsModel? setupDetails}) {
+    if (setupDetails == null) {
+      return 0.0;
+    }
     final steps = getOnboardingSteps(setupDetails: setupDetails);
     final completedCount = steps.where((s) => s.isCompleted).length;
     return completedCount / steps.length;
@@ -190,15 +193,6 @@ class DashboardProvider extends ChangeNotifier {
         isCompleted: details.propertiesImported,
         routePath: '/properties',
       ),
-      OnboardingStep(
-        id: 'invite_team',
-        title: 'Invite Team',
-        description: 'Add co-brokers, agents & team members to workspace',
-        svgAssetPath: 'assets/icons/ic_leads_filled.svg',
-        gradientColors: AppColors.gradientIndigo,
-        isCompleted: details.teamInvited,
-        routePath: '',
-      ),
     ];
   }
 
@@ -227,13 +221,6 @@ class DashboardProvider extends ChangeNotifier {
       icon: Icons.cloud_download_outlined,
       isLocked: !isFacebookConnected,
       routePath: '/properties',
-    ),
-    QuickActionItem(
-      id: 'invite_team',
-      title: 'Invite Team',
-      icon: Icons.group_add_outlined,
-      isLocked: !isInstagramConnected,
-      routePath: '/settings',
     ),
     QuickActionItem(
       id: 'branding',

@@ -225,6 +225,9 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
     }
 
     final property = _property!;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isDesktop = screenWidth > 900;
+    final isTablet = screenWidth >= 600 && screenWidth <= 900;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -234,11 +237,8 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(14.0),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final isDesktop = constraints.maxWidth > 900;
-            if (isDesktop) {
-              return Row(
+        child: isDesktop
+            ? Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Left Column: Media, Main Info, Specs & Marketing (flex: 3)
@@ -253,7 +253,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                         const SizedBox(height: 14.0),
                         PropertyPreviewSpecsGrid(property: property),
                         const SizedBox(height: 14.0),
-                        _buildMarketingActionsCard(context),
+                        _buildMarketingActionsCard(context, includePostCard: true),
                       ],
                     ),
                   ),
@@ -284,9 +284,8 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                     ),
                   ),
                 ],
-              );
-            } else {
-              return Column(
+              )
+            : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   PropertyPreviewMediaGallery(medias: property.medias, height: 260.0),
@@ -312,13 +311,153 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                     ),
                   ],
                   const SizedBox(height: 14.0),
-                  _buildMarketingActionsCard(context),
+                  _buildMarketingActionsCard(context, includePostCard: false),
                 ],
-              );
-            }
-          },
-        ),
+              ),
       ),
+      bottomNavigationBar: isDesktop ? null : _buildStickyBottomPostBar(context, isTablet: isTablet),
+    );
+  }
+
+  Widget _buildStickyBottomPostBar(BuildContext context, {required bool isTablet}) {
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+    return Container(
+      padding: EdgeInsets.fromLTRB(
+        16.0,
+        12.0,
+        16.0,
+        12.0 + (bottomPadding > 0 ? bottomPadding : 4.0),
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        border: const Border(
+          top: BorderSide(color: AppColors.border, width: 1.0),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 12.0,
+            offset: const Offset(0, -4),
+          ),
+        ],
+      ),
+      child: isTablet
+          ? Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(6.0),
+                            decoration: BoxDecoration(
+                              color: AppColors.primary.withValues(alpha: 0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.campaign_outlined,
+                              color: AppColors.primary,
+                              size: 16.0,
+                            ),
+                          ),
+                          const SizedBox(width: 8.0),
+                          Text(
+                            context.tr('post_property'),
+                            style: AppTextStyles.heading3.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.0,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4.0),
+                      Text(
+                        context.tr('post_property_feature_desc'),
+                        style: AppTextStyles.caption.copyWith(
+                          color: AppColors.textSecondary,
+                          fontSize: 11.5,
+                          height: 1.35,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 16.0),
+                SizedBox(
+                  width: 220.0,
+                  child: AppButton.solid(
+                    iconData: Icons.campaign_outlined,
+                    text: context.tr('post_property'),
+                    color: AppColors.primary,
+                    height: 44.0,
+                    borderRadius: 10.0,
+                    onPressed: () => _openPostPropertyDialog(context),
+                  ),
+                ),
+              ],
+            )
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(6.0),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.campaign_outlined,
+                        color: AppColors.primary,
+                        size: 16.0,
+                      ),
+                    ),
+                    const SizedBox(width: 8.0),
+                    Expanded(
+                      child: Text(
+                        context.tr('post_property'),
+                        style: AppTextStyles.heading3.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.5,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4.0),
+                Text(
+                  context.tr('post_property_feature_desc'),
+                  style: AppTextStyles.caption.copyWith(
+                    color: AppColors.textSecondary,
+                    fontSize: 11.5,
+                    height: 1.35,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 10.0),
+                SizedBox(
+                  width: double.infinity,
+                  child: AppButton.solid(
+                    iconData: Icons.campaign_outlined,
+                    text: context.tr('post_property'),
+                    color: AppColors.primary,
+                    height: 44.0,
+                    borderRadius: 10.0,
+                    onPressed: () => _openPostPropertyDialog(context),
+                  ),
+                ),
+              ],
+            ),
     );
   }
 
@@ -448,7 +587,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
     );
   }
 
-  Widget _buildMarketingActionsCard(BuildContext context) {
+  Widget _buildMarketingActionsCard(BuildContext context, {bool includePostCard = true}) {
     final postCard = _buildActionFeatureCard(
       icon: Icons.campaign_outlined,
       color: AppColors.primary,
@@ -478,6 +617,10 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
         onPressed: () => _openVideoRequestDialog(context),
       ),
     );
+
+    if (!includePostCard) {
+      return videoCard;
+    }
 
     return LayoutBuilder(
       builder: (context, constraints) {

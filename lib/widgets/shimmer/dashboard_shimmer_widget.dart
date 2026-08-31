@@ -17,7 +17,6 @@ class DashboardShimmerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDesktop = context.isDesktopUI;
     final isMobile = context.isMobileUI;
 
     return SingleChildScrollView(
@@ -32,8 +31,12 @@ class DashboardShimmerWidget extends StatelessWidget {
           const DashboardHeaderBannerShimmerWidget(),
 
           // 2. Responsive Main Content Layout Skeleton
-          isDesktop
-              ? const Row(
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final isDesktop = ContextX.isDesktopWidth(constraints.maxWidth);
+
+              if (isDesktop) {
+                return const Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Left Column (Flex 7 - ~65% Width)
@@ -123,7 +126,10 @@ class DashboardShimmerWidget extends StatelessWidget {
                                 Divider(height: 1.0, color: AppColors.border),
                                 Padding(
                                   padding: EdgeInsets.all(12.0),
-                                  child: LeadListShimmerWidget(count: 3),
+                                  child: LeadListShimmerWidget(
+                                    count: 3,
+                                    isCompact: true,
+                                  ),
                                 ),
                               ],
                             ),
@@ -132,93 +138,100 @@ class DashboardShimmerWidget extends StatelessWidget {
                       ),
                     ),
                   ],
-                )
-              : const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Section 1: Summary / Overview Performance
-                    AppSectionHeader(
-                      title: 'Overview Performance',
-                      svgAsset: AppAssets.icDashboardFilled,
-                    ),
-                    DashboardSummaryShimmerWidget(),
-                    SizedBox(height: 14.0),
-                    Divider(height: 1.0, color: AppColors.border),
-                    SizedBox(height: 14.0),
+                );
+              }
 
-                    // Section 2: Connected Channels (Social Channels)
-                    AppSectionHeader(
-                      title: 'Connected Channels',
-                      icon: Icons.link_rounded,
-                    ),
-                    SocialConnectShimmerWidget(isVertical: true),
-                    SizedBox(height: 14.0),
-                    Divider(height: 1.0, color: AppColors.border),
-                    SizedBox(height: 14.0),
+              return const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Section 1: Summary / Overview Performance
+                  AppSectionHeader(
+                    title: 'Overview Performance',
+                    svgAsset: AppAssets.icDashboardFilled,
+                  ),
+                  DashboardSummaryShimmerWidget(),
+                  SizedBox(height: 14.0),
+                  Divider(height: 1.0, color: AppColors.border),
+                  SizedBox(height: 14.0),
 
-                    // Section 3: Recent Leads Widget
-                    AppCardContainer(
-                      child: Column(
-                        children: [
-                          AppSectionHeader(
-                            title: 'Recent Leads',
-                            icon: Icons.people_alt_rounded,
-                            padding: EdgeInsets.fromLTRB(16.0, 12.0, 12.0, 12.0),
-                          ),
-                          Divider(height: 1.0, color: AppColors.border),
-                          Padding(
-                            padding: EdgeInsets.all(12.0),
-                            child: LeadListShimmerWidget(count: 3),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 14.0),
-                    Divider(height: 1.0, color: AppColors.border),
-                    SizedBox(height: 14.0),
+                  // Section 2: Connected Channels (Social Channels)
+                  AppSectionHeader(
+                    title: 'Connected Channels',
+                    icon: Icons.link_rounded,
+                  ),
+                  SocialConnectShimmerWidget(isVertical: true),
+                  SizedBox(height: 14.0),
+                  Divider(height: 1.0, color: AppColors.border),
+                  SizedBox(height: 14.0),
 
-                    // Section 4: Recent Posts Widget
-                    AppCardContainer(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AppSectionHeader(
-                            title: 'Recent Posts',
-                            icon: Icons.dynamic_feed_rounded,
-                            padding: EdgeInsets.fromLTRB(16.0, 12.0, 12.0, 12.0),
+                  // Section 3: Recent Leads Widget
+                  AppCardContainer(
+                    child: Column(
+                      children: [
+                        AppSectionHeader(
+                          title: 'Recent Leads',
+                          icon: Icons.people_alt_rounded,
+                          padding: EdgeInsets.fromLTRB(16.0, 12.0, 12.0, 12.0),
+                        ),
+                        Divider(height: 1.0, color: AppColors.border),
+                        Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: LeadListShimmerWidget(
+                            count: 3,
+                            isCompact: true,
                           ),
-                          Divider(height: 1.0, color: AppColors.border),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 12.0),
-                            child: PostListHorizontalShimmerWidget(count: 3),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 14.0),
-                    Divider(height: 1.0, color: AppColors.border),
-                    SizedBox(height: 14.0),
+                  ),
+                  SizedBox(height: 14.0),
+                  Divider(height: 1.0, color: AppColors.border),
+                  SizedBox(height: 14.0),
 
-                    // Section 5: Recent Properties Widget
-                    AppCardContainer(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AppSectionHeader(
-                            title: 'Recent Properties',
-                            icon: Icons.apartment_rounded,
-                            padding: EdgeInsets.fromLTRB(16.0, 12.0, 12.0, 12.0),
-                          ),
-                          Divider(height: 1.0, color: AppColors.border),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 12.0),
-                            child: PropertyListHorizontalShimmerWidget(count: 3),
-                          ),
-                        ],
-                      ),
+                  // Section 4: Recent Posts Widget
+                  AppCardContainer(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AppSectionHeader(
+                          title: 'Recent Posts',
+                          icon: Icons.dynamic_feed_rounded,
+                          padding: EdgeInsets.fromLTRB(16.0, 12.0, 12.0, 12.0),
+                        ),
+                        Divider(height: 1.0, color: AppColors.border),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12.0),
+                          child: PostListHorizontalShimmerWidget(count: 3),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 14.0),
+                  Divider(height: 1.0, color: AppColors.border),
+                  SizedBox(height: 14.0),
+
+                  // Section 5: Recent Properties Widget
+                  AppCardContainer(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AppSectionHeader(
+                          title: 'Recent Properties',
+                          icon: Icons.apartment_rounded,
+                          padding: EdgeInsets.fromLTRB(16.0, 12.0, 12.0, 12.0),
+                        ),
+                        Divider(height: 1.0, color: AppColors.border),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12.0),
+                          child: PropertyListHorizontalShimmerWidget(count: 3),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
         ],
       ),
     );
