@@ -38,14 +38,12 @@ class GrowPlanCardWidget extends StatelessWidget {
 
   /// Returns accent color for non-popular cards
   Color _getAccentColor() {
-    switch (plan.duration) {
-      case SubscriptionDuration.oneTime:
+    switch (plan.billingType) {
+      case PlanBillingType.oneTime:
         return AppColors.accentTeal;
-      case SubscriptionDuration.month:
+      case PlanBillingType.recurring:
         return AppColors.primary;
-      case SubscriptionDuration.year:
-        return AppColors.tagIndigo;
-      case SubscriptionDuration.custom:
+      case PlanBillingType.custom:
         return AppColors.posterGold;
     }
   }
@@ -202,17 +200,14 @@ class GrowPlanCardWidget extends StatelessWidget {
     final bool isPopular = plan.isPopular;
 
     IconData titleIcon;
-    switch (plan.duration) {
-      case SubscriptionDuration.oneTime:
+    switch (plan.billingType) {
+      case PlanBillingType.oneTime:
         titleIcon = Icons.bolt_rounded;
         break;
-      case SubscriptionDuration.month:
+      case PlanBillingType.recurring:
         titleIcon = Icons.auto_awesome_rounded;
         break;
-      case SubscriptionDuration.year:
-        titleIcon = Icons.military_tech_rounded;
-        break;
-      case SubscriptionDuration.custom:
+      case PlanBillingType.custom:
         titleIcon = Icons.corporate_fare_rounded;
         break;
     }
@@ -256,7 +251,7 @@ class GrowPlanCardWidget extends StatelessWidget {
 
   Widget _buildAmountSection(BuildContext context, Color accent) {
     final bool isPopular = plan.isPopular;
-    final bool isCustom = plan.duration == SubscriptionDuration.custom;
+    final bool isCustom = plan.billingType == PlanBillingType.custom;
 
     if (isCustom) {
       return FittedBox(
@@ -292,7 +287,7 @@ class GrowPlanCardWidget extends StatelessWidget {
           ),
           const SizedBox(width: 4.0),
           Text(
-            plan.duration.periodDisplay,
+            plan.billingType.periodDisplay,
             style: AppTextStyles.body2.copyWith(
               color: isPopular ? AppColors.slate400 : AppColors.textMuted,
               fontWeight: FontWeight.w500,
@@ -342,34 +337,34 @@ class GrowPlanCardWidget extends StatelessWidget {
   }
 
   String _getCTAButtonText(BuildContext context) {
-    if (plan.duration == SubscriptionDuration.custom) {
+    if (plan.billingType == PlanBillingType.custom) {
       return context.tr('grow_contact_team');
     }
 
-    if (plan.duration == SubscriptionDuration.oneTime) {
+    if (plan.billingType == PlanBillingType.oneTime) {
       return 'Start Trial';
     }
 
     final titleUpper = plan.title.toUpperCase();
     if (titleUpper.contains('STARTER')) {
-      return 'Subscribe Starter';
+      return 'Explore Starter';
     }
     if (titleUpper.contains('GROWTH')) {
-      return 'Subscribe Growth';
+      return 'Explore Growth';
     }
     if (titleUpper.contains('ELITE') || titleUpper.contains('HIGH')) {
-      return 'Subscribe Elite';
+      return 'Explore Elite';
     }
 
     final titleParts = plan.title.trim().split(' ');
-    final firstWord = titleParts.isNotEmpty ? titleParts.first : 'Plan';
+    final firstWord = titleParts.isNotEmpty ? titleParts.first : 'Package';
     final capitalized = '${firstWord[0].toUpperCase()}${firstWord.substring(1).toLowerCase()}';
-    return 'Subscribe $capitalized';
+    return 'Explore $capitalized';
   }
 
   Widget _buildCTAButton(BuildContext context, Color accent) {
     final bool isPopular = plan.isPopular;
-    final bool isCustom = plan.duration == SubscriptionDuration.custom;
+    final bool isCustom = plan.billingType == PlanBillingType.custom;
     final String buttonText = _getCTAButtonText(context);
 
     if (isPopular) {

@@ -2,7 +2,6 @@
 // Purpose: Provider managing subscription plans fetched dynamically from Supabase database with smart sorting.
 
 import 'package:flutter/material.dart';
-
 import '../../core/supabase/supabase_config.dart';
 import '../../models/models.dart';
 
@@ -24,30 +23,32 @@ class SubscriptionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Plans with one_time duration, sorted by price ascending
+  /// Plans with one_time billing type, sorted by price ascending
   List<SubscriptionPlanModel> get oneTimePlans {
-    final list = _plans.where((p) => p.duration == SubscriptionDuration.oneTime).toList();
+    final list = _plans
+        .where((p) => p.billingType == PlanBillingType.oneTime)
+        .toList();
     list.sort((a, b) => a.amount.compareTo(b.amount));
     return list;
   }
 
-  /// Plans with monthly duration, sorted by price ascending
-  List<SubscriptionPlanModel> get monthlyPlans {
-    final list = _plans.where((p) => p.duration == SubscriptionDuration.month).toList();
+  /// Plans with recurring billing type, sorted by price ascending
+  List<SubscriptionPlanModel> get recurringPlans {
+    final list = _plans
+        .where((p) => p.billingType == PlanBillingType.recurring)
+        .toList();
     list.sort((a, b) => a.amount.compareTo(b.amount));
     return list;
   }
 
-  /// Plans with yearly duration, sorted by price ascending
-  List<SubscriptionPlanModel> get yearlyPlans {
-    final list = _plans.where((p) => p.duration == SubscriptionDuration.year).toList();
-    list.sort((a, b) => a.amount.compareTo(b.amount));
-    return list;
-  }
+  /// Backward compatibility getter for monthlyPlans
+  List<SubscriptionPlanModel> get monthlyPlans => recurringPlans;
 
-  /// Plans with custom duration
+  /// Plans with custom billing type
   List<SubscriptionPlanModel> get customPlans {
-    return _plans.where((p) => p.duration == SubscriptionDuration.custom).toList();
+    return _plans
+        .where((p) => p.billingType == PlanBillingType.custom)
+        .toList();
   }
 
   /// Returns the designated Most Popular plan if available
@@ -60,7 +61,7 @@ class SubscriptionProvider extends ChangeNotifier {
   }
 
   /// Fetches all active subscription plans from Supabase subscription_plans table
-  /// and dynamically sorts them according to duration type and price.
+  /// and dynamically sorts them according to billing type and price.
   Future<void> fetchActiveSubscriptionPlans() async {
     _isLoading = true;
     _errorMessage = null;
@@ -77,14 +78,14 @@ class SubscriptionProvider extends ChangeNotifier {
           .toList();
 
       // Dynamic sorting logic:
-      // Primary Sort: Duration order -> oneTime (0), month (1), year (2), custom (3)
+      // Primary Sort: Billing type order -> oneTime (0), recurring (1), custom (2)
       // Secondary Sort: Amount ascending
       loadedPlans.sort((a, b) {
-        final durationOrderA = _getDurationSortWeight(a.duration);
-        final durationOrderB = _getDurationSortWeight(b.duration);
+        final orderA = _getBillingTypeSortWeight(a.billingType);
+        final orderB = _getBillingTypeSortWeight(b.billingType);
 
-        if (durationOrderA != durationOrderB) {
-          return durationOrderA.compareTo(durationOrderB);
+        if (orderA != orderB) {
+          return orderA.compareTo(orderB);
         }
 
         return a.amount.compareTo(b.amount);
@@ -107,16 +108,14 @@ class SubscriptionProvider extends ChangeNotifier {
     }
   }
 
-  int _getDurationSortWeight(SubscriptionDuration duration) {
-    switch (duration) {
-      case SubscriptionDuration.oneTime:
+  int _getBillingTypeSortWeight(PlanBillingType billingType) {
+    switch (billingType) {
+      case PlanBillingType.oneTime:
         return 0;
-      case SubscriptionDuration.month:
+      case PlanBillingType.recurring:
         return 1;
-      case SubscriptionDuration.year:
+      case PlanBillingType.custom:
         return 2;
-      case SubscriptionDuration.custom:
-        return 3;
     }
   }
 }

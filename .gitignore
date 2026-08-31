@@ -2,6 +2,9 @@
 config.json
 .env*
 !.env*.example
+key.properties
+*.jks
+*.keystore
 
 # Miscellaneous & System
 .DS_Store
