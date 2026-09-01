@@ -605,32 +605,45 @@ class _PropertiesWebViewState extends State<PropertiesWebView> {
                 children: [
                   AppShimmerContainer(
                     width: double.infinity,
-                    height: 190.0,
+                    height: 175.0,
                     borderRadius: 18.0,
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(14.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        AppShimmerContainer(width: 140.0, height: 20.0),
-                        SizedBox(height: 10.0),
-                        AppShimmerContainer(width: double.infinity, height: 16.0),
-                        SizedBox(height: 8.0),
-                        AppShimmerContainer(width: 180.0, height: 12.0),
-                        SizedBox(height: 14.0),
-                        AppShimmerContainer(width: double.infinity, height: 32.0, borderRadius: 8.0),
-                        SizedBox(height: 12.0),
-                        Divider(height: 1.0, color: AppColors.border),
-                        SizedBox(height: 10.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            AppShimmerContainer(width: 90.0, height: 14.0),
-                            AppShimmerContainer(width: 80.0, height: 24.0, borderRadius: 12.0),
-                          ],
-                        ),
-                      ],
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.all(14.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              AppShimmerContainer(width: 140.0, height: 18.0),
+                              SizedBox(height: 8.0),
+                              AppShimmerContainer(width: double.infinity, height: 14.0),
+                              SizedBox(height: 6.0),
+                              AppShimmerContainer(width: 160.0, height: 12.0),
+                              SizedBox(height: 10.0),
+                              AppShimmerContainer(width: double.infinity, height: 28.0, borderRadius: 8.0),
+                            ],
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Divider(height: 1.0, color: AppColors.border),
+                              SizedBox(height: 8.0),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  AppShimmerContainer(width: 80.0, height: 12.0),
+                                  AppShimmerContainer(width: 70.0, height: 20.0, borderRadius: 10.0),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
