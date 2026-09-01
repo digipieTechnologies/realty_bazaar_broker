@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
@@ -8,10 +9,7 @@ import '../../../widgets/containers/container_corner.dart';
 class AutomationConfirmationDialog extends StatelessWidget {
   final bool isEnabling;
 
-  const AutomationConfirmationDialog({
-    super.key,
-    required this.isEnabling,
-  });
+  const AutomationConfirmationDialog({super.key, required this.isEnabling});
 
   static Future<bool> show(BuildContext context, {required bool isEnabling}) async {
     final result = await showDialog<bool>(
@@ -65,7 +63,8 @@ class AutomationConfirmationDialog extends StatelessWidget {
               icon: Icons.verified_user_outlined,
               iconColor: AppColors.success,
               title: 'Existing Data Preserved',
-              description: 'All previously captured leads and reply history from this post remain safely saved.',
+              description:
+                  'All previously captured leads and reply history from this post remain safely saved.',
             ),
           ];
 
@@ -105,19 +104,12 @@ class AutomationConfirmationDialog extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: AppTextStyles.heading3.copyWith(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: AppTextStyles.heading3.copyWith(fontSize: 18.0, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 2.0),
                       Text(
-                        isEnabling
-                            ? context.tr('get_leads_subtitle')
-                            : context.tr('pause_leads_subtitle'),
-                        style: AppTextStyles.caption.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
+                        isEnabling ? context.tr('get_leads_subtitle') : context.tr('pause_leads_subtitle'),
+                        style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary),
                       ),
                     ],
                   ),
@@ -158,11 +150,7 @@ class AutomationConfirmationDialog extends StatelessWidget {
                               borderRadius: 10.0,
                               color: point.iconColor.withValues(alpha: 0.12),
                               alignment: Alignment.center,
-                              child: Icon(
-                                point.icon,
-                                size: 18.0,
-                                color: point.iconColor,
-                              ),
+                              child: Icon(point.icon, size: 18.0, color: point.iconColor),
                             ),
                             const SizedBox(width: 12.0),
                             Expanded(

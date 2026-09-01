@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+
 import 'broker_model.dart';
 import 'user_enums.dart';
 
@@ -56,9 +57,7 @@ class UserModel extends Equatable {
       isActive: json['is_active'] as bool? ?? true,
       isDeleted: json['is_deleted'] as bool? ?? false,
       isEmailVerified: json['is_email_verified'] as bool? ?? false,
-      brokerId: json['broker_id'] != null
-          ? BrokerModel.fromJson(json['broker_id'])
-          : null,
+      brokerId: json['broker_id'] != null ? BrokerModel.fromJson(json['broker_id']) : null,
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'].toString())?.toLocal()
           : null,

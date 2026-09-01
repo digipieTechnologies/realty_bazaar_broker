@@ -2,27 +2,24 @@
 // Purpose: Full-screen file preview modal supporting image zoom, text/CSV/SQL preview, video/document viewing, and browser launching.
 
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import '../../app/app_colors.dart';
 import '../../core/utils/common_ext.dart';
 import '../../util/app_utils.dart';
+import '../buttons/app_button.dart';
 import '../images/cached_image.dart';
 import '../toast/app_toast.dart';
-import '../buttons/app_button.dart';
 
 class AppFilePreviewDialog extends StatefulWidget {
   final String? fileUrl;
   final String? filePath;
   final String fileName;
 
-  const AppFilePreviewDialog({
-    super.key,
-    this.fileUrl,
-    this.filePath,
-    required this.fileName,
-  });
+  const AppFilePreviewDialog({super.key, this.fileUrl, this.filePath, required this.fileName});
 
   static Future<void> show(
     BuildContext context, {
@@ -33,11 +30,7 @@ class AppFilePreviewDialog extends StatefulWidget {
     return showDialog(
       context: context,
       useSafeArea: false,
-      builder: (context) => AppFilePreviewDialog(
-        fileUrl: fileUrl,
-        filePath: filePath,
-        fileName: fileName,
-      ),
+      builder: (context) => AppFilePreviewDialog(fileUrl: fileUrl, filePath: filePath, fileName: fileName),
     );
   }
 
@@ -161,11 +154,7 @@ class _AppFilePreviewDialogState extends State<AppFilePreviewDialog> {
           const SizedBox(width: 8.0),
         ],
       ),
-      body: SafeArea(
-        child: Center(
-          child: _buildBody(ext),
-        ),
-      ),
+      body: SafeArea(child: Center(child: _buildBody(ext))),
     );
   }
 
@@ -174,16 +163,13 @@ class _AppFilePreviewDialogState extends State<AppFilePreviewDialog> {
     if (widget.fileName.isImageUrl) {
       final imageSource = widget.fileUrl ?? widget.filePath;
       if (imageSource == null || imageSource.isEmpty) {
-        return const Center(child: Text('Image path is missing', style: TextStyle(color: Colors.white)));
+        return const Center(
+          child: Text('Image path is missing', style: TextStyle(color: Colors.white)),
+        );
       }
       return InteractiveViewer(
         maxScale: 5.0,
-        child: CachedImage(
-          imageSource,
-          fit: BoxFit.contain,
-          width: double.infinity,
-          height: double.infinity,
-        ),
+        child: CachedImage(imageSource, fit: BoxFit.contain, width: double.infinity, height: double.infinity),
       );
     }
 
@@ -223,7 +209,11 @@ class _AppFilePreviewDialogState extends State<AppFilePreviewDialog> {
                     ),
                     child: Text(
                       ext,
-                      style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 12.0),
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12.0,
+                      ),
                     ),
                   ),
                   Text(
@@ -271,10 +261,10 @@ class _AppFilePreviewDialogState extends State<AppFilePreviewDialog> {
               widget.fileName.isCsvUrl
                   ? Icons.table_chart_rounded
                   : (widget.fileName.isSqlUrl
-                      ? Icons.code_rounded
-                      : (widget.fileName.isPdfUrl
-                          ? Icons.picture_as_pdf_rounded
-                          : Icons.insert_drive_file_rounded)),
+                        ? Icons.code_rounded
+                        : (widget.fileName.isPdfUrl
+                              ? Icons.picture_as_pdf_rounded
+                              : Icons.insert_drive_file_rounded)),
               size: 64.0,
               color: AppColors.primary,
             ),
@@ -292,10 +282,7 @@ class _AppFilePreviewDialogState extends State<AppFilePreviewDialog> {
           ),
           if (_errorMessage != null) ...[
             const SizedBox(height: 12.0),
-            Text(
-              _errorMessage!,
-              style: const TextStyle(color: Colors.orangeAccent, fontSize: 12.0),
-            ),
+            Text(_errorMessage!, style: const TextStyle(color: Colors.orangeAccent, fontSize: 12.0)),
           ],
           const SizedBox(height: 32.0),
           AppButton.solid(

@@ -2,6 +2,7 @@
 // Purpose: Step 3 UI for publishing progress bar and status indicator while posting to social channels.
 
 import 'package:flutter/material.dart';
+
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
 import '../../../../providers/social/social_provider.dart';
@@ -9,10 +10,7 @@ import '../../../../providers/social/social_provider.dart';
 class StepPublishingProgress extends StatelessWidget {
   final SocialProvider socialProvider;
 
-  const StepPublishingProgress({
-    super.key,
-    required this.socialProvider,
-  });
+  const StepPublishingProgress({super.key, required this.socialProvider});
 
   @override
   Widget build(BuildContext context) {

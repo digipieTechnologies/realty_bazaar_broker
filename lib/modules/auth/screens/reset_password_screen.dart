@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
 import '../../../app/app_assets.dart';
 import '../../../app/app_colors.dart';
 import '../../../app/app_routes.dart';
@@ -23,10 +24,7 @@ import '../widgets/password_field_widget.dart';
 class ResetPasswordScreen extends StatefulWidget {
   final String email;
 
-  const ResetPasswordScreen({
-    super.key,
-    required this.email,
-  });
+  const ResetPasswordScreen({super.key, required this.email});
 
   @override
   State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
@@ -74,7 +72,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDesktop = context.isDesktopUI;
+    final isDesktop = context.isDesktop;
 
     return Scaffold(
       backgroundColor: AppColors.surfaceLight,
@@ -88,10 +86,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               child: Container(
                 width: 320,
                 height: 320,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.primary.withOpacity(0.05),
-                ),
+                decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.primary.withOpacity(0.05)),
               ),
             ),
             Positioned(
@@ -118,10 +113,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 child: SafeArea(
                   child: Center(
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 20.0,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 440.0),
                         child: Column(
@@ -133,17 +125,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             isDesktop
                                 ? _formContent()
                                 : Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 20.0,
-                                      vertical: 24.0,
-                                    ),
+                                    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(24.0),
-                                      border: Border.all(
-                                        color: AppColors.border,
-                                        width: 1.0,
-                                      ),
+                                      border: Border.all(color: AppColors.border, width: 1.0),
                                       boxShadow: [
                                         BoxShadow(
                                           color: Colors.black.withOpacity(0.02),
@@ -191,21 +177,13 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               borderRadius: BorderRadius.circular(12.0),
               border: Border.all(color: AppColors.border, width: 1.0),
               boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.03),
-                  blurRadius: 8.0,
-                  offset: const Offset(0, 2),
-                ),
+                BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 8.0, offset: const Offset(0, 2)),
               ],
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
-                  Icons.chevron_left_rounded,
-                  color: AppColors.textPrimary,
-                  size: 20.0,
-                ),
+                const Icon(Icons.chevron_left_rounded, color: AppColors.textPrimary, size: 20.0),
                 const SizedBox(width: 8.0),
                 Text(
                   'Back to Login',
@@ -227,18 +205,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   Widget _leftSidebar() {
     return Container(
       decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(AppAssets.building),
-          fit: BoxFit.cover,
-        ),
+        image: DecorationImage(image: AssetImage(AppAssets.building), fit: BoxFit.cover),
       ),
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              AppColors.primaryDark.withOpacity(0.85),
-              AppColors.primary.withOpacity(0.70),
-            ],
+            colors: [AppColors.primaryDark.withOpacity(0.85), AppColors.primary.withOpacity(0.70)],
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
           ),
@@ -252,12 +224,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
-                    blurRadius: 8.0,
-                  ),
-                ],
+                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 8.0)],
               ),
               child: const AppLogo(size: 38.0),
             ),
@@ -274,11 +241,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             const SizedBox(height: 16.0),
             Text(
               'Set a strong, new password to protect your ${AppStrings.appName} account and client data.',
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.85),
-                fontSize: 15.0,
-                height: 1.45,
-              ),
+              style: TextStyle(color: Colors.white.withOpacity(0.85), fontSize: 15.0, height: 1.45),
             ),
             const Spacer(),
           ],
@@ -296,7 +259,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         children: [
           const AuthHeaderWidget(
             title: 'Set New Password',
-            subtitle: 'Your new password must be at least 6 characters long and different from previous passwords.',
+            subtitle:
+                'Your new password must be at least 6 characters long and different from previous passwords.',
           ),
           const SizedBox(height: 24.0),
 
@@ -308,7 +272,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             textInputAction: TextInputAction.next,
             validator: (val) {
               if (val.isEmptyORNull) return 'Please enter a new password';
-              if (!val.isStrongPassword) return 'Password must be at least 6 characters with a letter and digit';
+              if (!val.isStrongPassword)
+                return 'Password must be at least 6 characters with a letter and digit';
               return null;
             },
           ),
@@ -328,9 +293,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           ),
           const SizedBox(height: 28.0),
 
-          _ResetPasswordSubmitButton(
-            onPressed: _handleResetPasswordSubmit,
-          ),
+          _ResetPasswordSubmitButton(onPressed: _handleResetPasswordSubmit),
         ],
       ),
     );
@@ -358,11 +321,7 @@ class _ResetPasswordSubmitButton extends StatelessWidget {
       text: 'UPDATE PASSWORD',
       variant: AppButtonVariant.gradient,
       isLoading: isLoading,
-      icon: const Icon(
-        Icons.check_circle_outline_rounded,
-        color: Colors.white,
-        size: 18.0,
-      ),
+      icon: const Icon(Icons.check_circle_outline_rounded, color: Colors.white, size: 18.0),
       onPressed: onPressed,
     ).disable(isDisable: isLoading);
   }

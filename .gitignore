@@ -1,5 +1,7 @@
 # Sensitive Configuration & API Keys
 config.json
+.env*
+!.env*.example
 key.properties
 *.jks
 *.keystore
@@ -57,3 +59,4 @@ ios/Pods/
 ios/.symlinks/
 macos/Flutter/ephemeral/
 macos/Pods/
+/supabase/.temp/

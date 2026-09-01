@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
 
@@ -94,9 +95,7 @@ class _SearchFilterHeaderWidgetState extends State<SearchFilterHeaderWidget> {
                     ),
                     decoration: InputDecoration(
                       hintText: widget.hintText,
-                      hintStyle: AppTextStyles.body2.copyWith(
-                        color: AppColors.textMuted,
-                      ),
+                      hintStyle: AppTextStyles.body2.copyWith(color: AppColors.textMuted),
                       filled: false,
                       fillColor: Colors.transparent,
                       hoverColor: Colors.transparent,
@@ -123,11 +122,7 @@ class _SearchFilterHeaderWidgetState extends State<SearchFilterHeaderWidget> {
                       },
                       child: const Padding(
                         padding: EdgeInsets.only(left: 6.0),
-                        child: Icon(
-                          Icons.cancel_rounded,
-                          color: AppColors.textSecondary,
-                          size: 18.0,
-                        ),
+                        child: Icon(Icons.cancel_rounded, color: AppColors.textSecondary, size: 18.0),
                       ),
                     ),
                   ),
@@ -136,10 +131,7 @@ class _SearchFilterHeaderWidgetState extends State<SearchFilterHeaderWidget> {
           ),
         ),
 
-        if (widget.trailingAction != null) ...[
-          const SizedBox(width: 12.0),
-          widget.trailingAction!,
-        ],
+        if (widget.trailingAction != null) ...[const SizedBox(width: 12.0), widget.trailingAction!],
       ],
     );
   }

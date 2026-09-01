@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart' as package_shimmer;
+
 import '../../app/app_colors.dart';
 import '../../util/common_ext.dart';
 
@@ -10,10 +11,7 @@ import '../../util/common_ext.dart';
 class VideoRequestListShimmerWidget extends StatelessWidget {
   final int count;
 
-  const VideoRequestListShimmerWidget({
-    super.key,
-    this.count = 3,
-  });
+  const VideoRequestListShimmerWidget({super.key, this.count = 3});
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +20,7 @@ class VideoRequestListShimmerWidget extends StatelessWidget {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding: isMobile
-          ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0)
-          : EdgeInsets.zero,
+      padding: isMobile ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0) : EdgeInsets.zero,
       itemCount: count,
       itemBuilder: (context, index) {
         return isMobile ? _buildMobileCardShimmer() : _buildDesktopRowShimmer();
@@ -54,15 +50,10 @@ class VideoRequestListShimmerWidget extends StatelessWidget {
                   Container(
                     width: 32.0,
                     height: 32.0,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
+                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8.0)),
                   ),
                   const SizedBox(width: 10.0),
-                  Expanded(
-                    child: Container(height: 14.0, width: 160.0, color: Colors.white),
-                  ),
+                  Expanded(child: Container(height: 14.0, width: 160.0, color: Colors.white)),
                   const SizedBox(width: 6.0),
                   Container(
                     width: 24.0,
@@ -75,7 +66,11 @@ class VideoRequestListShimmerWidget extends StatelessWidget {
               // Address Line
               Row(
                 children: [
-                  Container(width: 14.0, height: 14.0, decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle)),
+                  Container(
+                    width: 14.0,
+                    height: 14.0,
+                    decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                  ),
                   const SizedBox(width: 6.0),
                   Expanded(
                     child: Container(height: 12.0, width: double.infinity, color: Colors.white),
@@ -86,7 +81,11 @@ class VideoRequestListShimmerWidget extends StatelessWidget {
               // Broker Line
               Row(
                 children: [
-                  Container(width: 14.0, height: 14.0, decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle)),
+                  Container(
+                    width: 14.0,
+                    height: 14.0,
+                    decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                  ),
                   const SizedBox(width: 6.0),
                   Container(height: 11.5, width: 120.0, color: Colors.white),
                 ],
@@ -98,7 +97,11 @@ class VideoRequestListShimmerWidget extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Container(width: 12.0, height: 12.0, decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle)),
+                      Container(
+                        width: 12.0,
+                        height: 12.0,
+                        decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                      ),
                       const SizedBox(width: 4.0),
                       Container(height: 11.0, width: 80.0, color: Colors.white),
                     ],
@@ -106,10 +109,7 @@ class VideoRequestListShimmerWidget extends StatelessWidget {
                   Container(
                     height: 22.0,
                     width: 70.0,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(6.0),
-                    ),
+                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(6.0)),
                   ),
                 ],
               ),
@@ -118,10 +118,7 @@ class VideoRequestListShimmerWidget extends StatelessWidget {
               Container(
                 height: 36.0,
                 width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8.0)),
               ),
             ],
           ),
@@ -133,9 +130,7 @@ class VideoRequestListShimmerWidget extends StatelessWidget {
   Widget _buildDesktopRowShimmer() {
     return Container(
       decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: AppColors.border, width: 1.0),
-        ),
+        border: Border(bottom: BorderSide(color: AppColors.border, width: 1.0)),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 14.0),
       child: package_shimmer.Shimmer.fromColors(
@@ -177,10 +172,7 @@ class VideoRequestListShimmerWidget extends StatelessWidget {
                 child: Container(
                   height: 24.0,
                   width: 70.0,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(6.0),
-                  ),
+                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(6.0)),
                 ),
               ),
             ),
@@ -201,10 +193,7 @@ class VideoRequestListShimmerWidget extends StatelessWidget {
             const SizedBox(width: 12.0),
 
             // Flex 2: Created At
-            Expanded(
-              flex: 2,
-              child: Container(height: 12.0, width: 80.0, color: Colors.white),
-            ),
+            Expanded(flex: 2, child: Container(height: 12.0, width: 80.0, color: Colors.white)),
 
             // Action Menu
             SizedBox(
@@ -232,7 +221,7 @@ class VideoRequestStatsShimmerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMobile = context.isMobileUI;
-    final isDesktop = context.isDesktopUI;
+    final isDesktop = context.isDesktop;
 
     if (isMobile) {
       return GridView.builder(
@@ -258,7 +247,11 @@ class VideoRequestStatsShimmerWidget extends StatelessWidget {
               highlightColor: AppColors.shimmerHighlight,
               child: Row(
                 children: [
-                  Container(width: 24.0, height: 24.0, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(6.0))),
+                  Container(
+                    width: 24.0,
+                    height: 24.0,
+                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(6.0)),
+                  ),
                   const SizedBox(width: 6.0),
                   Expanded(
                     child: Column(

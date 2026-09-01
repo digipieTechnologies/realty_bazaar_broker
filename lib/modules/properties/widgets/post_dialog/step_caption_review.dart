@@ -2,11 +2,12 @@
 // Purpose: Step 3 UI for Gemini AI caption review and media summary. Matches Step 2's side-by-side desktop layout.
 
 import 'package:flutter/material.dart';
+
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
+import '../../../../models/media_model.dart';
 import '../../../../providers/social/social_provider.dart';
 import '../../../../widgets/images/cached_image.dart';
-import '../../../../models/media_model.dart';
 import '../../../../widgets/media/full_screen_media_viewer.dart';
 import 'step_media_preview_edit.dart';
 
@@ -53,12 +54,14 @@ class _StepCaptionReviewState extends State<StepCaptionReview> {
 
     final currentMedia = widget.selectedMedia[_currentMediaIndex];
     final pathLower = currentMedia.path.toLowerCase();
-    final isImgExt = pathLower.endsWith('.jpg') ||
+    final isImgExt =
+        pathLower.endsWith('.jpg') ||
         pathLower.endsWith('.jpeg') ||
         pathLower.endsWith('.png') ||
         pathLower.endsWith('.webp') ||
         pathLower.endsWith('.gif');
-    final isVideo = !isImgExt &&
+    final isVideo =
+        !isImgExt &&
         (currentMedia.type.toLowerCase() == 'video' ||
             pathLower.endsWith('.mp4') ||
             pathLower.endsWith('.mov'));
@@ -94,16 +97,10 @@ class _StepCaptionReviewState extends State<StepCaptionReview> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Reel Preview Device Mockup Box
-                SizedBox(
-                  width: 260.0,
-                  height: 440.0,
-                  child: _buildReelPreviewDevice(currentMedia, isVideo),
-                ),
+                SizedBox(width: 260.0, height: 440.0, child: _buildReelPreviewDevice(currentMedia, isVideo)),
                 const SizedBox(width: 16.0),
                 // Customization Controls Panel
-                Expanded(
-                  child: _buildInfoPanel(),
-                ),
+                Expanded(child: _buildInfoPanel()),
               ],
             )
           else
@@ -146,9 +143,7 @@ class _StepCaptionReviewState extends State<StepCaptionReview> {
         child: Stack(
           children: [
             // Media Background (Photo or Video Player)
-            Positioned.fill(
-              child: _buildMediaView(media, isVideo),
-            ),
+            Positioned.fill(child: _buildMediaView(media, isVideo)),
 
             // Tap detector on top of media (excluding navigation arrows)
             Positioned.fill(
@@ -194,11 +189,7 @@ class _StepCaptionReviewState extends State<StepCaptionReview> {
                           color: Colors.black.withValues(alpha: 0.45),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
-                          Icons.chevron_left_rounded,
-                          color: Colors.white,
-                          size: 18.0,
-                        ),
+                        child: const Icon(Icons.chevron_left_rounded, color: Colors.white, size: 18.0),
                       ),
                     ),
                   ),
@@ -218,11 +209,7 @@ class _StepCaptionReviewState extends State<StepCaptionReview> {
                           color: Colors.black.withValues(alpha: 0.45),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
-                          Icons.chevron_right_rounded,
-                          color: Colors.white,
-                          size: 18.0,
-                        ),
+                        child: const Icon(Icons.chevron_right_rounded, color: Colors.white, size: 18.0),
                       ),
                     ),
                   ),
@@ -253,9 +240,7 @@ class _StepCaptionReviewState extends State<StepCaptionReview> {
 
     return Container(
       color: Colors.grey.shade900,
-      child: const Center(
-        child: Icon(Icons.image_rounded, color: Colors.white54, size: 36.0),
-      ),
+      child: const Center(child: Icon(Icons.image_rounded, color: Colors.white54, size: 36.0)),
     );
   }
 
@@ -290,7 +275,11 @@ class _StepCaptionReviewState extends State<StepCaptionReview> {
                     children: [
                       Text(
                         '✨ Gemini AI is generating viral caption...',
-                        style: AppTextStyles.body2.copyWith(fontWeight: FontWeight.bold, color: AppColors.primary, fontSize: 13.0),
+                        style: AppTextStyles.body2.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                          fontSize: 13.0,
+                        ),
                       ),
                       const SizedBox(height: 2.0),
                       Text(
@@ -313,7 +302,9 @@ class _StepCaptionReviewState extends State<StepCaptionReview> {
           maxLines: null, // grows to fit full rich caption
           style: AppTextStyles.body2.copyWith(fontSize: 13.0, height: 1.55),
           decoration: InputDecoration(
-            hintText: widget.isGeneratingCaption ? 'Generating AI caption with Gemini...' : 'Write caption for your social post...',
+            hintText: widget.isGeneratingCaption
+                ? 'Generating AI caption with Gemini...'
+                : 'Write caption for your social post...',
             filled: true,
             fillColor: AppColors.background,
             contentPadding: const EdgeInsets.all(14.0),
@@ -362,12 +353,17 @@ class _StepCaptionReviewState extends State<StepCaptionReview> {
                       'assets/icons/instagram.png',
                       width: 16.0,
                       height: 16.0,
-                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.camera_alt_rounded, size: 16.0, color: AppColors.instagram),
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.camera_alt_rounded, size: 16.0, color: AppColors.instagram),
                     ),
                     const SizedBox(width: 6.0),
                     const Text(
                       'Instagram Feed & Reels',
-                      style: TextStyle(color: AppColors.instagram, fontSize: 12.0, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        color: AppColors.instagram,
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
@@ -387,12 +383,17 @@ class _StepCaptionReviewState extends State<StepCaptionReview> {
                       'assets/icons/facebook.png',
                       width: 16.0,
                       height: 16.0,
-                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.facebook_rounded, size: 16.0, color: AppColors.facebook),
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.facebook_rounded, size: 16.0, color: AppColors.facebook),
                     ),
                     const SizedBox(width: 6.0),
                     const Text(
                       'Facebook Page',
-                      style: TextStyle(color: AppColors.facebook, fontSize: 12.0, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        color: AppColors.facebook,
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
@@ -406,31 +407,25 @@ class _StepCaptionReviewState extends State<StepCaptionReview> {
   void _showFullScreenMedia(BuildContext context, PickedMedia media) {
     final mediaModels = widget.selectedMedia.map((m) {
       final pathLower = m.path.toLowerCase();
-      final isImgExt = pathLower.endsWith('.jpg') ||
+      final isImgExt =
+          pathLower.endsWith('.jpg') ||
           pathLower.endsWith('.jpeg') ||
           pathLower.endsWith('.png') ||
           pathLower.endsWith('.webp') ||
           pathLower.endsWith('.gif');
-      final type = !isImgExt &&
-              (m.type.toLowerCase() == 'video' ||
-                  pathLower.endsWith('.mp4') ||
-                  pathLower.endsWith('.mov'))
+      final type =
+          !isImgExt &&
+              (m.type.toLowerCase() == 'video' || pathLower.endsWith('.mp4') || pathLower.endsWith('.mov'))
           ? 'video'
           : 'image';
-      return MediaModel(
-        url: m.path,
-        type: type,
-        bytes: m.bytes,
-      );
+      return MediaModel(url: m.path, type: type, bytes: m.bytes);
     }).toList();
 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => FullScreenMediaViewer(
-          medias: mediaModels,
-          initialIndex: widget.selectedMedia.indexOf(media),
-        ),
+        builder: (context) =>
+            FullScreenMediaViewer(medias: mediaModels, initialIndex: widget.selectedMedia.indexOf(media)),
       ),
     );
   }

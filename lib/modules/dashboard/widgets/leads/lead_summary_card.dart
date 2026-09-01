@@ -134,10 +134,7 @@ class LeadSummaryCard extends StatelessWidget {
           ] else if (subtitle != null) ...[
             Row(
               children: [
-                if (icon != null) ...[
-                  Icon(icon, size: 14.0, color: iconColor),
-                  const SizedBox(width: 6.0),
-                ],
+                if (icon != null) ...[Icon(icon, size: 14.0, color: iconColor), const SizedBox(width: 6.0)],
                 Expanded(
                   child: Text(
                     subtitle!,

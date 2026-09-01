@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../widgets/toast/app_toast.dart';
 
 class AppUtils {
@@ -16,10 +17,7 @@ class AppUtils {
 
     // 1. Attempt external application launch
     try {
-      final bool launched = await launchUrl(
-        url,
-        mode: LaunchMode.externalApplication,
-      );
+      final bool launched = await launchUrl(url, mode: LaunchMode.externalApplication);
       if (launched) return true;
     } catch (e) {
       debugPrint('LaunchMode.externalApplication failed ($urlString): $e');
@@ -27,10 +25,7 @@ class AppUtils {
 
     // 2. Fallback to platform default launch
     try {
-      final bool launched = await launchUrl(
-        url,
-        mode: LaunchMode.platformDefault,
-      );
+      final bool launched = await launchUrl(url, mode: LaunchMode.platformDefault);
       if (launched) return true;
     } catch (e) {
       debugPrint('LaunchMode.platformDefault failed ($urlString): $e');
@@ -44,10 +39,7 @@ class AppUtils {
       debugPrint('Basic launchUrl failed ($urlString): $e');
     }
 
-    AppToast.showError(
-      'Launch Failed',
-      'Could not open connection link in browser.',
-    );
+    AppToast.showError('Launch Failed', 'Could not open connection link in browser.');
     return false;
   }
 }

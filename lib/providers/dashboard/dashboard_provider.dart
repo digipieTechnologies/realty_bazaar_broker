@@ -119,9 +119,7 @@ class DashboardProvider extends ChangeNotifier {
         params: {'p_broker_id': brokerId},
       );
       if (response != null && response is Map) {
-        _summary = DashboardSummaryModel.fromJson(
-          Map<String, dynamic>.from(response),
-        );
+        _summary = DashboardSummaryModel.fromJson(Map<String, dynamic>.from(response));
       }
     } catch (e) {
       debugPrint('[DashboardProvider] Error fetching summary RPC: $e');
@@ -142,9 +140,7 @@ class DashboardProvider extends ChangeNotifier {
   }
 
   // List of onboarding steps mapped directly from BrokerSetupDetailsModel
-  List<OnboardingStep> getOnboardingSteps({
-    BrokerSetupDetailsModel? setupDetails,
-  }) {
+  List<OnboardingStep> getOnboardingSteps({BrokerSetupDetailsModel? setupDetails}) {
     final details = setupDetails ?? const BrokerSetupDetailsModel();
 
     return [
@@ -197,10 +193,7 @@ class DashboardProvider extends ChangeNotifier {
   }
 
   // List of Quick Actions (dynamic lock state)
-  List<QuickActionItem> getQuickActions(
-    bool isFacebookConnected,
-    bool isInstagramConnected,
-  ) => [
+  List<QuickActionItem> getQuickActions(bool isFacebookConnected, bool isInstagramConnected) => [
     const QuickActionItem(
       id: 'profile',
       title: 'Profile',
@@ -240,59 +233,33 @@ class DashboardProvider extends ChangeNotifier {
 
   // Learning Center
   List<LearningItem> get learningItems => [
-    const LearningItem(
-      title: 'How FB Connection Works',
-      routePath: '/help/fb-connection',
-    ),
-    const LearningItem(
-      title: 'Instagram Sync Guide',
-      routePath: '/help/ig-sync',
-    ),
-    const LearningItem(
-      title: 'Data Privacy Policy',
-      routePath: '/privacy-policy',
-    ),
+    const LearningItem(title: 'How FB Connection Works', routePath: '/help/fb-connection'),
+    const LearningItem(title: 'Instagram Sync Guide', routePath: '/help/ig-sync'),
+    const LearningItem(title: 'Data Privacy Policy', routePath: '/privacy-policy'),
     const LearningItem(title: 'Frequently Asked Questions', routePath: '/faq'),
   ];
 
   // Advanced features
   List<AdvancedFeature> get advancedFeatures => [
-    const AdvancedFeature(
-      title: 'Automatic Lead Capture',
-      icon: Icons.person_add_alt_1_outlined,
-    ),
-    const AdvancedFeature(
-      title: 'Real-time Notifications',
-      icon: Icons.notifications_none_outlined,
-    ),
-    const AdvancedFeature(
-      title: 'Analytics Dashboard',
-      icon: Icons.analytics_outlined,
-    ),
-    const AdvancedFeature(
-      title: 'Manage Everything',
-      icon: Icons.grid_view_outlined,
-    ),
+    const AdvancedFeature(title: 'Automatic Lead Capture', icon: Icons.person_add_alt_1_outlined),
+    const AdvancedFeature(title: 'Real-time Notifications', icon: Icons.notifications_none_outlined),
+    const AdvancedFeature(title: 'Analytics Dashboard', icon: Icons.analytics_outlined),
+    const AdvancedFeature(title: 'Manage Everything', icon: Icons.grid_view_outlined),
     const AdvancedFeature(title: 'CRM Integration', icon: Icons.share_outlined),
-    const AdvancedFeature(
-      title: 'Time Saving Tools',
-      icon: Icons.hourglass_empty_outlined,
-    ),
+    const AdvancedFeature(title: 'Time Saving Tools', icon: Icons.hourglass_empty_outlined),
   ];
 
   // Services "What's waiting for you"
   List<ServiceTeaser> get serviceTeasers => [
     const ServiceTeaser(
       title: 'Lead Inbox',
-      description:
-          'A unified view for every person interested in your properties.',
+      description: 'A unified view for every person interested in your properties.',
       icon: Icons.mail_outline_rounded,
       themeColor: Colors.blue,
     ),
     const ServiceTeaser(
       title: 'Social Inbox',
-      description:
-          'Manage comments and messages from all platforms in one place.',
+      description: 'Manage comments and messages from all platforms in one place.',
       icon: Icons.chat_bubble_outline_rounded,
       themeColor: Colors.purple,
     ),

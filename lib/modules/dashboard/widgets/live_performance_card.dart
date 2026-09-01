@@ -1,7 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
+
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
 import '../../../../core/localization/app_localizations.dart';
@@ -9,10 +11,7 @@ import '../../../../core/localization/app_localizations.dart';
 class LivePerformanceCard extends StatelessWidget {
   final bool isLocked;
 
-  const LivePerformanceCard({
-    super.key,
-    required this.isLocked,
-  });
+  const LivePerformanceCard({super.key, required this.isLocked});
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +70,16 @@ class LivePerformanceCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildMetricColumn(context.tr("todays_leads"), isLocked ? '--' : '24', AppColors.primary),
-                      _buildMetricColumn(context.tr("engagement"), isLocked ? '--' : '84.6%', AppColors.success),
+                      _buildMetricColumn(
+                        context.tr("todays_leads"),
+                        isLocked ? '--' : '24',
+                        AppColors.primary,
+                      ),
+                      _buildMetricColumn(
+                        context.tr("engagement"),
+                        isLocked ? '--' : '84.6%',
+                        AppColors.success,
+                      ),
                       _buildMetricColumn(context.tr("reach_caps"), isLocked ? '--' : '12.8K', Colors.orange),
                     ],
                   ),
@@ -100,10 +107,7 @@ class LivePerformanceCard extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: AppColors.primary.withOpacity(0.08),
                               shape: BoxShape.circle,
-                              border: Border.all(
-                                color: AppColors.primary.withOpacity(0.15),
-                                width: 1.5,
-                              ),
+                              border: Border.all(color: AppColors.primary.withOpacity(0.15), width: 1.5),
                             ),
                             child: const Icon(
                               Icons.lock_outline_rounded,

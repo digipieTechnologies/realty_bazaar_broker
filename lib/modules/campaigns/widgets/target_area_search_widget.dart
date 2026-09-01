@@ -2,6 +2,7 @@
 // Purpose: Interactive location search input with autocomplete suggestions and removable target area chips.
 
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,11 +17,7 @@ class TargetAreaSearchWidget extends StatefulWidget {
   final List<TargetAreaModel> selectedAreas;
   final ValueChanged<List<TargetAreaModel>> onAreasChanged;
 
-  const TargetAreaSearchWidget({
-    super.key,
-    required this.selectedAreas,
-    required this.onAreasChanged,
-  });
+  const TargetAreaSearchWidget({super.key, required this.selectedAreas, required this.onAreasChanged});
 
   @override
   State<TargetAreaSearchWidget> createState() => _TargetAreaSearchWidgetState();
@@ -92,30 +89,84 @@ class _TargetAreaSearchWidgetState extends State<TargetAreaSearchWidget> {
     final isSearching = provider.isSearchingAreas;
 
     final buildingKeywords = const [
-      'society', 'socity', 'soc', 'shoc', 'soc.',
-      'bunglows', 'bungalow', 'bungalows', 'bnglow',
-      'chsl', 'chs', 'apt', 'apts', 'appartment', 'apartment', 'apartments',
-      'residency', 'realty', 'rowhouse', 'row house', 'villas', 'villa',
-      'homes', 'nivas', 'niwas', 'heights', 'arcade', 'square',
-      'palace', 'chambers', 'flats', 'flat', 'plaza', 'estate',
-      'township', 'nest', 'haven', 'bliss', 'paradise', 'valley',
-      'greens', 'residence', 'coop', 'co-op', 'building', 'house',
-      'plots', 'plot', 'complex', 'shopping', 'hub', 'infra',
-      'enclave', 'shoppes', 'sanctuary', 'cottage', 'manor', 'court',
-      'terrace', 'gardens', 'resort', 'commercial'
+      'society',
+      'socity',
+      'soc',
+      'shoc',
+      'soc.',
+      'bunglows',
+      'bungalow',
+      'bungalows',
+      'bnglow',
+      'chsl',
+      'chs',
+      'apt',
+      'apts',
+      'appartment',
+      'apartment',
+      'apartments',
+      'residency',
+      'realty',
+      'rowhouse',
+      'row house',
+      'villas',
+      'villa',
+      'homes',
+      'nivas',
+      'niwas',
+      'heights',
+      'arcade',
+      'square',
+      'palace',
+      'chambers',
+      'flats',
+      'flat',
+      'plaza',
+      'estate',
+      'township',
+      'nest',
+      'haven',
+      'bliss',
+      'paradise',
+      'valley',
+      'greens',
+      'residence',
+      'coop',
+      'co-op',
+      'building',
+      'house',
+      'plots',
+      'plot',
+      'complex',
+      'shopping',
+      'hub',
+      'infra',
+      'enclave',
+      'shoppes',
+      'sanctuary',
+      'cottage',
+      'manor',
+      'court',
+      'terrace',
+      'gardens',
+      'resort',
+      'commercial',
     ];
 
     final filteredResults = searchResults.where((item) {
       final itemFullClean = item.fullArea.toLowerCase().trim();
       final itemAreaClean = item.area.toLowerCase().trim();
 
-      final isAlreadySelected = widget.selectedAreas.any((selected) =>
-          selected.fullArea.toLowerCase().trim() == itemFullClean ||
-          selected.area.toLowerCase().trim() == itemAreaClean);
+      final isAlreadySelected = widget.selectedAreas.any(
+        (selected) =>
+            selected.fullArea.toLowerCase().trim() == itemFullClean ||
+            selected.area.toLowerCase().trim() == itemAreaClean,
+      );
       if (isAlreadySelected) return false;
 
-      final isBuildingOrSociety = buildingKeywords.any((kw) =>
-          itemFullClean.contains(kw) || itemAreaClean.contains(kw));
+      final isBuildingOrSociety = buildingKeywords.any(
+        (kw) => itemFullClean.contains(kw) || itemAreaClean.contains(kw),
+      );
       if (isBuildingOrSociety) return false;
 
       return true;
@@ -149,10 +200,7 @@ class _TargetAreaSearchWidgetState extends State<TargetAreaSearchWidget> {
         const SizedBox(height: 4.0),
         Text(
           context.tr('target_areas_desc'),
-          style: AppTextStyles.caption.copyWith(
-            fontSize: 12.0,
-            color: AppColors.textMuted,
-          ),
+          style: AppTextStyles.caption.copyWith(fontSize: 12.0, color: AppColors.textMuted),
         ),
         const SizedBox(height: 12.0),
 
@@ -162,10 +210,7 @@ class _TargetAreaSearchWidgetState extends State<TargetAreaSearchWidget> {
             spacing: 6.0,
             runSpacing: 6.0,
             children: widget.selectedAreas.map((area) {
-              return AppTagChip(
-                label: area.fullArea,
-                onDelete: () => _removeArea(area),
-              );
+              return AppTagChip(label: area.fullArea, onDelete: () => _removeArea(area));
             }).toList(),
           ),
           const SizedBox(height: 12.0),
@@ -194,15 +239,9 @@ class _TargetAreaSearchWidgetState extends State<TargetAreaSearchWidget> {
                 style: AppTextStyles.body2.copyWith(fontSize: 13.5),
                 decoration: InputDecoration(
                   hintText: context.tr('add_target_area'),
-                  hintStyle: AppTextStyles.body2.copyWith(
-                    color: AppColors.textMuted,
-                    fontSize: 13.5,
-                  ),
+                  hintStyle: AppTextStyles.body2.copyWith(color: AppColors.textMuted, fontSize: 13.5),
                   border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 14.0,
-                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
                   suffixIcon: isSearching
                       ? const Padding(
                           padding: EdgeInsets.all(12.0),
@@ -224,18 +263,14 @@ class _TargetAreaSearchWidgetState extends State<TargetAreaSearchWidget> {
                   child: ListView.separated(
                     shrinkWrap: true,
                     itemCount: filteredResults.length,
-                    separatorBuilder: (context, index) =>
-                        const Divider(height: 1.0, color: AppColors.border),
+                    separatorBuilder: (context, index) => const Divider(height: 1.0, color: AppColors.border),
                     itemBuilder: (context, index) {
                       final item = filteredResults[index];
                       return Material(
                         type: MaterialType.transparency,
                         child: ListTile(
                           dense: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16.0,
-                            vertical: 4.0,
-                          ),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                           title: Text(
                             item.fullArea,
                             style: AppTextStyles.body2.copyWith(
@@ -258,11 +293,7 @@ class _TargetAreaSearchWidgetState extends State<TargetAreaSearchWidget> {
                                 ),
                               ],
                             ),
-                            child: const Icon(
-                              Icons.add_rounded,
-                              size: 18.0,
-                              color: Colors.white,
-                            ),
+                            child: const Icon(Icons.add_rounded, size: 18.0, color: Colors.white),
                           ),
                           onTap: () => _addArea(item),
                         ),

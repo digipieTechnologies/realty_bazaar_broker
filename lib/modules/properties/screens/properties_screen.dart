@@ -4,20 +4,19 @@ import 'package:provider/provider.dart';
 import '../../../app/app_colors.dart';
 import '../../../app/app_constants.dart';
 import '../../../app/app_text_styles.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../models/property_model.dart';
-import '../../../providers/property/property_provider.dart';
 import '../../../providers/auth/auth_provider.dart';
+import '../../../providers/property/property_provider.dart';
 import '../../../util/common_ext.dart';
-import '../../../widgets/common/search_filter_header_widget.dart';
-import '../../../widgets/shimmer/property_list_shimmer_widget.dart';
+import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/common/app_card_container.dart';
 import '../../../widgets/common/app_empty_state_widget.dart';
 import '../../../widgets/common/app_pagination_widget.dart';
+import '../../../widgets/common/search_filter_header_widget.dart';
+import '../../../widgets/shimmer/property_list_shimmer_widget.dart';
 import '../widgets/property_card_widget.dart';
-import '../../../widgets/buttons/app_button.dart';
 import 'add_edit_property_screen.dart';
-
-import '../../../core/localization/app_localizations.dart';
 
 class PropertiesScreen extends StatefulWidget {
   const PropertiesScreen({super.key});
@@ -36,11 +35,7 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final brokerId = authProvider.userProfile?.brokerId?.id ?? '';
-      context.read<PropertyProvider>().fetchProperties(
-            brokerId: brokerId,
-            page: 1,
-            searchQuery: '',
-          );
+      context.read<PropertyProvider>().fetchProperties(brokerId: brokerId, page: 1, searchQuery: '');
     });
   }
 
@@ -53,29 +48,24 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
   void _onSearchQueryChanged(String query) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final brokerId = authProvider.userProfile?.brokerId?.id ?? '';
-    context.read<PropertyProvider>().fetchProperties(
-          brokerId: brokerId,
-          page: 1,
-          searchQuery: query,
-        );
+    context.read<PropertyProvider>().fetchProperties(brokerId: brokerId, page: 1, searchQuery: query);
   }
 
   void _onPageChanged(int page) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final brokerId = authProvider.userProfile?.brokerId?.id ?? '';
     context.read<PropertyProvider>().fetchProperties(
-          brokerId: brokerId,
-          page: page,
-          searchQuery: _searchController.text,
-        );
+      brokerId: brokerId,
+      page: page,
+      searchQuery: _searchController.text,
+    );
   }
 
   void _openAddEditPropertyScreen([PropertyModel? property]) {
-    Navigator.of(context, rootNavigator: true).push(
-      MaterialPageRoute(
-        builder: (context) => AddEditPropertyScreen(propertyToEdit: property),
-      ),
-    );
+    Navigator.of(
+      context,
+      rootNavigator: true,
+    ).push(MaterialPageRoute(builder: (context) => AddEditPropertyScreen(propertyToEdit: property)));
   }
 
   @override
@@ -86,10 +76,7 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: AppConstants.getTabPadding(
-            context,
-            bottomExtra: isMobile ? 80.0 : 24.0,
-          ),
+          padding: AppConstants.getTabPadding(context, bottomExtra: isMobile ? 80.0 : 24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -122,18 +109,15 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
                   }
 
                   if (provider.errorMessage != null && provider.properties.isEmpty) {
-                    return _buildErrorState(
-                      provider.errorMessage!,
-                      () {
-                        final authProvider = Provider.of<AuthProvider>(context, listen: false);
-                        final brokerId = authProvider.userProfile?.brokerId?.id ?? '';
-                        provider.fetchProperties(
-                          brokerId: brokerId,
-                          page: provider.currentPage,
-                          searchQuery: _searchController.text,
-                        );
-                      },
-                    );
+                    return _buildErrorState(provider.errorMessage!, () {
+                      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+                      final brokerId = authProvider.userProfile?.brokerId?.id ?? '';
+                      provider.fetchProperties(
+                        brokerId: brokerId,
+                        page: provider.currentPage,
+                        searchQuery: _searchController.text,
+                      );
+                    });
                   }
 
                   if (provider.properties.isEmpty) {
@@ -197,30 +181,18 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
         children: [
           Container(
             padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: AppColors.error.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.cloud_off_rounded,
-              size: 44.0,
-              color: AppColors.error,
-            ),
+            decoration: BoxDecoration(color: AppColors.error.withValues(alpha: 0.1), shape: BoxShape.circle),
+            child: const Icon(Icons.cloud_off_rounded, size: 44.0, color: AppColors.error),
           ),
           const SizedBox(height: 20.0),
           Text(
             context.tr('unable_to_load_properties'),
-            style: AppTextStyles.heading3.copyWith(
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-            ),
+            style: AppTextStyles.heading3.copyWith(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
           ),
           const SizedBox(height: 8.0),
           Text(
             context.tr('properties_load_error_desc'),
-            style: AppTextStyles.body2.copyWith(
-              color: AppColors.textSecondary,
-            ),
+            style: AppTextStyles.body2.copyWith(color: AppColors.textSecondary),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24.0),
@@ -247,9 +219,7 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
       child: AppEmptyStateWidget(
         icon: Icons.apartment_rounded,
         iconSize: 40.0,
-        title: isSearching
-            ? context.tr('no_properties_found')
-            : context.tr('no_properties_listed_yet'),
+        title: isSearching ? context.tr('no_properties_found') : context.tr('no_properties_listed_yet'),
         description: isSearching
             ? context.tr('no_properties_matched_desc', arguments: {'query': searchQuery})
             : context.tr('no_properties_empty_desc'),

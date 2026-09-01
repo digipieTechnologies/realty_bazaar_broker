@@ -1,9 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:the_realty_bazaar/core/extensions/context_extensions.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_constants.dart';
@@ -20,6 +20,7 @@ import '../../../widgets/dialogs/app_dialog.dart';
 import '../../../widgets/dividers/app_divider.dart';
 import '../../../widgets/inputs/app_textfield.dart';
 import '../../../widgets/loaders/app_loader.dart';
+import '../../../widgets/toast/app_toast.dart';
 import '../../auth/widgets/phone_field_widget.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -36,6 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late TextEditingController _phoneController;
   late TextEditingController _emailController;
   late TextEditingController _businessNameController;
+  late TextEditingController _brokerCodeController;
   late TextEditingController _fullAddressController;
   late TextEditingController _cityController;
   late TextEditingController _stateController;
@@ -43,8 +45,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late TextEditingController _countryController;
   late TextEditingController _landmarkController;
   late CountryCode _selectedCountry;
+
+  // Focus nodes
+  final _nameFocusNode = FocusNode();
+  final _phoneFocusNode = FocusNode();
+  final _businessNameFocusNode = FocusNode();
+  final _fullAddressFocusNode = FocusNode();
+  final _landmarkFocusNode = FocusNode();
+  final _cityFocusNode = FocusNode();
+  final _stateFocusNode = FocusNode();
+  final _pincodeFocusNode = FocusNode();
+  final _countryFocusNode = FocusNode();
+  final _saveFocusNode = FocusNode();
+
   bool _isSaving = false;
-  bool _isSigningOut = false;
 
   @override
   void initState() {
@@ -59,13 +73,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     _nameController = TextEditingController(text: profile?.name ?? '');
     _emailController = TextEditingController(text: profile?.email ?? '');
-    _businessNameController = TextEditingController(
-      text: broker?.businessName ?? '',
-    );
+    _businessNameController = TextEditingController(text: broker?.businessName ?? '');
+    _brokerCodeController = TextEditingController(text: broker?.brokerCode ?? '');
 
-    _fullAddressController = TextEditingController(
-      text: address?.fullAddress ?? '',
-    );
+    _fullAddressController = TextEditingController(text: address?.fullAddress ?? '');
     _cityController = TextEditingController(text: address?.city ?? '');
     _stateController = TextEditingController(text: address?.state ?? '');
     _pincodeController = TextEditingController(text: address?.pincode ?? '');
@@ -108,12 +119,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _phoneController.dispose();
     _emailController.dispose();
     _businessNameController.dispose();
+    _brokerCodeController.dispose();
     _fullAddressController.dispose();
     _cityController.dispose();
     _stateController.dispose();
     _pincodeController.dispose();
     _countryController.dispose();
     _landmarkController.dispose();
+
+    _nameFocusNode.dispose();
+    _phoneFocusNode.dispose();
+    _businessNameFocusNode.dispose();
+    _fullAddressFocusNode.dispose();
+    _landmarkFocusNode.dispose();
+    _cityFocusNode.dispose();
+    _stateFocusNode.dispose();
+    _pincodeFocusNode.dispose();
+    _countryFocusNode.dispose();
+    _saveFocusNode.dispose();
+
     super.dispose();
   }
 
@@ -143,6 +167,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       if (mounted) {
         if (success) {
+          TextInput.finishAutofillContext(shouldSave: true);
           AppDialog.showSuccess(
             context,
             title: context.tr('profile_updated_title'),
@@ -153,8 +178,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           AppDialog.showError(
             context,
             title: context.tr('update_failed_title'),
-            description:
-                authProvider.errorMessage ?? context.tr('error_generic'),
+            description: authProvider.errorMessage ?? context.tr('error_generic'),
             onConfirm: () {},
           );
         }
@@ -170,17 +194,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
     final profile = authProvider.userProfile;
-    final isDesktop = context.isDesktopUI;
+    final isDesktop = context.isDesktop;
     final isMobile = context.isMobileUI;
 
     if (profile == null) {
       return Scaffold(
-        body: Center(
-          child: AppLoader(
-            isFullScreen: false,
-            loadingText: context.tr('error_generic'),
-          ),
-        ),
+        body: Center(child: AppLoader(isFullScreen: false, loadingText: context.tr('error_generic'))),
       );
     }
 
@@ -188,75 +207,73 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: AppConstants.getTabPadding(
-            context,
-            bottomExtra: isMobile ? 80.0 : 24.0,
-          ),
+          padding: AppConstants.getTabPadding(context, bottomExtra: isMobile ? 80.0 : 24.0),
           child: Form(
             key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Heading Section
-                _buildHeader(profile, isDesktop),
-                SizedBox(height: isDesktop ? 24.0 : 14.0),
+            child: AutofillGroup(
+              child: FocusTraversalGroup(
+                policy: OrderedTraversalPolicy(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Heading Section
+                    _buildHeader(profile, isDesktop),
+                    SizedBox(height: isDesktop ? 24.0 : 14.0),
 
-                // Forms Layout
-                if (isDesktop)
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: _buildPersonalDetailsCard(isDesktop),
+                    // Forms Layout
+                    if (isDesktop)
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(flex: 3, child: _buildPersonalDetailsCard(isDesktop)),
+                          const SizedBox(width: 24.0),
+                          Expanded(flex: 4, child: _buildBusinessDetailsCard(isDesktop)),
+                        ],
+                      )
+                    else
+                      Column(
+                        children: [
+                          _buildPersonalDetailsCard(isDesktop),
+                          SizedBox(height: isMobile ? 12.0 : 24.0),
+                          _buildBusinessDetailsCard(isDesktop),
+                        ],
                       ),
-                      const SizedBox(width: 24.0),
-                      Expanded(
-                        flex: 4,
-                        child: _buildBusinessDetailsCard(isDesktop),
+
+                    SizedBox(height: isDesktop ? 24.0 : 16.0),
+
+                    // Save Button (Upside)
+                    Align(
+                      alignment: isDesktop ? Alignment.centerRight : Alignment.center,
+                      child: FocusTraversalOrder(
+                        order: const NumericFocusOrder(10),
+                        child: AppButton(
+                          text: context.tr('save_changes'),
+                          variant: AppButtonVariant.gradient,
+                          width: isDesktop ? 200.0 : double.infinity,
+                          focusNode: _saveFocusNode,
+                          isLoading: _isSaving,
+                          onPressed: _isSaving ? null : _saveChanges,
+                        ),
                       ),
-                    ],
-                  )
-                else
-                  Column(
-                    children: [
-                      _buildPersonalDetailsCard(isDesktop),
-                      SizedBox(height: isMobile ? 12.0 : 24.0),
-                      _buildBusinessDetailsCard(isDesktop),
-                    ],
-                  ),
+                    ),
 
-                SizedBox(height: isDesktop ? 24.0 : 16.0),
+                    SizedBox(height: isDesktop ? 20.0 : 14.0),
+                    const AppDivider(),
+                    SizedBox(height: isDesktop ? 20.0 : 14.0),
 
-                // Save Button (Upside)
-                Align(
-                  alignment: isDesktop
-                      ? Alignment.centerRight
-                      : Alignment.center,
-                  child: AppButton(
-                    text: context.tr('save_changes'),
-                    variant: AppButtonVariant.gradient,
-                    width: isDesktop ? 200.0 : double.infinity,
-                    isLoading: _isSaving,
-                    onPressed: _isSaving || _isSigningOut ? null : _saveChanges,
-                  ),
+                    // Change Language Option (Mobile & Tablet view only)
+                    if (!isDesktop) ...[
+                      const LanguageSelectorButton(),
+                      SizedBox(height: isMobile ? 14.0 : 16.0),
+                      const AppDivider(),
+                      SizedBox(height: isMobile ? 14.0 : 16.0),
+                    ],
+
+                    // Account Actions Section (Downside)
+                    _buildAccountActionsCard(isDesktop),
+                  ],
                 ),
-
-                SizedBox(height: isDesktop ? 20.0 : 14.0),
-                const AppDivider(),
-                SizedBox(height: isDesktop ? 20.0 : 14.0),
-
-                // Change Language Option (Mobile & Tablet view only)
-                if (!isDesktop) ...[
-                  const LanguageSelectorButton(),
-                  SizedBox(height: isMobile ? 14.0 : 16.0),
-                  const AppDivider(),
-                  SizedBox(height: isMobile ? 14.0 : 16.0),
-                ],
-
-                // Account Actions Section (Downside)
-                _buildAccountActionsCard(isDesktop),
-              ],
+              ),
             ),
           ),
         ),
@@ -288,18 +305,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               Text(
                 profile.name ?? 'Broker Profile',
-                style: AppTextStyles.heading1.copyWith(
-                  fontSize: isDesktop ? 26.0 : 20.0,
-                ),
+                style: AppTextStyles.heading1.copyWith(fontSize: isDesktop ? 26.0 : 20.0),
               ),
               const SizedBox(height: 4.0),
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 3,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                     decoration: BoxDecoration(
                       color: AppColors.primary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
@@ -315,10 +327,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(width: 8.0),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 3,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                     decoration: BoxDecoration(
                       color: AppColors.success.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
@@ -361,39 +370,60 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             Divider(height: isDesktop ? 32 : 20, color: AppColors.border),
 
-            AppTextField(
-              controller: _nameController,
-              label: context.tr('full_name'),
-              hint: context.tr('full_name'),
-              prefixIcon: const Icon(
-                Icons.person_outline,
-                color: AppColors.iconDefault,
+            FocusTraversalOrder(
+              order: const NumericFocusOrder(1),
+              child: AppTextField(
+                controller: _nameController,
+                focusNode: _nameFocusNode,
+                label: context.tr('full_name'),
+                hint: context.tr('full_name'),
+                keyboardType: TextInputType.name,
+                autofillHints: const [AutofillHints.name],
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) => _phoneFocusNode.requestFocus(),
+                prefixIcon: const Icon(Icons.person_outline, color: AppColors.iconDefault),
+                validator: AppUtils.validateName,
               ),
-              validator: AppUtils.validateName,
             ),
             SizedBox(height: isDesktop ? 20.0 : 12.0),
 
-            PhoneFieldWidget(
-              controller: _phoneController,
-              initialCountry: _selectedCountry,
-              onCountryChanged: (country) {
-                setState(() {
-                  _selectedCountry = country;
-                });
-              },
+            FocusTraversalOrder(
+              order: const NumericFocusOrder(2),
+              child: PhoneFieldWidget(
+                controller: _phoneController,
+                focusNode: _phoneFocusNode,
+                initialCountry: _selectedCountry,
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) => _businessNameFocusNode.requestFocus(),
+                onCountryChanged: (country) {
+                  setState(() {
+                    _selectedCountry = country;
+                  });
+                },
+              ),
             ),
             SizedBox(height: isDesktop ? 20.0 : 12.0),
 
-            AppTextField(
-              controller: _emailController,
-              label: context.tr('email_address'),
-              hint: context.tr('email_address'),
-              readOnly: true,
-              prefixIcon: const Icon(
-                Icons.email_outlined,
-                color: AppColors.iconDefault,
+            ExcludeFocusTraversal(
+              child: AppTextField(
+                controller: _emailController,
+                label: context.tr('email_address'),
+                hint: context.tr('email_address'),
+                readOnly: true,
+                prefixIcon: const Icon(Icons.email_outlined, color: AppColors.iconDefault),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.copy_rounded, size: 18.0, color: AppColors.iconDefault),
+                  tooltip: context.tr('copy'),
+                  onPressed: () {
+                    final text = _emailController.text.trim();
+                    if (text.isNotEmpty) {
+                      Clipboard.setData(ClipboardData(text: text));
+                      AppToast.showSuccess(context.tr('copied_title'), context.tr('email_copied'));
+                    }
+                  },
+                ),
               ),
-            ).disable(isDisable: true),
+            ),
           ],
         ),
       ),
@@ -420,43 +450,77 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             Divider(height: isDesktop ? 32 : 20, color: AppColors.border),
 
-            AppTextField(
-              controller: _businessNameController,
-              label: context.tr('business_name'),
-              hint: context.tr('business_name'),
-              prefixIcon: const Icon(
-                Icons.business_outlined,
-                color: AppColors.iconDefault,
+            FocusTraversalOrder(
+              order: const NumericFocusOrder(3),
+              child: AppTextField(
+                controller: _businessNameController,
+                focusNode: _businessNameFocusNode,
+                label: context.tr('business_name'),
+                hint: context.tr('business_name'),
+                keyboardType: TextInputType.text,
+                autofillHints: const [AutofillHints.organizationName],
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) => _fullAddressFocusNode.requestFocus(),
+                prefixIcon: const Icon(Icons.business_outlined, color: AppColors.iconDefault),
+                validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('business_name')),
               ),
-              validator: (val) =>
-                  AppUtils.validateRequired(val, fieldName: context.tr('business_name')),
             ),
             SizedBox(height: isDesktop ? 20.0 : 12.0),
 
-            AppTextField(
-              controller: _fullAddressController,
-              label: context.tr('full_address'),
-              hint: context.tr('full_address'),
-              maxLines: 1,
-              prefixIcon: const Icon(
-                Icons.location_on_outlined,
-                color: AppColors.iconDefault,
+            ExcludeFocusTraversal(
+              child: AppTextField(
+                controller: _brokerCodeController,
+                label: context.tr('broker_code'),
+                hint: context.tr('broker_code'),
+                readOnly: true,
+                prefixIcon: const Icon(Icons.badge_outlined, color: AppColors.iconDefault),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.copy_rounded, size: 18.0, color: AppColors.iconDefault),
+                  tooltip: context.tr('copy'),
+                  onPressed: () {
+                    final text = _brokerCodeController.text.trim();
+                    if (text.isNotEmpty) {
+                      Clipboard.setData(ClipboardData(text: text));
+                      AppToast.showSuccess(context.tr('copied_title'), context.tr('broker_code_copied'));
+                    }
+                  },
+                ),
               ),
-              validator: (val) =>
-                  AppUtils.validateRequired(val, fieldName: context.tr('full_address')),
             ),
             SizedBox(height: isDesktop ? 20.0 : 12.0),
 
-            AppTextField(
-              controller: _landmarkController,
-              label: context.tr('landmark'),
-              hint: context.tr('landmark'),
-              prefixIcon: const Icon(
-                Icons.pin_drop_outlined,
-                color: AppColors.iconDefault,
+            FocusTraversalOrder(
+              order: const NumericFocusOrder(4),
+              child: AppTextField(
+                controller: _fullAddressController,
+                focusNode: _fullAddressFocusNode,
+                label: context.tr('full_address'),
+                hint: context.tr('full_address'),
+                keyboardType: TextInputType.streetAddress,
+                autofillHints: const [AutofillHints.fullStreetAddress],
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) => _landmarkFocusNode.requestFocus(),
+                maxLines: 1,
+                prefixIcon: const Icon(Icons.location_on_outlined, color: AppColors.iconDefault),
+                validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('full_address')),
               ),
-              validator: (val) =>
-                  AppUtils.validateRequired(val, fieldName: context.tr('landmark')),
+            ),
+            SizedBox(height: isDesktop ? 20.0 : 12.0),
+
+            FocusTraversalOrder(
+              order: const NumericFocusOrder(5),
+              child: AppTextField(
+                controller: _landmarkController,
+                focusNode: _landmarkFocusNode,
+                label: context.tr('landmark'),
+                hint: context.tr('landmark'),
+                keyboardType: TextInputType.text,
+                autofillHints: const [AutofillHints.sublocality],
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) => _pincodeFocusNode.requestFocus(),
+                prefixIcon: const Icon(Icons.pin_drop_outlined, color: AppColors.iconDefault),
+                validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('landmark')),
+              ),
             ),
             SizedBox(height: isDesktop ? 20.0 : 12.0),
 
@@ -464,30 +528,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Row(
                 children: [
                   Expanded(
-                    child: AppTextField(
-                      controller: _cityController,
-                      label: context.tr('city'),
-                      hint: context.tr('city'),
-                      prefixIcon: const Icon(
-                        Icons.location_city_outlined,
-                        color: AppColors.iconDefault,
+                    child: FocusTraversalOrder(
+                      order: const NumericFocusOrder(6),
+                      child: AppTextField(
+                        controller: _pincodeController,
+                        focusNode: _pincodeFocusNode,
+                        label: context.tr('pincode'),
+                        hint: context.tr('pincode'),
+                        keyboardType: TextInputType.number,
+                        autofillHints: const [AutofillHints.postalCode],
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (_) => _cityFocusNode.requestFocus(),
+                        prefixIcon: const Icon(Icons.numbers_outlined, color: AppColors.iconDefault),
+                        validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('pincode')),
                       ),
-                      validator: (val) =>
-                          AppUtils.validateRequired(val, fieldName: context.tr('city')),
                     ),
                   ),
                   const SizedBox(width: 16.0),
                   Expanded(
-                    child: AppTextField(
-                      controller: _stateController,
-                      label: context.tr('state'),
-                      hint: context.tr('state'),
-                      prefixIcon: const Icon(
-                        Icons.map_outlined,
-                        color: AppColors.iconDefault,
+                    child: FocusTraversalOrder(
+                      order: const NumericFocusOrder(7),
+                      child: AppTextField(
+                        controller: _cityController,
+                        focusNode: _cityFocusNode,
+                        label: context.tr('city'),
+                        hint: context.tr('city'),
+                        keyboardType: TextInputType.text,
+                        autofillHints: const [AutofillHints.addressCity],
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (_) => _stateFocusNode.requestFocus(),
+                        prefixIcon: const Icon(Icons.location_city_outlined, color: AppColors.iconDefault),
+                        validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('city')),
                       ),
-                      validator: (val) =>
-                          AppUtils.validateRequired(val, fieldName: context.tr('state')),
                     ),
                   ),
                 ],
@@ -496,113 +568,111 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Row(
                 children: [
                   Expanded(
-                    child: AppTextField(
-                      controller: _pincodeController,
-                      label: context.tr('pincode'),
-                      hint: context.tr('pincode'),
-                      prefixIcon: const Icon(
-                        Icons.numbers_outlined,
-                        color: AppColors.iconDefault,
+                    child: FocusTraversalOrder(
+                      order: const NumericFocusOrder(8),
+                      child: AppTextField(
+                        controller: _stateController,
+                        focusNode: _stateFocusNode,
+                        label: context.tr('state'),
+                        hint: context.tr('state'),
+                        keyboardType: TextInputType.text,
+                        autofillHints: const [AutofillHints.addressState],
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (_) => _countryFocusNode.requestFocus(),
+                        prefixIcon: const Icon(Icons.map_outlined, color: AppColors.iconDefault),
+                        validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('state')),
                       ),
-                      validator: (val) =>
-                          AppUtils.validateRequired(val, fieldName: context.tr('pincode')),
                     ),
                   ),
                   const SizedBox(width: 16.0),
                   Expanded(
-                    child: AppTextField(
-                      controller: _countryController,
-                      label: context.tr('country'),
-                      hint: context.tr('country'),
-                      prefixIcon: const Icon(
-                        Icons.public_outlined,
-                        color: AppColors.iconDefault,
+                    child: FocusTraversalOrder(
+                      order: const NumericFocusOrder(9),
+                      child: AppTextField(
+                        controller: _countryController,
+                        focusNode: _countryFocusNode,
+                        label: context.tr('country'),
+                        hint: context.tr('country'),
+                        keyboardType: TextInputType.text,
+                        autofillHints: const [AutofillHints.countryName],
+                        textInputAction: TextInputAction.done,
+                        onFieldSubmitted: (_) => _saveChanges(),
+                        prefixIcon: const Icon(Icons.public_outlined, color: AppColors.iconDefault),
+                        validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('country')),
                       ),
-                      validator: (val) =>
-                          AppUtils.validateRequired(val, fieldName: context.tr('country')),
                     ),
                   ),
                 ],
               ),
             ] else ...[
-              AppTextField(
-                controller: _cityController,
-                label: context.tr('city'),
-                hint: context.tr('city'),
-                prefixIcon: const Icon(
-                  Icons.location_city_outlined,
-                  color: AppColors.iconDefault,
+              FocusTraversalOrder(
+                order: const NumericFocusOrder(6),
+                child: AppTextField(
+                  controller: _pincodeController,
+                  focusNode: _pincodeFocusNode,
+                  label: context.tr('pincode'),
+                  hint: context.tr('pincode'),
+                  keyboardType: TextInputType.number,
+                  autofillHints: const [AutofillHints.postalCode],
+                  textInputAction: TextInputAction.next,
+                  onFieldSubmitted: (_) => _cityFocusNode.requestFocus(),
+                  prefixIcon: const Icon(Icons.numbers_outlined, color: AppColors.iconDefault),
+                  validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('pincode')),
                 ),
-                validator: (val) =>
-                    AppUtils.validateRequired(val, fieldName: context.tr('city')),
               ),
               const SizedBox(height: 12.0),
-              AppTextField(
-                controller: _stateController,
-                label: context.tr('state'),
-                hint: context.tr('state'),
-                prefixIcon: const Icon(
-                  Icons.map_outlined,
-                  color: AppColors.iconDefault,
+              FocusTraversalOrder(
+                order: const NumericFocusOrder(7),
+                child: AppTextField(
+                  controller: _cityController,
+                  focusNode: _cityFocusNode,
+                  label: context.tr('city'),
+                  hint: context.tr('city'),
+                  keyboardType: TextInputType.text,
+                  autofillHints: const [AutofillHints.addressCity],
+                  textInputAction: TextInputAction.next,
+                  onFieldSubmitted: (_) => _stateFocusNode.requestFocus(),
+                  prefixIcon: const Icon(Icons.location_city_outlined, color: AppColors.iconDefault),
+                  validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('city')),
                 ),
-                validator: (val) =>
-                    AppUtils.validateRequired(val, fieldName: context.tr('state')),
               ),
               const SizedBox(height: 12.0),
-              AppTextField(
-                controller: _pincodeController,
-                label: context.tr('pincode'),
-                hint: context.tr('pincode'),
-                prefixIcon: const Icon(
-                  Icons.numbers_outlined,
-                  color: AppColors.iconDefault,
+              FocusTraversalOrder(
+                order: const NumericFocusOrder(8),
+                child: AppTextField(
+                  controller: _stateController,
+                  focusNode: _stateFocusNode,
+                  label: context.tr('state'),
+                  hint: context.tr('state'),
+                  keyboardType: TextInputType.text,
+                  autofillHints: const [AutofillHints.addressState],
+                  textInputAction: TextInputAction.next,
+                  onFieldSubmitted: (_) => _countryFocusNode.requestFocus(),
+                  prefixIcon: const Icon(Icons.map_outlined, color: AppColors.iconDefault),
+                  validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('state')),
                 ),
-                validator: (val) =>
-                    AppUtils.validateRequired(val, fieldName: context.tr('pincode')),
               ),
               const SizedBox(height: 12.0),
-              AppTextField(
-                controller: _countryController,
-                label: context.tr('country'),
-                hint: context.tr('country'),
-                prefixIcon: const Icon(
-                  Icons.public_outlined,
-                  color: AppColors.iconDefault,
+              FocusTraversalOrder(
+                order: const NumericFocusOrder(9),
+                child: AppTextField(
+                  controller: _countryController,
+                  focusNode: _countryFocusNode,
+                  label: context.tr('country'),
+                  hint: context.tr('country'),
+                  keyboardType: TextInputType.text,
+                  autofillHints: const [AutofillHints.countryName],
+                  textInputAction: TextInputAction.done,
+                  onFieldSubmitted: (_) => _saveChanges(),
+                  prefixIcon: const Icon(Icons.public_outlined, color: AppColors.iconDefault),
+                  validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('country')),
                 ),
-                validator: (val) =>
-                    AppUtils.validateRequired(val, fieldName: context.tr('country')),
               ),
             ],
           ],
         ),
       ),
     );
-  }
-
-  Future<void> _showSignOutConfirmation() async {
-    final confirmed = await AppDialog.showConfirmationDialog(
-      context,
-      title: context.tr('confirm_sign_out'),
-      description: context.tr('sign_out_warning'),
-      confirmText: context.tr('sign_out_button'),
-      cancelText: context.tr('cancel'),
-      type: DialogType.warning,
-    );
-
-    if (confirmed == true && mounted) {
-      setState(() => _isSigningOut = true);
-      try {
-        final router = GoRouter.of(context);
-        await context.read<AuthProvider>().signOut(context);
-        if (mounted) {
-          router.go(AppRoutes.login);
-        }
-      } finally {
-        if (mounted) {
-          setState(() => _isSigningOut = false);
-        }
-      }
-    }
   }
 
   Widget _buildAccountActionsCard(bool isDesktop) {
@@ -613,42 +683,100 @@ class _ProfileScreenState extends State<ProfileScreen> {
         side: const BorderSide(color: AppColors.border, width: 1.0),
       ),
       child: Padding(
-        padding: EdgeInsets.all(isDesktop ? 24.0 : 14.0),
+        padding: EdgeInsets.all(isDesktop ? 24.0 : 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(context.tr('account_actions'), style: AppTextStyles.heading3),
-            const SizedBox(height: 4.0),
-            Text(
-              context.tr('sign_out_subtitle'),
-              style: const TextStyle(fontSize: 13.0, color: AppColors.textSecondary),
+            Divider(height: isDesktop ? 32 : 24, color: AppColors.border),
+
+            // Danger Zone (Separated & Styled cleanly)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(14.0),
+              decoration: BoxDecoration(
+                color: AppColors.error.withOpacity(0.04),
+                borderRadius: BorderRadius.circular(12.0),
+                border: Border.all(color: AppColors.error.withOpacity(0.2), width: 1.0),
+              ),
+              child: isDesktop
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                context.tr('delete_account'),
+                                style: const TextStyle(
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.error,
+                                ),
+                              ),
+                              const SizedBox(height: 2.0),
+                              Text(
+                                context.tr('delete_account_subtitle'),
+                                style: const TextStyle(fontSize: 12.0, color: AppColors.textSecondary),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 16.0),
+                        AppButton(
+                          text: context.tr('delete_account'),
+                          variant: AppButtonVariant.outline,
+                          borderColor: AppColors.error.withOpacity(0.5),
+                          textColor: AppColors.error,
+                          height: 38.0,
+                          iconData: Icons.delete_outline_rounded,
+                          onPressed: () => context.push(AppRoutes.deleteAccount),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.warning_amber_rounded, size: 18.0, color: AppColors.error),
+                            const SizedBox(width: 6.0),
+                            Text(
+                              context.tr('delete_account'),
+                              style: const TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.error,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4.0),
+                        Text(
+                          context.tr('delete_account_subtitle'),
+                          style: const TextStyle(fontSize: 12.0, color: AppColors.textSecondary),
+                        ),
+                        const SizedBox(height: 12.0),
+                        AppButton(
+                          text: context.tr('delete_account'),
+                          variant: AppButtonVariant.outline,
+                          borderColor: AppColors.error.withOpacity(0.5),
+                          textColor: AppColors.error,
+                          height: 40.0,
+                          width: double.infinity,
+                          iconData: Icons.delete_outline_rounded,
+                          onPressed: () => context.push(AppRoutes.deleteAccount),
+                        ),
+                      ],
+                    ),
             ),
-            Divider(height: isDesktop ? 32 : 20, color: AppColors.border),
-            Wrap(
-              spacing: 12.0,
-              runSpacing: 12.0,
-              children: [
-                AppButton.outline(
-                  text: context.tr('sign_out_button'),
-                  textColor: context.textTheme.bodyMedium?.color ?? AppColors.textPrimary,
-                  width: isDesktop ? 180.0 : double.infinity,
-                  isLoading: _isSigningOut,
-                  onPressed: _isSigningOut || _isSaving ? null : _showSignOutConfirmation,
-                ),
-                AppButton(
-                  text: context.tr('delete_account'),
-                  variant: AppButtonVariant.outline,
-                  color: AppColors.error,
-                  borderColor: AppColors.error,
-                  textColor: AppColors.white,
-                  width: isDesktop ? 180.0 : double.infinity,
-                  onPressed: () => context.push(AppRoutes.deleteAccount),
-                ),
-              ],
-            ),
+
             const SizedBox(height: 16.0),
             const Divider(color: AppColors.border),
             const SizedBox(height: 8.0),
+
+            // Legal links footer
             Row(
               children: [
                 TextButton(

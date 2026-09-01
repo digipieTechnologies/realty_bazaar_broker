@@ -2,22 +2,24 @@
 // Purpose: Centralized reusable service for uploading images, videos, media, and documents to Supabase Storage buckets across the application.
 
 import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../supabase/supabase_config.dart';
 
 class SupabaseStorageService {
   SupabaseStorageService._();
 
   /// Centralized method to upload media/documents/files to a specified Supabase Storage bucket.
-  /// 
+  ///
   /// Parameters:
   /// - [filePath]: Local file path, blob URL, or existing HTTP URL.
   /// - [bucketName]: Supabase storage bucket name (e.g. 'chat_attachments', 'property_media', 'social_assets').
   /// - [folderName]: Optional sub-folder path inside the bucket (e.g. 'video_chats', 'documents').
   /// - [customFileName]: Optional custom file name.
   /// - [fileBytes]: Optional Uint8List bytes if file is already loaded into memory.
-  /// 
+  ///
   /// Returns the public HTTP URL of the uploaded file, or null on failure.
   static Future<String?> uploadFile({
     required String filePath,
@@ -62,21 +64,19 @@ class SupabaseStorageService {
 
       // Try uploading to bucket with upsert = true
       try {
-        await client.storage.from(bucketName).uploadBinary(
-          storagePath,
-          bytes,
-          fileOptions: const FileOptions(upsert: true),
-        );
+        await client.storage
+            .from(bucketName)
+            .uploadBinary(storagePath, bytes, fileOptions: const FileOptions(upsert: true));
       } catch (uploadErr) {
-        debugPrint('[SupabaseStorageService] Bucket "$bucketName" upload warning: $uploadErr. Attempting bucket creation...');
+        debugPrint(
+          '[SupabaseStorageService] Bucket "$bucketName" upload warning: $uploadErr. Attempting bucket creation...',
+        );
         try {
           // Attempt creating public bucket if it doesn't exist yet
           await client.storage.createBucket(bucketName, const BucketOptions(public: true));
-          await client.storage.from(bucketName).uploadBinary(
-            storagePath,
-            bytes,
-            fileOptions: const FileOptions(upsert: true),
-          );
+          await client.storage
+              .from(bucketName)
+              .uploadBinary(storagePath, bytes, fileOptions: const FileOptions(upsert: true));
         } catch (createErr) {
           debugPrint('[SupabaseStorageService] Failed to create/upload to bucket "$bucketName": $createErr');
         }

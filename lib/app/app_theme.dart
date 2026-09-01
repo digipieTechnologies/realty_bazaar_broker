@@ -2,6 +2,7 @@
 // Purpose: Main Theme definitions for the application.
 
 import 'package:flutter/material.dart';
+
 import 'app_colors.dart';
 import 'app_text_styles.dart';
 
@@ -26,11 +27,7 @@ class AppTheme {
         onError: AppColors.surface,
       ),
 
-      dividerTheme: const DividerThemeData(
-        color: AppColors.divider,
-        thickness: 1.0,
-        space: 1.0,
-      ),
+      dividerTheme: const DividerThemeData(color: AppColors.divider, thickness: 1.0, space: 1.0),
 
       // Text Theme
       textTheme: const TextTheme(
@@ -50,10 +47,7 @@ class AppTheme {
         fillColor: AppColors.surface,
         hoverColor: Colors.transparent,
         focusColor: Colors.transparent,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
-        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         hintStyle: AppTextStyles.caption.copyWith(color: AppColors.textMuted),
         labelStyle: AppTextStyles.label,
         errorStyle: AppTextStyles.error,
@@ -91,16 +85,11 @@ class AppTheme {
       dialogTheme: DialogThemeData(
         backgroundColor: AppColors.surface,
         elevation: 10,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.0),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
       ),
 
       // Button Theme
-      buttonTheme: const ButtonThemeData(
-        buttonColor: AppColors.primary,
-        textTheme: ButtonTextTheme.primary,
-      ),
+      buttonTheme: const ButtonThemeData(buttonColor: AppColors.primary, textTheme: ButtonTextTheme.primary),
 
       // AppBar Theme
       appBarTheme: const AppBarTheme(
@@ -110,19 +99,9 @@ class AppTheme {
         centerTitle: false,
         titleSpacing: 0.0,
         surfaceTintColor: Colors.transparent,
-        iconTheme: IconThemeData(
-          color: AppColors.textPrimary,
-          size: 22.0,
-        ),
-        actionsIconTheme: IconThemeData(
-          color: AppColors.textSecondary,
-          size: 22.0,
-        ),
-        titleTextStyle: TextStyle(
-          color: AppColors.textPrimary,
-          fontSize: 18.0,
-          fontWeight: FontWeight.bold,
-        ),
+        iconTheme: IconThemeData(color: AppColors.textPrimary, size: 22.0),
+        actionsIconTheme: IconThemeData(color: AppColors.textSecondary, size: 22.0),
+        titleTextStyle: TextStyle(color: AppColors.textPrimary, fontSize: 18.0, fontWeight: FontWeight.bold),
       ),
     );
   }

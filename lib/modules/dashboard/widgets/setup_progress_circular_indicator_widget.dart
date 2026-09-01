@@ -2,6 +2,7 @@
 // Purpose: Modular reusable circular progress ring widget displaying live percentage integer and animated loader ring.
 
 import 'package:flutter/material.dart';
+
 import '../../../../app/app_colors.dart';
 
 class SetupProgressCircularIndicatorWidget extends StatelessWidget {
@@ -47,7 +48,8 @@ class SetupProgressCircularIndicatorWidget extends StatelessWidget {
               fit: BoxFit.scaleDown,
               child: Text(
                 '$percentInt%',
-                style: textStyle ??
+                style:
+                    textStyle ??
                     TextStyle(
                       fontSize: size * 0.26,
                       fontWeight: FontWeight.w900,

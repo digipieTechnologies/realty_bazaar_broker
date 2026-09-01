@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../app/app_assets.dart';
 import '../../app/app_colors.dart';
 import '../../app/app_constants.dart';
@@ -20,10 +21,7 @@ class DashboardShimmerWidget extends StatelessWidget {
     final isMobile = context.isMobileUI;
 
     return SingleChildScrollView(
-      padding: AppConstants.getTabPadding(
-        context,
-        bottomExtra: isMobile ? 80.0 : 24.0,
-      ),
+      padding: AppConstants.getTabPadding(context, bottomExtra: isMobile ? 80.0 : 24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -105,10 +103,7 @@ class DashboardShimmerWidget extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          AppSectionHeader(
-                            title: 'Connected Channels',
-                            icon: Icons.link_rounded,
-                          ),
+                          AppSectionHeader(title: 'Connected Channels', icon: Icons.link_rounded),
                           SocialConnectShimmerWidget(isVertical: true),
                           SizedBox(height: 24.0),
                           Divider(height: 1.0, color: AppColors.border),
@@ -126,10 +121,7 @@ class DashboardShimmerWidget extends StatelessWidget {
                                 Divider(height: 1.0, color: AppColors.border),
                                 Padding(
                                   padding: EdgeInsets.all(12.0),
-                                  child: LeadListShimmerWidget(
-                                    count: 3,
-                                    isCompact: true,
-                                  ),
+                                  child: LeadListShimmerWidget(count: 3, isCompact: true),
                                 ),
                               ],
                             ),
@@ -145,20 +137,14 @@ class DashboardShimmerWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Section 1: Summary / Overview Performance
-                  AppSectionHeader(
-                    title: 'Overview Performance',
-                    svgAsset: AppAssets.icDashboardFilled,
-                  ),
+                  AppSectionHeader(title: 'Overview Performance', svgAsset: AppAssets.icDashboardFilled),
                   DashboardSummaryShimmerWidget(),
                   SizedBox(height: 14.0),
                   Divider(height: 1.0, color: AppColors.border),
                   SizedBox(height: 14.0),
 
                   // Section 2: Connected Channels (Social Channels)
-                  AppSectionHeader(
-                    title: 'Connected Channels',
-                    icon: Icons.link_rounded,
-                  ),
+                  AppSectionHeader(title: 'Connected Channels', icon: Icons.link_rounded),
                   SocialConnectShimmerWidget(isVertical: true),
                   SizedBox(height: 14.0),
                   Divider(height: 1.0, color: AppColors.border),
@@ -176,10 +162,7 @@ class DashboardShimmerWidget extends StatelessWidget {
                         Divider(height: 1.0, color: AppColors.border),
                         Padding(
                           padding: EdgeInsets.all(12.0),
-                          child: LeadListShimmerWidget(
-                            count: 3,
-                            isCompact: true,
-                          ),
+                          child: LeadListShimmerWidget(count: 3, isCompact: true),
                         ),
                       ],
                     ),

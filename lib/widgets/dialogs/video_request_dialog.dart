@@ -1,27 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../app/app_utils.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../models/models.dart';
 import '../../../providers/video_request/video_request_provider.dart';
+import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/shimmer/video_request_shimmer_widget.dart';
 import '../../../widgets/toast/app_toast.dart';
-import '../../../widgets/buttons/app_button.dart';
 import '../../modules/chat/chat.dart';
-
 import 'app_base_dialog.dart';
 
 class VideoRequestDialog extends StatefulWidget {
   final String propertyId;
   final String brokerId;
 
-  const VideoRequestDialog({
-    super.key,
-    required this.propertyId,
-    required this.brokerId,
-  });
+  const VideoRequestDialog({super.key, required this.propertyId, required this.brokerId});
 
   @override
   State<VideoRequestDialog> createState() => _VideoRequestDialogState();
@@ -103,10 +99,7 @@ class _VideoRequestDialogState extends State<VideoRequestDialog> {
 
     try {
       final provider = Provider.of<VideoRequestProvider>(context, listen: false);
-      final updated = await provider.cancelRequestWithModel(
-        _existingRequest!.id,
-        brokerId: widget.brokerId,
-      );
+      final updated = await provider.cancelRequestWithModel(_existingRequest!.id, brokerId: widget.brokerId);
 
       if (updated != null) {
         setState(() {
@@ -164,11 +157,7 @@ class _VideoRequestDialogState extends State<VideoRequestDialog> {
               color: AppColors.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10.0),
             ),
-            child: const Icon(
-              Icons.apartment_rounded,
-              color: AppColors.primary,
-              size: 22.0,
-            ),
+            child: const Icon(Icons.apartment_rounded, color: AppColors.primary, size: 22.0),
           ),
           const SizedBox(width: 12.0),
           Expanded(
@@ -188,19 +177,12 @@ class _VideoRequestDialogState extends State<VideoRequestDialog> {
                 const SizedBox(height: 2.0),
                 Row(
                   children: [
-                    const Icon(
-                      Icons.location_on_outlined,
-                      size: 13.0,
-                      color: AppColors.textSecondary,
-                    ),
+                    const Icon(Icons.location_on_outlined, size: 13.0, color: AppColors.textSecondary),
                     const SizedBox(width: 4.0),
                     Expanded(
                       child: Text(
                         addressStr,
-                        style: AppTextStyles.caption.copyWith(
-                          color: AppColors.textSecondary,
-                          fontSize: 12.0,
-                        ),
+                        style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary, fontSize: 12.0),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -215,11 +197,7 @@ class _VideoRequestDialogState extends State<VideoRequestDialog> {
     );
   }
 
-  Widget _buildStepItem({
-    required String stepNumber,
-    required String title,
-    required String desc,
-  }) {
+  Widget _buildStepItem({required String stepNumber, required String title, required String desc}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 14.0),
       child: Row(
@@ -228,18 +206,11 @@ class _VideoRequestDialogState extends State<VideoRequestDialog> {
           Container(
             width: 20.0,
             height: 20.0,
-            decoration: const BoxDecoration(
-              color: AppColors.primary,
-              shape: BoxShape.circle,
-            ),
+            decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
             child: Center(
               child: Text(
                 stepNumber,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 10.0,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: const TextStyle(color: Colors.white, fontSize: 10.0, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -248,15 +219,9 @@ class _VideoRequestDialogState extends State<VideoRequestDialog> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: AppTextStyles.body2.copyWith(fontWeight: FontWeight.bold, fontSize: 13.0),
-                ),
+                Text(title, style: AppTextStyles.body2.copyWith(fontWeight: FontWeight.bold, fontSize: 13.0)),
                 const SizedBox(height: 1.0),
-                Text(
-                  desc,
-                  style: const TextStyle(color: AppColors.textMuted, fontSize: 11.5, height: 1.3),
-                ),
+                Text(desc, style: const TextStyle(color: AppColors.textMuted, fontSize: 11.5, height: 1.3)),
               ],
             ),
           ),
@@ -376,7 +341,8 @@ class _VideoRequestDialogState extends State<VideoRequestDialog> {
         statusTitle = context.tr('status_completed_title');
         final completedDate = _existingRequest?.completedAt?.toIso8601String();
         final formattedDate = _formatDateTime(completedDate);
-        statusDesc = '${context.tr('status_completed_desc')}${formattedDate.isNotEmpty ? "\n\nUploaded on: $formattedDate" : ""}';
+        statusDesc =
+            '${context.tr('status_completed_desc')}${formattedDate.isNotEmpty ? "\n\nUploaded on: $formattedDate" : ""}';
         break;
       case VideoRequestStatus.cancelled:
         statusColor = AppColors.error;
@@ -423,15 +389,8 @@ class _VideoRequestDialogState extends State<VideoRequestDialog> {
         children: [
           Container(
             padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: statusColor.withValues(alpha: 0.08),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              statusIcon,
-              color: statusColor,
-              size: 48.0,
-            ),
+            decoration: BoxDecoration(color: statusColor.withValues(alpha: 0.08), shape: BoxShape.circle),
+            child: Icon(statusIcon, color: statusColor, size: 48.0),
           ),
           const SizedBox(height: 18.0),
           Text(

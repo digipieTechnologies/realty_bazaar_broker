@@ -25,12 +25,11 @@ class AppRadioTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Custom radio circle styling
-    final Color borderAndDotColor =
-        isSelected ? AppColors.primary : AppColors.textSecondary.withValues(alpha: 0.6);
-    final Color labelColor =
-        isSelected ? AppColors.textPrimary : AppColors.textSecondary;
-    final FontWeight labelFontWeight =
-        isSelected ? FontWeight.bold : FontWeight.w500;
+    final Color borderAndDotColor = isSelected
+        ? AppColors.primary
+        : AppColors.textSecondary.withValues(alpha: 0.6);
+    final Color labelColor = isSelected ? AppColors.textPrimary : AppColors.textSecondary;
+    final FontWeight labelFontWeight = isSelected ? FontWeight.bold : FontWeight.w500;
 
     return InkWell(
       onTap: onTap,
@@ -46,20 +45,14 @@ class AppRadioTile extends StatelessWidget {
               height: 20.0,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: borderAndDotColor,
-                  width: 2.0,
-                ),
+                border: Border.all(color: borderAndDotColor, width: 2.0),
               ),
               child: isSelected
                   ? Center(
                       child: Container(
                         width: 10.0,
                         height: 10.0,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.primary,
-                        ),
+                        decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primary),
                       ),
                     )
                   : null,
@@ -67,7 +60,8 @@ class AppRadioTile extends StatelessWidget {
             const SizedBox(width: 8.0),
             Text(
               label,
-              style: labelStyle ??
+              style:
+                  labelStyle ??
                   AppTextStyles.body2.copyWith(
                     fontSize: 14.0,
                     fontWeight: labelFontWeight,

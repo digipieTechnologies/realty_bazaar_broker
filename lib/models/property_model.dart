@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+
 import 'address_model.dart';
 import 'broker_model.dart';
 import 'media_model.dart';
@@ -8,6 +9,7 @@ class PropertyModel extends Equatable {
   static const String tableName = "properties";
 
   final String? id;
+  final String? propertyCode;
   final BrokerModel? brokerId;
   final AddressModel? addressId;
   final String propertyTitle;
@@ -40,6 +42,7 @@ class PropertyModel extends Equatable {
 
   const PropertyModel({
     this.id,
+    this.propertyCode,
     this.brokerId,
     this.addressId,
     required this.propertyTitle,
@@ -99,9 +102,8 @@ class PropertyModel extends Equatable {
 
     return PropertyModel(
       id: json['id']?.toString(),
-      brokerId: json['broker_id'] != null
-          ? BrokerModel.fromJson(json['broker_id'])
-          : null,
+      propertyCode: json['property_code']?.toString(),
+      brokerId: json['broker_id'] != null ? BrokerModel.fromJson(json['broker_id']) : null,
       addressId: parsedAddress,
       propertyTitle: json['property_title']?.toString() ?? '',
       propertyDescription: json['property_description']?.toString(),
@@ -139,6 +141,7 @@ class PropertyModel extends Equatable {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
     if (id != null) data['id'] = id;
+    if (propertyCode != null) data['property_code'] = propertyCode;
     data['broker_id'] = brokerId?.id;
     data['address_id'] = addressId?.id;
     data['property_title'] = propertyTitle;
@@ -171,6 +174,7 @@ class PropertyModel extends Equatable {
 
   PropertyModel copyWith({
     String? id,
+    String? propertyCode,
     BrokerModel? brokerId,
     AddressModel? addressId,
     String? propertyTitle,
@@ -200,6 +204,7 @@ class PropertyModel extends Equatable {
   }) {
     return PropertyModel(
       id: id ?? this.id,
+      propertyCode: propertyCode ?? this.propertyCode,
       brokerId: brokerId ?? this.brokerId,
       addressId: addressId ?? this.addressId,
       propertyTitle: propertyTitle ?? this.propertyTitle,
@@ -231,32 +236,33 @@ class PropertyModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        brokerId,
-        addressId,
-        propertyTitle,
-        propertyDescription,
-        propertyType,
-        listingType,
-        price,
-        area,
-        areaUnit,
-        bedrooms,
-        bathrooms,
-        balconies,
-        parking,
-        floorNumber,
-        totalFloors,
-        furnishingStatus,
-        propertyStatus,
-        constructionStatus,
-        facing,
-        amenities,
-        medias,
-        isActive,
-        isDeleted,
-        deletedAt,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    propertyCode,
+    brokerId,
+    addressId,
+    propertyTitle,
+    propertyDescription,
+    propertyType,
+    listingType,
+    price,
+    area,
+    areaUnit,
+    bedrooms,
+    bathrooms,
+    balconies,
+    parking,
+    floorNumber,
+    totalFloors,
+    furnishingStatus,
+    propertyStatus,
+    constructionStatus,
+    facing,
+    amenities,
+    medias,
+    isActive,
+    isDeleted,
+    deletedAt,
+    createdAt,
+    updatedAt,
+  ];
 }

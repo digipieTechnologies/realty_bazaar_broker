@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../core/constants/chat_constants.dart';
 import '../../../core/localization/app_localizations.dart';
@@ -105,10 +106,7 @@ class _ChatInputBarWidgetState extends State<ChatInputBarWidget> {
       senderType: widget.currentUserType,
       message: 'Location',
       messageType: ChatMessageMessageType.location,
-      locationData: {
-        'latitude': position.latitude,
-        'longitude': position.longitude,
-      },
+      locationData: {'latitude': position.latitude, 'longitude': position.longitude},
     );
 
     if (success) {
@@ -216,7 +214,6 @@ class _ChatInputBarWidgetState extends State<ChatInputBarWidget> {
                   },
                 ),
               )
-
             // 3. Reply Preview Strip
             else if (widget.replyingToMessage != null)
               Padding(
@@ -248,11 +245,7 @@ class _ChatInputBarWidgetState extends State<ChatInputBarWidget> {
                   AppPopupMenuButton<String>(
                     triggerWidget: const Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.add_rounded,
-                        color: AppColors.primary,
-                        size: 26.0,
-                      ),
+                      child: Icon(Icons.add_rounded, color: AppColors.primary, size: 26.0),
                     ),
                     items: const [
                       AppPopupMenuItem<String>(
@@ -321,24 +314,14 @@ class _ChatInputBarWidgetState extends State<ChatInputBarWidget> {
                       width: 44.0,
                       height: 44.0,
                       alignment: Alignment.center,
-                      decoration: const BoxDecoration(
-                        color: AppColors.primary,
-                        shape: BoxShape.circle,
-                      ),
+                      decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
                       child: provider.isSending
                           ? const SizedBox(
                               width: 20.0,
                               height: 20.0,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2.2,
-                                color: Colors.white,
-                              ),
+                              child: CircularProgressIndicator(strokeWidth: 2.2, color: Colors.white),
                             )
-                          : const Icon(
-                              Icons.send_rounded,
-                              color: Colors.white,
-                              size: 20.0,
-                            ),
+                          : const Icon(Icons.send_rounded, color: Colors.white, size: 20.0),
                     ),
                   ),
                 ],

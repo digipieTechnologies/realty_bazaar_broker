@@ -2,6 +2,7 @@
 // Purpose: Centered placeholder widget shown in empty chat rooms prompting users to say hello using AppButton.
 
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../widgets/buttons/app_button.dart';
@@ -9,10 +10,7 @@ import '../../../widgets/buttons/app_button.dart';
 class SayHelloWidget extends StatelessWidget {
   final VoidCallback onSayHello;
 
-  const SayHelloWidget({
-    super.key,
-    required this.onSayHello,
-  });
+  const SayHelloWidget({super.key, required this.onSayHello});
 
   @override
   Widget build(BuildContext context) {
@@ -26,17 +24,10 @@ class SayHelloWidget extends StatelessWidget {
               color: AppColors.primary.withValues(alpha: 0.08),
               shape: BoxShape.circle,
             ),
-            child: const Icon(
-              Icons.waving_hand_rounded,
-              size: 44.0,
-              color: AppColors.primary,
-            ),
+            child: const Icon(Icons.waving_hand_rounded, size: 44.0, color: AppColors.primary),
           ),
           const SizedBox(height: 16.0),
-          Text(
-            'No messages yet',
-            style: AppTextStyles.heading3.copyWith(fontSize: 16.0),
-          ),
+          Text('No messages yet', style: AppTextStyles.heading3.copyWith(fontSize: 16.0)),
           const SizedBox(height: 6.0),
           Text(
             'Start the conversation by sending a message below!',

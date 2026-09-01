@@ -2,7 +2,9 @@
 // Purpose: Interactive, responsive OTP verification screen matching the The Realty Bazaar App auth design system.
 
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -12,15 +14,14 @@ import '../../../app/app_routes.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../app/app_utils.dart';
 import '../../../core/localization/app_localizations.dart';
+import '../../../models/otp_type.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../util/common_ext.dart';
 import '../../../widgets/brand/app_logo.dart';
 import '../../../widgets/buttons/app_button.dart';
+import '../../../widgets/inputs/app_pinput_field.dart';
 import '../../../widgets/toast/app_toast.dart';
 import '../widgets/auth_header_widget.dart';
-
-import '../../../models/otp_type.dart';
-import '../../../widgets/inputs/app_pinput_field.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   final String? email;
@@ -84,10 +85,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     AppUtils.dismissKeyboard(context);
     final otp = _pinController.text.trim();
     if (otp.length < 6) {
-      AppToast.showError(
-        'Invalid OTP',
-        'Please enter the full 6-digit verification code.',
-      );
+      AppToast.showError('Invalid OTP', 'Please enter the full 6-digit verification code.');
       return;
     }
 
@@ -103,16 +101,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       );
 
       if (success && mounted) {
+        TextInput.finishAutofillContext(shouldSave: true);
         AppToast.showSuccess(
           'Security Code Verified',
           'Verification successful. Please set up your new password.',
         );
-        context.go(
-          AppRoutes.resetPassword,
-          extra: {
-            'email': widget.email,
-          },
-        );
+        context.go(AppRoutes.resetPassword, extra: {'email': widget.email});
       } else if (mounted) {
         AppToast.showError(
           'Verification Failed',
@@ -121,12 +115,10 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       }
     } else if (widget.isPreSignup && widget.signUpData != null) {
       // Pre-signup verification: validates 2-minute OTP & creates account
-      final success = await authProvider.completeSignUpWithOtp(
-        signUpData: widget.signUpData!,
-        otp: otp,
-      );
+      final success = await authProvider.completeSignUpWithOtp(signUpData: widget.signUpData!, otp: otp);
 
       if (success && mounted) {
+        TextInput.finishAutofillContext(shouldSave: true);
         AppToast.showSuccess(
           'Registration Complete',
           'Your email has been verified and your account is created!',
@@ -148,10 +140,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       );
 
       if (success && mounted) {
-        AppToast.showSuccess(
-          'Email Verified',
-          'Your email has been verified successfully.',
-        );
+        AppToast.showSuccess('Email Verified', 'Your email has been verified successfully.');
         context.go(AppRoutes.home);
       } else if (mounted) {
         AppToast.showError(
@@ -215,7 +204,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDesktop = context.isDesktopUI;
+    final isDesktop = context.isDesktop;
     final targetEmail = widget.email ?? authProviderEmail(context) ?? 'your email';
 
     return PopScope(
@@ -226,93 +215,84 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       },
       child: Scaffold(
         backgroundColor: AppColors.surfaceLight,
-      body: Stack(
-        children: [
-          if (!isDesktop) ...[
-            Positioned(
-              top: -120,
-              right: -120,
-              child: Container(
-                width: 320,
-                height: 320,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.primary.withValues(alpha: 0.05),
+        body: Stack(
+          children: [
+            if (!isDesktop) ...[
+              Positioned(
+                top: -120,
+                right: -120,
+                child: Container(
+                  width: 320,
+                  height: 320,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.primary.withValues(alpha: 0.05),
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              bottom: -150,
-              left: -150,
-              child: Container(
-                width: 380,
-                height: 380,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.secondary.withValues(alpha: 0.03),
+              Positioned(
+                bottom: -150,
+                left: -150,
+                child: Container(
+                  width: 380,
+                  height: 380,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.secondary.withValues(alpha: 0.03),
+                  ),
                 ),
               ),
-            ),
-          ],
-          Row(
-            children: [
-              if (isDesktop) Expanded(child: _leftSidebar()),
-              Expanded(
-                child: SafeArea(
-                  child: Center(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 20.0,
-                      ),
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 440.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            _modernBackButton(),
-                            const SizedBox(height: 24.0),
-                            isDesktop
-                                ? _formContent(targetEmail)
-                                : Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 20.0,
-                                      vertical: 24.0,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(24.0),
-                                      border: Border.all(
-                                        color: AppColors.border,
-                                        width: 1.0,
+            ],
+            Row(
+              children: [
+                if (isDesktop) Expanded(child: _leftSidebar()),
+                Expanded(
+                  child: SafeArea(
+                    child: Center(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 440.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              _modernBackButton(),
+                              const SizedBox(height: 24.0),
+                              isDesktop
+                                  ? _formContent(targetEmail)
+                                  : Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(24.0),
+                                        border: Border.all(color: AppColors.border, width: 1.0),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withValues(alpha: 0.02),
+                                            blurRadius: 20.0,
+                                            offset: const Offset(0, 8),
+                                          ),
+                                        ],
                                       ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withValues(alpha: 0.02),
-                                          blurRadius: 20.0,
-                                          offset: const Offset(0, 8),
-                                        ),
-                                      ],
+                                      child: _formContent(targetEmail),
                                     ),
-                                    child: _formContent(targetEmail),
-                                  ),
-                            const SizedBox(height: 32.0),
-                            _copyrightFooter(),
-                          ],
+                              const SizedBox(height: 32.0),
+                              _copyrightFooter(),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   String? authProviderEmail(BuildContext context) {
     try {
@@ -325,10 +305,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   Widget _leftSidebar() {
     return Container(
       decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(AppAssets.building),
-          fit: BoxFit.cover,
-        ),
+        image: DecorationImage(image: AssetImage(AppAssets.building), fit: BoxFit.cover),
       ),
       child: Container(
         decoration: BoxDecoration(
@@ -350,12 +327,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.08),
-                    blurRadius: 8.0,
-                  ),
-                ],
+                boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 8.0)],
               ),
               child: const AppLogo(size: 38.0),
             ),
@@ -372,11 +344,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             const SizedBox(height: 16.0),
             Text(
               'Secure your account with 2-step verification.',
-              style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.85),
-                fontSize: 15.0,
-                height: 1.45,
-              ),
+              style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 15.0, height: 1.45),
             ),
             const SizedBox(height: 40.0),
           ],
@@ -388,78 +356,71 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   Widget _formContent(String email) {
     final isLoading = context.select<AuthProvider, bool>((p) => p.isLoading);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        AuthHeaderWidget(
-          title: 'Verify Your Email',
-          subtitle: 'We sent a 6-digit verification code to:\n$email',
-        ),
-        const SizedBox(height: 32.0),
-
-        // App Pinput Field
-        AppPinputField(
-          controller: _pinController,
-          focusNode: _pinFocusNode,
-          length: 6,
-          autofocus: true,
-          onCompleted: (_) => _handleVerifyOtp(),
-        ),
-
-        const SizedBox(height: 32.0),
-
-        // Verify button
-        AppButton(
-          text: 'Verify Email',
-          variant: AppButtonVariant.gradient,
-          isLoading: isLoading,
-          icon: const Icon(
-            Icons.check_circle_outline_rounded,
-            color: Colors.white,
-            size: 18.0,
+    return AutofillGroup(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          AuthHeaderWidget(
+            title: 'Verify Your Email',
+            subtitle: 'We sent a 6-digit verification code to:\n$email',
           ),
-          onPressed: _handleVerifyOtp,
-        ).disable(isDisable: isLoading),
+          const SizedBox(height: 32.0),
 
-        const SizedBox(height: 24.0),
+          // App Pinput Field
+          AppPinputField(
+            controller: _pinController,
+            focusNode: _pinFocusNode,
+            length: 6,
+            autofocus: true,
+            onCompleted: (_) => _handleVerifyOtp(),
+          ),
 
-        // Resend Timer Row
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Didn't receive code? ",
-              style: AppTextStyles.body2.copyWith(color: AppColors.textMuted),
-            ),
-            _resendCountdown > 0
-                ? Text(
-                    "Resend in ${_resendCountdown}s",
-                    style: AppTextStyles.body2.copyWith(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                : InkWell(
-                    onTap: _isResending ? null : _handleResendOtp,
-                    borderRadius: BorderRadius.circular(4.0),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 4.0,
-                        vertical: 2.0,
+          const SizedBox(height: 32.0),
+
+          // Verify button
+          AppButton(
+            text: 'Verify Email',
+            variant: AppButtonVariant.gradient,
+            isLoading: isLoading,
+            isDisabled: isLoading,
+            icon: const Icon(Icons.check_circle_outline_rounded, color: Colors.white, size: 18.0),
+            onPressed: _handleVerifyOtp,
+          ),
+
+          const SizedBox(height: 24.0),
+
+          // Resend Timer Row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Didn't receive code? ", style: AppTextStyles.body2.copyWith(color: AppColors.textMuted)),
+              _resendCountdown > 0
+                  ? Text(
+                      "Resend in ${_resendCountdown}s",
+                      style: AppTextStyles.body2.copyWith(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.bold,
                       ),
-                      child: Text(
-                        _isResending ? 'Sending...' : 'Resend Code',
-                        style: AppTextStyles.body2.copyWith(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
+                    )
+                  : InkWell(
+                      onTap: _isResending ? null : _handleResendOtp,
+                      borderRadius: BorderRadius.circular(4.0),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+                        child: Text(
+                          _isResending ? 'Sending...' : 'Resend Code',
+                          style: AppTextStyles.body2.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -488,11 +449,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
-                  Icons.chevron_left_rounded,
-                  color: AppColors.textPrimary,
-                  size: 20.0,
-                ),
+                const Icon(Icons.chevron_left_rounded, color: AppColors.textPrimary, size: 20.0),
                 const SizedBox(width: 8.0),
                 Text(
                   'Back to Login',

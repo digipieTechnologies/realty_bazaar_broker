@@ -4,6 +4,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -48,12 +49,16 @@ class _LoginScreenState extends State<LoginScreen> {
   final _confirmPasswordController = TextEditingController();
 
   // Focus nodes
+  final _nameFocusNode = FocusNode();
+  final _emailFocusNode = FocusNode();
+  final _phoneFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
   final _confirmPasswordFocusNode = FocusNode();
+  final _submitFocusNode = FocusNode();
+  final _footerLinkFocusNode = FocusNode();
 
   late AuthMode _currentMode;
-  CountryCode _selectedCountry =
-      CountryCode.countries.first; // Default to India (+91)
+  CountryCode _selectedCountry = CountryCode.countries.first; // Default to India (+91)
 
   @override
   void initState() {
@@ -68,12 +73,18 @@ class _LoginScreenState extends State<LoginScreen> {
     _phoneController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _nameFocusNode.dispose();
+    _emailFocusNode.dispose();
+    _phoneFocusNode.dispose();
     _passwordFocusNode.dispose();
     _confirmPasswordFocusNode.dispose();
+    _submitFocusNode.dispose();
+    _footerLinkFocusNode.dispose();
     super.dispose();
   }
 
   void _switchMode(AuthMode mode) {
+    TextInput.finishAutofillContext(shouldSave: false);
     setState(() {
       _currentMode = mode;
       _formKey.currentState?.reset();
@@ -85,6 +96,8 @@ class _LoginScreenState extends State<LoginScreen> {
       _confirmPasswordController.clear();
       _selectedCountry = CountryCode.countries.first;
     });
+    // Unfocus active keyboard on switch
+    FocusScope.of(context).unfocus();
   }
 
   Future<void> _handleAuthSubmit() async {
@@ -99,6 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text,
       );
       if (success && mounted) {
+        TextInput.finishAutofillContext(shouldSave: true);
         if (authProvider.userProfile?.isEmailVerified == false) {
           final targetEmail = _emailController.text.trim();
           await authProvider.resendEmailOtp(
@@ -120,10 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
             },
           );
         } else {
-          AppToast.showSuccess(
-            context.tr('login_successful'),
-            context.tr('welcome_back_generic'),
-          );
+          AppToast.showSuccess(context.tr('login_successful'), context.tr('welcome_back_generic'));
           context.go(AppRoutes.home);
         }
       } else if (mounted) {
@@ -152,6 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // 2. Generate and send 2-minute verification OTP via RPC without creating account yet
       final otpSent = await authProvider.requestSignUpOtp(email);
       if (otpSent && mounted) {
+        TextInput.finishAutofillContext(shouldSave: true);
         AppToast.showSuccess(
           'Verification Code Sent',
           'Please check your email for the 6-digit verification code.',
@@ -167,32 +179,25 @@ class _LoginScreenState extends State<LoginScreen> {
               'password': _passwordController.text,
               'phone': formattedPhone,
             },
+            'otpType': AppOtpType.emailVerify,
           },
         );
       } else if (mounted) {
         AppToast.showError(
-          context.tr('auth_error'),
-          authProvider.errorMessage ?? context.tr('error_generic'),
+          'Verification Failed',
+          authProvider.errorMessage ?? 'Unable to send verification code. Please try again.',
         );
       }
-    } else {
+    } else if (_currentMode == AuthMode.forgotPassword) {
       final email = _emailController.text.trim();
-      final success = await authProvider.requestForgotPasswordOtp(
-        email,
-        expectedRole: UserRole.broker,
-      );
+      final success = await authProvider.requestForgotPasswordOtp(email, expectedRole: UserRole.broker);
       if (success && mounted) {
-        AppToast.showSuccess(
-          'Verification Code Sent',
-          'Please check your email for the 6-digit password reset code.',
-        );
-        context.go(
-          AppRoutes.verifyOtp,
-          extra: {'email': email, 'otpType': AppOtpType.forgotPassword},
-        );
+        TextInput.finishAutofillContext(shouldSave: false);
+        AppToast.showSuccess(context.tr('code_sent_title'), context.tr('code_sent_sub'));
+        context.go(AppRoutes.verifyOtp, extra: {'email': email, 'otpType': AppOtpType.forgotPassword});
       } else if (mounted) {
         AppToast.showError(
-          context.tr('auth_error'),
+          context.tr('reset_failed'),
           authProvider.errorMessage ?? context.tr('error_generic'),
         );
       }
@@ -201,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDesktop = context.isDesktopUI;
+    final isDesktop = context.isDesktop;
 
     return Scaffold(
       backgroundColor: AppColors.surfaceLight,
@@ -215,10 +220,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Container(
                 width: 320,
                 height: 320,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.primary.withOpacity(0.05),
-                ),
+                decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.primary.withOpacity(0.05)),
               ),
             ),
             Positioned(
@@ -245,10 +247,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: SafeArea(
                   child: Center(
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 20.0,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 440.0),
                         child: Column(
@@ -259,17 +258,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             isDesktop
                                 ? _formContent()
                                 : Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 20.0,
-                                      vertical: 24.0,
-                                    ),
+                                    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(24.0),
-                                      border: Border.all(
-                                        color: AppColors.border,
-                                        width: 1.0,
-                                      ),
+                                      border: Border.all(color: AppColors.border, width: 1.0),
                                       boxShadow: [
                                         BoxShadow(
                                           color: Colors.black.withOpacity(0.02),
@@ -300,18 +293,12 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _leftSidebar() {
     return Container(
       decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(AppAssets.building),
-          fit: BoxFit.cover,
-        ),
+        image: DecorationImage(image: AssetImage(AppAssets.building), fit: BoxFit.cover),
       ),
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              AppColors.primaryDark.withOpacity(0.85),
-              AppColors.primary.withOpacity(0.70),
-            ],
+            colors: [AppColors.primaryDark.withOpacity(0.85), AppColors.primary.withOpacity(0.70)],
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
           ),
@@ -326,12 +313,7 @@ class _LoginScreenState extends State<LoginScreen> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
-                    blurRadius: 8.0,
-                  ),
-                ],
+                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 8.0)],
               ),
               child: const AppLogo(size: 38.0),
             ),
@@ -350,11 +332,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 16.0),
             Text(
               context.tr('join_network'),
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.85),
-                fontSize: 15.0,
-                height: 1.45,
-              ),
+              style: TextStyle(color: Colors.white.withOpacity(0.85), fontSize: 15.0, height: 1.45),
             ),
             const SizedBox(height: 40.0),
 
@@ -384,11 +362,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _glassmorphicCard({
-    required IconData icon,
-    required String title,
-    required String desc,
-  }) {
+  Widget _glassmorphicCard({required IconData icon, required String title, required String desc}) {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -404,21 +378,10 @@ class _LoginScreenState extends State<LoginScreen> {
           const SizedBox(height: 12.0),
           Text(
             title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 14.0,
-            ),
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14.0),
           ),
           const SizedBox(height: 6.0),
-          Text(
-            desc,
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.8),
-              fontSize: 12.0,
-              height: 1.3,
-            ),
-          ),
+          Text(desc, style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12.0, height: 1.3)),
         ],
       ),
     );
@@ -426,45 +389,38 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // --- FORM CONTAINER & SWITCHER ---
   Widget _formContent() {
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _headerWidget(),
-          const SizedBox(height: 24.0),
+    return FocusTraversalGroup(
+      child: AutofillGroup(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _headerWidget(),
+              const SizedBox(height: 24.0),
 
-          // Dynamic form input fields
-          if (_currentMode == AuthMode.signup) ...[
-            _nameField(),
-            const SizedBox(height: 16.0),
-          ],
-          _emailField(),
-          if (_currentMode == AuthMode.signup) ...[
-            const SizedBox(height: 16.0),
-            _phoneField(),
-          ],
-          if (_currentMode != AuthMode.forgotPassword) ...[
-            const SizedBox(height: 16.0),
-            _passwordField(),
-          ],
-          if (_currentMode == AuthMode.login) ...[
-            const SizedBox(height: 8.0),
-            _forgotPasswordLink(),
-          ],
-          if (_currentMode == AuthMode.signup) ...[
-            const SizedBox(height: 16.0),
-            _confirmPasswordField(),
-          ],
+              // Dynamic form input fields
+              if (_currentMode == AuthMode.signup) ...[_nameField(), const SizedBox(height: 16.0)],
+              _emailField(),
+              if (_currentMode == AuthMode.signup) ...[const SizedBox(height: 16.0), _phoneField()],
+              if (_currentMode != AuthMode.forgotPassword) ...[
+                const SizedBox(height: 16.0),
+                _passwordField(),
+              ],
+              if (_currentMode == AuthMode.login) ...[const SizedBox(height: 8.0), _forgotPasswordLink()],
+              if (_currentMode == AuthMode.signup) ...[const SizedBox(height: 16.0), _confirmPasswordField()],
 
-          const SizedBox(height: 24.0),
-          _AuthSubmitButton(
-            currentMode: _currentMode,
-            onPressed: _handleAuthSubmit,
+              const SizedBox(height: 24.0),
+              _AuthSubmitButton(
+                currentMode: _currentMode,
+                focusNode: _submitFocusNode,
+                onPressed: _handleAuthSubmit,
+              ),
+              const SizedBox(height: 24.0),
+              _footerLink(),
+            ],
           ),
-          const SizedBox(height: 24.0),
-          _footerLink(),
-        ],
+        ),
       ),
     );
   }
@@ -492,14 +448,14 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _nameField() {
     return AppTextField(
       controller: _nameController,
+      focusNode: _nameFocusNode,
       label: context.tr('full_name'),
       hint: 'John Doe',
       keyboardType: TextInputType.name,
+      autofillHints: const [AutofillHints.name],
       textInputAction: TextInputAction.next,
-      prefixIcon: const Icon(
-        Icons.person_outline,
-        color: AppColors.iconDefault,
-      ),
+      onFieldSubmitted: (_) => _emailFocusNode.requestFocus(),
+      prefixIcon: const Icon(Icons.person_outline, color: AppColors.iconDefault),
       validator: (val) {
         if (val.isEmptyORNull) return context.tr('full_name_required');
         return null;
@@ -508,18 +464,29 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _emailField() {
+    final isForgotPassword = _currentMode == AuthMode.forgotPassword;
+    final isSignup = _currentMode == AuthMode.signup;
+
     return AppTextField(
       controller: _emailController,
+      focusNode: _emailFocusNode,
       label: context.tr('email_address'),
       hint: 'name@therealtybazaar.com',
       keyboardType: TextInputType.emailAddress,
-      textInputAction: _currentMode == AuthMode.forgotPassword
-          ? TextInputAction.done
-          : TextInputAction.next,
-      prefixIcon: const Icon(
-        Icons.email_outlined,
-        color: AppColors.iconDefault,
-      ),
+      autofillHints: isForgotPassword
+          ? const [AutofillHints.email]
+          : const [AutofillHints.email, AutofillHints.username],
+      textInputAction: isForgotPassword ? TextInputAction.done : TextInputAction.next,
+      onFieldSubmitted: (_) {
+        if (isForgotPassword) {
+          _handleAuthSubmit();
+        } else if (isSignup) {
+          _phoneFocusNode.requestFocus();
+        } else {
+          _passwordFocusNode.requestFocus();
+        }
+      },
+      prefixIcon: const Icon(Icons.email_outlined, color: AppColors.iconDefault),
       validator: (val) {
         if (val.isEmptyORNull) return context.tr('email_required');
         if (!val.isEmail) return context.tr('valid_email_required');
@@ -531,7 +498,11 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _phoneField() {
     return PhoneFieldWidget(
       controller: _phoneController,
+      focusNode: _phoneFocusNode,
       initialCountry: _selectedCountry,
+      autofillHints: const [AutofillHints.telephoneNumber],
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (_) => _passwordFocusNode.requestFocus(),
       onCountryChanged: (country) {
         setState(() {
           _selectedCountry = country;
@@ -541,13 +512,21 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _passwordField() {
+    final isSignup = _currentMode == AuthMode.signup;
+
     return PasswordFieldWidget(
       controller: _passwordController,
       focusNode: _passwordFocusNode,
       label: context.tr('password'),
-      textInputAction: _currentMode == AuthMode.signup
-          ? TextInputAction.next
-          : TextInputAction.done,
+      autofillHints: isSignup ? const [AutofillHints.newPassword] : const [AutofillHints.password],
+      textInputAction: isSignup ? TextInputAction.next : TextInputAction.done,
+      onFieldSubmitted: (_) {
+        if (isSignup) {
+          _confirmPasswordFocusNode.requestFocus();
+        } else {
+          _handleAuthSubmit();
+        }
+      },
       validator: (val) {
         if (val.isEmptyORNull) return context.tr('password_required');
         if (_currentMode == AuthMode.signup && !val.isStrongPassword) {
@@ -561,13 +540,16 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _forgotPasswordLink() {
     return Align(
       alignment: Alignment.centerRight,
-      child: GestureDetector(
-        onTap: () => _switchMode(AuthMode.forgotPassword),
-        child: Text(
-          context.tr('forgot_password_link'),
-          style: AppTextStyles.body2.copyWith(
-            color: AppColors.primary,
-            fontWeight: FontWeight.w600,
+      child: ExcludeFocusTraversal(
+        child: InkWell(
+          borderRadius: BorderRadius.circular(4.0),
+          onTap: () => _switchMode(AuthMode.forgotPassword),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
+            child: Text(
+              context.tr('forgot_password_link'),
+              style: AppTextStyles.body2.copyWith(color: AppColors.primary, fontWeight: FontWeight.w600),
+            ),
           ),
         ),
       ),
@@ -579,7 +561,9 @@ class _LoginScreenState extends State<LoginScreen> {
       controller: _confirmPasswordController,
       focusNode: _confirmPasswordFocusNode,
       label: context.tr('confirm_password'),
+      autofillHints: const [AutofillHints.newPassword],
       textInputAction: TextInputAction.done,
+      onFieldSubmitted: (_) => _handleAuthSubmit(),
       validator: (val) {
         if (val.isEmptyORNull) return context.tr('confirm_password_required');
         if (val != _passwordController.text) {
@@ -593,18 +577,21 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _footerLink() {
     if (_currentMode == AuthMode.signup) {
       return AuthFooterLinkWidget(
+        focusNode: _footerLinkFocusNode,
         mainText: context.tr('already_have_account'),
         actionText: context.tr('sign_in'),
         onTap: () => _switchMode(AuthMode.login),
       );
     } else if (_currentMode == AuthMode.forgotPassword) {
       return AuthFooterLinkWidget(
+        focusNode: _footerLinkFocusNode,
         mainText: context.tr('remember_password'),
         actionText: context.tr('sign_in'),
         onTap: () => _switchMode(AuthMode.login),
       );
     } else {
       return AuthFooterLinkWidget(
+        focusNode: _footerLinkFocusNode,
         mainText: context.tr('dont_have_account'),
         actionText: 'Sign Up',
         onTap: () => _switchMode(AuthMode.signup),
@@ -662,8 +649,9 @@ class _LoginScreenState extends State<LoginScreen> {
 class _AuthSubmitButton extends StatelessWidget {
   final AuthMode currentMode;
   final VoidCallback onPressed;
+  final FocusNode? focusNode;
 
-  const _AuthSubmitButton({required this.currentMode, required this.onPressed});
+  const _AuthSubmitButton({required this.currentMode, required this.onPressed, this.focusNode});
 
   @override
   Widget build(BuildContext context) {
@@ -677,15 +665,13 @@ class _AuthSubmitButton extends StatelessWidget {
     }
 
     return AppButton(
+      focusNode: focusNode,
       text: buttonText,
       variant: AppButtonVariant.gradient,
       isLoading: isLoading,
-      icon: const Icon(
-        Icons.chevron_right_rounded,
-        color: Colors.white,
-        size: 20.0,
-      ),
+      isDisabled: isLoading,
+      icon: const Icon(Icons.chevron_right_rounded, color: Colors.white, size: 20.0),
       onPressed: onPressed,
-    ).disable(isDisable: isLoading);
+    );
   }
 }

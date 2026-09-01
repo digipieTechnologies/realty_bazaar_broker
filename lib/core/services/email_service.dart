@@ -2,6 +2,7 @@
 // Purpose: Centralized service to send emails by invoking the Supabase Edge Function 'send-email' via Resend.
 
 import 'package:flutter/foundation.dart';
+
 import '../supabase/supabase_config.dart';
 
 class EmailService {
@@ -25,24 +26,20 @@ class EmailService {
     String? from,
   }) async {
     try {
-      final Map<String, dynamic> bodyData = {
-        'to': to,
-        'subject': subject,
-      };
+      final Map<String, dynamic> bodyData = {'to': to, 'subject': subject};
       if (html != null) bodyData['html'] = html;
       if (text != null) bodyData['text'] = text;
       if (from != null) bodyData['from'] = from;
 
-      final response = await SupabaseConfig.client.functions.invoke(
-        'send-email',
-        body: bodyData,
-      );
+      final response = await SupabaseConfig.client.functions.invoke('send-email', body: bodyData);
 
       if (response.status == 200) {
         debugPrint('[EmailService] Email sent successfully to: $to');
         return true;
       } else {
-        debugPrint('[EmailService] Failed to send email. Status: ${response.status}, Error: ${response.data}');
+        debugPrint(
+          '[EmailService] Failed to send email. Status: ${response.status}, Error: ${response.data}',
+        );
         return false;
       }
     } catch (e) {

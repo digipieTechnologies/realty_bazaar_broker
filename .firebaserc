@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "the-realty-bazaar"
-  }
+  },
+  "targets": {
+    "the-realty-bazaar": {
+      "hosting": {
+        "partners": [
+          "the-realty-bazaar-broker"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

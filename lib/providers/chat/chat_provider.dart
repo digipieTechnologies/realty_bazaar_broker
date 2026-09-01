@@ -2,8 +2,10 @@
 // Purpose: Generic Chat state provider supporting room initialization, real-time message streaming, seamless scroll pagination, soft-delete, inline edit, and multi-media attachments via JSONB medias.
 
 import 'dart:io' as io;
+
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../core/services/supabase_storage_service.dart';
 import '../../core/supabase/supabase_config.dart';
 import '../../models/models.dart';
@@ -169,11 +171,10 @@ class ChatProvider extends ChangeNotifier {
   Future<bool> deleteMessage(String messageId) async {
     try {
       final nowUtc = DateTime.now().toUtc().toIso8601String();
-      await SupabaseConfig.client.from('chat_messages').update({
-        'is_deleted': true,
-        'deleted_at': nowUtc,
-        'updated_at': nowUtc,
-      }).eq('id', messageId);
+      await SupabaseConfig.client
+          .from('chat_messages')
+          .update({'is_deleted': true, 'deleted_at': nowUtc, 'updated_at': nowUtc})
+          .eq('id', messageId);
 
       _messages.removeWhere((m) => m.id == messageId);
       notifyListeners();
@@ -194,11 +195,10 @@ class ChatProvider extends ChangeNotifier {
 
     try {
       final nowUtc = DateTime.now().toUtc().toIso8601String();
-      await SupabaseConfig.client.from('chat_messages').update({
-        'message': trimmed,
-        'is_edited': true,
-        'updated_at': nowUtc,
-      }).eq('id', messageId);
+      await SupabaseConfig.client
+          .from('chat_messages')
+          .update({'message': trimmed, 'is_edited': true, 'updated_at': nowUtc})
+          .eq('id', messageId);
 
       final index = _messages.indexWhere((m) => m.id == messageId);
       if (index != -1) {
@@ -218,10 +218,7 @@ class ChatProvider extends ChangeNotifier {
 
   /// Helper to upload local file attachment to Supabase Storage bucket 'chat_attachments'
   Future<String?> _uploadChatMedia(String localPath) async {
-    return await SupabaseStorageService.uploadFile(
-      filePath: localPath,
-      bucketName: 'chat_attachments',
-    );
+    return await SupabaseStorageService.uploadFile(filePath: localPath, bucketName: 'chat_attachments');
   }
 
   /// Send a text message with single or multi-media attachments via JSONB medias or locationData
@@ -254,7 +251,8 @@ class ChatProvider extends ChangeNotifier {
           }
 
           if (item.thumbnailBytes != null) {
-            final tempPath = '${io.Directory.systemTemp.path}/thumb_${DateTime.now().millisecondsSinceEpoch}.jpg';
+            final tempPath =
+                '${io.Directory.systemTemp.path}/thumb_${DateTime.now().millisecondsSinceEpoch}.jpg';
             final tempFile = io.File(tempPath);
             await tempFile.writeAsBytes(item.thumbnailBytes!);
             uploadedThumb = await _uploadChatMedia(tempFile.path);
@@ -264,10 +262,7 @@ class ChatProvider extends ChangeNotifier {
           }
 
           uploadedMedias.add(
-            item.copyWith(
-              url: uploadedUrl ?? item.url,
-              thumbnail: uploadedThumb ?? item.thumbnail,
-            ),
+            item.copyWith(url: uploadedUrl ?? item.url, thumbnail: uploadedThumb ?? item.thumbnail),
           );
         }
       }
@@ -292,11 +287,7 @@ class ChatProvider extends ChangeNotifier {
         'is_deleted': false,
       };
 
-      final response = await SupabaseConfig.client
-          .from('chat_messages')
-          .insert(payload)
-          .select('*')
-          .single();
+      final response = await SupabaseConfig.client.from('chat_messages').insert(payload).select('*').single();
 
       var newMessage = ChatMessageModel.fromJson(response);
       if (newMessage.replyMessageId != null && newMessage.replyMessage == null) {
@@ -331,11 +322,7 @@ class ChatProvider extends ChangeNotifier {
           event: PostgresChangeEvent.all,
           schema: 'public',
           table: 'chat_messages',
-          filter: PostgresChangeFilter(
-            type: PostgresChangeFilterType.eq,
-            column: 'room_id',
-            value: roomId,
-          ),
+          filter: PostgresChangeFilter(type: PostgresChangeFilterType.eq, column: 'room_id', value: roomId),
           callback: (payload) {
             debugPrint('[ChatProvider] Realtime Message Event: ${payload.eventType}');
             if (payload.eventType == PostgresChangeEvent.insert) {
@@ -363,7 +350,8 @@ class ChatProvider extends ChangeNotifier {
                   final idx = _messages.indexWhere((m) => m.id == updatedMsg.id);
                   if (idx != -1) {
                     final existingMsg = _messages[idx];
-                    final replyMsgToKeep = existingMsg.replyMessage ??
+                    final replyMsgToKeep =
+                        existingMsg.replyMessage ??
                         (updatedMsg.replyMessageId != null
                             ? _messages.where((m) => m.id == updatedMsg.replyMessageId).firstOrNull
                             : null);

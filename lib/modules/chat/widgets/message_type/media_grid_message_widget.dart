@@ -2,6 +2,7 @@
 // Purpose: Reusable media grid widget displaying single or multi-media attachments in WhatsApp style (+X overlay for >4 items) opening FullScreenMediaViewer on tap.
 
 import 'package:flutter/material.dart';
+
 import '../../../../models/models.dart';
 import '../../../../widgets/images/cached_image.dart';
 import '../../../../widgets/media/full_screen_media_viewer.dart';
@@ -11,20 +12,12 @@ class MediaGridMessageWidget extends StatelessWidget {
   final String? caption;
   final bool isMe;
 
-  const MediaGridMessageWidget({
-    super.key,
-    required this.medias,
-    this.caption,
-    required this.isMe,
-  });
+  const MediaGridMessageWidget({super.key, required this.medias, this.caption, required this.isMe});
 
   void _openMediaViewer(BuildContext context, int initialIndex) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => FullScreenMediaViewer(
-          medias: medias,
-          initialIndex: initialIndex,
-        ),
+        builder: (_) => FullScreenMediaViewer(medias: medias, initialIndex: initialIndex),
       ),
     );
   }
@@ -37,10 +30,7 @@ class MediaGridMessageWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(12.0),
-          child: _buildGrid(context),
-        ),
+        ClipRRect(borderRadius: BorderRadius.circular(12.0), child: _buildGrid(context)),
 
         if (caption != null && caption!.trim().isNotEmpty) ...[
           const SizedBox(height: 6.0),
@@ -48,11 +38,7 @@ class MediaGridMessageWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
             child: Text(
               caption!,
-              style: TextStyle(
-                fontSize: 13.0,
-                color: isMe ? Colors.white : Colors.black87,
-                height: 1.3,
-              ),
+              style: TextStyle(fontSize: 13.0, color: isMe ? Colors.white : Colors.black87, height: 1.3),
             ),
           ),
         ],
@@ -153,13 +139,7 @@ class MediaGridMessageWidget extends StatelessWidget {
     }
   }
 
-  Widget _buildMediaTile(
-    BuildContext context,
-    MediaModel media,
-    int index, {
-    double? width,
-    double? height,
-  }) {
+  Widget _buildMediaTile(BuildContext context, MediaModel media, int index, {double? width, double? height}) {
     final imagePathOrUrl = media.displayImageUrl;
 
     return GestureDetector(
@@ -170,25 +150,13 @@ class MediaGridMessageWidget extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            CachedImage(
-              imagePathOrUrl,
-              fit: BoxFit.cover,
-              width: width,
-              height: height,
-            ),
+            CachedImage(imagePathOrUrl, fit: BoxFit.cover, width: width, height: height),
             if (media.isVideo)
               Center(
                 child: Container(
                   padding: const EdgeInsets.all(8.0),
-                  decoration: const BoxDecoration(
-                    color: Colors.black45,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.play_arrow_rounded,
-                    color: Colors.white,
-                    size: 28.0,
-                  ),
+                  decoration: const BoxDecoration(color: Colors.black45, shape: BoxShape.circle),
+                  child: const Icon(Icons.play_arrow_rounded, color: Colors.white, size: 28.0),
                 ),
               ),
           ],

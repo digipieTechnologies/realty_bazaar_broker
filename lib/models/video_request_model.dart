@@ -2,10 +2,11 @@
 // Purpose: Type-safe model representing video request records along with nested property & broker objects.
 
 import 'package:equatable/equatable.dart';
+
 import 'address_model.dart';
-import 'video_request_enums.dart';
 import 'media_model.dart';
 import 'user_model.dart';
+import 'video_request_enums.dart';
 
 class VideoRequestModel extends Equatable {
   final String id;
@@ -92,19 +93,19 @@ class VideoRequestModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        status,
-        adminApprovalStatus,
-        notes,
-        cancelReason,
-        adminCancelReason,
-        cancelledByUserId,
-        createdAt,
-        updatedAt,
-        completedAt,
-        property,
-        broker,
-      ];
+    id,
+    status,
+    adminApprovalStatus,
+    notes,
+    cancelReason,
+    adminCancelReason,
+    cancelledByUserId,
+    createdAt,
+    updatedAt,
+    completedAt,
+    property,
+    broker,
+  ];
 }
 
 class PropertyDetails extends Equatable {
@@ -156,12 +157,7 @@ class PropertyDetails extends Equatable {
 
   static PropertyDetails fromJson(dynamic json) {
     if (json is! Map) {
-      return const PropertyDetails(
-        id: '',
-        title: '',
-        price: 0,
-        area: 0,
-      );
+      return const PropertyDetails(id: '', title: '', price: 0, area: 0);
     }
 
     List<MediaModel> parsedMedias = [];
@@ -195,36 +191,34 @@ class PropertyDetails extends Equatable {
       facing: json['facing']?.toString(),
       amenities: parsedAmenities,
       medias: parsedMedias,
-      address: json['address'] != null
-          ? AddressModel.fromJson(json['address'])
-          : null,
+      address: json['address'] != null ? AddressModel.fromJson(json['address']) : null,
     );
   }
 
   @override
   List<Object?> get props => [
-        id,
-        title,
-        propertyDescription,
-        propertyType,
-        listingType,
-        price,
-        area,
-        areaUnit,
-        bedrooms,
-        bathrooms,
-        balconies,
-        parking,
-        floorNumber,
-        totalFloors,
-        furnishingStatus,
-        propertyStatus,
-        constructionStatus,
-        facing,
-        amenities,
-        medias,
-        address,
-      ];
+    id,
+    title,
+    propertyDescription,
+    propertyType,
+    listingType,
+    price,
+    area,
+    areaUnit,
+    bedrooms,
+    bathrooms,
+    balconies,
+    parking,
+    floorNumber,
+    totalFloors,
+    furnishingStatus,
+    propertyStatus,
+    constructionStatus,
+    facing,
+    amenities,
+    medias,
+    address,
+  ];
 }
 
 class BrokerDetails extends Equatable {
@@ -232,26 +226,17 @@ class BrokerDetails extends Equatable {
   final String businessName;
   final AddressModel? address;
 
-  const BrokerDetails({
-    required this.id,
-    required this.businessName,
-    this.address,
-  });
+  const BrokerDetails({required this.id, required this.businessName, this.address});
 
   static BrokerDetails fromJson(dynamic json) {
     if (json is! Map) {
-      return const BrokerDetails(
-        id: '',
-        businessName: '',
-      );
+      return const BrokerDetails(id: '', businessName: '');
     }
 
     return BrokerDetails(
       id: json['id']?.toString() ?? '',
       businessName: json['business_name']?.toString() ?? '',
-      address: json['address'] != null
-          ? AddressModel.fromJson(json['address'])
-          : null,
+      address: json['address'] != null ? AddressModel.fromJson(json['address']) : null,
     );
   }
 

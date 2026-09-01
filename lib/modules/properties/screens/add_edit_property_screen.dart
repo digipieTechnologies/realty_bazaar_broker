@@ -78,8 +78,7 @@ class _AddEditPropertyScreenState extends State<AddEditPropertyScreen> {
 
     // Step 2 Init
     _listingType = p?.listingType ?? ListingType.sale;
-    _constructionStatus =
-        p?.constructionStatus ?? ConstructionStatus.readyToMove;
+    _constructionStatus = p?.constructionStatus ?? ConstructionStatus.readyToMove;
     _areaUnit = p?.areaUnit ?? AreaUnit.sqft;
     _facing = p?.facing ?? FacingDirection.east;
     _furnishingStatus = p?.furnishingStatus ?? FurnishingStatus.unfurnished;
@@ -91,33 +90,21 @@ class _AddEditPropertyScreenState extends State<AddEditPropertyScreen> {
     _medias = List<MediaModel>.from(p?.medias ?? []);
 
     _titleController = TextEditingController(text: p?.propertyTitle ?? '');
-    _descriptionController = TextEditingController(
-      text: p?.propertyDescription ?? '',
-    );
+    _descriptionController = TextEditingController(text: p?.propertyDescription ?? '');
     _priceController = TextEditingController(
       text: p?.price != null && p!.price > 0 ? p.price.toStringAsFixed(0) : '',
     );
     _areaController = TextEditingController(
       text: p?.area != null && p!.area > 0 ? p.area.toStringAsFixed(0) : '',
     );
-    _floorNumberController = TextEditingController(
-      text: p?.floorNumber?.toString() ?? '',
-    );
-    _totalFloorsController = TextEditingController(
-      text: p?.totalFloors?.toString() ?? '',
-    );
+    _floorNumberController = TextEditingController(text: p?.floorNumber?.toString() ?? '');
+    _totalFloorsController = TextEditingController(text: p?.totalFloors?.toString() ?? '');
 
     // Step 3 Init
-    _fullAddressController = TextEditingController(
-      text: p?.address?.fullAddress ?? '',
-    );
+    _fullAddressController = TextEditingController(text: p?.address?.fullAddress ?? '');
     _cityController = TextEditingController(text: p?.address?.city ?? 'Surat');
-    _stateController = TextEditingController(
-      text: p?.address?.state ?? 'Gujarat',
-    );
-    _countryController = TextEditingController(
-      text: p?.address?.country ?? 'India',
-    );
+    _stateController = TextEditingController(text: p?.address?.state ?? 'Gujarat');
+    _countryController = TextEditingController(text: p?.address?.country ?? 'India');
     _pincodeController = TextEditingController();
     _landmarkController = TextEditingController();
   }
@@ -143,49 +130,31 @@ class _AddEditPropertyScreenState extends State<AddEditPropertyScreen> {
   bool _validateCurrentStep() {
     if (_currentStep == 0) {
       if (_propertyType == PropertyType.unknown) {
-        AppToast.showError(
-          context.tr('validation_error'),
-          context.tr('err_select_property_type'),
-        );
+        AppToast.showError(context.tr('validation_error'), context.tr('err_select_property_type'));
         return false;
       }
     } else if (_currentStep == 1) {
       if (_titleController.text.trim().isEmpty) {
-        AppToast.showError(
-          context.tr('validation_error'),
-          context.tr('err_enter_property_title'),
-        );
+        AppToast.showError(context.tr('validation_error'), context.tr('err_enter_property_title'));
         return false;
       }
       final price = double.tryParse(_priceController.text.trim());
       if (price == null || price <= 0) {
-        AppToast.showError(
-          context.tr('validation_error'),
-          context.tr('err_enter_valid_price'),
-        );
+        AppToast.showError(context.tr('validation_error'), context.tr('err_enter_valid_price'));
         return false;
       }
       final area = double.tryParse(_areaController.text.trim());
       if (area == null || area <= 0) {
-        AppToast.showError(
-          context.tr('validation_error'),
-          context.tr('err_enter_valid_area'),
-        );
+        AppToast.showError(context.tr('validation_error'), context.tr('err_enter_valid_area'));
         return false;
       }
     } else if (_currentStep == 2) {
       if (_fullAddressController.text.trim().isEmpty) {
-        AppToast.showError(
-          context.tr('validation_error'),
-          context.tr('err_enter_street_address'),
-        );
+        AppToast.showError(context.tr('validation_error'), context.tr('err_enter_street_address'));
         return false;
       }
       if (_cityController.text.trim().isEmpty) {
-        AppToast.showError(
-          context.tr('validation_error'),
-          context.tr('err_enter_city'),
-        );
+        AppToast.showError(context.tr('validation_error'), context.tr('err_enter_city'));
         return false;
       }
     }
@@ -194,11 +163,7 @@ class _AddEditPropertyScreenState extends State<AddEditPropertyScreen> {
 
   void _scrollToTop() {
     if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        0.0,
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeOut,
-      );
+      _scrollController.animateTo(0.0, duration: const Duration(milliseconds: 250), curve: Curves.easeOut);
     }
   }
 
@@ -265,8 +230,7 @@ class _AddEditPropertyScreenState extends State<AddEditPropertyScreen> {
       floorNumber: int.tryParse(_floorNumberController.text.trim()),
       totalFloors: int.tryParse(_totalFloorsController.text.trim()),
       furnishingStatus: _furnishingStatus,
-      propertyStatus:
-          widget.propertyToEdit?.propertyStatus ?? PropertyStatus.available,
+      propertyStatus: widget.propertyToEdit?.propertyStatus ?? PropertyStatus.available,
       constructionStatus: _constructionStatus,
       facing: _facing,
       amenities: _selectedAmenities,
@@ -290,10 +254,7 @@ class _AddEditPropertyScreenState extends State<AddEditPropertyScreen> {
         return PropertyPreviewDialog(
           property: property,
           isEdit: isEdit,
-          propertyProvider: Provider.of<PropertyProvider>(
-            context,
-            listen: false,
-          ),
+          propertyProvider: Provider.of<PropertyProvider>(context, listen: false),
           onSuccess: (savedProperty) {
             if (mounted) {
               Navigator.of(context).pop(savedProperty);
@@ -319,9 +280,7 @@ class _AddEditPropertyScreenState extends State<AddEditPropertyScreen> {
       child: Scaffold(
         backgroundColor: AppColors.background,
         appBar: CommonAppBar(
-          title: isEdit
-              ? context.tr('edit_property_listing')
-              : context.tr('add_new_property'),
+          title: isEdit ? context.tr('edit_property_listing') : context.tr('add_new_property'),
           onBackPressed: _previousStep,
         ),
         body: SafeArea(
@@ -331,10 +290,7 @@ class _AddEditPropertyScreenState extends State<AddEditPropertyScreen> {
 
               return SingleChildScrollView(
                 controller: _scrollController,
-                padding: EdgeInsets.symmetric(
-                  horizontal: isMobile ? 12.0 : 24.0,
-                  vertical: 12,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: isMobile ? 12.0 : 24.0, vertical: 12),
                 child: Center(
                   child: Container(
                     constraints: const BoxConstraints(maxWidth: 900.0),
@@ -351,50 +307,38 @@ class _AddEditPropertyScreenState extends State<AddEditPropertyScreen> {
                         if (_currentStep == 0)
                           StepPropertyTypeWidget(
                             selectedType: _propertyType,
-                            onTypeSelected: (type) =>
-                                setState(() => _propertyType = type),
+                            onTypeSelected: (type) => setState(() => _propertyType = type),
                           )
                         else if (_currentStep == 1)
                           StepPropertyDetailsWidget(
                             listingType: _listingType,
-                            onListingTypeChanged: (val) =>
-                                setState(() => _listingType = val),
+                            onListingTypeChanged: (val) => setState(() => _listingType = val),
                             constructionStatus: _constructionStatus,
-                            onConstructionStatusChanged: (val) =>
-                                setState(() => _constructionStatus = val),
+                            onConstructionStatusChanged: (val) => setState(() => _constructionStatus = val),
                             titleController: _titleController,
                             descriptionController: _descriptionController,
                             priceController: _priceController,
                             areaController: _areaController,
                             areaUnit: _areaUnit,
-                            onAreaUnitChanged: (val) =>
-                                setState(() => _areaUnit = val),
+                            onAreaUnitChanged: (val) => setState(() => _areaUnit = val),
                             bedrooms: _bedrooms,
-                            onBedroomsChanged: (val) =>
-                                setState(() => _bedrooms = val),
+                            onBedroomsChanged: (val) => setState(() => _bedrooms = val),
                             bathrooms: _bathrooms,
-                            onBathroomsChanged: (val) =>
-                                setState(() => _bathrooms = val),
+                            onBathroomsChanged: (val) => setState(() => _bathrooms = val),
                             balconies: _balconies,
-                            onBalconiesChanged: (val) =>
-                                setState(() => _balconies = val),
+                            onBalconiesChanged: (val) => setState(() => _balconies = val),
                             parking: _parking,
-                            onParkingChanged: (val) =>
-                                setState(() => _parking = val),
+                            onParkingChanged: (val) => setState(() => _parking = val),
                             floorNumberController: _floorNumberController,
                             totalFloorsController: _totalFloorsController,
                             facing: _facing,
-                            onFacingChanged: (val) =>
-                                setState(() => _facing = val),
+                            onFacingChanged: (val) => setState(() => _facing = val),
                             furnishingStatus: _furnishingStatus,
-                            onFurnishingStatusChanged: (val) =>
-                                setState(() => _furnishingStatus = val),
+                            onFurnishingStatusChanged: (val) => setState(() => _furnishingStatus = val),
                             selectedAmenities: _selectedAmenities,
-                            onAmenitiesChanged: (val) =>
-                                setState(() => _selectedAmenities = val),
+                            onAmenitiesChanged: (val) => setState(() => _selectedAmenities = val),
                             medias: _medias,
-                            onMediasChanged: (val) =>
-                                setState(() => _medias = val),
+                            onMediasChanged: (val) => setState(() => _medias = val),
                           )
                         else
                           StepPropertyLocationWidget(
@@ -418,10 +362,7 @@ class _AddEditPropertyScreenState extends State<AddEditPropertyScreen> {
             color: AppColors.surface,
             border: Border(top: BorderSide(color: AppColors.border, width: 1.0)),
           ),
-          padding: EdgeInsets.symmetric(
-            horizontal: isMobileScreen ? 12 : 24,
-            vertical: 10,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: isMobileScreen ? 12 : 24, vertical: 10),
           child: SafeArea(
             top: false,
             child: Center(

@@ -98,8 +98,7 @@ class AmenityItem {
 }
 
 class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
-  static final List<AmenityItem> availableAmenities = PropertyAmenityHelper
-      .availableAmenityNames
+  static final List<AmenityItem> availableAmenities = PropertyAmenityHelper.availableAmenityNames
       .map((name) => AmenityItem(name, PropertyAmenityHelper.getIcon(name)))
       .toList();
 
@@ -124,10 +123,7 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
         ),
         const SizedBox(height: 16.0),
 
-        AppSquareMediaPicker(
-          medias: widget.medias,
-          onMediasChanged: widget.onMediasChanged,
-        ),
+        AppSquareMediaPicker(medias: widget.medias, onMediasChanged: widget.onMediasChanged),
         const SizedBox(height: 42.0),
 
         // 2. BASIC DETAILS & PRICING
@@ -135,7 +131,8 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
           context,
           title: context.tr('section_basic_info'),
           dialogTitle: context.tr('section_basic_info'),
-          dialogDesc: 'Enter a clear, descriptive property title and price in INR (₹). A descriptive title includes BHK count, project name, and area landmark.',
+          dialogDesc:
+              'Enter a clear, descriptive property title and price in INR (₹). A descriptive title includes BHK count, project name, and area landmark.',
           examples: const [
             '3 BHK Sun Empress Luxury Apartment in Bhatar',
             '4 BHK Independent Lawn Villa in Vesu',
@@ -189,19 +186,20 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
                   value: widget.areaUnit.displayName,
                   items: AreaUnit.values
                       .where((u) => u != AreaUnit.unknown)
-                      .map((u) => DropdownMenuItem(
-                            value: u.displayName,
-                            child: Text(
-                              PropertyLocalizer.getLocalizedAreaUnit(context, u),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                          ))
+                      .map(
+                        (u) => DropdownMenuItem(
+                          value: u.displayName,
+                          child: Text(
+                            PropertyLocalizer.getLocalizedAreaUnit(context, u),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        ),
+                      )
                       .toList(),
                   onChanged: (val) {
                     if (val != null) {
-                      widget.onAreaUnitChanged(
-                          AreaUnit.values.firstWhere((u) => u.displayName == val));
+                      widget.onAreaUnitChanged(AreaUnit.values.firstWhere((u) => u.displayName == val));
                     }
                   },
                 ),
@@ -241,19 +239,20 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
                   value: widget.areaUnit.displayName,
                   items: AreaUnit.values
                       .where((u) => u != AreaUnit.unknown)
-                      .map((u) => DropdownMenuItem(
-                            value: u.displayName,
-                            child: Text(
-                              PropertyLocalizer.getLocalizedAreaUnit(context, u),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                          ))
+                      .map(
+                        (u) => DropdownMenuItem(
+                          value: u.displayName,
+                          child: Text(
+                            PropertyLocalizer.getLocalizedAreaUnit(context, u),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        ),
+                      )
                       .toList(),
                   onChanged: (val) {
                     if (val != null) {
-                      widget.onAreaUnitChanged(
-                          AreaUnit.values.firstWhere((u) => u.displayName == val));
+                      widget.onAreaUnitChanged(AreaUnit.values.firstWhere((u) => u.displayName == val));
                     }
                   },
                 ),
@@ -268,8 +267,13 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
           context,
           title: context.tr('section_listing_purpose'),
           dialogTitle: context.tr('section_listing_purpose'),
-          dialogDesc: 'Specify whether this property is available for Sale, Rent, or Lease, along with its current completion status.',
-          examples: const ['Sale: Property for full purchase.', 'Rent: Monthly rental listing.', 'Ready to Move: Fully constructed & ready for occupancy.'],
+          dialogDesc:
+              'Specify whether this property is available for Sale, Rent, or Lease, along with its current completion status.',
+          examples: const [
+            'Sale: Property for full purchase.',
+            'Rent: Monthly rental listing.',
+            'Ready to Move: Fully constructed & ready for occupancy.',
+          ],
         ),
         const SizedBox(height: 16.0),
 
@@ -287,8 +291,7 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
             }).toList(),
             onChanged: (val) {
               if (val != null) {
-                widget.onListingTypeChanged(
-                    ListingType.values.firstWhere((u) => u.displayName == val));
+                widget.onListingTypeChanged(ListingType.values.firstWhere((u) => u.displayName == val));
               }
             },
           ),
@@ -307,7 +310,8 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
             onChanged: (val) {
               if (val != null) {
                 widget.onConstructionStatusChanged(
-                    ConstructionStatus.values.firstWhere((u) => u.displayName == val));
+                  ConstructionStatus.values.firstWhere((u) => u.displayName == val),
+                );
               }
             },
           ),
@@ -328,8 +332,7 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
                   }).toList(),
                   onChanged: (val) {
                     if (val != null) {
-                      widget.onListingTypeChanged(
-                          ListingType.values.firstWhere((u) => u.displayName == val));
+                      widget.onListingTypeChanged(ListingType.values.firstWhere((u) => u.displayName == val));
                     }
                   },
                 ),
@@ -350,7 +353,8 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
                   onChanged: (val) {
                     if (val != null) {
                       widget.onConstructionStatusChanged(
-                          ConstructionStatus.values.firstWhere((u) => u.displayName == val));
+                        ConstructionStatus.values.firstWhere((u) => u.displayName == val),
+                      );
                     }
                   },
                 ),
@@ -365,7 +369,8 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
           context,
           title: context.tr('section_room_specs'),
           dialogTitle: context.tr('section_room_specs'),
-          dialogDesc: 'Select bedroom, bathroom, balcony, parking counts, floor details, and Vastu facing direction.',
+          dialogDesc:
+              'Select bedroom, bathroom, balcony, parking counts, floor details, and Vastu facing direction.',
           examples: const ['Bedrooms: 3', 'Bathrooms: 3', 'Facing: East / North-East'],
         ),
         const SizedBox(height: 12.0),
@@ -495,15 +500,16 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
             prefixIcon: const Icon(Icons.explore_outlined, size: 20.0),
             items: FacingDirection.values
                 .where((f) => f != FacingDirection.unknown)
-                .map((f) => DropdownMenuItem(
-                      value: f.displayName,
-                      child: Text(PropertyLocalizer.getLocalizedFacing(context, f)),
-                    ))
+                .map(
+                  (f) => DropdownMenuItem(
+                    value: f.displayName,
+                    child: Text(PropertyLocalizer.getLocalizedFacing(context, f)),
+                  ),
+                )
                 .toList(),
             onChanged: (val) {
               if (val != null) {
-                widget.onFacingChanged(
-                    FacingDirection.values.firstWhere((f) => f.displayName == val));
+                widget.onFacingChanged(FacingDirection.values.firstWhere((f) => f.displayName == val));
               }
             },
           ),
@@ -536,15 +542,16 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
                   prefixIcon: const Icon(Icons.explore_outlined, size: 20.0),
                   items: FacingDirection.values
                       .where((f) => f != FacingDirection.unknown)
-                      .map((f) => DropdownMenuItem(
-                            value: f.displayName,
-                            child: Text(PropertyLocalizer.getLocalizedFacing(context, f)),
-                          ))
+                      .map(
+                        (f) => DropdownMenuItem(
+                          value: f.displayName,
+                          child: Text(PropertyLocalizer.getLocalizedFacing(context, f)),
+                        ),
+                      )
                       .toList(),
                   onChanged: (val) {
                     if (val != null) {
-                      widget.onFacingChanged(
-                          FacingDirection.values.firstWhere((f) => f.displayName == val));
+                      widget.onFacingChanged(FacingDirection.values.firstWhere((f) => f.displayName == val));
                     }
                   },
                 ),
@@ -559,7 +566,8 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
           context,
           title: context.tr('section_furnishing'),
           dialogTitle: context.tr('section_furnishing'),
-          dialogDesc: 'Select furnishing level with visual room previews to help buyers understand included furniture & fittings.',
+          dialogDesc:
+              'Select furnishing level with visual room previews to help buyers understand included furniture & fittings.',
           examples: const [
             'Fully Furnished: Includes sofa, TV, beds, AC, wardrobes.',
             'Semi-Furnished: Fitted kitchen cabinets, lights, fans.',
@@ -574,17 +582,36 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
             if (isMobile) {
               return Column(
                 children: [
-                  _buildFurnishingCardMobile(context, 'Fully Furnished', 'assets/images/property/fully_furnished.png', 'Includes sofa, beds, AC & wardrobes'),
+                  _buildFurnishingCardMobile(
+                    context,
+                    'Fully Furnished',
+                    'assets/images/property/fully_furnished.png',
+                    'Includes sofa, beds, AC & wardrobes',
+                  ),
                   const SizedBox(height: 10.0),
-                  _buildFurnishingCardMobile(context, 'Semi-Furnished', 'assets/images/property/semi_furnished.png', 'Fitted cabinets, lights & fans'),
+                  _buildFurnishingCardMobile(
+                    context,
+                    'Semi-Furnished',
+                    'assets/images/property/semi_furnished.png',
+                    'Fitted cabinets, lights & fans',
+                  ),
                   const SizedBox(height: 10.0),
-                  _buildFurnishingCardMobile(context, 'Unfurnished', 'assets/images/property/unfurnished.png', 'Bare room structure without furniture'),
+                  _buildFurnishingCardMobile(
+                    context,
+                    'Unfurnished',
+                    'assets/images/property/unfurnished.png',
+                    'Bare room structure without furniture',
+                  ),
                 ],
               );
             }
             return Row(
               children: [
-                _buildFurnishingCard(context, 'Fully Furnished', 'assets/images/property/fully_furnished.png'),
+                _buildFurnishingCard(
+                  context,
+                  'Fully Furnished',
+                  'assets/images/property/fully_furnished.png',
+                ),
                 const SizedBox(width: 12.0),
                 _buildFurnishingCard(context, 'Semi-Furnished', 'assets/images/property/semi_furnished.png'),
                 const SizedBox(width: 12.0),
@@ -628,10 +655,7 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
                   decoration: BoxDecoration(
                     color: isSel ? AppColors.primary : AppColors.surface,
                     borderRadius: BorderRadius.circular(8.0),
-                    border: Border.all(
-                      color: isSel ? AppColors.primary : AppColors.border,
-                      width: 1.0,
-                    ),
+                    border: Border.all(color: isSel ? AppColors.primary : AppColors.border, width: 1.0),
                     boxShadow: isSel
                         ? [
                             BoxShadow(
@@ -698,10 +722,7 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
         Expanded(
           child: Text(
             title,
-            style: AppTextStyles.heading3.copyWith(
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-            ),
+            style: AppTextStyles.heading3.copyWith(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
           ),
         ),
         const SizedBox(width: 8.0),
@@ -709,24 +730,14 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
           cursor: SystemMouseCursors.click,
           child: GestureDetector(
             onTap: () {
-              FieldInfoDialog.show(
-                context,
-                title: dialogTitle,
-                description: dialogDesc,
-                examples: examples,
-              );
+              FieldInfoDialog.show(context, title: dialogTitle, description: dialogDesc, examples: examples);
             },
-            child: const Icon(
-              Icons.info_outline_rounded,
-              color: AppColors.primary,
-              size: 18.0,
-            ),
+            child: const Icon(Icons.info_outline_rounded, color: AppColors.primary, size: 18.0),
           ),
         ),
       ],
     );
   }
-
 
   Widget _buildSpecCounterCard({
     required BuildContext context,
@@ -741,11 +752,7 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
         borderRadius: BorderRadius.circular(14.0),
         border: Border.all(color: AppColors.border, width: 1.0),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 8, offset: const Offset(0, 3)),
         ],
       ),
       child: Column(
@@ -766,7 +773,7 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
               ),
             ),
           ),
-          
+
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
             child: Column(
@@ -784,7 +791,7 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 8.0),
-                
+
                 // Counter Buttons
                 Container(
                   height: 36.0,
@@ -807,7 +814,7 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
                           padding: EdgeInsets.zero,
                         ),
                       ),
-                      
+
                       // Value text
                       Text(
                         '$count',
@@ -816,7 +823,7 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
                           color: AppColors.textPrimary,
                         ),
                       ),
-                      
+
                       // Plus Button
                       IconButton(
                         onPressed: () => onChanged(count + 1),
@@ -838,6 +845,7 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
       ),
     );
   }
+
   Widget _buildFurnishingCard(BuildContext context, String status, String assetPath) {
     final localizedStatus = PropertyLocalizer.getLocalizedFurnishingStatus(context, status);
     final isSelected = widget.furnishingStatus.displayName.toLowerCase() == status.toLowerCase();
@@ -846,9 +854,9 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
-          onTap: () =>
-              widget.onFurnishingStatusChanged(
-              FurnishingStatus.values.firstWhere((f) => f.displayName.toLowerCase() == status.toLowerCase())),
+          onTap: () => widget.onFurnishingStatusChanged(
+            FurnishingStatus.values.firstWhere((f) => f.displayName.toLowerCase() == status.toLowerCase()),
+          ),
           child: Container(
             height: 130.0,
             decoration: BoxDecoration(
@@ -903,9 +911,9 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () =>
-            widget.onFurnishingStatusChanged(
-            FurnishingStatus.values.firstWhere((f) => f.displayName.toLowerCase() == status.toLowerCase())),
+        onTap: () => widget.onFurnishingStatusChanged(
+          FurnishingStatus.values.firstWhere((f) => f.displayName.toLowerCase() == status.toLowerCase()),
+        ),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           height: 80.0,
@@ -952,15 +960,8 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
                           left: 8,
                           child: Container(
                             padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              color: AppColors.primary,
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.check_rounded,
-                              color: Colors.white,
-                              size: 14,
-                            ),
+                            decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
+                            child: const Icon(Icons.check_rounded, color: Colors.white, size: 14),
                           ),
                         ),
                     ],

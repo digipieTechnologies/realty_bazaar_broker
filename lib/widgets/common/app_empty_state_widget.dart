@@ -2,6 +2,7 @@
 // Purpose: Reusable, modern, and professional empty state view for lists, tables, and screens when data is null or empty.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
 
@@ -46,16 +47,8 @@ class AppEmptyStateWidget extends StatelessWidget {
             if (iconWidget != null || icon != null) ...[
               Container(
                 padding: const EdgeInsets.all(14.0),
-                decoration: BoxDecoration(
-                  color: themeBgColor,
-                  shape: BoxShape.circle,
-                ),
-                child: iconWidget ??
-                    Icon(
-                      icon,
-                      size: iconSize,
-                      color: themeIconColor,
-                    ),
+                decoration: BoxDecoration(color: themeBgColor, shape: BoxShape.circle),
+                child: iconWidget ?? Icon(icon, size: iconSize, color: themeIconColor),
               ),
               const SizedBox(height: 14.0),
             ],
@@ -89,10 +82,7 @@ class AppEmptyStateWidget extends StatelessWidget {
             ],
 
             // Optional Action Button
-            if (action != null) ...[
-              const SizedBox(height: 18.0),
-              action!,
-            ],
+            if (action != null) ...[const SizedBox(height: 18.0), action!],
           ],
         ),
       ),

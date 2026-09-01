@@ -5,6 +5,7 @@
 
 import 'dart:convert';
 import 'dart:io' as io;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -13,8 +14,8 @@ import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
 import '../../../../models/property_model.dart';
 import '../../../../providers/social/social_provider.dart';
-import '../../../../widgets/images/cached_image.dart';
 import '../../../../util/common_ext.dart';
+import '../../../../widgets/images/cached_image.dart';
 
 class StepMediaPreviewEdit extends StatefulWidget {
   final PropertyModel? property;
@@ -88,12 +89,14 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
 
     final currentMedia = widget.selectedMedia[_currentMediaIndex];
     final pathLower = currentMedia.path.toLowerCase();
-    final isImgExt = pathLower.endsWith('.jpg') ||
+    final isImgExt =
+        pathLower.endsWith('.jpg') ||
         pathLower.endsWith('.jpeg') ||
         pathLower.endsWith('.png') ||
         pathLower.endsWith('.webp') ||
         pathLower.endsWith('.gif');
-    final isVideo = !isImgExt &&
+    final isVideo =
+        !isImgExt &&
         (currentMedia.type.toLowerCase() == 'video' ||
             pathLower.endsWith('.mp4') ||
             pathLower.endsWith('.mov'));
@@ -159,16 +162,10 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Reel Preview Device Mockup Box
-                SizedBox(
-                  width: 260.0,
-                  height: 440.0,
-                  child: _buildReelPreviewDevice(currentMedia, isVideo),
-                ),
+                SizedBox(width: 260.0, height: 440.0, child: _buildReelPreviewDevice(currentMedia, isVideo)),
                 const SizedBox(width: 16.0),
                 // Customization Controls Panel
-                Expanded(
-                  child: _buildCustomizationControls(),
-                ),
+                Expanded(child: _buildCustomizationControls()),
               ],
             )
           else
@@ -211,9 +208,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
         child: Stack(
           children: [
             // Media Background (Photo or Video Player)
-            Positioned.fill(
-              child: _buildMediaView(media, isVideo),
-            ),
+            Positioned.fill(child: _buildMediaView(media, isVideo)),
 
             // Top Gradient Dimming
             Positioned(
@@ -313,7 +308,11 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.location_on_rounded, size: 11.0, color: _getThemeLocationTextColor()),
+                              Icon(
+                                Icons.location_on_rounded,
+                                size: 11.0,
+                                color: _getThemeLocationTextColor(),
+                              ),
                               const SizedBox(width: 4.0),
                               Text(
                                 _locationBadgeController.text.trim(),
@@ -391,11 +390,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
                           color: Colors.black.withValues(alpha: 0.45),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
-                          Icons.chevron_left_rounded,
-                          color: Colors.white,
-                          size: 18.0,
-                        ),
+                        child: const Icon(Icons.chevron_left_rounded, color: Colors.white, size: 18.0),
                       ),
                     ),
                   ),
@@ -415,11 +410,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
                           color: Colors.black.withValues(alpha: 0.45),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
-                          Icons.chevron_right_rounded,
-                          color: Colors.white,
-                          size: 18.0,
-                        ),
+                        child: const Icon(Icons.chevron_right_rounded, color: Colors.white, size: 18.0),
                       ),
                     ),
                   ),
@@ -450,9 +441,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
 
     return Container(
       color: Colors.grey.shade900,
-      child: const Center(
-        child: Icon(Icons.image_rounded, color: Colors.white54, size: 36.0),
-      ),
+      child: const Center(child: Icon(Icons.image_rounded, color: Colors.white54, size: 36.0)),
     );
   }
 
@@ -629,10 +618,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: AppTextStyles.caption.copyWith(fontWeight: FontWeight.bold, fontSize: 11.0),
-        ),
+        Text(label, style: AppTextStyles.caption.copyWith(fontWeight: FontWeight.bold, fontSize: 11.0)),
         const SizedBox(height: 4.0),
         TextField(
           controller: controller,
@@ -805,11 +791,7 @@ class StepVideoPreviewWidget extends StatefulWidget {
   final String videoUrl;
   final Uint8List? videoBytes;
 
-  const StepVideoPreviewWidget({
-    super.key,
-    required this.videoUrl,
-    this.videoBytes,
-  });
+  const StepVideoPreviewWidget({super.key, required this.videoUrl, this.videoBytes});
 
   @override
   State<StepVideoPreviewWidget> createState() => _StepVideoPreviewWidgetState();
@@ -833,8 +815,8 @@ class _StepVideoPreviewWidgetState extends State<StepVideoPreviewWidget> {
               Uri.parse('data:video/mp4;base64,${base64Encode(widget.videoBytes!)}'),
             )
           : (widget.videoUrl.startsWith('http')
-              ? VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
-              : VideoPlayerController.file(io.File(widget.videoUrl)));
+                ? VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
+                : VideoPlayerController.file(io.File(widget.videoUrl)));
 
       _controller = controller;
       await controller.initialize();
@@ -865,9 +847,7 @@ class _StepVideoPreviewWidgetState extends State<StepVideoPreviewWidget> {
     if (_hasError) {
       return Container(
         color: Colors.black87,
-        child: const Center(
-          child: Icon(Icons.videocam_off_rounded, color: Colors.white54, size: 36.0),
-        ),
+        child: const Center(child: Icon(Icons.videocam_off_rounded, color: Colors.white54, size: 36.0)),
       );
     }
 
@@ -913,15 +893,8 @@ class _StepVideoPreviewWidgetState extends State<StepVideoPreviewWidget> {
           if (!isPlaying)
             Container(
               padding: const EdgeInsets.all(12.0),
-              decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.5),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.play_arrow_rounded,
-                color: Colors.white,
-                size: 32.0,
-              ),
+              decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.5), shape: BoxShape.circle),
+              child: const Icon(Icons.play_arrow_rounded, color: Colors.white, size: 32.0),
             ),
         ],
       ),

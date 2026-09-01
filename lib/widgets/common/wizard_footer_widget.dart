@@ -2,6 +2,7 @@
 // Purpose: Compact wizard footer with AppButton action buttons and centered step dots indicator.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../buttons/app_button.dart';
 
@@ -69,9 +70,7 @@ class WizardFooterWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: isActive
                         ? AppColors.primary
-                        : (isCompleted
-                              ? AppColors.primary.withValues(alpha: 0.4)
-                              : AppColors.border),
+                        : (isCompleted ? AppColors.primary.withValues(alpha: 0.4) : AppColors.border),
                     borderRadius: BorderRadius.circular(3.5),
                   ),
                 );

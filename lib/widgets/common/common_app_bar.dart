@@ -2,6 +2,7 @@
 // Purpose: Centralized common app bar component for consistent static theme, icon style, and branding across the app.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
 import '../buttons/app_back_button.dart';
@@ -43,27 +44,20 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
-  Size get preferredSize => Size.fromHeight(
-        toolbarHeight + (bottom?.preferredSize.height ?? 0.0),
-      );
+  Size get preferredSize => Size.fromHeight(toolbarHeight + (bottom?.preferredSize.height ?? 0.0));
 
   @override
   Widget build(BuildContext context) {
     final ModalRoute<dynamic>? parentRoute = ModalRoute.of(context);
     final bool canPop = parentRoute?.canPop ?? false;
-    final bool effectiveShowBackButton =
-        showBackButton && (canPop || onBackPressed != null);
+    final bool effectiveShowBackButton = showBackButton && (canPop || onBackPressed != null);
 
     final effectiveFgColor = foregroundColor ?? AppColors.textPrimary;
     final effectiveBgColor = backgroundColor ?? AppColors.surface;
 
     Widget? leadingWidget = leading;
     if (leadingWidget == null && effectiveShowBackButton) {
-      leadingWidget = AppBackButton(
-        icon: backIcon,
-        color: effectiveFgColor,
-        onPressed: onBackPressed,
-      );
+      leadingWidget = AppBackButton(icon: backIcon, color: effectiveFgColor, onPressed: onBackPressed);
     }
 
     Widget? effectiveTitleWidget = titleWidget;
@@ -72,17 +66,12 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (logo != null) ...[
-            logo!,
-            const SizedBox(width: 10.0),
-          ],
+          if (logo != null) ...[logo!, const SizedBox(width: 10.0)],
           if (title != null)
             Flexible(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: centerTitle
-                    ? CrossAxisAlignment.center
-                    : CrossAxisAlignment.start,
+                crossAxisAlignment: centerTitle ? CrossAxisAlignment.center : CrossAxisAlignment.start,
                 children: [
                   Text(
                     title!,
@@ -98,10 +87,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
                     const SizedBox(height: 2.0),
                     Text(
                       subtitle!,
-                      style: AppTextStyles.caption.copyWith(
-                        color: AppColors.textSecondary,
-                        fontSize: 12.0,
-                      ),
+                      style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary, fontSize: 12.0),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -115,10 +101,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     List<Widget>? effectiveActions = actions;
     if (effectiveActions != null && effectiveActions.isNotEmpty) {
-      effectiveActions = [
-        ...effectiveActions,
-        const SizedBox(width: 8.0),
-      ];
+      effectiveActions = [...effectiveActions, const SizedBox(width: 8.0)];
     }
 
     return AppBar(
@@ -132,8 +115,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: effectiveActions,
       bottom: bottom,
       surfaceTintColor: Colors.transparent,
-      titleSpacing:
-          (leadingWidget != null) ? 0.0 : NavigationToolbar.kMiddleSpacing,
+      titleSpacing: (leadingWidget != null) ? 0.0 : NavigationToolbar.kMiddleSpacing,
     );
   }
 }

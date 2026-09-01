@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart' as package_shimmer;
+
 import '../../app/app_colors.dart';
 import '../../util/common_ext.dart';
 
@@ -10,11 +11,7 @@ class LeadListShimmerWidget extends StatelessWidget {
   final int count;
   final bool? isCompact;
 
-  const LeadListShimmerWidget({
-    super.key,
-    this.count = 4,
-    this.isCompact,
-  });
+  const LeadListShimmerWidget({super.key, this.count = 4, this.isCompact});
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +20,7 @@ class LeadListShimmerWidget extends StatelessWidget {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding: useMobileTile
-          ? const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0)
-          : EdgeInsets.zero,
+      padding: useMobileTile ? const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0) : EdgeInsets.zero,
       itemCount: count,
       itemBuilder: (context, index) {
         return useMobileTile ? _buildMobileTileShimmer() : _buildDesktopRowShimmer();
@@ -56,10 +51,7 @@ class LeadListShimmerWidget extends StatelessWidget {
                   Container(
                     width: 36.0,
                     height: 36.0,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
+                    decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                   ),
                   const SizedBox(width: 10.0),
                   Expanded(
@@ -73,10 +65,7 @@ class LeadListShimmerWidget extends StatelessWidget {
                             Container(
                               width: 14.0,
                               height: 14.0,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                              ),
+                              decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                             ),
                             const SizedBox(width: 6.0),
                             Container(height: 10.0, width: 60.0, color: Colors.white),
@@ -104,19 +93,13 @@ class LeadListShimmerWidget extends StatelessWidget {
                   Container(
                     width: 26.0,
                     height: 26.0,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
+                    decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                   ),
                   const SizedBox(width: 4.0),
                   Container(
                     width: 26.0,
                     height: 26.0,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
+                    decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                   ),
                 ],
               ),
@@ -125,10 +108,7 @@ class LeadListShimmerWidget extends StatelessWidget {
               Container(
                 height: 30.0,
                 width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(6.0),
-                ),
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(6.0)),
               ),
             ],
           ),
@@ -140,9 +120,7 @@ class LeadListShimmerWidget extends StatelessWidget {
   Widget _buildDesktopRowShimmer() {
     return Container(
       decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: AppColors.border, width: 1.0),
-        ),
+        border: Border(bottom: BorderSide(color: AppColors.border, width: 1.0)),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 14.0),
       child: package_shimmer.Shimmer.fromColors(
@@ -205,10 +183,7 @@ class LeadListShimmerWidget extends StatelessWidget {
             const SizedBox(width: 12.0),
 
             // Created At
-            Expanded(
-              flex: 2,
-              child: Container(height: 12.0, width: 90.0, color: Colors.white),
-            ),
+            Expanded(flex: 2, child: Container(height: 12.0, width: 90.0, color: Colors.white)),
 
             // Action Menu
             SizedBox(

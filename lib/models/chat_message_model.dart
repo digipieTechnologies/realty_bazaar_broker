@@ -2,6 +2,7 @@
 // Purpose: Type-safe model for chat messages supporting multi-media, soft delete, edit tracking, and locationData JSON.
 
 import 'package:equatable/equatable.dart';
+
 import 'chat_enums.dart';
 import 'media_model.dart';
 
@@ -40,8 +41,10 @@ class ChatMessageModel extends Equatable {
     required this.updatedAt,
   });
 
-  double? get latitude => (locationData?['latitude'] as num?)?.toDouble() ?? (locationData?['lat'] as num?)?.toDouble();
-  double? get longitude => (locationData?['longitude'] as num?)?.toDouble() ?? (locationData?['lng'] as num?)?.toDouble();
+  double? get latitude =>
+      (locationData?['latitude'] as num?)?.toDouble() ?? (locationData?['lat'] as num?)?.toDouble();
+  double? get longitude =>
+      (locationData?['longitude'] as num?)?.toDouble() ?? (locationData?['lng'] as num?)?.toDouble();
 
   factory ChatMessageModel.fromJson(dynamic json) {
     if (json is! Map) {
@@ -57,9 +60,7 @@ class ChatMessageModel extends Equatable {
 
     List<MediaModel> parsedMedias = [];
     if (json['medias'] != null && json['medias'] is List) {
-      parsedMedias = (json['medias'] as List)
-          .map((item) => MediaModel.fromJson(item))
-          .toList();
+      parsedMedias = (json['medias'] as List).map((item) => MediaModel.fromJson(item)).toList();
     }
 
     return ChatMessageModel(
@@ -72,9 +73,7 @@ class ChatMessageModel extends Equatable {
       medias: parsedMedias,
       locationData: json['location_data'] is Map ? Map<String, dynamic>.from(json['location_data']) : null,
       replyMessageId: json['reply_message_id']?.toString() ?? json['parent_id']?.toString(),
-      replyMessage: json['reply_message'] != null
-          ? ChatMessageModel.fromJson(json['reply_message'])
-          : null,
+      replyMessage: json['reply_message'] != null ? ChatMessageModel.fromJson(json['reply_message']) : null,
       isEdited: json['is_edited'] == true,
       isDeleted: json['is_deleted'] == true,
       deletedAt: json['deleted_at'] != null ? DateTime.tryParse(json['deleted_at'].toString()) : null,
@@ -144,20 +143,20 @@ class ChatMessageModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        roomId,
-        senderId,
-        senderType,
-        message,
-        messageType,
-        medias,
-        locationData,
-        replyMessageId,
-        replyMessage,
-        isEdited,
-        isDeleted,
-        deletedAt,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    roomId,
+    senderId,
+    senderType,
+    message,
+    messageType,
+    medias,
+    locationData,
+    replyMessageId,
+    replyMessage,
+    isEdited,
+    isDeleted,
+    deletedAt,
+    createdAt,
+    updatedAt,
+  ];
 }

@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_constants.dart';
 import '../../../models/social_lead_model.dart';
@@ -53,10 +54,10 @@ class _LeadsTabScreenState extends State<LeadsTabScreen> {
     );
     if (newLead != null && mounted) {
       context.read<LeadProvider>().fetchLeads(
-            brokerId: _brokerId,
-            page: 1,
-            searchQuery: context.read<LeadProvider>().searchQuery,
-          );
+        brokerId: _brokerId,
+        page: 1,
+        searchQuery: context.read<LeadProvider>().searchQuery,
+      );
     }
   }
 
@@ -70,42 +71,35 @@ class _LeadsTabScreenState extends State<LeadsTabScreen> {
         child: Consumer<LeadProvider>(
           builder: (context, provider, child) {
             return SingleChildScrollView(
-              padding: AppConstants.getTabPadding(
-                context,
-                bottomExtra: isMobile ? 80.0 : 24.0,
-              ),
+              padding: AppConstants.getTabPadding(context, bottomExtra: isMobile ? 80.0 : 24.0),
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Social Leads Table / Card View Widget with Platform Filters & Pagination
-                    LeadTableWidget(
-                      leads: provider.leads,
-                      isLoading: provider.isLoading,
-                      currentPage: provider.currentPage,
-                      totalPages: provider.totalPages,
-                      totalItems: provider.totalItems,
-                      selectedPlatforms: provider.platformsFilter,
-                      onPlatformsFilterChanged: (platforms) {
-                        provider.setPlatformsFilter(platforms, brokerId: _brokerId);
-                      },
-                      onSearchChanged: (query) {
-                        provider.fetchLeads(
-                          brokerId: _brokerId,
-                          page: 1,
-                          searchQuery: query,
-                        );
-                      },
-                      onPageChanged: (newPage) {
-                        provider.fetchLeads(
-                          brokerId: _brokerId,
-                          page: newPage,
-                          searchQuery: provider.searchQuery,
-                        );
-                      },
-                      onAddLeadPressed: _handleAddLead,
-                    ),
-                  ],
-                ),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Social Leads Table / Card View Widget with Platform Filters & Pagination
+                  LeadTableWidget(
+                    leads: provider.leads,
+                    isLoading: provider.isLoading,
+                    currentPage: provider.currentPage,
+                    totalPages: provider.totalPages,
+                    totalItems: provider.totalItems,
+                    selectedPlatforms: provider.platformsFilter,
+                    onPlatformsFilterChanged: (platforms) {
+                      provider.setPlatformsFilter(platforms, brokerId: _brokerId);
+                    },
+                    onSearchChanged: (query) {
+                      provider.fetchLeads(brokerId: _brokerId, page: 1, searchQuery: query);
+                    },
+                    onPageChanged: (newPage) {
+                      provider.fetchLeads(
+                        brokerId: _brokerId,
+                        page: newPage,
+                        searchQuery: provider.searchQuery,
+                      );
+                    },
+                    onAddLeadPressed: _handleAddLead,
+                  ),
+                ],
+              ),
             );
           },
         ),

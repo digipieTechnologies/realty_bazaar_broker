@@ -2,6 +2,7 @@
 // Purpose: Separate reusable widget displaying edit message preview strip above input bar with cancel button.
 
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../models/chat_message_model.dart';
 
@@ -9,11 +10,7 @@ class ChatEditPreviewWidget extends StatelessWidget {
   final ChatMessageModel editingMessage;
   final VoidCallback onCancelEdit;
 
-  const ChatEditPreviewWidget({
-    super.key,
-    required this.editingMessage,
-    required this.onCancelEdit,
-  });
+  const ChatEditPreviewWidget({super.key, required this.editingMessage, required this.onCancelEdit});
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +20,7 @@ class ChatEditPreviewWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.secondary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10.0),
-        border: const Border(
-          left: BorderSide(color: AppColors.secondary, width: 3.5),
-        ),
+        border: const Border(left: BorderSide(color: AppColors.secondary, width: 3.5)),
       ),
       child: Row(
         children: [
@@ -38,21 +33,14 @@ class ChatEditPreviewWidget extends StatelessWidget {
               children: [
                 const Text(
                   'Editing message',
-                  style: TextStyle(
-                    fontSize: 11.0,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.secondary,
-                  ),
+                  style: TextStyle(fontSize: 11.0, fontWeight: FontWeight.bold, color: AppColors.secondary),
                 ),
                 const SizedBox(height: 2.0),
                 Text(
                   editingMessage.message ?? '',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 12.0,
-                    color: AppColors.textSecondary,
-                  ),
+                  style: const TextStyle(fontSize: 12.0, color: AppColors.textSecondary),
                 ),
               ],
             ),

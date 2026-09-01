@@ -41,11 +41,7 @@ class AdCampaignBannerWidget extends StatelessWidget {
               color: AppColors.surface.withValues(alpha: 0.18),
               shape: BoxShape.circle,
             ),
-            child: const Icon(
-              Icons.campaign_rounded,
-              color: AppColors.surface,
-              size: 24.0,
-            ),
+            child: const Icon(Icons.campaign_rounded, color: AppColors.surface, size: 24.0),
           ),
           const SizedBox(width: 14.0),
           Expanded(

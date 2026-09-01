@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
-import '../../../../providers/dashboard/dashboard_provider.dart';
 import '../../../../core/localization/app_localizations.dart';
+import '../../../../providers/dashboard/dashboard_provider.dart';
 
 class AdvancedFeaturesSection extends StatelessWidget {
   const AdvancedFeaturesSection({super.key});
@@ -18,18 +19,12 @@ class AdvancedFeaturesSection extends StatelessWidget {
       children: [
         Text(
           context.tr('unlock_adv_growth'),
-          style: const TextStyle(
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
-          ),
+          style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
         ),
         const SizedBox(height: 4.0),
         Text(
           context.tr('connecting_enables_ecosystem'),
-          style: AppTextStyles.body2.copyWith(
-            color: AppColors.textSecondary,
-          ),
+          style: AppTextStyles.body2.copyWith(color: AppColors.textSecondary),
         ),
         const SizedBox(height: 16.0),
 
@@ -54,14 +49,12 @@ class AdvancedFeaturesSection extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Icon(
-                      feature.icon,
-                      color: AppColors.primary,
-                      size: 24.0,
-                    ),
+                    Icon(feature.icon, color: AppColors.primary, size: 24.0),
                     const SizedBox(height: 8.0),
                     Text(
-                      context.tr('adv_feature_${feature.title.toLowerCase().replaceAll(' ', '_').replaceAll('-', '_')}'),
+                      context.tr(
+                        'adv_feature_${feature.title.toLowerCase().replaceAll(' ', '_').replaceAll('-', '_')}',
+                      ),
                       style: const TextStyle(
                         fontSize: 12.0,
                         fontWeight: FontWeight.bold,

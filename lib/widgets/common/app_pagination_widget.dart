@@ -2,6 +2,7 @@
 // Purpose: Common pagination widget for list and table views with responsive ellipsis (...) pagination and hand cursor hover effects.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
 import '../../util/common_ext.dart';
@@ -42,25 +43,9 @@ class AppPaginationWidget extends StatelessWidget {
       if (currentPage <= 4) {
         return [1, 2, 3, 4, 5, '...', totalPages];
       } else if (currentPage >= totalPages - 3) {
-        return [
-          1,
-          '...',
-          totalPages - 4,
-          totalPages - 3,
-          totalPages - 2,
-          totalPages - 1,
-          totalPages
-        ];
+        return [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
       } else {
-        return [
-          1,
-          '...',
-          currentPage - 1,
-          currentPage,
-          currentPage + 1,
-          '...',
-          totalPages
-        ];
+        return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
       }
     }
   }
@@ -82,9 +67,7 @@ class AppPaginationWidget extends StatelessWidget {
           bottomLeft: Radius.circular(16.0),
           bottomRight: Radius.circular(16.0),
         ),
-        border: Border(
-          top: BorderSide(color: AppColors.border, width: 1.0),
-        ),
+        border: Border(top: BorderSide(color: AppColors.border, width: 1.0)),
       ),
       child: isMobile
           ? Column(
@@ -99,10 +82,7 @@ class AppPaginationWidget extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10.0),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: _buildPageControls(isMobile),
-                ),
+                Align(alignment: Alignment.centerRight, child: _buildPageControls(isMobile)),
               ],
             )
           : Row(
@@ -125,7 +105,7 @@ class AppPaginationWidget extends StatelessWidget {
 
   Widget _buildPageControls(bool isMobile) {
     if (totalPages <= 1) return const SizedBox.shrink();
-    
+
     final pages = _getPageNumbers(isMobile);
 
     return Row(
@@ -149,10 +129,7 @@ class AppPaginationWidget extends StatelessWidget {
               isMobile: isMobile,
             ),
           ] else ...[
-            _buildEllipsisItem(
-              index: i,
-              isMobile: isMobile,
-            ),
+            _buildEllipsisItem(index: i, isMobile: isMobile),
           ],
         ],
 
@@ -190,9 +167,7 @@ class AppPaginationWidget extends StatelessWidget {
             width: size,
             height: size,
             alignment: Alignment.center,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
             child: Icon(
               icon,
               size: isMobile ? 18.0 : 20.0,
@@ -204,11 +179,7 @@ class AppPaginationWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildPageNumberItem({
-    required int page,
-    required bool isSelected,
-    required bool isMobile,
-  }) {
+  Widget _buildPageNumberItem({required int page, required bool isSelected, required bool isMobile}) {
     final size = isMobile ? 28.0 : 32.0;
 
     return MouseRegion(
@@ -227,9 +198,7 @@ class AppPaginationWidget extends StatelessWidget {
               width: size,
               height: size,
               alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
               child: Text(
                 '$page',
                 style: TextStyle(
@@ -245,10 +214,7 @@ class AppPaginationWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildEllipsisItem({
-    required int index,
-    required bool isMobile,
-  }) {
+  Widget _buildEllipsisItem({required int index, required bool isMobile}) {
     final width = isMobile ? 22.0 : 26.0;
     final height = isMobile ? 28.0 : 32.0;
 

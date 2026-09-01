@@ -2,6 +2,7 @@
 // Purpose: Extension methods on BuildContext for cleaner UI code.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_constants.dart';
 
 extension ContextExtensions on BuildContext {
@@ -15,14 +16,12 @@ extension ContextExtensions on BuildContext {
   double get screenHeight => MediaQuery.of(this).size.height;
 
   // Orientation helper
-  bool get isLandscape =>
-      MediaQuery.of(this).orientation == Orientation.landscape;
+  bool get isLandscape => MediaQuery.of(this).orientation == Orientation.landscape;
 
   // Responsive Breakpoint shorthand access
   bool get isMobile => screenWidth < AppConstants.breakpointMobile;
   bool get isTablet =>
-      screenWidth >= AppConstants.breakpointMobile &&
-      screenWidth < AppConstants.breakpointTablet;
+      screenWidth >= AppConstants.breakpointMobile && screenWidth < AppConstants.breakpointTablet;
   bool get isDesktop => screenWidth >= AppConstants.breakpointTablet;
 
   // Safe Area padding shorthand

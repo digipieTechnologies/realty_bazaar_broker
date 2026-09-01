@@ -57,9 +57,7 @@ class _LeadTableWidgetState extends State<LeadTableWidget> {
   void initState() {
     super.initState();
     _localPlatformsFilter = List<String>.from(widget.selectedPlatforms);
-    if (_localPlatformsFilter.isEmpty &&
-        widget.activeFilter != null &&
-        widget.activeFilter != 'all') {
+    if (_localPlatformsFilter.isEmpty && widget.activeFilter != null && widget.activeFilter != 'all') {
       _localPlatformsFilter = [widget.activeFilter!];
     }
   }
@@ -76,15 +74,13 @@ class _LeadTableWidgetState extends State<LeadTableWidget> {
     if (widget.onPlatformsFilterChanged != null) {
       widget.onPlatformsFilterChanged!(_localPlatformsFilter);
     } else if (widget.onFilterChanged != null) {
-      widget.onFilterChanged!(
-        _localPlatformsFilter.isEmpty ? 'all' : _localPlatformsFilter.first,
-      );
+      widget.onFilterChanged!(_localPlatformsFilter.isEmpty ? 'all' : _localPlatformsFilter.first);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final useTileView = !context.isDesktopUI;
+    final useTileView = !context.isDesktop;
 
     return AppTableContainer(
       child: Column(
@@ -145,11 +141,7 @@ class _LeadTableWidgetState extends State<LeadTableWidget> {
             const AppTableHeaderRow(
               columns: [
                 AppTableColumnDef(title: 'LEAD DETAILS', flex: 3),
-                AppTableColumnDef(
-                  title: 'SOURCE',
-                  flex: 2,
-                  alignment: Alignment.center,
-                ),
+                AppTableColumnDef(title: 'SOURCE', flex: 2, alignment: Alignment.center),
                 AppTableColumnDef(title: 'PROPERTY DETAILS', flex: 4),
                 AppTableColumnDef(title: 'CREATED AT', flex: 2),
               ],

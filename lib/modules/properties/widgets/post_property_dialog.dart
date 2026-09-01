@@ -9,28 +9,24 @@ import 'package:provider/provider.dart';
 import '../../../app/app_colors.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../models/property_model.dart';
-import '../../../providers/social/social_provider.dart';
 import '../../../providers/auth/auth_provider.dart';
-import '../../../widgets/toast/app_toast.dart';
+import '../../../providers/social/social_provider.dart';
 import '../../../widgets/buttons/app_button.dart';
-import '../services/post_content_service.dart';
-import '../services/media_export_service.dart';
-import 'post_dialog/step_platform_selection.dart';
-import 'post_dialog/step_media_selection.dart';
-import 'post_dialog/step_media_preview_edit.dart';
-import 'post_dialog/step_caption_review.dart';
-import 'post_dialog/step_publishing_progress.dart';
 import '../../../widgets/dialogs/app_base_dialog.dart';
+import '../../../widgets/toast/app_toast.dart';
+import '../services/media_export_service.dart';
+import '../services/post_content_service.dart';
+import 'post_dialog/step_caption_review.dart';
+import 'post_dialog/step_media_preview_edit.dart';
+import 'post_dialog/step_media_selection.dart';
+import 'post_dialog/step_platform_selection.dart';
+import 'post_dialog/step_publishing_progress.dart';
 
 class PostPropertyDialog extends StatefulWidget {
   final PropertyModel? property;
   final String brokerId;
 
-  const PostPropertyDialog({
-    super.key,
-    this.property,
-    required this.brokerId,
-  });
+  const PostPropertyDialog({super.key, this.property, required this.brokerId});
 
   @override
   State<PostPropertyDialog> createState() => _PostPropertyDialogState();
@@ -107,10 +103,7 @@ class _PostPropertyDialogState extends State<PostPropertyDialog> {
     setState(() => _connectionErrorMessage = null);
 
     if (!_selectInstagram && !_selectFacebook) {
-      AppToast.showError(
-        context.tr('select_platform'),
-        context.tr('select_platform_error'),
-      );
+      AppToast.showError(context.tr('select_platform'), context.tr('select_platform_error'));
       return;
     }
 
@@ -138,9 +131,15 @@ class _PostPropertyDialogState extends State<PostPropertyDialog> {
   /// Generates content ONCE; if already generated, just advances.
   Future<void> _validateMediaStep() async {
     if (_selectedMedia.isEmpty) {
+      AppToast.showError(context.tr('select_media'), context.tr('select_media_error'));
+      return;
+    }
+
+    final videoCount = _selectedMedia.where((m) => m.type == 'video').length;
+    if (_selectFacebook && videoCount > 1) {
       AppToast.showError(
-        context.tr('select_media'),
-        context.tr('select_media_error'),
+        'Facebook Video Limit',
+        'Facebook supports at most 1 video per post. Please select 1 video or uncheck Facebook in the first step.',
       );
       return;
     }
@@ -178,10 +177,7 @@ class _PostPropertyDialogState extends State<PostPropertyDialog> {
     } catch (e) {
       debugPrint('Post content generation failed: $e');
       if (mounted) {
-        AppToast.showError(
-          'Generation Failed',
-          'Could not generate post content. Please try again.',
-        );
+        AppToast.showError('Generation Failed', 'Could not generate post content. Please try again.');
       }
     } finally {
       if (mounted) setState(() => _isFetchingContent = false);
@@ -245,19 +241,13 @@ class _PostPropertyDialogState extends State<PostPropertyDialog> {
     );
 
     if (mediaToPublish.isEmpty) {
-      AppToast.showError(
-        context.tr('select_media'),
-        context.tr('select_media_error'),
-      );
+      AppToast.showError(context.tr('select_media'), context.tr('select_media_error'));
       return;
     }
 
     final finalCaption = _captionController.text.trim();
     if (finalCaption.isEmpty) {
-      AppToast.showError(
-        'Empty Caption',
-        'Please enter or generate a caption before publishing.',
-      );
+      AppToast.showError('Empty Caption', 'Please enter or generate a caption before publishing.');
       return;
     }
 
@@ -331,9 +321,7 @@ class _PostPropertyDialogState extends State<PostPropertyDialog> {
               valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
               minHeight: 3.5,
             ),
-          Expanded(
-            child: _buildStepContent(socialProvider),
-          ),
+          Expanded(child: _buildStepContent(socialProvider)),
         ],
       ),
     );
@@ -424,7 +412,8 @@ class _PostPropertyDialogState extends State<PostPropertyDialog> {
   Widget _buildFooter() {
     final socialProvider = Provider.of<SocialProvider>(context);
     final isPublishing = _isPublishing || socialProvider.isPublishing;
-    final isNextLoading = (_isFetchingContent && _currentStep == 1) ||
+    final isNextLoading =
+        (_isFetchingContent && _currentStep == 1) ||
         (_isExporting && _currentStep == 2) ||
         (isPublishing && _currentStep == 3);
 
@@ -444,31 +433,29 @@ class _PostPropertyDialogState extends State<PostPropertyDialog> {
             iconData: Icons.chevron_left_rounded,
             height: 42.0,
             borderRadius: 10.0,
-            onPressed: (isNextLoading || isPublishing)
-                ? null
-                : () => setState(() => _currentStep--),
+            onPressed: (isNextLoading || isPublishing) ? null : () => setState(() => _currentStep--),
           ),
 
         AppButton(
           text: isPublishing
               ? 'Publishing...'
               : (_currentStep == 3
-                  ? context.tr('publish_now')
-                  : (_isExporting && _currentStep == 2
-                      ? 'Exporting (${(_exportProgress * 100).round()}%)'
-                      : (_isFetchingContent && _currentStep == 1
-                          ? 'Generating...'
-                          : context.tr('next')))),
+                    ? context.tr('publish_now')
+                    : (_isExporting && _currentStep == 2
+                          ? 'Exporting (${(_exportProgress * 100).round()}%)'
+                          : (_isFetchingContent && _currentStep == 1
+                                ? 'Generating...'
+                                : context.tr('next')))),
           iconData: (isPublishing || (_isExporting && _currentStep == 2))
               ? null
               : (_currentStep == 3 ? Icons.send_rounded : Icons.chevron_right_rounded),
           height: 42.0,
           borderRadius: 10.0,
           isLoading: isNextLoading && !(_isExporting && _currentStep == 2),
-          isDisabled: isPublishing ||
+          isDisabled:
+              isPublishing ||
               (_isExporting && _currentStep == 2) ||
-              (_currentStep == 0 &&
-                  (!_selectInstagram && !_selectFacebook)) ||
+              (_currentStep == 0 && (!_selectInstagram && !_selectFacebook)) ||
               (_currentStep == 1 && _selectedMedia.isEmpty),
           onPressed: (isPublishing || (_isExporting && _currentStep == 2))
               ? null

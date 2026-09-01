@@ -59,10 +59,7 @@ class _RecentPropertiesWidgetState extends State<RecentPropertiesWidget> {
               onTap: () => context.go('/properties'),
               borderRadius: BorderRadius.circular(6.0),
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 6.0,
-                  vertical: 3.0,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -75,11 +72,7 @@ class _RecentPropertiesWidgetState extends State<RecentPropertiesWidget> {
                       ),
                     ),
                     const SizedBox(width: 2.0),
-                    const Icon(
-                      Icons.chevron_right_rounded,
-                      size: 16.0,
-                      color: AppColors.primary,
-                    ),
+                    const Icon(Icons.chevron_right_rounded, size: 16.0, color: AppColors.primary),
                   ],
                 ),
               ),
@@ -89,10 +82,7 @@ class _RecentPropertiesWidgetState extends State<RecentPropertiesWidget> {
 
           // Content Area: Loading, Empty, or Horizontal Property List
           if (isLoading)
-            const Padding(
-              padding: EdgeInsets.all(12.0),
-              child: PropertyListHorizontalShimmerWidget(count: 3),
-            )
+            const Padding(padding: EdgeInsets.all(12.0), child: PropertyListHorizontalShimmerWidget(count: 3))
           else if (properties.isEmpty)
             AppEmptyStateWidget(
               icon: Icons.apartment_rounded,
@@ -114,10 +104,7 @@ class _RecentPropertiesWidgetState extends State<RecentPropertiesWidget> {
                         width: 260.0,
                         child: Padding(
                           padding: const EdgeInsets.only(right: 12.0),
-                          child: PropertyCardWidget(
-                            property: property,
-                            isMinimalView: true,
-                          ),
+                          child: PropertyCardWidget(property: property, isMinimalView: true),
                         ),
                       );
                     }).toList(),

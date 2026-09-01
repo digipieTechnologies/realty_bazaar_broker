@@ -34,10 +34,7 @@ class AuthHeaderWidget extends StatelessWidget {
         // Form Title
         Text(
           title,
-          style: AppTextStyles.heading2.copyWith(
-            color: AppColors.textPrimary,
-            fontWeight: FontWeight.bold,
-          ),
+          style: AppTextStyles.heading2.copyWith(color: AppColors.textPrimary, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
 

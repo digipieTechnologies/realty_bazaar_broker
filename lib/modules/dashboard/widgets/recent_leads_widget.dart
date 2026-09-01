@@ -59,10 +59,7 @@ class _RecentLeadsWidgetState extends State<RecentLeadsWidget> {
               onTap: () => context.go('/leads'),
               borderRadius: BorderRadius.circular(6.0),
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 6.0,
-                  vertical: 3.0,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -75,11 +72,7 @@ class _RecentLeadsWidgetState extends State<RecentLeadsWidget> {
                       ),
                     ),
                     const SizedBox(width: 2.0),
-                    const Icon(
-                      Icons.chevron_right_rounded,
-                      color: AppColors.primary,
-                      size: 16.0,
-                    ),
+                    const Icon(Icons.chevron_right_rounded, color: AppColors.primary, size: 16.0),
                   ],
                 ),
               ),
@@ -91,10 +84,7 @@ class _RecentLeadsWidgetState extends State<RecentLeadsWidget> {
           if (isLoading)
             const Padding(
               padding: EdgeInsets.all(12.0),
-              child: LeadListShimmerWidget(
-                count: 3,
-                isCompact: true,
-              ),
+              child: LeadListShimmerWidget(count: 3, isCompact: true),
             )
           else if (leads.isEmpty)
             AppEmptyStateWidget(
@@ -111,11 +101,7 @@ class _RecentLeadsWidgetState extends State<RecentLeadsWidget> {
                 itemCount: leads.length,
                 itemBuilder: (context, index) {
                   final lead = leads[index];
-                  return LeadTileWidget(
-                    lead: lead,
-                    isMobile: true,
-                    isMinimalView: true,
-                  );
+                  return LeadTileWidget(lead: lead, isMobile: true, isMinimalView: true);
                 },
               ),
             ),

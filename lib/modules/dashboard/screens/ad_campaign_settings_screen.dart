@@ -79,10 +79,7 @@ class _AdCampaignSettingsScreenState extends State<AdCampaignSettingsScreen> {
         _gender = settings.gender;
         _targetAreas = List<TargetAreaModel>.from(settings.areaDetails);
         _suggestions = List<String>.from(settings.targetingSuggestions);
-        _ageRange = RangeValues(
-          settings.startAgeRange.toDouble(),
-          settings.endAgeRange.toDouble(),
-        );
+        _ageRange = RangeValues(settings.startAgeRange.toDouble(), settings.endAgeRange.toDouble());
 
         _isWholeDay = settings.campaignIsAllDay;
 
@@ -148,18 +145,12 @@ class _AdCampaignSettingsScreenState extends State<AdCampaignSettingsScreen> {
     AppUtils.hideKeyboard(context);
 
     if (_brokerId == null || _brokerId!.isEmpty) {
-      AppToast.showError(
-        context.tr('toast_action_failed_title'),
-        context.tr('error_broker_not_found'),
-      );
+      AppToast.showError(context.tr('toast_action_failed_title'), context.tr('error_broker_not_found'));
       return;
     }
 
     if (_targetAreas.isEmpty) {
-      AppToast.showError(
-        context.tr('toast_action_failed_title'),
-        context.tr('select_target_area_error'),
-      );
+      AppToast.showError(context.tr('toast_action_failed_title'), context.tr('select_target_area_error'));
       return;
     }
 
@@ -191,10 +182,7 @@ class _AdCampaignSettingsScreenState extends State<AdCampaignSettingsScreen> {
       _initialTimeRange = _timeRange;
       _initialIsWholeDay = _isWholeDay;
 
-      AppToast.showSuccess(
-        context.tr('toast_saved_title'),
-        context.tr('toast_saved_desc'),
-      );
+      AppToast.showSuccess(context.tr('toast_saved_title'), context.tr('toast_saved_desc'));
     } else {
       AppToast.showError(
         context.tr('toast_action_failed_title'),
@@ -238,69 +226,66 @@ class _AdCampaignSettingsScreenState extends State<AdCampaignSettingsScreen> {
       },
       child: Scaffold(
         backgroundColor: AppColors.background,
-        appBar: CommonAppBar(
-          title: context.tr('ad_campaign_settings'),
-          onBackPressed: _confirmAndPop,
-        ),
-      body: SafeArea(
-        child: provider.isLoading && !_isInitialized
-            ? const AdCampaignSettingsShimmerWidget()
-            : SingleChildScrollView(
-                padding: AppConstants.getTabPadding(context),
-                child: Center(
-                  child: Container(
-                    constraints: BoxConstraints(maxWidth: isMobile ? 600.0 : 900.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Section 1: Gender Selection Radios
-                        _buildGenderSection(context),
-                        const SizedBox(height: 20.0),
+        appBar: CommonAppBar(title: context.tr('ad_campaign_settings'), onBackPressed: _confirmAndPop),
+        body: SafeArea(
+          child: provider.isLoading && !_isInitialized
+              ? const AdCampaignSettingsShimmerWidget()
+              : SingleChildScrollView(
+                  padding: AppConstants.getTabPadding(context),
+                  child: Center(
+                    child: Container(
+                      constraints: BoxConstraints(maxWidth: isMobile ? 600.0 : 900.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Section 1: Gender Selection Radios
+                          _buildGenderSection(context),
+                          const SizedBox(height: 20.0),
 
-                        // Section 2: Target Areas Autocomplete & Chips
-                        TargetAreaSearchWidget(
-                          selectedAreas: _targetAreas,
-                          onAreasChanged: (newAreas) {
-                            setState(() => _targetAreas = newAreas);
-                          },
-                        ),
-                        const SizedBox(height: 20.0),
+                          // Section 2: Target Areas Autocomplete & Chips
+                          TargetAreaSearchWidget(
+                            selectedAreas: _targetAreas,
+                            onAreasChanged: (newAreas) {
+                              setState(() => _targetAreas = newAreas);
+                            },
+                          ),
+                          const SizedBox(height: 20.0),
 
-                        // Section 3: Map Banner Illustration Image
-                        _buildMapBannerIllustration(context),
-                        const SizedBox(height: 24.0),
+                          // Section 3: Map Banner Illustration Image
+                          _buildMapBannerIllustration(context),
+                          const SizedBox(height: 24.0),
 
-                        // Section 4: Targeting Suggestions Text & Tags
-                        TargetingSuggestionsWidget(
-                          suggestions: _suggestions,
-                          onSuggestionsChanged: (newSuggestions) {
-                            setState(() => _suggestions = newSuggestions);
-                          },
-                        ),
-                        const SizedBox(height: 24.0),
+                          // Section 4: Targeting Suggestions Text & Tags
+                          TargetingSuggestionsWidget(
+                            suggestions: _suggestions,
+                            onSuggestionsChanged: (newSuggestions) {
+                              setState(() => _suggestions = newSuggestions);
+                            },
+                          ),
+                          const SizedBox(height: 24.0),
 
-                        const Divider(height: 1.0, color: AppColors.border),
-                        const SizedBox(height: 20.0),
+                          const Divider(height: 1.0, color: AppColors.border),
+                          const SizedBox(height: 20.0),
 
-                        // Section 5: Advanced Settings (Age & Time Schedule Sliders)
-                        _buildAdvancedSettingsSection(context),
-                        const SizedBox(height: 32.0),
+                          // Section 5: Advanced Settings (Age & Time Schedule Sliders)
+                          _buildAdvancedSettingsSection(context),
+                          const SizedBox(height: 32.0),
 
-                        // Section 6: Primary Save Settings Button
-                        AppButton(
-                          text: context.tr('save_settings'),
-                          height: 50.0,
-                          width: double.infinity,
-                          borderRadius: 14.0,
-                          isLoading: provider.isSaving,
-                          onPressed: _handleSaveSettings,
-                        ),
-                        const SizedBox(height: 24.0),
-                      ],
+                          // Section 6: Primary Save Settings Button
+                          AppButton(
+                            text: context.tr('save_settings'),
+                            height: 50.0,
+                            width: double.infinity,
+                            borderRadius: 14.0,
+                            isLoading: provider.isSaving,
+                            onPressed: _handleSaveSettings,
+                          ),
+                          const SizedBox(height: 24.0),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
         ),
       ),
     );
@@ -370,16 +355,8 @@ class _AdCampaignSettingsScreenState extends State<AdCampaignSettingsScreen> {
                 return Stack(
                   alignment: Alignment.center,
                   children: [
-                    Icon(
-                      Icons.map_rounded,
-                      size: 80.0,
-                      color: AppColors.primary.withValues(alpha: 0.3),
-                    ),
-                    const Icon(
-                      Icons.location_on_rounded,
-                      size: 48.0,
-                      color: AppColors.accentCoral,
-                    ),
+                    Icon(Icons.map_rounded, size: 80.0, color: AppColors.primary.withValues(alpha: 0.3)),
+                    const Icon(Icons.location_on_rounded, size: 48.0, color: AppColors.accentCoral),
                   ],
                 );
               },

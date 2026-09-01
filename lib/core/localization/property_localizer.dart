@@ -2,6 +2,7 @@
 // Purpose: Helper class for localizing property model values to user's preferred language using Property Enums or String fallback.
 
 import 'package:flutter/material.dart';
+
 import '../../models/property_enums.dart';
 import 'app_localizations.dart';
 
@@ -127,7 +128,8 @@ class PropertyLocalizer {
     if (lower.contains('elevator') || lower.contains('lift')) return context.tr('amenity_elevator');
     if (lower.contains('parking')) return context.tr('amenity_parking');
     if (lower.contains('cctv')) return context.tr('amenity_cctv');
-    if (lower.contains('children') || lower.contains('play') || lower.contains('kids')) return context.tr('amenity_play_area');
+    if (lower.contains('children') || lower.contains('play') || lower.contains('kids'))
+      return context.tr('amenity_play_area');
     return englishAmenity;
   }
 
@@ -153,9 +155,7 @@ class PropertyLocalizer {
 
   /// Gets localized display text for Area Unit
   static String getLocalizedAreaUnit(BuildContext context, dynamic unitInput) {
-    final AreaUnit unit = unitInput is AreaUnit
-        ? unitInput
-        : (unitInput?.toString()).asAreaUnit;
+    final AreaUnit unit = unitInput is AreaUnit ? unitInput : (unitInput?.toString()).asAreaUnit;
 
     switch (unit) {
       case AreaUnit.sqft:

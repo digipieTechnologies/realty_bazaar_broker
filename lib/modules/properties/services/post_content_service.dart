@@ -3,8 +3,9 @@
 //          (topHeader, instagramHandle, location, bottomContact, caption) via the
 //          generate-post-content edge function with a local fallback.
 
-import 'package:the_realty_bazaar/models/property_enums.dart';
 import 'package:flutter/foundation.dart';
+import 'package:the_realty_bazaar/models/property_enums.dart';
+
 import '../../../core/supabase/supabase_config.dart';
 import '../../../models/property_model.dart';
 import '../../../providers/social/social_provider.dart';
@@ -52,8 +53,7 @@ class PostContentService {
           body: {
             'propertyId': prop.id,
             'brokerId': prop.brokerId,
-            'instagramUsername':
-                socialProvider.instagramAccount?.instagramUsername,
+            'instagramUsername': socialProvider.instagramAccount?.instagramUsername,
             'facebookPageName': socialProvider.facebookAccount?.pageName,
           },
         );
@@ -65,10 +65,8 @@ class PostContentService {
           final location = (data['location'] ?? '').toString();
           final bottomContact = (data['bottomContact'] ?? '').toString();
           final caption = (data['caption'] ?? '').toString();
-          final brokerPhone =
-              (data['brokerPhone'] ?? localBrokerPhone ?? '').toString();
-          final brokerName =
-              (data['brokerName'] ?? localBrokerName ?? '').toString();
+          final brokerPhone = (data['brokerPhone'] ?? localBrokerPhone ?? '').toString();
+          final brokerName = (data['brokerName'] ?? localBrokerName ?? '').toString();
 
           if (topHeader.isNotEmpty && caption.isNotEmpty) {
             return PostContentResult(
@@ -161,9 +159,7 @@ class PostContentService {
   }
 
   static String _buildFallbackCaption(PropertyModel? prop, String phone) {
-    final contactLine = phone.isNotEmpty
-        ? '📞 Call / WhatsApp: $phone'
-        : '📞 DM for site visit!';
+    final contactLine = phone.isNotEmpty ? '📞 Call / WhatsApp: $phone' : '📞 DM for site visit!';
 
     if (prop == null) {
       return '✨ Luxury Property Available\n📍 Prime Location\n$contactLine\n#RealEstate #DreamHome #PropertyForSale';
@@ -174,8 +170,8 @@ class PostContentService {
     final priceStr = price >= 10000000
         ? '₹${(price / 10000000).toStringAsFixed(2)} Cr'
         : price >= 100000
-            ? '₹${(price / 100000).toStringAsFixed(2)} Lakh'
-            : '';
+        ? '₹${(price / 100000).toStringAsFixed(2)} Lakh'
+        : '';
 
     return '✨ ${prop.propertyTitle}'
         '${city.isNotEmpty ? '\n📍 $city' : ''}'

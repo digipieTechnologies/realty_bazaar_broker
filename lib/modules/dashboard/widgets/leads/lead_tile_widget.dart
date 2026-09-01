@@ -36,20 +36,14 @@ class LeadTileWidget extends StatelessWidget {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        UserAvatarWidget(
-          name: lead.userName,
-          radius: radius,
-        ),
+        UserAvatarWidget(name: lead.userName, radius: radius),
         if (platform == SocialPlatform.facebook)
           Positioned(
             right: -2,
             bottom: -2,
             child: Container(
               padding: const EdgeInsets.all(2.0),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
+              decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
               child: const FacebookIconWidget(size: 14.0),
             ),
           )
@@ -59,10 +53,7 @@ class LeadTileWidget extends StatelessWidget {
             bottom: -2,
             child: Container(
               padding: const EdgeInsets.all(2.0),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
+              decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
               child: const InstagramIconWidget(size: 14.0),
             ),
           ),
@@ -74,13 +65,11 @@ class LeadTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final platform = lead.socialPost?.platform;
     final rawPropertyTitle = lead.socialPost?.propertyId?.propertyTitle;
-    final String propertyText =
-        (rawPropertyTitle != null && rawPropertyTitle.trim().isNotEmpty)
-            ? rawPropertyTitle.trim()
-            : (lead.propertyDetails != null &&
-                    lead.propertyDetails!.trim().isNotEmpty
-                ? lead.propertyDetails!.trim()
-                : (lead.socialPost?.caption ?? 'General Inquiry'));
+    final String propertyText = (rawPropertyTitle != null && rawPropertyTitle.trim().isNotEmpty)
+        ? rawPropertyTitle.trim()
+        : (lead.propertyDetails != null && lead.propertyDetails!.trim().isNotEmpty
+              ? lead.propertyDetails!.trim()
+              : (lead.socialPost?.caption ?? 'General Inquiry'));
 
     // --- MOBILE CARD LAYOUT (Modern Food & Product Card Aesthetic) ---
     if (isMobile) {
@@ -170,10 +159,7 @@ class LeadTileWidget extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: AppColors.primary.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(12.0),
-                        border: Border.all(
-                          color: AppColors.primary.withValues(alpha: 0.1),
-                          width: 1.0,
-                        ),
+                        border: Border.all(color: AppColors.primary.withValues(alpha: 0.1), width: 1.0),
                       ),
                       child: Row(
                         children: [
@@ -209,9 +195,7 @@ class LeadTileWidget extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 14.0),
           decoration: const BoxDecoration(
-            border: Border(
-              bottom: BorderSide(color: AppColors.border, width: 1.0),
-            ),
+            border: Border(bottom: BorderSide(color: AppColors.border, width: 1.0)),
           ),
           child: Row(
             children: [
@@ -285,10 +269,7 @@ class LeadTileWidget extends StatelessWidget {
                 flex: 2,
                 child: Text(
                   _formatDate(lead.createdAt),
-                  style: AppTextStyles.caption.copyWith(
-                    color: AppColors.textSecondary,
-                    fontSize: 12.0,
-                  ),
+                  style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary, fontSize: 12.0),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

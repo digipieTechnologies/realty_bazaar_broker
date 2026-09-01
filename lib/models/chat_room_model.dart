@@ -2,6 +2,7 @@
 // Purpose: Generic model for chat rooms supporting video request chats as well as direct / group chats.
 
 import 'package:equatable/equatable.dart';
+
 import 'video_request_model.dart';
 
 class ChatRoomModel extends Equatable {
@@ -27,11 +28,7 @@ class ChatRoomModel extends Equatable {
 
   factory ChatRoomModel.fromJson(dynamic json) {
     if (json is! Map) {
-      return ChatRoomModel(
-        id: '',
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-      );
+      return ChatRoomModel(id: '', createdAt: DateTime.now(), updatedAt: DateTime.now());
     }
 
     return ChatRoomModel(
@@ -44,9 +41,7 @@ class ChatRoomModel extends Equatable {
       updatedAt: json['updated_at'] != null
           ? (DateTime.tryParse(json['updated_at'].toString())?.toLocal() ?? DateTime.now())
           : DateTime.now(),
-      videoRequest: json['video_request'] != null
-          ? VideoRequestModel.fromJson(json['video_request'])
-          : null,
+      videoRequest: json['video_request'] != null ? VideoRequestModel.fromJson(json['video_request']) : null,
       title: json['title']?.toString(),
       roomType: json['room_type']?.toString() ?? 'video_request',
     );
@@ -66,13 +61,13 @@ class ChatRoomModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        videoRequestId,
-        brokerId,
-        createdAt,
-        updatedAt,
-        videoRequest,
-        title,
-        roomType,
-      ];
+    id,
+    videoRequestId,
+    brokerId,
+    createdAt,
+    updatedAt,
+    videoRequest,
+    title,
+    roomType,
+  ];
 }

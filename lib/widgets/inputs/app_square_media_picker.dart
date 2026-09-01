@@ -3,6 +3,7 @@
 
 import 'dart:convert';
 import 'dart:io' as io;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -112,11 +113,7 @@ class _AppSquareMediaPickerState extends State<AppSquareMediaPicker> {
                 SizedBox(width: 12.0),
                 Text(
                   'Processing selected media files...',
-                  style: TextStyle(
-                    fontSize: 13.0,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.primary,
-                  ),
+                  style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w600, color: AppColors.primary),
                 ),
               ],
             ),
@@ -159,11 +156,7 @@ class _AppSquareMediaPickerState extends State<AppSquareMediaPicker> {
               ),
               child: Text(
                 '${images.length}/${widget.maxImages}',
-                style: const TextStyle(
-                  fontSize: 11.0,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
-                ),
+                style: const TextStyle(fontSize: 11.0, fontWeight: FontWeight.bold, color: AppColors.primary),
               ),
             ),
           ],
@@ -187,11 +180,7 @@ class _AppSquareMediaPickerState extends State<AppSquareMediaPicker> {
                 onDelete: () => _removeMediaModel(media),
               ),
             if (!isFull && !widget.readOnly)
-              _buildAddSquareButton(
-                label: 'Add Photo',
-                icon: Icons.add_a_photo_rounded,
-                onTap: _pickImages,
-              ),
+              _buildAddSquareButton(label: 'Add Photo', icon: Icons.add_a_photo_rounded, onTap: _pickImages),
           ],
         ),
       ],
@@ -295,24 +284,13 @@ class _AppSquareMediaPickerState extends State<AppSquareMediaPicker> {
             children: [
               Container(
                 padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: accentColor.withValues(alpha: 0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  icon,
-                  color: accentColor,
-                  size: 22.0,
-                ),
+                decoration: BoxDecoration(color: accentColor.withValues(alpha: 0.1), shape: BoxShape.circle),
+                child: Icon(icon, color: accentColor, size: 22.0),
               ),
               const SizedBox(height: 8.0),
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.bold,
-                  color: accentColor,
-                ),
+                style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold, color: accentColor),
               ),
             ],
           ),
@@ -351,10 +329,7 @@ class _AppSquareMediaPickerState extends State<AppSquareMediaPicker> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FullScreenMediaViewer(
-                        medias: widget.medias,
-                        initialIndex: index,
-                      ),
+                      builder: (context) => FullScreenMediaViewer(medias: widget.medias, initialIndex: index),
                     ),
                   );
                 }
@@ -414,11 +389,7 @@ class _AppSquareMediaPickerState extends State<AppSquareMediaPicker> {
                               borderRadius: BorderRadius.circular(13.0),
                             ),
                             child: const Center(
-                              child: Icon(
-                                Icons.play_circle_fill_rounded,
-                                color: Colors.white,
-                                size: 36.0,
-                              ),
+                              child: Icon(Icons.play_circle_fill_rounded, color: Colors.white, size: 36.0),
                             ),
                           ),
                         ),
@@ -441,19 +412,9 @@ class _AppSquareMediaPickerState extends State<AppSquareMediaPicker> {
                     decoration: const BoxDecoration(
                       color: AppColors.error,
                       shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 4,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
+                      boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 4, offset: Offset(0, 2))],
                     ),
-                    child: const Icon(
-                      Icons.close_rounded,
-                      color: Colors.white,
-                      size: 13.0,
-                    ),
+                    child: const Icon(Icons.close_rounded, color: Colors.white, size: 13.0),
                   ),
                 ),
               ),
@@ -468,11 +429,7 @@ class VideoThumbnailWidget extends StatefulWidget {
   final String videoUrl;
   final Uint8List? videoBytes;
 
-  const VideoThumbnailWidget({
-    super.key,
-    required this.videoUrl,
-    this.videoBytes,
-  });
+  const VideoThumbnailWidget({super.key, required this.videoUrl, this.videoBytes});
 
   @override
   State<VideoThumbnailWidget> createState() => _VideoThumbnailWidgetState();
@@ -496,8 +453,8 @@ class _VideoThumbnailWidgetState extends State<VideoThumbnailWidget> {
               Uri.parse('data:video/mp4;base64,${base64Encode(widget.videoBytes!)}'),
             )
           : (widget.videoUrl.startsWith('http')
-              ? VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
-              : VideoPlayerController.file(io.File(widget.videoUrl)));
+                ? VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
+                : VideoPlayerController.file(io.File(widget.videoUrl)));
 
       _controller = controller;
       await controller.initialize();
@@ -527,13 +484,7 @@ class _VideoThumbnailWidgetState extends State<VideoThumbnailWidget> {
     if (_hasError) {
       return Container(
         color: AppColors.primary.withValues(alpha: 0.05),
-        child: const Center(
-          child: Icon(
-            Icons.videocam_rounded,
-            color: AppColors.primary,
-            size: 28.0,
-          ),
-        ),
+        child: const Center(child: Icon(Icons.videocam_rounded, color: AppColors.primary, size: 28.0)),
       );
     }
 

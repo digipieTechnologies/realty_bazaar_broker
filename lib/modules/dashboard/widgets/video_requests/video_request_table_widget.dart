@@ -4,6 +4,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+
 import '../../../../app/app_colors.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../models/models.dart';
@@ -61,7 +62,8 @@ class _VideoRequestTableWidgetState extends State<VideoRequestTableWidget> {
   @override
   void initState() {
     super.initState();
-    _localStatusesFilter = widget.statusesFilter ?? (widget.statusFilter != null ? [widget.statusFilter!] : []);
+    _localStatusesFilter =
+        widget.statusesFilter ?? (widget.statusFilter != null ? [widget.statusFilter!] : []);
   }
 
   @override
@@ -76,7 +78,7 @@ class _VideoRequestTableWidgetState extends State<VideoRequestTableWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final useTileView = !context.isDesktopUI;
+    final useTileView = !context.isDesktop;
 
     return AppTableContainer(
       child: Column(
@@ -110,7 +112,9 @@ class _VideoRequestTableWidgetState extends State<VideoRequestTableWidget> {
                     if (widget.onStatusesFilterChanged != null) {
                       widget.onStatusesFilterChanged!(_localStatusesFilter);
                     } else if (widget.onStatusFilterChanged != null) {
-                      widget.onStatusFilterChanged!(_localStatusesFilter.length == 1 ? _localStatusesFilter.first : null);
+                      widget.onStatusFilterChanged!(
+                        _localStatusesFilter.length == 1 ? _localStatusesFilter.first : null,
+                      );
                     }
                   },
                   child: VideoRequestFilterPopover(
@@ -167,7 +171,9 @@ class _VideoRequestTableWidgetState extends State<VideoRequestTableWidget> {
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              padding: useTileView ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0) : EdgeInsets.zero,
+              padding: useTileView
+                  ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0)
+                  : EdgeInsets.zero,
               itemCount: widget.requests.length,
               itemBuilder: (context, index) {
                 final req = widget.requests[index];

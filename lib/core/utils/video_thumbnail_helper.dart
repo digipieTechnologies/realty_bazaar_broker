@@ -2,6 +2,7 @@
 // Purpose: Helper class to extract video frames/thumbnails locally across iOS, Android, and macOS desktop.
 
 import 'dart:io' as io;
+
 import 'package:flutter/foundation.dart';
 import 'package:video_thumbnail/video_thumbnail.dart' as vt;
 
@@ -10,9 +11,7 @@ class VideoThumbnailHelper {
 
   /// Generates a thumbnail image from a video file.
   /// Returns the image bytes or null if generation fails or is unsupported.
-  static Future<Uint8List?> generateThumbnail({
-    required String filePath,
-  }) async {
+  static Future<Uint8List?> generateThumbnail({required String filePath}) async {
     if (kIsWeb) return null;
 
     // 1. Try native video_thumbnail plugin (iOS / Android)
@@ -32,14 +31,7 @@ class VideoThumbnailHelper {
     if (!kIsWeb && io.Platform.isMacOS) {
       try {
         final tempDir = io.Directory.systemTemp;
-        final result = await io.Process.run('qlmanage', [
-          '-t',
-          '-s',
-          '400',
-          '-o',
-          tempDir.path,
-          filePath,
-        ]);
+        final result = await io.Process.run('qlmanage', ['-t', '-s', '400', '-o', tempDir.path, filePath]);
 
         if (result.exitCode == 0) {
           final fileName = filePath.split(io.Platform.pathSeparator).last;

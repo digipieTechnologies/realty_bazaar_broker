@@ -1,4 +1,5 @@
 import 'package:event_bus_plus/event_bus_plus.dart';
+
 import '../models/social_account_model.dart';
 
 // Global EventBus instance
@@ -10,11 +11,7 @@ class OnSocialAccountUpdated extends AppEvent {
   final bool isConnected;
   final SocialAccountModel? account;
 
-  const OnSocialAccountUpdated({
-    required this.platform,
-    required this.isConnected,
-    this.account,
-  });
+  const OnSocialAccountUpdated({required this.platform, required this.isConnected, this.account});
 
   @override
   List<Object?> get props => [platform, isConnected, account];

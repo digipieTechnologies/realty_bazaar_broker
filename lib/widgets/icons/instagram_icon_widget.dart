@@ -6,18 +6,10 @@ import 'package:flutter/material.dart';
 class InstagramIconWidget extends StatelessWidget {
   final double size;
 
-  const InstagramIconWidget({
-    super.key,
-    this.size = 20.0,
-  });
+  const InstagramIconWidget({super.key, this.size = 20.0});
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      'assets/icons/instagram.png',
-      width: size,
-      height: size,
-      fit: BoxFit.contain,
-    );
+    return Image.asset('assets/icons/instagram.png', width: size, height: size, fit: BoxFit.contain);
   }
 }

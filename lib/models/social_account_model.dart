@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+
 import 'broker_model.dart';
 import 'social_enums.dart';
 
@@ -49,12 +50,8 @@ class SocialAccountModel extends Equatable {
     }
     return SocialAccountModel(
       id: json['id']?.toString(),
-      brokerId: json['broker_id'] != null
-          ? BrokerModel.fromJson(json['broker_id'])
-          : null,
-      platform: json['platform'] != null
-          ? SocialPlatform.fromDbValue(json['platform'].toString())
-          : null,
+      brokerId: json['broker_id'] != null ? BrokerModel.fromJson(json['broker_id']) : null,
+      platform: json['platform'] != null ? SocialPlatform.fromDbValue(json['platform'].toString()) : null,
       facebookUserId: json['facebook_user_id']?.toString(),
       pageId: json['page_id']?.toString(),
       pageName: json['page_name']?.toString(),
@@ -150,22 +147,22 @@ class SocialAccountModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        brokerId,
-        platform,
-        facebookUserId,
-        pageId,
-        pageName,
-        pageAccessToken,
-        instagramAccountId,
-        instagramUsername,
-        adAccountId,
-        accessToken,
-        expiresAt,
-        profilePictureUrl,
-        isConnected,
-        isActive,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    brokerId,
+    platform,
+    facebookUserId,
+    pageId,
+    pageName,
+    pageAccessToken,
+    instagramAccountId,
+    instagramUsername,
+    adAccountId,
+    accessToken,
+    expiresAt,
+    profilePictureUrl,
+    isConnected,
+    isActive,
+    createdAt,
+    updatedAt,
+  ];
 }

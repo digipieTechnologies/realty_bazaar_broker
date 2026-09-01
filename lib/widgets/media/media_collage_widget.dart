@@ -3,10 +3,11 @@
 //          property preview dialogs and property detail screens.
 
 import 'package:flutter/material.dart';
-import '../../models/media_model.dart';
+
 import '../../app/app_colors.dart';
-import '../inputs/app_square_media_picker.dart';
+import '../../models/media_model.dart';
 import '../images/cached_image.dart';
+import '../inputs/app_square_media_picker.dart';
 
 /// Callback signature: provides the tapped media index.
 typedef MediaTapCallback = void Function(int index);
@@ -61,14 +62,11 @@ class MediaCollageWidget extends StatelessWidget {
         child: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.image_not_supported_outlined,
-                size: 48.0, color: AppColors.textSecondary),
+            Icon(Icons.image_not_supported_outlined, size: 48.0, color: AppColors.textSecondary),
             SizedBox(height: 8.0),
             Text(
               'No Media Attached',
-              style: TextStyle(
-                  color: AppColors.textSecondary,
-                  fontWeight: FontWeight.w600),
+              style: TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.w600),
             ),
           ],
         ),
@@ -127,9 +125,7 @@ class MediaCollageWidget extends StatelessWidget {
               children: [
                 Expanded(child: _buildTile(context, 1)),
                 const SizedBox(height: 4.0),
-                Expanded(
-                  child: _buildOverflowTile(context, 2, extraCount),
-                ),
+                Expanded(child: _buildOverflowTile(context, 2, extraCount)),
               ],
             ),
           ),
@@ -218,9 +214,7 @@ class MediaCollageWidget extends StatelessWidget {
                   children: [
                     Expanded(child: _buildTile(context, 3)),
                     const SizedBox(width: 4.0),
-                    Expanded(
-                      child: _buildOverflowTile(context, 4, extraCount),
-                    ),
+                    Expanded(child: _buildOverflowTile(context, 4, extraCount)),
                   ],
                 ),
               ),
@@ -237,11 +231,7 @@ class MediaCollageWidget extends StatelessWidget {
 
   /// Standard image/video tile.
   Widget _buildTile(BuildContext context, int index) {
-    return _wrapWithTap(
-      context,
-      index,
-      _buildMediaContent(medias[index]),
-    );
+    return _wrapWithTap(context, index, _buildMediaContent(medias[index]));
   }
 
   /// Tile that shows a "+N" overlay when [extraCount] > 0.
@@ -258,11 +248,7 @@ class MediaCollageWidget extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               '+$extraCount',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
             ),
           ),
       ],
@@ -271,10 +257,7 @@ class MediaCollageWidget extends StatelessWidget {
     if (hasOverflow && onOverflowTap != null) {
       return MouseRegion(
         cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          onTap: onOverflowTap,
-          child: child,
-        ),
+        child: GestureDetector(onTap: onOverflowTap, child: child),
       );
     }
 
@@ -286,10 +269,7 @@ class MediaCollageWidget extends StatelessWidget {
     if (onMediaTap == null) return child;
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => onMediaTap!(index),
-        child: child,
-      ),
+      child: GestureDetector(onTap: () => onMediaTap!(index), child: child),
     );
   }
 
@@ -301,34 +281,17 @@ class MediaCollageWidget extends StatelessWidget {
         if (media.type == 'video')
           _buildVideoThumbnail(media)
         else
-          CachedImage(
-            media.url,
-            imageBytes: media.bytes,
-            fit: BoxFit.cover,
-          ),
+          CachedImage(media.url, imageBytes: media.bytes, fit: BoxFit.cover),
         if (media.type == 'video')
-          const Center(
-            child: Icon(
-              Icons.play_circle_fill_rounded,
-              color: Colors.white,
-              size: 40.0,
-            ),
-          ),
+          const Center(child: Icon(Icons.play_circle_fill_rounded, color: Colors.white, size: 40.0)),
       ],
     );
   }
 
   Widget _buildVideoThumbnail(MediaModel media) {
     if (media.thumbnailBytes != null) {
-      return CachedImage(
-        null,
-        imageBytes: media.thumbnailBytes,
-        fit: BoxFit.cover,
-      );
+      return CachedImage(null, imageBytes: media.thumbnailBytes, fit: BoxFit.cover);
     }
-    return VideoThumbnailWidget(
-      videoUrl: media.url ?? '',
-      videoBytes: media.bytes,
-    );
+    return VideoThumbnailWidget(videoUrl: media.url ?? '', videoBytes: media.bytes);
   }
 }

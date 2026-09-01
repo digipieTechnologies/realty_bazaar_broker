@@ -5,10 +5,7 @@ class LanguageModel {
   final String code;
   final String name;
 
-  const LanguageModel({
-    required this.code,
-    required this.name,
-  });
+  const LanguageModel({required this.code, required this.name});
 
   /// Static list of languages supported by the application.
   static const List<LanguageModel> languages = [

@@ -43,15 +43,14 @@ class AppCheckboxTile extends StatelessWidget {
                 value: value,
                 onChanged: onChanged,
                 activeColor: activeColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(borderRadius),
-                ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)),
               ),
             ),
             const SizedBox(width: 8.0),
             Text(
               label,
-              style: labelStyle ??
+              style:
+                  labelStyle ??
                   AppTextStyles.body2.copyWith(
                     fontSize: 14.0,
                     fontWeight: FontWeight.w600,

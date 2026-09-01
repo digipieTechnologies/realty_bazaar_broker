@@ -51,23 +51,19 @@ class _SocialConnectCardState extends State<SocialConnectCard> {
 
   @override
   Widget build(BuildContext context) {
-    final isDesktop = context.isDesktopUI;
+    final isDesktop = context.isDesktop;
     final isInstagram =
-        widget.buttonGradient != null ||
-        widget.platformName.toLowerCase().contains('instagram');
+        widget.buttonGradient != null || widget.platformName.toLowerCase().contains('instagram');
 
     // Brand Palette Tokens
     final Color cardBgColor = isInstagram
-        ? AppColors.instagramLightBg // Soft Instagram Pink Tint
+        ? AppColors
+              .instagramLightBg // Soft Instagram Pink Tint
         : AppColors.facebookLightBg; // Soft Facebook Blue Tint
 
-    final Color borderColor = isInstagram
-        ? AppColors.instagramLightBorder
-        : AppColors.facebookLightBorder;
+    final Color borderColor = isInstagram ? AppColors.instagramLightBorder : AppColors.facebookLightBorder;
 
-    final Color accentColor = isInstagram
-        ? AppColors.instagram
-        : AppColors.facebook;
+    final Color accentColor = isInstagram ? AppColors.instagram : AppColors.facebook;
 
     return Container(
       decoration: BoxDecoration(
@@ -75,11 +71,7 @@ class _SocialConnectCardState extends State<SocialConnectCard> {
         borderRadius: BorderRadius.circular(18.0),
         border: Border.all(color: borderColor, width: 1.2),
         boxShadow: [
-          BoxShadow(
-            color: accentColor.withValues(alpha: 0.06),
-            blurRadius: 12.0,
-            offset: const Offset(0, 4),
-          ),
+          BoxShadow(color: accentColor.withValues(alpha: 0.06), blurRadius: 12.0, offset: const Offset(0, 4)),
         ],
       ),
       padding: EdgeInsets.all(isDesktop ? 16.0 : 12.0),
@@ -161,17 +153,13 @@ class _SocialConnectCardState extends State<SocialConnectCard> {
 
                 // Live Status Badge Widget
                 AppStatusBadge.socialStatus(
-                  text: widget.isConnected
-                      ? context.tr('connected')
-                      : context.tr('not_connected'),
+                  text: widget.isConnected ? context.tr('connected') : context.tr('not_connected'),
                   isConnected: widget.isConnected,
                 ),
                 const SizedBox(width: 6.0),
 
                 // Expand/Collapse Chevron Icon Widget
-                AppCircularChevron(
-                  isExpanded: _isExpanded,
-                ),
+                AppCircularChevron(isExpanded: _isExpanded),
               ],
             ),
           ),
@@ -200,18 +188,14 @@ class _SocialConnectCardState extends State<SocialConnectCard> {
                 SizedBox(height: isDesktop ? 12.0 : 8.0),
 
                 // Bullet Features
-                ...widget.features.map(
-                  (feature) => _buildFeatureRow(feature, accentColor),
-                ),
+                ...widget.features.map((feature) => _buildFeatureRow(feature, accentColor)),
                 SizedBox(height: isDesktop ? 16.0 : 10.0),
 
                 // Action Button
                 _buildActionButton(context, accentColor),
               ],
             ),
-            crossFadeState: _isExpanded
-                ? CrossFadeState.showSecond
-                : CrossFadeState.showFirst,
+            crossFadeState: _isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
             duration: const Duration(milliseconds: 250),
           ),
         ],
@@ -229,8 +213,6 @@ class _SocialConnectCardState extends State<SocialConnectCard> {
     );
   }
 
-
-
   Widget _buildFeatureRow(String feature, Color accentColor) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
@@ -238,10 +220,7 @@ class _SocialConnectCardState extends State<SocialConnectCard> {
         children: [
           Container(
             padding: const EdgeInsets.all(3.0),
-            decoration: BoxDecoration(
-              color: accentColor.withValues(alpha: 0.12),
-              shape: BoxShape.circle,
-            ),
+            decoration: BoxDecoration(color: accentColor.withValues(alpha: 0.12), shape: BoxShape.circle),
             child: Icon(Icons.bolt_rounded, color: accentColor, size: 13.0),
           ),
           const SizedBox(width: 8.0),
@@ -288,9 +267,7 @@ class _SocialConnectCardState extends State<SocialConnectCard> {
               height: 16.0,
               child: CircularProgressIndicator(
                 strokeWidth: 2.0,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  widget.isConnected ? AppColors.error : accentColor,
-                ),
+                valueColor: AlwaysStoppedAnimation<Color>(widget.isConnected ? AppColors.error : accentColor),
               ),
             ),
             const SizedBox(width: 8.0),
@@ -352,9 +329,7 @@ class _SocialConnectCardState extends State<SocialConnectCard> {
         height: 40.0,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: widget.buttonGradient == null
-              ? (widget.buttonColor ?? accentColor)
-              : null,
+          color: widget.buttonGradient == null ? (widget.buttonColor ?? accentColor) : null,
           gradient: widget.buttonGradient != null
               ? LinearGradient(
                   colors: widget.buttonGradient!,

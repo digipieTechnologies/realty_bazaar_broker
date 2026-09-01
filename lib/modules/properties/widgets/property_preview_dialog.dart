@@ -1,30 +1,30 @@
 // File: lib/modules/properties/widgets/property_preview_dialog.dart
 // Purpose: A standalone premium dialog for reviewing listing details and managing multi-stage uploads.
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/services/supabase_storage_service.dart';
 import '../../../app/app_colors.dart';
+import '../../../app/app_routes.dart';
 import '../../../app/app_text_styles.dart';
-import '../../../models/property_model.dart';
-import '../../../models/media_model.dart';
-import '../../../providers/auth/auth_provider.dart';
-import '../../../providers/property/property_provider.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/localization/property_localizer.dart';
+import '../../../core/services/supabase_storage_service.dart';
+import '../../../core/utils/video_thumbnail_helper.dart';
+import '../../../models/media_model.dart';
+import '../../../models/property_model.dart';
+import '../../../providers/auth/auth_provider.dart';
+import '../../../providers/property/property_provider.dart';
+import '../../../widgets/buttons/app_button.dart';
+import '../../../widgets/dialogs/app_base_dialog.dart';
 import '../../../widgets/toast/app_toast.dart';
+import '../screens/view_property_screen.dart';
+import './property_amenities_wrap.dart';
+import './property_location_card.dart';
+import './property_preview_buttons.dart';
 import './property_preview_media_gallery.dart';
 import './property_preview_specs_grid.dart';
-import './property_preview_buttons.dart';
-import './property_location_card.dart';
-import './property_amenities_wrap.dart';
-import 'package:flutter/foundation.dart';
-import '../../../core/utils/video_thumbnail_helper.dart';
-import '../screens/view_property_screen.dart';
-import '../../../app/app_routes.dart';
-import '../../../widgets/dialogs/app_base_dialog.dart';
-import '../../../widgets/buttons/app_button.dart';
 
 class PropertyPreviewDialog extends StatefulWidget {
   final PropertyModel property;
@@ -96,16 +96,10 @@ class _PropertyPreviewDialogState extends State<PropertyPreviewDialog> {
 
           final ext = media.type == 'video' ? 'mp4' : 'jpg';
           final mimeType = media.type == 'video' ? 'video/mp4' : 'image/jpeg';
-          final uniqueName =
-              '${DateTime.now().millisecondsSinceEpoch}_$i.$ext';
+          final uniqueName = '${DateTime.now().millisecondsSinceEpoch}_$i.$ext';
           final path = 'listings/$uniqueName';
 
-          final publicUrl = await _uploadFileToSupabase(
-            bucketName,
-            path,
-            media.bytes!,
-            mimeType,
-          );
+          final publicUrl = await _uploadFileToSupabase(bucketName, path, media.bytes!, mimeType);
 
           String? thumbUrl;
           if (media.type == 'video') {
@@ -117,23 +111,13 @@ class _PropertyPreviewDialogState extends State<PropertyPreviewDialog> {
               setState(() {
                 _uploadStatusText = "Uploading video thumbnail...";
               });
-              final thumbName =
-                  'thumb_${DateTime.now().millisecondsSinceEpoch}_$i.jpg';
+              final thumbName = 'thumb_${DateTime.now().millisecondsSinceEpoch}_$i.jpg';
               final thumbPath = 'listings/$thumbName';
-              thumbUrl = await _uploadFileToSupabase(
-                bucketName,
-                thumbPath,
-                thumbBytes,
-                'image/jpeg',
-              );
+              thumbUrl = await _uploadFileToSupabase(bucketName, thumbPath, thumbBytes, 'image/jpeg');
             }
           }
 
-          updatedMedias.add(MediaModel(
-            type: media.type,
-            url: publicUrl,
-            thumbnail: thumbUrl,
-          ));
+          updatedMedias.add(MediaModel(type: media.type, url: publicUrl, thumbnail: thumbUrl));
         } else {
           updatedMedias.add(media);
         }
@@ -143,9 +127,7 @@ class _PropertyPreviewDialogState extends State<PropertyPreviewDialog> {
         _uploadStatusText = "Saving property to server...";
       });
 
-      final finalProperty = property.copyWith(
-        medias: updatedMedias,
-      );
+      final finalProperty = property.copyWith(medias: updatedMedias);
 
       final savedProperty = await widget.propertyProvider.saveProperty(
         finalProperty,
@@ -195,11 +177,7 @@ class _PropertyPreviewDialogState extends State<PropertyPreviewDialog> {
 
     final navContext = AppRoutes.rootNavigatorKey.currentContext;
     if (navContext != null) {
-      Navigator.of(navContext).push(
-        MaterialPageRoute(
-          builder: (context) => ViewPropertyScreen(property: savedProp),
-        ),
-      );
+      AppRoutes.navigateToPropertyDetails(navContext, savedProp);
     }
   }
 
@@ -225,11 +203,7 @@ class _PropertyPreviewDialogState extends State<PropertyPreviewDialog> {
                     color: Colors.green.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
-                    Icons.check_circle_outline_rounded,
-                    color: Colors.green,
-                    size: 54.0,
-                  ),
+                  child: const Icon(Icons.check_circle_outline_rounded, color: Colors.green, size: 54.0),
                 ),
                 const SizedBox(height: 24.0),
                 Text(
@@ -239,9 +213,7 @@ class _PropertyPreviewDialogState extends State<PropertyPreviewDialog> {
                 ),
                 const SizedBox(height: 12.0),
                 Text(
-                  widget.isEdit
-                      ? context.tr('listing_updated_desc')
-                      : context.tr('listing_published_desc'),
+                  widget.isEdit ? context.tr('listing_updated_desc') : context.tr('listing_published_desc'),
                   style: const TextStyle(color: AppColors.textSecondary, fontSize: 13.5),
                   textAlign: TextAlign.center,
                 ),
@@ -267,16 +239,13 @@ class _PropertyPreviewDialogState extends State<PropertyPreviewDialog> {
     final formattedPrice =
         '₹ ${priceVal.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}';
 
-    final categoryLabel = PropertyLocalizer.getLocalizedPropertyType(
-        context, property.propertyType);
-    final listingLabel = PropertyLocalizer.getLocalizedListingType(
-        context, property.listingType);
-    final constStatusLabel =
-        PropertyLocalizer.getLocalizedConstructionStatus(
-            context, property.constructionStatus);
-    final furnishLabel =
-        PropertyLocalizer.getLocalizedFurnishingStatus(
-            context, property.furnishingStatus);
+    final categoryLabel = PropertyLocalizer.getLocalizedPropertyType(context, property.propertyType);
+    final listingLabel = PropertyLocalizer.getLocalizedListingType(context, property.listingType);
+    final constStatusLabel = PropertyLocalizer.getLocalizedConstructionStatus(
+      context,
+      property.constructionStatus,
+    );
+    final furnishLabel = PropertyLocalizer.getLocalizedFurnishingStatus(context, property.furnishingStatus);
 
     return AppBaseDialog(
       headerIcon: Icons.rate_review_rounded,
@@ -307,25 +276,17 @@ class _PropertyPreviewDialogState extends State<PropertyPreviewDialog> {
               _buildBadge(context, categoryLabel, AppColors.primary),
               _buildBadge(context, listingLabel, Colors.orange),
               _buildBadge(context, constStatusLabel, Colors.green),
-              if (furnishLabel.isNotEmpty)
-                _buildBadge(context, furnishLabel, Colors.teal),
+              if (furnishLabel.isNotEmpty) _buildBadge(context, furnishLabel, Colors.teal),
             ],
           ),
           const SizedBox(height: 16.0),
           Text(
             formattedPrice,
-            style: AppTextStyles.heading1.copyWith(
-              color: AppColors.primary,
-              fontWeight: FontWeight.w800,
-            ),
+            style: AppTextStyles.heading1.copyWith(color: AppColors.primary, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 4.0),
-          Text(
-            property.propertyTitle,
-            style: AppTextStyles.heading3.copyWith(fontWeight: FontWeight.bold),
-          ),
-          if (property.propertyDescription != null &&
-              property.propertyDescription!.isNotEmpty) ...[
+          Text(property.propertyTitle, style: AppTextStyles.heading3.copyWith(fontWeight: FontWeight.bold)),
+          if (property.propertyDescription != null && property.propertyDescription!.isNotEmpty) ...[
             const SizedBox(height: 12.0),
             Text(
               property.propertyDescription!,
@@ -356,8 +317,7 @@ class _PropertyPreviewDialogState extends State<PropertyPreviewDialog> {
       ),
       child: Text(
         text,
-        style: AppTextStyles.caption.copyWith(
-            color: color, fontWeight: FontWeight.bold, fontSize: 11.0),
+        style: AppTextStyles.caption.copyWith(color: color, fontWeight: FontWeight.bold, fontSize: 11.0),
       ),
     );
   }

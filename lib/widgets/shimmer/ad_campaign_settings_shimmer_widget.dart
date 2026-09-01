@@ -3,6 +3,7 @@
 // optimized for both Desktop (2-column grid) and Mobile (stacked column) layouts.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_constants.dart';
 import '../../util/common_ext.dart';
@@ -13,7 +14,7 @@ class AdCampaignSettingsShimmerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDesktop = context.isDesktopUI;
+    final isDesktop = context.isDesktop;
 
     return SingleChildScrollView(
       padding: AppConstants.getTabPadding(context),
@@ -78,11 +79,7 @@ class AdCampaignSettingsShimmerWidget extends StatelessWidget {
               const SizedBox(height: 32.0),
 
               // Primary Save Button Shimmer
-              const AppShimmerContainer(
-                width: double.infinity,
-                height: 50.0,
-                borderRadius: 14.0,
-              ),
+              const AppShimmerContainer(width: double.infinity, height: 50.0, borderRadius: 14.0),
             ],
           ),
         ),
@@ -129,22 +126,14 @@ class AdCampaignSettingsShimmerWidget extends StatelessWidget {
         ),
         const SizedBox(height: 10.0),
         // Search Input Box Shimmer
-        const AppShimmerContainer(
-          width: double.infinity,
-          height: 48.0,
-          borderRadius: 10.0,
-        ),
+        const AppShimmerContainer(width: double.infinity, height: 48.0, borderRadius: 10.0),
       ],
     );
   }
 
   // --- Map Banner Card Shimmer ---
   Widget _buildMapBannerShimmer() {
-    return const AppShimmerContainer(
-      width: double.infinity,
-      height: 160.0,
-      borderRadius: 16.0,
-    );
+    return const AppShimmerContainer(width: double.infinity, height: 160.0, borderRadius: 16.0);
   }
 
   // --- Targeting Suggestions Shimmer ---
@@ -156,11 +145,7 @@ class AdCampaignSettingsShimmerWidget extends StatelessWidget {
         const SizedBox(height: 6.0),
         const AppShimmerContainer(width: 240, height: 14, borderRadius: 4),
         const SizedBox(height: 12.0),
-        const AppShimmerContainer(
-          width: double.infinity,
-          height: 48.0,
-          borderRadius: 10.0,
-        ),
+        const AppShimmerContainer(width: double.infinity, height: 48.0, borderRadius: 10.0),
         const SizedBox(height: 12.0),
         // Tag Pills Shimmer
         Wrap(

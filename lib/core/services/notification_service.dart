@@ -3,6 +3,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+
 import '../../app/app_routes.dart';
 import '../../models/notification_enums.dart';
 
@@ -39,7 +40,9 @@ class NotificationService {
         _isInitialized = true;
         debugPrint('OneSignal NotificationService initialized successfully with App ID: $oneSignalAppId');
       } else {
-        debugPrint('ONE_SIGNAL_APP_ID missing from String.fromEnvironment. Make sure to build/run with --dart-define-from-file=config.json');
+        debugPrint(
+          'ONE_SIGNAL_APP_ID missing from String.fromEnvironment. Make sure to build/run with --dart-define-from-file=config.json',
+        );
       }
     } catch (e) {
       debugPrint('Error initializing OneSignal NotificationService: $e');

@@ -2,6 +2,7 @@
 // Purpose: A clean action button footer using the common AppButton system for publishing flows.
 
 import 'package:flutter/material.dart';
+
 import '../../../core/localization/app_localizations.dart';
 import '../../../widgets/buttons/app_button.dart';
 
@@ -38,7 +39,9 @@ class PropertyPreviewButtons extends StatelessWidget {
         ],
         Expanded(
           child: AppButton(
-            text: isPublishing ? uploadStatusText : (isEdit ? context.tr('save_changes') : context.tr('save_publish')),
+            text: isPublishing
+                ? uploadStatusText
+                : (isEdit ? context.tr('save_changes') : context.tr('save_publish')),
             isLoading: isPublishing,
             height: 48.0,
             borderRadius: 12.0,

@@ -3,6 +3,7 @@
 
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -58,7 +59,7 @@ extension ContextX on BuildContext {
   /// Responsive Breakpoint checkers
   bool get isMobileUI => width < mobileBreakpoint;
   bool get isTabletUI => width >= mobileBreakpoint && width < desktopBreakpoint;
-  bool get isDesktopUI => width >= desktopBreakpoint;
+  bool get isDesktop => width >= desktopBreakpoint;
 
   /// Helper to evaluate desktop layout state from constraints width.
   static bool isDesktopWidth(double maxWidth) => maxWidth >= desktopBreakpoint;
@@ -72,11 +73,7 @@ extension ContextX on BuildContext {
 }
 
 extension WidgetX on Widget {
-  Widget disable({
-    bool isDisable = true,
-    bool changeOpacity = true,
-    double opacity = 0.5,
-  }) {
+  Widget disable({bool isDisable = true, bool changeOpacity = true, double opacity = 0.5}) {
     if (!isDisable) return this;
     return AbsorbPointer(
       absorbing: true,
@@ -105,8 +102,7 @@ extension ObjectX on Object {
     if (this is AuthException) {
       final error = this as AuthException;
       final msg = error.message;
-      if (msg.contains('Invalid login credentials') ||
-          msg.contains('invalid_credentials')) {
+      if (msg.contains('Invalid login credentials') || msg.contains('invalid_credentials')) {
         return 'Invalid login credentials. Please check your email and password.';
       }
       if (msg.contains('User already registered') ||
@@ -114,8 +110,7 @@ extension ObjectX on Object {
           msg.contains('email_exists')) {
         return 'An account with this email address already exists.';
       }
-      if (msg.contains('Email not confirmed') ||
-          msg.contains('confirmation_required')) {
+      if (msg.contains('Email not confirmed') || msg.contains('confirmation_required')) {
         return 'Please verify your email address before signing in.';
       }
       if (msg.contains('Password should be')) {
@@ -125,8 +120,7 @@ extension ObjectX on Object {
     } else if (this is PostgrestException) {
       final error = this as PostgrestException;
       final msg = error.message;
-      if (msg.contains('duplicate key') ||
-          msg.contains('violates unique constraint')) {
+      if (msg.contains('duplicate key') || msg.contains('violates unique constraint')) {
         return 'An account with these details is already registered.';
       }
       return 'Database synchronization error. Please try again.';
@@ -136,8 +130,7 @@ extension ObjectX on Object {
       return 'Request timed out. Please check your connection and try again.';
     }
 
-    if (str.contains('invalid login credentials') ||
-        str.contains('invalid_credentials')) {
+    if (str.contains('invalid login credentials') || str.contains('invalid_credentials')) {
       return 'Invalid login credentials. Please check your email and password.';
     }
     if (str.contains('already exists') || str.contains('email_exists')) {

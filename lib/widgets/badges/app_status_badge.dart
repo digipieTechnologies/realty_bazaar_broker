@@ -2,6 +2,7 @@
 // Purpose: Universal live status badge pill widget featuring a customizable status dot indicator, high-contrast text, and responsive border styling.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
 
@@ -45,9 +46,7 @@ class AppStatusBadge extends StatelessWidget {
       showDot: isConnected,
       dotColor: isConnected ? AppColors.success : null,
       textColor: isConnected ? AppColors.statusSuccessText : AppColors.textSecondary,
-      borderColor: isConnected
-          ? AppColors.success.withValues(alpha: 0.3)
-          : AppColors.border,
+      borderColor: isConnected ? AppColors.success.withValues(alpha: 0.3) : AppColors.border,
       backgroundColor: Colors.white,
       onTap: onTap,
     );
@@ -55,16 +54,13 @@ class AppStatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveTextColor = textColor ??
-        (isConnected ? AppColors.statusSuccessText : AppColors.textSecondary);
+    final effectiveTextColor =
+        textColor ?? (isConnected ? AppColors.statusSuccessText : AppColors.textSecondary);
 
-    final effectiveDotColor = dotColor ??
-        (isConnected ? AppColors.success : AppColors.textMuted);
+    final effectiveDotColor = dotColor ?? (isConnected ? AppColors.success : AppColors.textMuted);
 
-    final effectiveBorderColor = borderColor ??
-        (isConnected
-            ? AppColors.success.withValues(alpha: 0.3)
-            : AppColors.border);
+    final effectiveBorderColor =
+        borderColor ?? (isConnected ? AppColors.success.withValues(alpha: 0.3) : AppColors.border);
 
     final effectiveBgColor = backgroundColor ?? Colors.white;
 
@@ -73,16 +69,9 @@ class AppStatusBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: effectiveBgColor,
         borderRadius: BorderRadius.circular(12.0),
-        border: Border.all(
-          color: effectiveBorderColor,
-          width: 1.0,
-        ),
+        border: Border.all(color: effectiveBorderColor, width: 1.0),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 4.0,
-            offset: const Offset(0, 2),
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 4.0, offset: const Offset(0, 2)),
         ],
       ),
       child: Row(
@@ -92,10 +81,7 @@ class AppStatusBadge extends StatelessWidget {
             Container(
               width: 6.0,
               height: 6.0,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: effectiveDotColor,
-              ),
+              decoration: BoxDecoration(shape: BoxShape.circle, color: effectiveDotColor),
             ),
             const SizedBox(width: 4.0),
           ],
@@ -113,11 +99,7 @@ class AppStatusBadge extends StatelessWidget {
     );
 
     if (onTap != null) {
-      return InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12.0),
-        child: badgeContent,
-      );
+      return InkWell(onTap: onTap, borderRadius: BorderRadius.circular(12.0), child: badgeContent);
     }
 
     return badgeContent;

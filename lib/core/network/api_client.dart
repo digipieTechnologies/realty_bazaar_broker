@@ -2,6 +2,7 @@
 // Purpose: Network request handler using Dio.
 
 import 'package:dio/dio.dart';
+
 import '../../app/app_constants.dart';
 
 class ApiClient {
@@ -10,16 +11,9 @@ class ApiClient {
   ApiClient()
     : _dio = Dio(
         BaseOptions(
-          connectTimeout: const Duration(
-            milliseconds: AppConstants.connectionTimeoutMs,
-          ),
-          receiveTimeout: const Duration(
-            milliseconds: AppConstants.receiveTimeoutMs,
-          ),
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
+          connectTimeout: const Duration(milliseconds: AppConstants.connectionTimeoutMs),
+          receiveTimeout: const Duration(milliseconds: AppConstants.receiveTimeoutMs),
+          headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
         ),
       ) {
     // Add logging interceptor for debugging network calls

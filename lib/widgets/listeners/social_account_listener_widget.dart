@@ -1,29 +1,22 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import '../../util/app_events.dart';
+
 import '../../models/social_account_model.dart';
+import '../../util/app_events.dart';
 
 class SocialAccountListenerWidget extends StatefulWidget {
   final Widget child;
-  final void Function(
-    String platform,
-    bool isConnected,
-    SocialAccountModel? account,
-  )? onSocialAccountListener;
+  final void Function(String platform, bool isConnected, SocialAccountModel? account)?
+  onSocialAccountListener;
 
-  const SocialAccountListenerWidget({
-    super.key,
-    required this.child,
-    this.onSocialAccountListener,
-  });
+  const SocialAccountListenerWidget({super.key, required this.child, this.onSocialAccountListener});
 
   @override
-  State<SocialAccountListenerWidget> createState() =>
-      _SocialAccountListenerWidgetState();
+  State<SocialAccountListenerWidget> createState() => _SocialAccountListenerWidgetState();
 }
 
-class _SocialAccountListenerWidgetState
-    extends State<SocialAccountListenerWidget> {
+class _SocialAccountListenerWidgetState extends State<SocialAccountListenerWidget> {
   StreamSubscription<OnSocialAccountUpdated>? _subscription;
 
   @override
@@ -31,11 +24,7 @@ class _SocialAccountListenerWidgetState
     super.initState();
     _subscription = eventBus.on<OnSocialAccountUpdated>().listen((event) {
       if (widget.onSocialAccountListener != null) {
-        widget.onSocialAccountListener!(
-          event.platform,
-          event.isConnected,
-          event.account,
-        );
+        widget.onSocialAccountListener!(event.platform, event.isConnected, event.account);
       }
     });
   }

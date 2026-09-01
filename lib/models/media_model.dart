@@ -1,5 +1,7 @@
 import 'dart:typed_data';
+
 import 'package:equatable/equatable.dart';
+
 import '../core/utils/common_ext.dart';
 
 class MediaModel extends Equatable {
@@ -83,14 +85,5 @@ class MediaModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-        type,
-        url,
-        thumbnail,
-        bytes,
-        thumbnailBytes,
-        width,
-        height,
-        aspectRatio,
-      ];
+  List<Object?> get props => [type, url, thumbnail, bytes, thumbnailBytes, width, height, aspectRatio];
 }

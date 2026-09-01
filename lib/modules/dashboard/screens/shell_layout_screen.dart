@@ -12,14 +12,17 @@ import 'package:provider/provider.dart';
 
 import '../../../app/app_assets.dart';
 import '../../../app/app_colors.dart';
+import '../../../app/app_routes.dart';
 import '../../../app/app_strings.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../util/common_ext.dart';
 import '../../../widgets/brand/app_logo.dart';
-import '../../../widgets/common/common_app_bar.dart';
+import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/buttons/language_selector_button.dart';
+import '../../../widgets/common/common_app_bar.dart';
+import '../../../widgets/dialogs/app_dialog.dart';
 import '../../../widgets/navigation/app_bottom_navigation_bar.dart';
 import '../../../widgets/shimmer/app_shimmer_container.dart';
 import '../../../widgets/shimmer/dashboard_shimmer_widget.dart';
@@ -83,6 +86,8 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
     ),
   ];
 
+  bool get isProfileRoute => GoRouterState.of(context).matchedLocation.startsWith('/profile');
+
   @override
   void initState() {
     super.initState();
@@ -118,13 +123,12 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;
     final currentIndex = _getCurrentIndex(location);
-    final isDesktop = context.isDesktopUI;
+    final isDesktop = context.isDesktop;
 
     // Bind reactively to cached user profile from AuthProvider
     final profile = context.watch<AuthProvider>().userProfile;
     final String displayName = profile?.name ?? 'Alex Sterling';
-    final String displayRole =
-        (profile?.role?.displayName ?? 'Principal Broker').toUpperCase();
+    final String displayRole = (profile?.role?.displayName ?? 'Principal Broker').toUpperCase();
     final String displayEmail = profile?.email ?? 'alex@realtybazaar.com';
 
     if (isDesktop) {
@@ -154,13 +158,7 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
                     const Expanded(child: DashboardShimmerWidget())
                   else ...[
                     // Top navigation search and metrics bar
-                    _buildTopBar(
-                      location,
-                      displayName,
-                      displayRole,
-                      displayEmail,
-                      isDesktop,
-                    ),
+                    _buildTopBar(location, displayName, displayRole, displayEmail, isDesktop),
 
                     // Embedded Route Content
                     Expanded(child: widget.child),
@@ -197,11 +195,9 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
         title: mobileTitle,
         showBackButton: false,
         leading: null,
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 12.0),
-            child: CompactSetupProgressWidget(),
-          ),
+        actions: [
+          if (isProfileRoute) ...[const _SignOutButton(isMobile: false), const SizedBox(width: 4.0)],
+          Padding(padding: EdgeInsets.only(right: 12.0), child: CompactSetupProgressWidget()),
         ],
       ),
       body: profile == null ? const DashboardShimmerWidget() : widget.child,
@@ -272,8 +268,7 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
             Expanded(
               child: ListView.separated(
                 itemCount: _navItems.length,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 4.0),
+                separatorBuilder: (context, index) => const SizedBox(height: 4.0),
                 itemBuilder: (context, index) {
                   final item = _navItems[index];
                   final isSelected = index == currentIndex;
@@ -302,9 +297,7 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
       child: Container(
         height: 44.0,
         decoration: BoxDecoration(
-          color: isSelected
-              ? AppColors.primary.withOpacity(0.06)
-              : Colors.transparent,
+          color: isSelected ? AppColors.primary.withOpacity(0.06) : Colors.transparent,
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: Stack(
@@ -332,9 +325,7 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
                   style: TextStyle(
                     fontSize: 14.0,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                    color: isSelected
-                        ? AppColors.primary
-                        : AppColors.textSecondary,
+                    color: isSelected ? AppColors.primary : AppColors.textSecondary,
                   ),
                 ),
               ],
@@ -363,13 +354,7 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
   }
 
   // --- FOOTER USER PROFILE COMPONENT ---
-  Widget _buildUserCard(
-    String name,
-    String role,
-    String email,
-    bool isSelected,
-    bool isLoading,
-  ) {
+  Widget _buildUserCard(String name, String role, String email, bool isSelected, bool isLoading) {
     if (isLoading) {
       return Container(
         padding: const EdgeInsets.all(12.0),
@@ -409,14 +394,9 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
       child: Container(
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
-          color: isSelected
-              ? AppColors.primary.withOpacity(0.06)
-              : AppColors.background,
+          color: isSelected ? AppColors.primary.withOpacity(0.06) : AppColors.background,
           borderRadius: BorderRadius.circular(12.0),
-          border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.border,
-            width: 1.0,
-          ),
+          border: Border.all(color: isSelected ? AppColors.primary : AppColors.border, width: 1.0),
         ),
         child: Row(
           children: [
@@ -426,11 +406,7 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
               backgroundColor: AppColors.primary.withOpacity(0.1),
               child: Text(
                 name.substring(0, 1).toUpperCase(),
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
-                ),
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.primary),
               ),
             ),
             const SizedBox(width: 12.0),
@@ -471,13 +447,7 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
   }
 
   // --- TOP NAVIGATION BAR COMPONENT ---
-  Widget _buildTopBar(
-    String location,
-    String name,
-    String role,
-    String email,
-    bool isDesktop,
-  ) {
+  Widget _buildTopBar(String location, String name, String role, String email, bool isDesktop) {
     // Determine screen label based on path
     String screenLabel = context.tr('dashboard');
     if (location.startsWith('/profile')) {
@@ -519,17 +489,87 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
       child: Row(
         children: [
           // Screen Title
-          Text(
-            screenLabel,
-            style: AppTextStyles.heading2.copyWith(
-              fontWeight: FontWeight.bold,
-              letterSpacing: -0.3,
+          Expanded(
+            child: Text(
+              screenLabel,
+              style: AppTextStyles.heading2.copyWith(fontWeight: FontWeight.bold, letterSpacing: -0.3),
             ),
           ),
-          const Spacer(),
+
+          if (isProfileRoute) ...[const _SignOutButton(isMobile: false), const SizedBox(width: 12.0)],
           const CompactSetupProgressWidget(),
         ],
       ),
+    );
+  }
+}
+
+class _SignOutButton extends StatefulWidget {
+  final bool isMobile;
+
+  const _SignOutButton({required this.isMobile});
+
+  @override
+  State<_SignOutButton> createState() => _SignOutButtonState();
+}
+
+class _SignOutButtonState extends State<_SignOutButton> {
+  bool _isSigningOut = false;
+
+  Future<void> _handleSignOut() async {
+    final confirmed = await AppDialog.showConfirmationDialog(
+      context,
+      title: context.tr('confirm_sign_out'),
+      description: context.tr('sign_out_warning'),
+      confirmText: context.tr('sign_out_button'),
+      cancelText: context.tr('cancel'),
+      type: DialogType.info,
+    );
+
+    if (confirmed == true && mounted) {
+      setState(() => _isSigningOut = true);
+      try {
+        final router = GoRouter.of(context);
+        await context.read<AuthProvider>().signOut(context);
+        if (mounted) {
+          router.go(AppRoutes.login);
+        }
+      } finally {
+        if (mounted) {
+          setState(() => _isSigningOut = false);
+        }
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.isMobile) {
+      return IconButton(
+        icon: _isSigningOut
+            ? const SizedBox(
+                width: 18.0,
+                height: 18.0,
+                child: CircularProgressIndicator(strokeWidth: 2.0, color: AppColors.textSecondary),
+              )
+            : const Icon(Icons.logout_rounded, size: 20.0, color: AppColors.textSecondary),
+        tooltip: context.tr('sign_out_button'),
+        onPressed: _isSigningOut ? null : _handleSignOut,
+      );
+    }
+
+    return AppButton.outline(
+      text: context.tr('sign_out_button'),
+      iconData: Icons.logout_rounded,
+      iconSize: 16.0,
+      height: 34.0,
+      borderRadius: 17.0,
+      textColor: AppColors.textSecondary,
+      borderColor: AppColors.border,
+      isLoading: _isSigningOut,
+      padding: const EdgeInsets.symmetric(horizontal: 14.0),
+      textStyle: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+      onPressed: _isSigningOut ? null : _handleSignOut,
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
@@ -57,11 +58,7 @@ class StepPropertyLocationWidget extends StatelessWidget {
                     tip: 'Including a recognizable landmark increases buyer viewing inquiries by 35%.',
                   );
                 },
-                child: const Icon(
-                  Icons.info_outline_rounded,
-                  color: AppColors.primary,
-                  size: 20.0,
-                ),
+                child: const Icon(Icons.info_outline_rounded, color: AppColors.primary, size: 20.0),
               ),
             ),
           ],

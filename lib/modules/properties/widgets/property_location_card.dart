@@ -2,6 +2,7 @@
 // Purpose: Reusable location card widget shared across property preview and view dialogs.
 
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../models/address_model.dart';
@@ -9,10 +10,7 @@ import '../../../models/address_model.dart';
 class PropertyLocationCard extends StatelessWidget {
   final AddressModel? address;
 
-  const PropertyLocationCard({
-    super.key,
-    this.address,
-  });
+  const PropertyLocationCard({super.key, this.address});
 
   @override
   Widget build(BuildContext context) {
@@ -47,21 +45,14 @@ class PropertyLocationCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(
-            Icons.location_on_rounded,
-            color: AppColors.error,
-            size: 24.0,
-          ),
+          const Icon(Icons.location_on_rounded, color: AppColors.error, size: 24.0),
           const SizedBox(width: 12.0),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (fullAddr.isNotEmpty)
-                  Text(
-                    fullAddr,
-                    style: AppTextStyles.body2.copyWith(fontWeight: FontWeight.bold),
-                  ),
+                  Text(fullAddr, style: AppTextStyles.body2.copyWith(fontWeight: FontWeight.bold)),
                 if (landmark != null && landmark.isNotEmpty) ...[
                   const SizedBox(height: 2.0),
                   Text(

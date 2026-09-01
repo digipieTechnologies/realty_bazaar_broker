@@ -3,31 +3,29 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../app/app_colors.dart';
+import '../../../app/app_routes.dart';
 import '../../../app/app_text_styles.dart';
+import '../../../app/app_utils.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../models/social_enums.dart';
 import '../../../models/social_post_model.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../providers/social/social_provider.dart';
+import '../../../util/common_ext.dart';
 import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/common/app_card_container.dart';
 import '../../../widgets/icons/app_icons.dart';
 import '../../../widgets/images/cached_image.dart';
 import '../../../widgets/toast/app_toast.dart';
-import '../../../app/app_utils.dart';
-import '../../../util/common_ext.dart';
-import '../../../core/localization/app_localizations.dart';
 import 'automation_confirmation_dialog.dart';
 
 class SocialPostCard extends StatelessWidget {
   final SocialPostModel post;
   final bool isMinimalView;
 
-  const SocialPostCard({
-    super.key,
-    required this.post,
-    this.isMinimalView = false,
-  });
+  const SocialPostCard({super.key, required this.post, this.isMinimalView = false});
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +35,13 @@ class SocialPostCard extends StatelessWidget {
     final isMobile = context.isMobileUI;
     final isFB = post.platform == SocialPlatform.facebook;
 
-    final mediaUrl = post.mediaUrl ?? (post.mediaUrls != null && post.mediaUrls!.isNotEmpty ? post.mediaUrls!.first.url : null);
+    final mediaUrl =
+        post.mediaUrl ??
+        (post.mediaUrls != null && post.mediaUrls!.isNotEmpty ? post.mediaUrls!.first.url : null);
     final thumbnailUrl = post.thumbnailUrl ?? mediaUrl;
     final hasMedia = thumbnailUrl != null && thumbnailUrl.isNotEmpty;
-    final isVideo = post.mediaType?.toLowerCase().contains('video') == true ||
+    final isVideo =
+        post.mediaType?.toLowerCase().contains('video') == true ||
         post.mediaType?.toLowerCase().contains('reel') == true;
 
     final timeStr = _formatDate(post.publishedAt ?? post.createdAt);
@@ -50,6 +51,7 @@ class SocialPostCard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 16.0),
       child: AppCardContainer(
         borderRadius: 16.0,
+        onTap: () => AppRoutes.navigateToPostDetails(context, post),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -96,11 +98,7 @@ class SocialPostCard extends StatelessWidget {
                                 shape: BoxShape.circle,
                                 border: Border.all(color: Colors.white, width: 1.5),
                               ),
-                              child: const Icon(
-                                Icons.play_arrow_rounded,
-                                color: Colors.white,
-                                size: 22.0,
-                              ),
+                              child: const Icon(Icons.play_arrow_rounded, color: Colors.white, size: 22.0),
                             ),
                           ),
                         ),
@@ -116,10 +114,7 @@ class SocialPostCard extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: Colors.black.withValues(alpha: 0.55),
                             borderRadius: BorderRadius.circular(20.0),
-                            border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.25),
-                              width: 0.8,
-                            ),
+                            border: Border.all(color: Colors.white.withValues(alpha: 0.25), width: 0.8),
                           ),
                           child: Text(
                             timeStr,
@@ -147,16 +142,9 @@ class SocialPostCard extends StatelessWidget {
                               decoration: BoxDecoration(
                                 color: Colors.black.withValues(alpha: 0.55),
                                 shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Colors.white.withValues(alpha: 0.25),
-                                  width: 0.8,
-                                ),
+                                border: Border.all(color: Colors.white.withValues(alpha: 0.25), width: 0.8),
                               ),
-                              child: const Icon(
-                                Icons.open_in_new_rounded,
-                                size: 14.0,
-                                color: Colors.white,
-                              ),
+                              child: const Icon(Icons.open_in_new_rounded, size: 14.0, color: Colors.white),
                             ),
                           ),
                         ),
@@ -202,10 +190,7 @@ class SocialPostCard extends StatelessWidget {
           const SizedBox(height: 8.0),
 
           // Shared Metrics Row Widget with Automation Button
-          _PostMetricsRow(
-            post: post,
-            showAutomationButton: true,
-          ),
+          _PostMetricsRow(post: post, showAutomationButton: true),
         ],
       ),
     );
@@ -218,10 +203,13 @@ class SocialPostCard extends StatelessWidget {
 
   Widget _buildDashboardMinimalCard(BuildContext context) {
     final isFB = post.platform == SocialPlatform.facebook;
-    final mediaUrl = post.mediaUrl ?? (post.mediaUrls != null && post.mediaUrls!.isNotEmpty ? post.mediaUrls!.first.url : null);
+    final mediaUrl =
+        post.mediaUrl ??
+        (post.mediaUrls != null && post.mediaUrls!.isNotEmpty ? post.mediaUrls!.first.url : null);
     final thumbnailUrl = post.thumbnailUrl ?? mediaUrl;
     final hasMedia = thumbnailUrl != null && thumbnailUrl.isNotEmpty;
-    final isVideo = post.mediaType?.toLowerCase().contains('video') == true ||
+    final isVideo =
+        post.mediaType?.toLowerCase().contains('video') == true ||
         post.mediaType?.toLowerCase().contains('reel') == true;
 
     return AppCardContainer(
@@ -245,12 +233,7 @@ class SocialPostCard extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(14.0)),
                   child: hasMedia
-                      ? CachedImage(
-                          thumbnailUrl,
-                          width: double.infinity,
-                          height: 120.0,
-                          fit: BoxFit.cover,
-                        )
+                      ? CachedImage(thumbnailUrl, width: double.infinity, height: 120.0, fit: BoxFit.cover)
                       : Container(
                           color: isFB
                               ? AppColors.facebook.withValues(alpha: 0.1)
@@ -280,9 +263,7 @@ class SocialPostCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: isFB
-                      ? const FacebookIconWidget(size: 18.0)
-                      : const InstagramIconWidget(size: 18.0),
+                  child: isFB ? const FacebookIconWidget(size: 18.0) : const InstagramIconWidget(size: 18.0),
                 ),
               ),
               // Video / Reel Badge at Top Right
@@ -296,11 +277,7 @@ class SocialPostCard extends StatelessWidget {
                       color: Colors.black.withValues(alpha: 0.65),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
-                      Icons.play_arrow_rounded,
-                      color: Colors.white,
-                      size: 14.0,
-                    ),
+                    child: const Icon(Icons.play_arrow_rounded, color: Colors.white, size: 14.0),
                   ),
                 ),
             ],
@@ -329,10 +306,7 @@ class SocialPostCard extends StatelessWidget {
                 const SizedBox(height: 8.0),
 
                 // Shared Metrics Row Widget with Date
-                _PostMetricsRow(
-                  post: post,
-                  showDate: true,
-                ),
+                _PostMetricsRow(post: post, showDate: true),
               ],
             ),
           ),
@@ -365,11 +339,7 @@ class _PostMetricsRow extends StatelessWidget {
   final bool showDate;
   final bool showAutomationButton;
 
-  const _PostMetricsRow({
-    required this.post,
-    this.showDate = false,
-    this.showAutomationButton = false,
-  });
+  const _PostMetricsRow({required this.post, this.showDate = false, this.showAutomationButton = false});
 
   @override
   Widget build(BuildContext context) {
@@ -380,11 +350,7 @@ class _PostMetricsRow extends StatelessWidget {
 
     return Row(
       children: [
-        _buildMetricItem(
-          icon: Icons.favorite_border_rounded,
-          value: likes,
-          color: AppColors.error,
-        ),
+        _buildMetricItem(icon: Icons.favorite_border_rounded, value: likes, color: AppColors.error),
         const SizedBox(width: 10.0),
         _buildMetricItem(
           icon: Icons.chat_bubble_outline_rounded,
@@ -421,11 +387,7 @@ class _PostMetricsRow extends StatelessWidget {
     );
   }
 
-  Widget _buildMetricItem({
-    required IconData icon,
-    required int value,
-    required Color color,
-  }) {
+  Widget _buildMetricItem({required IconData icon, required int value, required Color color}) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -487,10 +449,7 @@ class _AutomationButtonState extends State<_AutomationButton> {
     final socialProvider = Provider.of<SocialProvider>(context, listen: false);
     final isCurrentlyEnabled = widget.post.isStoredInDb;
 
-    final confirmed = await AutomationConfirmationDialog.show(
-      context,
-      isEnabling: !isCurrentlyEnabled,
-    );
+    final confirmed = await AutomationConfirmationDialog.show(context, isEnabling: !isCurrentlyEnabled);
 
     if (!confirmed || !mounted) return;
 
@@ -535,10 +494,7 @@ class _AutomationButtonState extends State<_AutomationButton> {
               borderColor: AppColors.error,
               textColor: AppColors.error,
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              textStyle: AppTextStyles.caption.copyWith(
-                fontWeight: FontWeight.bold,
-                fontSize: 11.0,
-              ),
+              textStyle: AppTextStyles.caption.copyWith(fontWeight: FontWeight.bold, fontSize: 11.0),
             )
           : AppButton.solid(
               text: text,
@@ -550,10 +506,7 @@ class _AutomationButtonState extends State<_AutomationButton> {
               color: AppColors.primary,
               textColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              textStyle: AppTextStyles.caption.copyWith(
-                fontWeight: FontWeight.bold,
-                fontSize: 11.0,
-              ),
+              textStyle: AppTextStyles.caption.copyWith(fontWeight: FontWeight.bold, fontSize: 11.0),
             ),
     );
   }

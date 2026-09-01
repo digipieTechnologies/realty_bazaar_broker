@@ -2,6 +2,7 @@
 // Purpose: Separate modular filter widget for video request status filtering with multi-select checkboxes in a Wrap layout.
 
 import 'package:flutter/material.dart';
+
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
 import '../../../../models/models.dart';
@@ -35,22 +36,10 @@ class VideoRequestFilterPopover extends StatelessWidget {
     final isAllSelected = selectedStatuses.isEmpty;
 
     final statusOptions = <Map<String, dynamic>>[
-      {
-        'label': 'Pending',
-        'status': VideoRequestStatus.pending,
-      },
-      {
-        'label': 'In Progress',
-        'status': VideoRequestStatus.inProgress,
-      },
-      {
-        'label': 'Completed',
-        'status': VideoRequestStatus.completed,
-      },
-      {
-        'label': 'Cancelled',
-        'status': VideoRequestStatus.cancelled,
-      },
+      {'label': 'Pending', 'status': VideoRequestStatus.pending},
+      {'label': 'In Progress', 'status': VideoRequestStatus.inProgress},
+      {'label': 'Completed', 'status': VideoRequestStatus.completed},
+      {'label': 'Cancelled', 'status': VideoRequestStatus.cancelled},
     ];
 
     return Column(
@@ -69,16 +58,12 @@ class VideoRequestFilterPopover extends StatelessWidget {
             ),
           ),
         ),
-        
+
         Wrap(
           spacing: 12.0,
           runSpacing: 10.0,
           children: [
-            _buildCheckboxRow(
-              label: 'All',
-              isChecked: isAllSelected,
-              onTap: _selectAll,
-            ),
+            _buildCheckboxRow(label: 'All', isChecked: isAllSelected, onTap: _selectAll),
             for (final opt in statusOptions)
               _buildCheckboxRow(
                 label: opt['label'] as String,
@@ -91,11 +76,7 @@ class VideoRequestFilterPopover extends StatelessWidget {
     );
   }
 
-  Widget _buildCheckboxRow({
-    required String label,
-    required bool isChecked,
-    required VoidCallback onTap,
-  }) {
+  Widget _buildCheckboxRow({required String label, required bool isChecked, required VoidCallback onTap}) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(6.0),
@@ -111,9 +92,7 @@ class VideoRequestFilterPopover extends StatelessWidget {
                 value: isChecked,
                 onChanged: (_) => onTap(),
                 activeColor: AppColors.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4.0),
-                ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
                 side: const BorderSide(color: AppColors.border, width: 1.5),
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),

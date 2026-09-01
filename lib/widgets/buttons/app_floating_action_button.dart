@@ -2,6 +2,7 @@
 // Purpose: Reusable Floating Action Button (FAB) following the application design system.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
 
@@ -45,9 +46,7 @@ class AppFloatingActionButton extends StatelessWidget {
         backgroundColor: backgroundColor,
         elevation: elevation,
         tooltip: tooltip ?? label,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
       );
     }
 
@@ -56,9 +55,7 @@ class AppFloatingActionButton extends StatelessWidget {
       backgroundColor: backgroundColor,
       elevation: elevation,
       tooltip: tooltip ?? label,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16.0),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
       child: Icon(icon, color: foregroundColor, size: 22.0),
     );
   }

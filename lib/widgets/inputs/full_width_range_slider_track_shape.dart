@@ -42,18 +42,13 @@ class FullWidthRangeSliderTrackShape extends RangeSliderTrackShape {
       isDiscrete: isDiscrete,
     );
 
-    final Paint activePaint = Paint()
-      ..color = sliderTheme.activeTrackColor ?? Colors.blue;
-    final Paint inactivePaint = Paint()
-      ..color = sliderTheme.inactiveTrackColor ?? Colors.grey;
+    final Paint activePaint = Paint()..color = sliderTheme.activeTrackColor ?? Colors.blue;
+    final Paint inactivePaint = Paint()..color = sliderTheme.inactiveTrackColor ?? Colors.grey;
 
     final Radius trackRadius = Radius.circular(trackRect.height / 2);
 
     // Background full track (inactive)
-    context.canvas.drawRRect(
-      RRect.fromRectAndRadius(trackRect, trackRadius),
-      inactivePaint,
-    );
+    context.canvas.drawRRect(RRect.fromRectAndRadius(trackRect, trackRadius), inactivePaint);
 
     // Active track segment
     final Rect activeRect = Rect.fromLTRB(
@@ -64,10 +59,7 @@ class FullWidthRangeSliderTrackShape extends RangeSliderTrackShape {
     );
 
     if (activeRect.width > 0) {
-      context.canvas.drawRRect(
-        RRect.fromRectAndRadius(activeRect, trackRadius),
-        activePaint,
-      );
+      context.canvas.drawRRect(RRect.fromRectAndRadius(activeRect, trackRadius), activePaint);
     }
   }
 }

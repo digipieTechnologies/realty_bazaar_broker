@@ -32,16 +32,11 @@ class AppTagChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveBg = backgroundColor ??
-        (isSelected
-            ? AppColors.primary
-            : AppColors.primary.withValues(alpha: 0.08));
-    final effectiveTextColor = textColor ??
-        (isSelected ? Colors.white : AppColors.primary);
-    final effectiveBorder = borderColor ??
-        (isSelected
-            ? AppColors.primary
-            : AppColors.primary.withValues(alpha: 0.18));
+    final effectiveBg =
+        backgroundColor ?? (isSelected ? AppColors.primary : AppColors.primary.withValues(alpha: 0.08));
+    final effectiveTextColor = textColor ?? (isSelected ? Colors.white : AppColors.primary);
+    final effectiveBorder =
+        borderColor ?? (isSelected ? AppColors.primary : AppColors.primary.withValues(alpha: 0.18));
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
@@ -64,7 +59,7 @@ class AppTagChip extends StatelessWidget {
                         color: AppColors.primary.withValues(alpha: 0.25),
                         blurRadius: 6,
                         offset: const Offset(0, 2),
-                      )
+                      ),
                     ]
                   : null,
             ),
@@ -72,11 +67,7 @@ class AppTagChip extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (icon != null) ...[
-                  Icon(
-                    icon,
-                    size: 14.0,
-                    color: effectiveTextColor,
-                  ),
+                  Icon(icon, size: 14.0, color: effectiveTextColor),
                   const SizedBox(width: 6.0),
                 ],
                 Flexible(
@@ -101,11 +92,7 @@ class AppTagChip extends StatelessWidget {
                         color: effectiveTextColor.withValues(alpha: 0.18),
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(
-                        Icons.close_rounded,
-                        size: 12.0,
-                        color: effectiveTextColor,
-                      ),
+                      child: Icon(Icons.close_rounded, size: 12.0, color: effectiveTextColor),
                     ),
                   ),
                 ],

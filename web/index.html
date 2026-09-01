@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -27,30 +28,23 @@
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="favicon.png" />
 
   <title>The Realty Bazaar</title>
   <link rel="manifest" href="manifest.json">
 
-  <!-- OneSignal Web Push SDK -->
-  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-  <script>
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
-    OneSignalDeferred.push(async function(OneSignal) {
-      await OneSignal.init({
-        appId: "efebf0cf-7143-4e0b-95c3-b4cd8f4319e0",
-      });
-    });
-  </script>
+
 </head>
+
 <body>
   <script>
     if (screen.orientation && screen.orientation.lock) {
-      screen.orientation.lock('portrait').catch(function(error) {
+      screen.orientation.lock('portrait').catch(function (error) {
         // Orientation lock not supported or denied by browser security policy
       });
     }
   </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
+
 </html>

@@ -2,6 +2,7 @@
 // Purpose: Custom JSON-based localization system with key-value translate lookup and BuildContext extension.
 
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,17 +16,14 @@ class AppLocalizations {
   }
 
   /// Static delegate instance
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   late Map<String, String> _localizedStrings;
 
   /// Loads the localized JSON assets matching the active language code
   Future<bool> load() async {
     try {
-      String jsonString = await rootBundle.loadString(
-        'assets/lang/${locale.languageCode}.json',
-      );
+      String jsonString = await rootBundle.loadString('assets/lang/${locale.languageCode}.json');
       Map<String, dynamic> jsonMap = json.decode(jsonString);
 
       _localizedStrings = jsonMap.map((key, value) {
@@ -51,8 +49,7 @@ class AppLocalizations {
   }
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -74,7 +71,6 @@ class _AppLocalizationsDelegate
 /// Helper extension on BuildContext to translate keys easily
 extension LocalizationExtension on BuildContext {
   String tr(String key, {Map<String, String>? arguments}) {
-    return AppLocalizations.of(this)?.translate(key, arguments: arguments) ??
-        key;
+    return AppLocalizations.of(this)?.translate(key, arguments: arguments) ?? key;
   }
 }

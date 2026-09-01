@@ -65,11 +65,7 @@ class StepPropertyTypeWidget extends StatelessWidget {
     ),
   ];
 
-  const StepPropertyTypeWidget({
-    super.key,
-    required this.selectedType,
-    required this.onTypeSelected,
-  });
+  const StepPropertyTypeWidget({super.key, required this.selectedType, required this.onTypeSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -105,11 +101,7 @@ class StepPropertyTypeWidget extends StatelessWidget {
                     tip: 'Selecting the correct property type improves buyer match accuracy.',
                   );
                 },
-                child: const Icon(
-                  Icons.info_outline_rounded,
-                  color: AppColors.primary,
-                  size: 20.0,
-                ),
+                child: const Icon(Icons.info_outline_rounded, color: AppColors.primary, size: 20.0),
               ),
             ),
           ],
@@ -147,13 +139,12 @@ class StepPropertyTypeWidget extends StatelessWidget {
                 final isSelected = selectedType == option.type;
                 return MouseRegion(
                   cursor: SystemMouseCursors.click,
-                  child: GestureDetector(onTap: () => onTypeSelected(option.type),
+                  child: GestureDetector(
+                    onTap: () => onTypeSelected(option.type),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       decoration: BoxDecoration(
-                        color: isSelected
-                            ? AppColors.primary.withValues(alpha: 0.04)
-                            : AppColors.surface,
+                        color: isSelected ? AppColors.primary.withValues(alpha: 0.04) : AppColors.surface,
                         borderRadius: BorderRadius.circular(16.0),
                         border: Border.all(
                           color: isSelected ? AppColors.primary : AppColors.border,
@@ -185,7 +176,11 @@ class StepPropertyTypeWidget extends StatelessWidget {
                                             fit: BoxFit.cover,
                                             errorBuilder: (context, error, stackTrace) => Container(
                                               color: AppColors.background,
-                                              child: const Icon(Icons.apartment, size: 30, color: AppColors.textMuted),
+                                              child: const Icon(
+                                                Icons.apartment,
+                                                size: 30,
+                                                color: AppColors.textMuted,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -223,9 +218,7 @@ class StepPropertyTypeWidget extends StatelessWidget {
                                             context.tr(option.titleKey),
                                             style: AppTextStyles.body1.copyWith(
                                               fontWeight: FontWeight.bold,
-                                              color: isSelected
-                                                  ? AppColors.primary
-                                                  : AppColors.textPrimary,
+                                              color: isSelected ? AppColors.primary : AppColors.textPrimary,
                                             ),
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
@@ -260,7 +253,11 @@ class StepPropertyTypeWidget extends StatelessWidget {
                                             fit: BoxFit.cover,
                                             errorBuilder: (context, error, stackTrace) => Container(
                                               color: AppColors.background,
-                                              child: const Icon(Icons.apartment, size: 40, color: AppColors.textMuted),
+                                              child: const Icon(
+                                                Icons.apartment,
+                                                size: 40,
+                                                color: AppColors.textMuted,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -298,9 +295,7 @@ class StepPropertyTypeWidget extends StatelessWidget {
                                             context.tr(option.titleKey),
                                             style: AppTextStyles.body1.copyWith(
                                               fontWeight: FontWeight.bold,
-                                              color: isSelected
-                                                  ? AppColors.primary
-                                                  : AppColors.textPrimary,
+                                              color: isSelected ? AppColors.primary : AppColors.textPrimary,
                                             ),
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,

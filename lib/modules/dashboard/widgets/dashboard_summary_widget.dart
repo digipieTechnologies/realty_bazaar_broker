@@ -29,7 +29,7 @@ class _DashboardSummaryWidgetState extends State<DashboardSummaryWidget> {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final brokerId = authProvider.userProfile?.brokerId?.id;
       final dashboardProvider = Provider.of<DashboardProvider>(context, listen: false);
-      
+
       if (brokerId != null && brokerId.isNotEmpty) {
         dashboardProvider.fetchDashboardSummary(brokerId);
       }
@@ -41,7 +41,7 @@ class _DashboardSummaryWidgetState extends State<DashboardSummaryWidget> {
     final dashboardProvider = context.watch<DashboardProvider>();
     final summary = dashboardProvider.summary;
     final isLoading = dashboardProvider.isLoadingSummary && summary == null;
-    final isDesktop = context.isDesktopUI;
+    final isDesktop = context.isDesktop;
 
     if (isLoading) {
       return const DashboardSummaryShimmerWidget();
@@ -102,16 +102,19 @@ class _DashboardSummaryWidgetState extends State<DashboardSummaryWidget> {
 
     if (isDesktop) {
       return Row(
-        children: cards
-            .map((item) => Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 12.0),
-                    child: _StatCard(data: item, isDesktop: true),
+        children:
+            cards
+                .map(
+                  (item) => Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 12.0),
+                      child: _StatCard(data: item, isDesktop: true),
+                    ),
                   ),
-                ))
-            .toList()
-          ..removeLast()
-          ..add(Expanded(child: _StatCard(data: cards.last, isDesktop: true))),
+                )
+                .toList()
+              ..removeLast()
+              ..add(Expanded(child: _StatCard(data: cards.last, isDesktop: true))),
       );
     }
 
@@ -167,10 +170,7 @@ class _StatCard extends StatelessWidget {
   final _StatItemData data;
   final bool isDesktop;
 
-  const _StatCard({
-    required this.data,
-    required this.isDesktop,
-  });
+  const _StatCard({required this.data, required this.isDesktop});
 
   @override
   Widget build(BuildContext context) {
@@ -204,35 +204,22 @@ class _StatCard extends StatelessWidget {
                 children: [
                   Container(
                     padding: EdgeInsets.all(isDesktop ? 8.0 : 6.0),
-                    decoration: BoxDecoration(
-                      color: data.iconBgColor,
-                      shape: BoxShape.circle,
-                    ),
+                    decoration: BoxDecoration(color: data.iconBgColor, shape: BoxShape.circle),
                     child: data.svgAsset != null
                         ? SvgPicture.asset(
                             data.svgAsset!,
                             width: isDesktop ? 18.0 : 15.0,
                             height: isDesktop ? 18.0 : 15.0,
-                            colorFilter: ColorFilter.mode(
-                              data.iconColor,
-                              BlendMode.srcIn,
-                            ),
+                            colorFilter: ColorFilter.mode(data.iconColor, BlendMode.srcIn),
                           )
-                        : Icon(
-                            data.icon,
-                            color: data.iconColor,
-                            size: isDesktop ? 18.0 : 15.0,
-                          ),
+                        : Icon(data.icon, color: data.iconColor, size: isDesktop ? 18.0 : 15.0),
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(
                       horizontal: isDesktop ? 9.0 : 7.0,
                       vertical: isDesktop ? 4.0 : 3.0,
                     ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
+                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12.0)),
                     child: Text(
                       data.tagText,
                       style: AppTextStyles.caption.copyWith(

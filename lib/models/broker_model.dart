@@ -1,6 +1,7 @@
 // Purpose: Broker entity model referencing standalone BrokerSetupDetailsModel JSONB configuration.
 
 import 'package:equatable/equatable.dart';
+
 import 'address_model.dart';
 import 'broker_setup_details_model.dart';
 
@@ -8,6 +9,7 @@ class BrokerModel extends Equatable {
   static String tableName = "brokers";
 
   final String? id;
+  final String? brokerCode;
   final String? businessName;
   final AddressModel? addressId;
   final String? plan;
@@ -26,6 +28,7 @@ class BrokerModel extends Equatable {
 
   const BrokerModel({
     this.id,
+    this.brokerCode,
     this.businessName,
     this.addressId,
     this.plan,
@@ -45,13 +48,11 @@ class BrokerModel extends Equatable {
     }
     return BrokerModel(
       id: json['id']?.toString(),
+      brokerCode: json['broker_code']?.toString(),
       businessName: json['business_name']?.toString() ?? '',
-      addressId: json['address_id'] != null
-          ? AddressModel.fromJson(json['address_id'])
-          : null,
+      addressId: json['address_id'] != null ? AddressModel.fromJson(json['address_id']) : null,
       plan: json['plan']?.toString(),
-      onboardingStatus:
-          json['onboarding_status']?.toString() ?? onboardingStatusPending,
+      onboardingStatus: json['onboarding_status']?.toString() ?? onboardingStatusPending,
       isActive: json['is_active'] as bool? ?? true,
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'].toString())?.toLocal()
@@ -73,6 +74,7 @@ class BrokerModel extends Equatable {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
     if (id != null) data['id'] = id;
+    if (brokerCode != null) data['broker_code'] = brokerCode;
     data['business_name'] = businessName;
     data['address_id'] = addressId?.id;
     data['plan'] = plan;
@@ -97,6 +99,7 @@ class BrokerModel extends Equatable {
 
   BrokerModel copyWith({
     String? id,
+    String? brokerCode,
     String? businessName,
     AddressModel? addressId,
     String? plan,
@@ -111,6 +114,7 @@ class BrokerModel extends Equatable {
   }) {
     return BrokerModel(
       id: id ?? this.id,
+      brokerCode: brokerCode ?? this.brokerCode,
       businessName: businessName ?? this.businessName,
       addressId: addressId ?? this.addressId,
       plan: plan ?? this.plan,
@@ -128,6 +132,7 @@ class BrokerModel extends Equatable {
   @override
   List<Object?> get props => [
     id,
+    brokerCode,
     businessName,
     addressId,
     plan,

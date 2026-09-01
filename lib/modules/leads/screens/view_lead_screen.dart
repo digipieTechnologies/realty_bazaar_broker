@@ -3,13 +3,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
+import '../../../core/extensions/currency_extensions.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/localization/property_localizer.dart';
 import '../../../models/models.dart';
 import '../../../models/social_enums.dart';
+import '../../../providers/lead/lead_provider.dart';
 import '../../../util/app_date_utils.dart';
 import '../../../util/app_utils.dart';
 import '../../../widgets/badges/app_platform_badge.dart';
@@ -21,21 +24,88 @@ import '../../../widgets/icons/app_icons.dart';
 import '../../../widgets/images/cached_image.dart';
 import '../../../widgets/toast/app_toast.dart';
 
-class ViewLeadScreen extends StatelessWidget {
-  final SocialLeadModel lead;
+class ViewLeadScreen extends StatefulWidget {
+  final SocialLeadModel? lead;
+  final String? leadId;
 
-  const ViewLeadScreen({
-    super.key,
-    required this.lead,
-  });
+  const ViewLeadScreen({super.key, this.lead, this.leadId});
+
+  @override
+  State<ViewLeadScreen> createState() => _ViewLeadScreenState();
+}
+
+class _ViewLeadScreenState extends State<ViewLeadScreen> {
+  SocialLeadModel? _lead;
+  bool _isLoading = false;
+  String? _errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.lead != null) {
+      _lead = widget.lead;
+    } else if (widget.leadId != null && widget.leadId!.isNotEmpty) {
+      _isLoading = true;
+      _fetchLead(widget.leadId!);
+    }
+  }
+
+  Future<void> _fetchLead(String id) async {
+    try {
+      final provider = Provider.of<LeadProvider>(context, listen: false);
+      final fetched = await provider.fetchLeadById(id);
+      if (mounted) {
+        setState(() {
+          _lead = fetched;
+          _isLoading = false;
+          if (fetched == null) {
+            _errorMessage = 'Lead details not found.';
+          }
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = 'Error loading lead details.';
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return Scaffold(
+        backgroundColor: AppColors.background,
+        appBar: CommonAppBar(title: context.tr('lead_details')),
+        body: const Center(child: CircularProgressIndicator(color: AppColors.primary)),
+      );
+    }
+
+    if (_errorMessage != null || _lead == null) {
+      return Scaffold(
+        backgroundColor: AppColors.background,
+        appBar: CommonAppBar(title: context.tr('lead_details')),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+              const SizedBox(height: 16),
+              Text(_errorMessage ?? 'Lead details not found.', style: AppTextStyles.body1),
+              const SizedBox(height: 16),
+              ElevatedButton(onPressed: () => Navigator.of(context).maybePop(), child: const Text('Go Back')),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final lead = _lead!;
     final socialPost = lead.socialPost;
     final platform = socialPost?.platform;
-    final hasPermalink =
-        socialPost?.permalink != null &&
-        socialPost!.permalink!.trim().isNotEmpty;
+    final hasPermalink = socialPost?.permalink != null && socialPost!.permalink!.trim().isNotEmpty;
     final PropertyModel? property = socialPost?.propertyId;
     final propertyTitle = property?.propertyTitle.isNotEmpty == true
         ? property!.propertyTitle
@@ -47,38 +117,35 @@ class ViewLeadScreen extends StatelessWidget {
     final isFacebook = platform == SocialPlatform.facebook;
 
     // Platform cover gradient
-    // Platform cover gradient
     final Gradient coverGradient = isInstagram
         ? const LinearGradient(
-            colors: AppColors.instagramGradient,
+            colors: [Color(0xFF833AB4), Color(0xFFFD1D1D), Color(0xFFFCB045)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           )
         : (isFacebook
-            ? const LinearGradient(
-                colors: AppColors.gradientFacebook,
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              )
-            : LinearGradient(
-                colors: [AppColors.primary, AppColors.primary700],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ));
+              ? const LinearGradient(
+                  colors: [Color(0xFF1877F2), Color(0xFF0056C6)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                )
+              : LinearGradient(
+                  colors: [AppColors.primary, AppColors.primary700],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ));
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: CommonAppBar(
-        title: context.tr('lead_details'),
-      ),
+      appBar: CommonAppBar(title: context.tr('lead_details')),
       body: SingleChildScrollView(
         physics: const ClampingScrollPhysics(),
         child: LayoutBuilder(
           builder: (context, constraints) {
             final isDesktop = constraints.maxWidth > 900;
 
-            final profileHeroCard = _buildHeroProfileCard(context, coverGradient, platform);
-            final contactInfoCard = _buildContactInfoCard(context, platform);
+            final profileHeroCard = _buildHeroProfileCard(context, lead, coverGradient, platform);
+            final contactInfoCard = _buildContactInfoCard(context, lead, platform);
             final propertyCard = (propertyTitle.isNotEmpty || property != null)
                 ? _buildPropertyCard(context, propertyTitle, property, mediaUrls)
                 : null;
@@ -104,10 +171,7 @@ class ViewLeadScreen extends StatelessWidget {
                         profileHeroCard,
                         const SizedBox(height: 14.0),
                         contactInfoCard,
-                        if (permalinkButton != null) ...[
-                          const SizedBox(height: 14.0),
-                          permalinkButton,
-                        ],
+                        if (permalinkButton != null) ...[const SizedBox(height: 14.0), permalinkButton],
                       ],
                     ),
                   ),
@@ -131,10 +195,7 @@ class ViewLeadScreen extends StatelessWidget {
                             profileHeroCard,
                             const SizedBox(height: 14.0),
                             contactInfoCard,
-                            if (permalinkButton != null) ...[
-                              const SizedBox(height: 14.0),
-                              permalinkButton,
-                            ],
+                            if (permalinkButton != null) ...[const SizedBox(height: 14.0), permalinkButton],
                           ],
                         ),
                       ),
@@ -146,14 +207,8 @@ class ViewLeadScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            if (propertyCard != null) ...[
-                              propertyCard,
-                              const SizedBox(height: 14.0),
-                            ],
-                            if (notesCard != null) ...[
-                              notesCard,
-                              const SizedBox(height: 14.0),
-                            ],
+                            if (propertyCard != null) ...[propertyCard, const SizedBox(height: 14.0)],
+                            if (notesCard != null) ...[notesCard, const SizedBox(height: 14.0)],
                           ],
                         ),
                       ),
@@ -172,18 +227,9 @@ class ViewLeadScreen extends StatelessWidget {
                   profileHeroCard,
                   const SizedBox(height: 14.0),
                   contactInfoCard,
-                  if (propertyCard != null) ...[
-                    const SizedBox(height: 14.0),
-                    propertyCard,
-                  ],
-                  if (notesCard != null) ...[
-                    const SizedBox(height: 14.0),
-                    notesCard,
-                  ],
-                  if (permalinkButton != null) ...[
-                    const SizedBox(height: 14.0),
-                    permalinkButton,
-                  ],
+                  if (propertyCard != null) ...[const SizedBox(height: 14.0), propertyCard],
+                  if (notesCard != null) ...[const SizedBox(height: 14.0), notesCard],
+                  if (permalinkButton != null) ...[const SizedBox(height: 14.0), permalinkButton],
                   const SizedBox(height: 16.0),
                 ],
               ),
@@ -197,6 +243,7 @@ class ViewLeadScreen extends StatelessWidget {
   // --- 1. HERO PROFILE CARD WITH COVER & ACTION BUTTONS ---
   Widget _buildHeroProfileCard(
     BuildContext context,
+    SocialLeadModel lead,
     Gradient coverGradient,
     SocialPlatform? platform,
   ) {
@@ -208,93 +255,62 @@ class ViewLeadScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(20.0),
         border: Border.all(color: AppColors.border, width: 1.0),
         boxShadow: [
-          BoxShadow(
-            color: AppColors.shadow.withValues(alpha: 0.04),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 16, offset: const Offset(0, 4)),
         ],
       ),
       child: Column(
         children: [
-          // Cover Header Banner
+          // Platform Header Banner
           Stack(
             clipBehavior: Clip.none,
-            alignment: Alignment.bottomCenter,
+            alignment: Alignment.center,
             children: [
               Container(
                 height: 100.0,
+                width: double.infinity,
                 decoration: BoxDecoration(
                   gradient: coverGradient,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(19.0),
-                    topRight: Radius.circular(19.0),
-                  ),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(19.0)),
                 ),
                 child: Stack(
                   children: [
-                    // Decorative background circles
+                    // Subtle Background Pattern Icons
                     Positioned(
-                      right: -20,
-                      top: -20,
-                      child: Container(
-                        width: 120,
-                        height: 120,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.white.withValues(alpha: 0.12),
-                        ),
+                      right: -10,
+                      bottom: -10,
+                      child: Icon(
+                        platform == SocialPlatform.facebook
+                            ? Icons.facebook_rounded
+                            : Icons.camera_alt_rounded,
+                        size: 90.0,
+                        color: Colors.white.withValues(alpha: 0.12),
                       ),
                     ),
                     Positioned(
-                      left: -30,
-                      bottom: -30,
-                      child: Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.white.withValues(alpha: 0.08),
-                        ),
-                      ),
+                      top: 12.0,
+                      right: 12.0,
+                      child: AppPlatformBadge(platform: platform, isHeaderStyle: true, iconSize: 16.0),
                     ),
-                    // Platform Badge in Header
-                    if (platform != null)
-                      Positioned(
-                        top: 14,
-                        right: 14,
-                        child: AppPlatformBadge(
-                          platform: platform,
-                          isHeaderStyle: true,
-                          iconSize: 16.0,
-                        ),
-                      ),
                   ],
                 ),
               ),
 
-              // Overlapping Avatar with White Border & Active Status Dot
+              // Floating User Avatar with White Border Overlay
               Positioned(
                 bottom: -36.0,
                 child: Stack(
+                  alignment: Alignment.bottomRight,
                   children: [
                     Container(
                       padding: const EdgeInsets.all(4.0),
-                      decoration: BoxDecoration(
-                        color: AppColors.white,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
                         shape: BoxShape.circle,
                         boxShadow: [
-                          BoxShadow(
-                            color: AppColors.shadow.withValues(alpha: 0.12),
-                            blurRadius: 12,
-                            offset: const Offset(0, 4),
-                          ),
+                          BoxShadow(color: Color(0x1F000000), blurRadius: 12, offset: Offset(0, 4)),
                         ],
                       ),
-                      child: UserAvatarWidget(
-                        name: lead.userName,
-                        radius: 36.0,
-                      ),
+                      child: UserAvatarWidget(name: lead.userName, radius: 36.0),
                     ),
                     // Active Status Dot
                     Positioned(
@@ -304,9 +320,9 @@ class ViewLeadScreen extends StatelessWidget {
                         width: 16.0,
                         height: 16.0,
                         decoration: BoxDecoration(
-                          color: AppColors.success,
+                          color: const Color(0xFF22C55E),
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.white, width: 2.5),
+                          border: Border.all(color: Colors.white, width: 2.5),
                         ),
                       ),
                     ),
@@ -336,11 +352,7 @@ class ViewLeadScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
-                      Icons.access_time_rounded,
-                      size: 14.0,
-                      color: AppColors.textMuted,
-                    ),
+                    const Icon(Icons.access_time_rounded, size: 14.0, color: AppColors.textMuted),
                     const SizedBox(width: 4.0),
                     Text(
                       'Received $dateStr',
@@ -369,31 +381,25 @@ class ViewLeadScreen extends StatelessWidget {
                 _buildActionCalloutButton(
                   context,
                   label: 'Call',
-                  icon: const CallIconWidget(size: 24.0, color: AppColors.white),
-                  gradient: const LinearGradient(
-                    colors: [AppColors.primary, AppColors.primaryDark],
-                  ),
-                  shadowColor: AppColors.primary,
+                  icon: const CallIconWidget(size: 24.0, color: Colors.white),
+                  gradient: const LinearGradient(colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)]),
+                  shadowColor: const Color(0xFF2563EB),
                   onTap: () => AppUtils.launchAppUrl('tel:${lead.contactNumber}'),
                 ),
                 _buildActionCalloutButton(
                   context,
                   label: 'Message',
-                  icon: const MessageIconWidget(size: 24.0, color: AppColors.white),
-                  gradient: const LinearGradient(
-                    colors: AppColors.gradientCyan,
-                  ),
-                  shadowColor: AppColors.gradientCyan.first,
+                  icon: const MessageIconWidget(size: 24.0, color: Colors.white),
+                  gradient: const LinearGradient(colors: [Color(0xFF0EA5E9), Color(0xFF0284C7)]),
+                  shadowColor: const Color(0xFF0EA5E9),
                   onTap: () => AppUtils.launchAppUrl('sms:${lead.contactNumber}'),
                 ),
                 _buildActionCalloutButton(
                   context,
                   label: 'WhatsApp',
-                  icon: const WhatsappIconWidget(size: 24.0, color: AppColors.white),
-                  gradient: const LinearGradient(
-                    colors: [AppColors.whatsapp, AppColors.whatsappDark],
-                  ),
-                  shadowColor: AppColors.whatsapp,
+                  icon: const WhatsappIconWidget(size: 24.0, color: Colors.white),
+                  gradient: const LinearGradient(colors: [Color(0xFF25D366), Color(0xFF128C7E)]),
+                  shadowColor: const Color(0xFF25D366),
                   onTap: () => AppUtils.launchAppUrl(lead.buildWhatsappUrl()),
                 ),
               ],
@@ -452,7 +458,7 @@ class ViewLeadScreen extends StatelessWidget {
   }
 
   // --- 2. CONTACT INFORMATION CARD ---
-  Widget _buildContactInfoCard(BuildContext context, SocialPlatform? platform) {
+  Widget _buildContactInfoCard(BuildContext context, SocialLeadModel lead, SocialPlatform? platform) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16.0),
@@ -461,11 +467,7 @@ class ViewLeadScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
         border: Border.all(color: AppColors.border, width: 1.0),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 12, offset: const Offset(0, 4)),
         ],
       ),
       child: Column(
@@ -491,10 +493,7 @@ class ViewLeadScreen extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   Clipboard.setData(ClipboardData(text: lead.contactNumber));
-                  AppToast.showSuccess(
-                    context.tr('copied_title'),
-                    context.tr('contact_number_copied'),
-                  );
+                  AppToast.showSuccess(context.tr('copied_title'), context.tr('contact_number_copied'));
                 },
                 borderRadius: BorderRadius.circular(8.0),
                 child: Container(
@@ -506,11 +505,7 @@ class ViewLeadScreen extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(
-                        Icons.copy_rounded,
-                        size: 14.0,
-                        color: AppColors.primary,
-                      ),
+                      const Icon(Icons.copy_rounded, size: 14.0, color: AppColors.primary),
                       const SizedBox(width: 4.0),
                       Text(
                         'Copy',
@@ -539,9 +534,7 @@ class ViewLeadScreen extends StatelessWidget {
                   ? const FacebookIconWidget(size: 24.0)
                   : const InstagramIconWidget(size: 24.0),
               label: context.tr('platform_source'),
-              value: platform == SocialPlatform.facebook
-                  ? 'Facebook Lead Ads'
-                  : 'Instagram Lead Form',
+              value: platform == SocialPlatform.facebook ? 'Facebook Lead Ads' : 'Instagram Lead Form',
             ),
           ],
         ],
@@ -559,9 +552,7 @@ class ViewLeadScreen extends StatelessWidget {
     final typeText = property != null
         ? PropertyLocalizer.getLocalizedPropertyType(context, property.propertyType).toUpperCase()
         : '';
-    final priceStr = property != null && property.price > 0
-        ? _formatPrice(property.price)
-        : '';
+    final priceStr = property != null && property.price > 0 ? property.price.toCompactCurrency() : '';
     final addressStr = property?.address?.fullAddress.isNotEmpty == true
         ? property!.address!.fullAddress
         : '';
@@ -573,11 +564,7 @@ class ViewLeadScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
         border: Border.all(color: AppColors.border, width: 1.0),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 12, offset: const Offset(0, 4)),
         ],
       ),
       child: Column(
@@ -630,18 +617,22 @@ class ViewLeadScreen extends StatelessWidget {
                         ),
                       ),
                     if (priceStr.isNotEmpty)
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
-                        decoration: BoxDecoration(
-                          color: AppColors.success.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        child: Text(
-                          priceStr,
-                          style: AppTextStyles.caption.copyWith(
-                            fontSize: 11.5,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.success,
+                      Tooltip(
+                        message: property!.price.toFullIndianCurrency(),
+                        preferBelow: false,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+                          decoration: BoxDecoration(
+                            color: AppColors.success.withValues(alpha: 0.08),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Text(
+                            priceStr,
+                            style: AppTextStyles.caption.copyWith(
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.success,
+                            ),
                           ),
                         ),
                       ),
@@ -652,19 +643,12 @@ class ViewLeadScreen extends StatelessWidget {
                   const SizedBox(height: 10.0),
                   Row(
                     children: [
-                      const Icon(
-                        Icons.location_on_outlined,
-                        size: 15.0,
-                        color: AppColors.textMuted,
-                      ),
+                      const Icon(Icons.location_on_outlined, size: 15.0, color: AppColors.textMuted),
                       const SizedBox(width: 4.0),
                       Expanded(
                         child: Text(
                           addressStr,
-                          style: AppTextStyles.caption.copyWith(
-                            color: AppColors.textMuted,
-                            fontSize: 12.5,
-                          ),
+                          style: AppTextStyles.caption.copyWith(color: AppColors.textMuted, fontSize: 12.5),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -692,12 +676,7 @@ class ViewLeadScreen extends StatelessWidget {
                   final url = media is MediaModel ? media.url : media.toString();
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(12.0),
-                    child: CachedImage(
-                      url,
-                      width: 130.0,
-                      height: 88.0,
-                      fit: BoxFit.cover,
-                    ),
+                    child: CachedImage(url, width: 130.0, height: 88.0, fit: BoxFit.cover),
                   );
                 },
               ),
@@ -718,11 +697,7 @@ class ViewLeadScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
         border: Border.all(color: AppColors.border, width: 1.0),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 12, offset: const Offset(0, 4)),
         ],
       ),
       child: Column(
@@ -749,11 +724,7 @@ class ViewLeadScreen extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(
-                  Icons.format_quote_rounded,
-                  size: 22.0,
-                  color: AppColors.warning,
-                ),
+                const Icon(Icons.format_quote_rounded, size: 22.0, color: AppColors.warning),
                 const SizedBox(width: 10.0),
                 Expanded(
                   child: Text(
@@ -839,16 +810,5 @@ class ViewLeadScreen extends StatelessWidget {
         ?trailing,
       ],
     );
-  }
-
-  String _formatPrice(double amount) {
-    if (amount >= 10000000) {
-      return '₹${(amount / 10000000).toStringAsFixed(2)} Cr';
-    } else if (amount >= 100000) {
-      return '₹${(amount / 100000).toStringAsFixed(2)} Lakh';
-    } else if (amount > 0) {
-      return '₹${amount.toStringAsFixed(0)}';
-    }
-    return '';
   }
 }

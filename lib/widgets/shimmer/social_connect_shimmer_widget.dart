@@ -2,6 +2,7 @@
 // Purpose: Dedicated shimmer loader placeholder for Facebook & Instagram social connect cards with vertical, horizontal, and compact mobile support.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../util/common_ext.dart';
 import 'app_shimmer_container.dart';
@@ -9,14 +10,11 @@ import 'app_shimmer_container.dart';
 class SocialConnectShimmerWidget extends StatelessWidget {
   final bool isVertical;
 
-  const SocialConnectShimmerWidget({
-    super.key,
-    this.isVertical = true,
-  });
+  const SocialConnectShimmerWidget({super.key, this.isVertical = true});
 
   @override
   Widget build(BuildContext context) {
-    final isDesktop = context.isDesktopUI;
+    final isDesktop = context.isDesktop;
 
     if (!isVertical && isDesktop) {
       return const Row(
@@ -42,10 +40,7 @@ class SocialConnectShimmerWidget extends StatelessWidget {
 class SingleSocialConnectCardSkeleton extends StatelessWidget {
   final bool isMobile;
 
-  const SingleSocialConnectCardSkeleton({
-    super.key,
-    this.isMobile = true,
-  });
+  const SingleSocialConnectCardSkeleton({super.key, this.isMobile = true});
 
   @override
   Widget build(BuildContext context) {

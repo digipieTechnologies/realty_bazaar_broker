@@ -2,6 +2,7 @@
 // Purpose: Reusable shimmer skeleton placeholder for the Grow tab plan cards, responsive across mobile, tablet, and desktop.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import 'app_shimmer_container.dart';
 
@@ -29,11 +30,7 @@ class GrowPlanShimmerWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Title Badge shimmer
-          const AppShimmerContainer(
-            width: 120.0,
-            height: 24.0,
-            borderRadius: 20.0,
-          ),
+          const AppShimmerContainer(width: 120.0, height: 24.0, borderRadius: 20.0),
           const SizedBox(height: 14.0),
 
           // Amount & Period shimmer
@@ -41,41 +38,21 @@ class GrowPlanShimmerWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              AppShimmerContainer(
-                width: 110.0,
-                height: 32.0,
-                borderRadius: 8.0,
-              ),
+              AppShimmerContainer(width: 110.0, height: 32.0, borderRadius: 8.0),
               SizedBox(width: 6.0),
-              AppShimmerContainer(
-                width: 50.0,
-                height: 14.0,
-                borderRadius: 4.0,
-              ),
+              AppShimmerContainer(width: 50.0, height: 14.0, borderRadius: 4.0),
             ],
           ),
           const SizedBox(height: 10.0),
 
           // Description shimmer
-          const AppShimmerContainer(
-            width: double.infinity,
-            height: 12.0,
-            borderRadius: 4.0,
-          ),
+          const AppShimmerContainer(width: double.infinity, height: 12.0, borderRadius: 4.0),
           const SizedBox(height: 6.0),
-          const AppShimmerContainer(
-            width: 170.0,
-            height: 12.0,
-            borderRadius: 4.0,
-          ),
+          const AppShimmerContainer(width: 170.0, height: 12.0, borderRadius: 4.0),
           const SizedBox(height: 16.0),
 
           // Divider shimmer
-          const AppShimmerContainer(
-            width: double.infinity,
-            height: 1.0,
-            borderRadius: 0.0,
-          ),
+          const AppShimmerContainer(width: double.infinity, height: 1.0, borderRadius: 0.0),
           const SizedBox(height: 16.0),
 
           // Benefits List shimmer
@@ -87,18 +64,10 @@ class GrowPlanShimmerWidget extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 12.0),
                   child: Row(
                     children: [
-                      const AppShimmerContainer(
-                        width: 20.0,
-                        height: 20.0,
-                        borderRadius: 10.0,
-                      ),
+                      const AppShimmerContainer(width: 20.0, height: 20.0, borderRadius: 10.0),
                       const SizedBox(width: 10.0),
                       Expanded(
-                        child: AppShimmerContainer(
-                          width: double.infinity,
-                          height: 12.0,
-                          borderRadius: 4.0,
-                        ),
+                        child: AppShimmerContainer(width: double.infinity, height: 12.0, borderRadius: 4.0),
                       ),
                     ],
                   ),
@@ -110,11 +79,7 @@ class GrowPlanShimmerWidget extends StatelessWidget {
           const SizedBox(height: 12.0),
 
           // CTA Button shimmer
-          const AppShimmerContainer(
-            width: double.infinity,
-            height: 48.0,
-            borderRadius: 12.0,
-          ),
+          const AppShimmerContainer(width: double.infinity, height: 48.0, borderRadius: 12.0),
         ],
       ),
     );

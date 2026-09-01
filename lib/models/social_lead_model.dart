@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+
 import 'broker_model.dart';
 import 'social_post_model.dart';
 
@@ -22,6 +23,7 @@ class SocialLeadModel extends Equatable {
     final code = phoneCountryCode ?? '91';
     return '+$code $phone';
   }
+
   String get whatsappNumber => phone;
 
   String buildWhatsappUrl() {
@@ -46,7 +48,9 @@ class SocialLeadModel extends Equatable {
       msgBuffer.writeln('\nRegarding your inquiry: ${notes!.trim()}');
     }
 
-    msgBuffer.writeln('\nPlease let us know if you have any questions or when you would like to schedule a site visit.');
+    msgBuffer.writeln(
+      '\nPlease let us know if you have any questions or when you would like to schedule a site visit.',
+    );
 
     final encodedText = Uri.encodeComponent(msgBuffer.toString());
     return 'https://wa.me/$cleanPhone?text=$encodedText';
@@ -83,7 +87,8 @@ class SocialLeadModel extends Equatable {
       parsedSocialPost = SocialPostModel.fromJson(json['social_post_id']);
     }
 
-    final rawPhone = json['phone']?.toString() ??
+    final rawPhone =
+        json['phone']?.toString() ??
         json['contact_number']?.toString() ??
         json['whatsapp_number']?.toString() ??
         '';
@@ -97,9 +102,7 @@ class SocialLeadModel extends Equatable {
       phoneCountryCode: json['phone_country_code']?.toString() ?? '91',
       phoneCountryIso: json['phone_country_iso']?.toString() ?? 'IN',
       socialPostId: parsedSocialPost,
-      brokerId: json['broker_id'] != null
-          ? BrokerModel.fromJson(json['broker_id'])
-          : null,
+      brokerId: json['broker_id'] != null ? BrokerModel.fromJson(json['broker_id']) : null,
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'].toString())?.toLocal()
           : null,

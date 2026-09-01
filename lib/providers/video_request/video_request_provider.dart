@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../core/services/clarity_service.dart';
 import '../../core/supabase/supabase_config.dart';
 import '../../models/models.dart';
@@ -78,9 +79,7 @@ class VideoRequestProvider extends ChangeNotifier {
     try {
       final response = await SupabaseConfig.client.rpc(
         'fetch_video_request_counts',
-        params: {
-          'p_broker_id': brokerId,
-        },
+        params: {'p_broker_id': brokerId},
       );
       if (response != null) {
         final resMap = response is Map<String, dynamic> ? response : {};
@@ -97,11 +96,7 @@ class VideoRequestProvider extends ChangeNotifier {
   }
 
   /// Fetch paginated video request list for a specific broker or all brokers
-  Future<void> fetchVideoRequests({
-    String? brokerId,
-    int page = 1,
-    String searchQuery = '',
-  }) async {
+  Future<void> fetchVideoRequests({String? brokerId, int page = 1, String searchQuery = ''}) async {
     _isLoading = true;
     _currentPage = page;
     _searchQuery = searchQuery;
@@ -122,15 +117,11 @@ class VideoRequestProvider extends ChangeNotifier {
       );
 
       if (response != null) {
-        final Map<String, dynamic> resMap = response is Map<String, dynamic>
-            ? response
-            : {};
-        
+        final Map<String, dynamic> resMap = response is Map<String, dynamic> ? response : {};
+
         if (resMap['success'] == true && resMap['data'] is List) {
           final rawList = resMap['data'] as List;
-          _requests = rawList
-              .map((json) => VideoRequestModel.fromJson(json))
-              .toList();
+          _requests = rawList.map((json) => VideoRequestModel.fromJson(json)).toList();
 
           final pagination = resMap['pagination'] is Map ? resMap['pagination'] as Map : {};
           _totalItems = int.tryParse(pagination['total_items']?.toString() ?? '0') ?? _requests.length;
@@ -176,7 +167,9 @@ class VideoRequestProvider extends ChangeNotifier {
             value: brokerId,
           ),
           callback: (payload) {
-            debugPrint('[VideoRequestProvider] Realtime Postgres Change Received (${payload.eventType}) for broker: $brokerId');
+            debugPrint(
+              '[VideoRequestProvider] Realtime Postgres Change Received (${payload.eventType}) for broker: $brokerId',
+            );
             _handleRealtimePayload(payload);
           },
         );
@@ -198,21 +191,17 @@ class VideoRequestProvider extends ChangeNotifier {
     final oldRecord = payload.oldRecord;
     final recordId = (newRecord['id'] ?? oldRecord['id'])?.toString();
 
-    final bool isDeleted = (newRecord['is_deleted'] == true) ||
+    final bool isDeleted =
+        (newRecord['is_deleted'] == true) ||
         (newRecord['is_deleted']?.toString().toLowerCase() == 'true') ||
         (payload.eventType == PostgresChangeEvent.delete);
 
-    final bool isPresentOnCurrentPage = recordId != null &&
-        _requests.any((r) => r.id == recordId);
+    final bool isPresentOnCurrentPage = recordId != null && _requests.any((r) => r.id == recordId);
 
     // Re-fetch current page directly if record was deleted, updated while on current page, or inserted
     if (isDeleted || isPresentOnCurrentPage || payload.eventType == PostgresChangeEvent.insert) {
       fetchVideoRequestCounts(brokerId: _currentBrokerId);
-      fetchVideoRequests(
-        brokerId: _currentBrokerId,
-        page: _currentPage,
-        searchQuery: _searchQuery,
-      );
+      fetchVideoRequests(brokerId: _currentBrokerId, page: _currentPage, searchQuery: _searchQuery);
     }
   }
 
@@ -251,23 +240,23 @@ class VideoRequestProvider extends ChangeNotifier {
     String? notes,
   }) async {
     try {
-      final response = await SupabaseConfig.client.from('video_requests').insert({
-        'broker_id': brokerId,
-        'property_id': propertyId,
-        'status': VideoRequestStatus.pending.dbValue,
-        'notes': notes != null && notes.isNotEmpty ? notes : null,
-      }).select('*, property:properties(*, address:addresses(*))').single();
+      final response = await SupabaseConfig.client
+          .from('video_requests')
+          .insert({
+            'broker_id': brokerId,
+            'property_id': propertyId,
+            'status': VideoRequestStatus.pending.dbValue,
+            'notes': notes != null && notes.isNotEmpty ? notes : null,
+          })
+          .select('*, property:properties(*, address:addresses(*))')
+          .single();
 
       final newModel = VideoRequestModel.fromJson(response);
 
       ClarityService.instance.sendCustomEvent('feature_video_request_submitted');
 
       await fetchVideoRequestCounts(brokerId: brokerId);
-      await fetchVideoRequests(
-        brokerId: brokerId,
-        page: _currentPage,
-        searchQuery: _searchQuery,
-      );
+      await fetchVideoRequests(brokerId: brokerId, page: _currentPage, searchQuery: _searchQuery);
 
       return newModel;
     } catch (e) {
@@ -277,7 +266,12 @@ class VideoRequestProvider extends ChangeNotifier {
   }
 
   /// Cancel a video request (updates status to cancelled with optional reason and canceller user ID)
-  Future<VideoRequestModel?> cancelRequestWithModel(String requestId, {String? brokerId, String? cancelReason, String? cancelledByUserId}) async {
+  Future<VideoRequestModel?> cancelRequestWithModel(
+    String requestId, {
+    String? brokerId,
+    String? cancelReason,
+    String? cancelledByUserId,
+  }) async {
     try {
       final currentUserId = cancelledByUserId ?? SupabaseConfig.client.auth.currentUser?.id;
       final updates = <String, dynamic>{
@@ -302,11 +296,7 @@ class VideoRequestProvider extends ChangeNotifier {
 
       // Refresh list and counts
       await fetchVideoRequestCounts(brokerId: brokerId);
-      await fetchVideoRequests(
-        brokerId: brokerId,
-        page: _currentPage,
-        searchQuery: _searchQuery,
-      );
+      await fetchVideoRequests(brokerId: brokerId, page: _currentPage, searchQuery: _searchQuery);
       return updatedModel;
     } catch (e) {
       debugPrint('[VideoRequestProvider] Error cancelling video request: $e');
@@ -315,8 +305,18 @@ class VideoRequestProvider extends ChangeNotifier {
   }
 
   /// Cancel a video request (returns bool for backwards compatibility)
-  Future<bool> cancelRequest(String requestId, {String? brokerId, String? cancelReason, String? cancelledByUserId}) async {
-    final result = await cancelRequestWithModel(requestId, brokerId: brokerId, cancelReason: cancelReason, cancelledByUserId: cancelledByUserId);
+  Future<bool> cancelRequest(
+    String requestId, {
+    String? brokerId,
+    String? cancelReason,
+    String? cancelledByUserId,
+  }) async {
+    final result = await cancelRequestWithModel(
+      requestId,
+      brokerId: brokerId,
+      cancelReason: cancelReason,
+      cancelledByUserId: cancelledByUserId,
+    );
     return result != null;
   }
 

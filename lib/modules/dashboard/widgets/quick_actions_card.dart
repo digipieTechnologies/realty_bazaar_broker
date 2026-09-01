@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../providers/dashboard/dashboard_provider.dart';
 import '../../../../providers/social/social_provider.dart';
 import '../../../../widgets/toast/app_toast.dart';
-import '../../../../core/localization/app_localizations.dart';
 
 class QuickActionsCard extends StatelessWidget {
   const QuickActionsCard({super.key});
@@ -41,7 +42,7 @@ class QuickActionsCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24.0),
-            
+
             // Grid layout (2 columns, 3 rows)
             GridView.builder(
               shrinkWrap: true,
@@ -65,12 +66,8 @@ class QuickActionsCard extends StatelessWidget {
   }
 
   Widget _buildActionItem(BuildContext context, QuickActionItem action) {
-    final iconColor = action.isLocked 
-        ? AppColors.textMuted 
-        : AppColors.primary;
-    final textColor = action.isLocked 
-        ? AppColors.textMuted 
-        : AppColors.textPrimary;
+    final iconColor = action.isLocked ? AppColors.textMuted : AppColors.primary;
+    final textColor = action.isLocked ? AppColors.textMuted : AppColors.textPrimary;
 
     return InkWell(
       onTap: () {
@@ -87,11 +84,7 @@ class QuickActionsCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            action.icon,
-            size: 26.0,
-            color: iconColor,
-          ),
+          Icon(action.icon, size: 26.0, color: iconColor),
           const SizedBox(height: 8.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -100,22 +93,14 @@ class QuickActionsCard extends StatelessWidget {
               Flexible(
                 child: Text(
                   context.tr('action_${action.id}'),
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.w600,
-                    color: textColor,
-                  ),
+                  style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600, color: textColor),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
               if (action.isLocked) ...[
                 const SizedBox(width: 4.0),
-                const Icon(
-                  Icons.lock_outline_rounded,
-                  size: 11.0,
-                  color: AppColors.textMuted,
-                ),
+                const Icon(Icons.lock_outline_rounded, size: 11.0, color: AppColors.textMuted),
               ],
             ],
           ),

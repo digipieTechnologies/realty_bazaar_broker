@@ -114,15 +114,10 @@ class AppBottomNavigationBar extends StatelessWidget {
                         width: 24.0,
                         height: 24.0,
                         child: SvgPicture.asset(
-                          isSelected
-                              ? item.filledIconAsset
-                              : item.outlineIconAsset,
+                          isSelected ? item.filledIconAsset : item.outlineIconAsset,
                           width: 22.0,
                           height: 22.0,
-                          colorFilter: ColorFilter.mode(
-                            iconColor,
-                            BlendMode.srcIn,
-                          ),
+                          colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
                           fit: BoxFit.contain,
                         ),
                       ),
@@ -131,12 +126,8 @@ class AppBottomNavigationBar extends StatelessWidget {
                         context.tr(item.titleKey),
                         style: AppTextStyles.caption.copyWith(
                           fontSize: 11.0,
-                          fontWeight: isSelected
-                              ? FontWeight.w700
-                              : FontWeight.w500,
-                          color: isSelected
-                              ? activeColor
-                              : AppColors.textSecondary,
+                          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                          color: isSelected ? activeColor : AppColors.textSecondary,
                           height: 1.0,
                         ),
                         maxLines: 1,

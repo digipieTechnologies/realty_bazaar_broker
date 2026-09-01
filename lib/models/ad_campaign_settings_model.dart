@@ -42,16 +42,12 @@ class AdCampaignSettingsModel extends Equatable {
 
     List<TargetAreaModel> parsedAreas = [];
     if (json['area_details'] != null && json['area_details'] is List) {
-      parsedAreas = (json['area_details'] as List)
-          .map((e) => TargetAreaModel.fromJson(e))
-          .toList();
+      parsedAreas = (json['area_details'] as List).map((e) => TargetAreaModel.fromJson(e)).toList();
     }
 
     List<String> parsedSuggestions = [];
     if (json['targeting_suggestions'] != null && json['targeting_suggestions'] is List) {
-      parsedSuggestions = (json['targeting_suggestions'] as List)
-          .map((e) => e.toString())
-          .toList();
+      parsedSuggestions = (json['targeting_suggestions'] as List).map((e) => e.toString()).toList();
     }
 
     BrokerModel? parsedBroker;
@@ -132,17 +128,17 @@ class AdCampaignSettingsModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        brokerId,
-        gender,
-        areaDetails,
-        targetingSuggestions,
-        startAgeRange,
-        endAgeRange,
-        campaignStartTime,
-        campaignEndTime,
-        campaignIsAllDay,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    brokerId,
+    gender,
+    areaDetails,
+    targetingSuggestions,
+    startAgeRange,
+    endAgeRange,
+    campaignStartTime,
+    campaignEndTime,
+    campaignIsAllDay,
+    createdAt,
+    updatedAt,
+  ];
 }

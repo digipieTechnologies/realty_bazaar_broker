@@ -2,6 +2,7 @@
 // Purpose: Shimmer placeholder widget matching the video request shoot dialog form.
 
 import 'package:flutter/material.dart';
+
 import './app_shimmer_container.dart';
 
 class VideoRequestShimmerWidget extends StatelessWidget {
@@ -27,7 +28,7 @@ class VideoRequestShimmerWidget extends StatelessWidget {
         const SizedBox(height: 6.0),
         const AppShimmerContainer(height: 12.0, width: 300.0),
         const SizedBox(height: 20.0),
-        
+
         // Option 1 Shimmer Row
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,

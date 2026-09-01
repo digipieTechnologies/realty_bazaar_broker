@@ -2,6 +2,7 @@
 // Purpose: Unified, reusable card container featuring pure white fill, crisp 1px border, and standardized SaaS elevation shadow across all dashboard and list cards.
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 
 class AppCardContainer extends StatelessWidget {
@@ -43,10 +44,7 @@ class AppCardContainer extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor ?? AppColors.surface,
         borderRadius: BorderRadius.circular(borderRadius),
-        border: Border.all(
-          color: borderColor ?? AppColors.border,
-          width: borderWidth,
-        ),
+        border: Border.all(color: borderColor ?? AppColors.border, width: borderWidth),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -62,11 +60,7 @@ class AppCardContainer extends StatelessWidget {
       return Material(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(borderRadius),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(borderRadius),
-          child: content,
-        ),
+        child: InkWell(onTap: onTap, borderRadius: BorderRadius.circular(borderRadius), child: content),
       );
     }
 

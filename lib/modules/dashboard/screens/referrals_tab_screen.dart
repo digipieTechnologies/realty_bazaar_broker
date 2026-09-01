@@ -2,6 +2,7 @@
 // Purpose: Screen containing the Referral network tab page.
 
 import 'package:flutter/material.dart';
+
 import '../widgets/base_tab_screen.dart';
 
 class ReferralsTabScreen extends StatelessWidget {
@@ -11,8 +12,7 @@ class ReferralsTabScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const BaseTabScreen(
       title: 'Referrals Network',
-      description:
-          'Track commission shares, agent handoffs, and affiliate link generation.',
+      description: 'Track commission shares, agent handoffs, and affiliate link generation.',
       icon: Icons.share_outlined,
     );
   }

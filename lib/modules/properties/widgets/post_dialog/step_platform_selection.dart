@@ -1,17 +1,17 @@
 // File: lib/modules/properties/widgets/post_dialog/step_platform_selection.dart
 // Purpose: Step 0 UI for platform selection (Instagram & Facebook) with responsive layout, property preview banner, and social publishing tips.
 
-import 'package:the_realty_bazaar/models/property_enums.dart';
 import 'package:flutter/material.dart';
+import 'package:the_realty_bazaar/models/property_enums.dart';
 
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
+import '../../../../core/extensions/currency_extensions.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../models/property_model.dart';
 import '../../../../providers/social/social_provider.dart';
 import '../../../../widgets/buttons/app_button.dart';
 import '../../../../widgets/images/cached_image.dart';
-
-import '../../../../core/localization/app_localizations.dart';
 
 class StepPlatformSelection extends StatelessWidget {
   final bool selectInstagram;
@@ -83,10 +83,7 @@ class StepPlatformSelection extends StatelessWidget {
           const SizedBox(height: 18.0),
 
           // Property Details Preview Card
-          if (property != null) ...[
-            _buildPropertyPreviewCard(context),
-            const SizedBox(height: 14.0),
-          ],
+          if (property != null) ...[_buildPropertyPreviewCard(context), const SizedBox(height: 14.0)],
 
           // Automated Features & Guidelines Card
           _buildPublishingTipsCard(context),
@@ -99,11 +96,7 @@ class StepPlatformSelection extends StatelessWidget {
     if (property == null) return const SizedBox.shrink();
 
     final firstMediaUrl = property!.medias.isNotEmpty ? property!.medias.first.url : null;
-    final priceStr = property!.price >= 10000000
-        ? '${(property!.price / 10000000).toStringAsFixed(2)} Cr'
-        : property!.price >= 100000
-            ? '${(property!.price / 100000).toStringAsFixed(2)} Lakh'
-            : property!.price.toStringAsFixed(0);
+    final priceStr = property!.price.toCompactCurrency();
     final locationStr = property!.address?.city ?? property!.address?.fullAddress ?? '';
 
     return Container(
@@ -163,9 +156,17 @@ class StepPlatformSelection extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 2.0),
-                Text(
-                  '₹ $priceStr • $locationStr',
-                  style: AppTextStyles.caption.copyWith(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 11.5),
+                Tooltip(
+                  message: property!.price.toFullIndianCurrency(),
+                  preferBelow: false,
+                  child: Text(
+                    '$priceStr • $locationStr',
+                    style: AppTextStyles.caption.copyWith(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11.5,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 4.0),
                 Row(
@@ -175,8 +176,9 @@ class StepPlatformSelection extends StatelessWidget {
                       const SizedBox(width: 6.0),
                     ],
                     if (property!.area > 0) ...[
-                      _buildChip('${property!.area.toStringAsFixed(0)} ${property!.areaUnit.displayName
-                          .toUpperCase()}'),
+                      _buildChip(
+                        '${property!.area.toStringAsFixed(0)} ${property!.areaUnit.displayName.toUpperCase()}',
+                      ),
                       const SizedBox(width: 6.0),
                     ],
                     _buildChip(property!.propertyType.displayName.toUpperCase()),
@@ -226,16 +228,32 @@ class StepPlatformSelection extends StatelessWidget {
               const SizedBox(width: 6.0),
               Text(
                 context.tr('automated_social_features'),
-                style: AppTextStyles.body2.copyWith(fontWeight: FontWeight.bold, color: AppColors.primary, fontSize: 12.5),
+                style: AppTextStyles.body2.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primary,
+                  fontSize: 12.5,
+                ),
               ),
             ],
           ),
           const SizedBox(height: 10.0),
-          _buildTipRow(Icons.psychology_rounded, context.tr('ai_captions_title'), context.tr('ai_captions_desc')),
+          _buildTipRow(
+            Icons.psychology_rounded,
+            context.tr('ai_captions_title'),
+            context.tr('ai_captions_desc'),
+          ),
           const SizedBox(height: 8.0),
-          _buildTipRow(Icons.photo_library_rounded, context.tr('multimedia_grid_title'), context.tr('multimedia_grid_desc')),
+          _buildTipRow(
+            Icons.photo_library_rounded,
+            context.tr('multimedia_grid_title'),
+            context.tr('multimedia_grid_desc'),
+          ),
           const SizedBox(height: 8.0),
-          _buildTipRow(Icons.contact_phone_rounded, context.tr('direct_reach_title'), context.tr('direct_reach_desc')),
+          _buildTipRow(
+            Icons.contact_phone_rounded,
+            context.tr('direct_reach_title'),
+            context.tr('direct_reach_desc'),
+          ),
         ],
       ),
     );
@@ -252,7 +270,10 @@ class StepPlatformSelection extends StatelessWidget {
             text: TextSpan(
               style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary, fontSize: 11.0),
               children: [
-                TextSpan(text: '$title: ', style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+                TextSpan(
+                  text: '$title: ',
+                  style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                ),
                 TextSpan(text: desc),
               ],
             ),
@@ -315,10 +336,14 @@ class StepPlatformSelection extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     final badgeBgColor = isConnected ? AppColors.statusSuccessBgLight : AppColors.statusWarningBgLight;
-    final badgeBorderColor = isConnected ? AppColors.statusSuccessBorderLight : AppColors.statusWarningBorderLight;
+    final badgeBorderColor = isConnected
+        ? AppColors.statusSuccessBorderLight
+        : AppColors.statusWarningBorderLight;
     final badgeTextColor = isConnected ? AppColors.statusSuccessDarkText : AppColors.statusWarningText;
     final badgeDotColor = isConnected ? AppColors.statusSuccessText : AppColors.tagAmber;
-    final statusText = isConnected ? (accountName != null ? '@$accountName' : context.tr('connected')) : context.tr('not_connected');
+    final statusText = isConnected
+        ? (accountName != null ? '@$accountName' : context.tr('connected'))
+        : context.tr('not_connected');
 
     return InkWell(
       onTap: onTap,
@@ -354,11 +379,8 @@ class StepPlatformSelection extends StatelessWidget {
                   logoPath,
                   width: 32.0,
                   height: 32.0,
-                  errorBuilder: (context, error, stackTrace) => Icon(
-                    fallbackIcon,
-                    size: 30.0,
-                    color: brandColor,
-                  ),
+                  errorBuilder: (context, error, stackTrace) =>
+                      Icon(fallbackIcon, size: 30.0, color: brandColor),
                 ),
                 const SizedBox(width: 10.0),
                 Expanded(
@@ -375,10 +397,7 @@ class StepPlatformSelection extends StatelessWidget {
                       ),
                       Text(
                         subtitle,
-                        style: AppTextStyles.caption.copyWith(
-                          color: AppColors.textSecondary,
-                          fontSize: 10.0,
-                        ),
+                        style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary, fontSize: 10.0),
                       ),
                     ],
                   ),
@@ -390,14 +409,9 @@ class StepPlatformSelection extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: isSelected ? brandColor : Colors.transparent,
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: isSelected ? brandColor : AppColors.textMuted,
-                      width: 1.5,
-                    ),
+                    border: Border.all(color: isSelected ? brandColor : AppColors.textMuted, width: 1.5),
                   ),
-                  child: isSelected
-                      ? const Icon(Icons.check_rounded, size: 14.0, color: Colors.white)
-                      : null,
+                  child: isSelected ? const Icon(Icons.check_rounded, size: 14.0, color: Colors.white) : null,
                 ),
               ],
             ),
@@ -415,10 +429,7 @@ class StepPlatformSelection extends StatelessWidget {
                   Container(
                     width: 6.0,
                     height: 6.0,
-                    decoration: BoxDecoration(
-                      color: badgeDotColor,
-                      shape: BoxShape.circle,
-                    ),
+                    decoration: BoxDecoration(color: badgeDotColor, shape: BoxShape.circle),
                   ),
                   const SizedBox(width: 6.0),
                   Flexible(
@@ -499,8 +510,7 @@ class StepPlatformSelection extends StatelessWidget {
                     }
                   },
                 ),
-              if (showIgConnect && showFbConnect)
-                const SizedBox(height: 8.0),
+              if (showIgConnect && showFbConnect) const SizedBox(height: 8.0),
               if (showFbConnect)
                 AppButton.solid(
                   text: context.tr('connect_facebook_page'),
