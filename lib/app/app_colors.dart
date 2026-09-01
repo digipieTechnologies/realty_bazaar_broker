@@ -22,8 +22,6 @@ class AppColors {
 
   // Aliases for component compatibility
   static const Color primary = primary500;
-  static const Color primaryLight = primary100;
-  static const Color primaryDark = primary700;
 
   static const Color white = Colors.white;
   static const Color black = Colors.black;
@@ -31,16 +29,12 @@ class AppColors {
   // ==========================================
   // Secondary & Dynamic Accents
   // ==========================================
-  static const Color secondary = Color(0xFF174A86); // Deep Nexus Blue
-  static const Color secondaryLight = Color(0xFFEAF3FF);
-  static const Color secondaryDark = Color(0xFF0F325E);
 
   // ==========================================
   // Neutral Palette (Backgrounds, Surfaces, Borders)
   // ==========================================
   static const Color background = Color(0xFFF8FAFC); // Clean Canvas (#F8FAFC)
   static const Color surface = Color(0xFFFFFFFF); // Surface / Card white
-  static const Color surfaceElevated = Color(0xFFFFFFFF);
   static const Color surfaceLight = Color(0xFFF1F5F9); // Muted input background
   static const Color border = Color(0xFFE4EAF2); // Global border
   static const Color divider = Color(0xFFEEF2F6); // Soft divider
@@ -48,14 +42,12 @@ class AppColors {
   static const Color shadowDark = Color(0xFF0B111E);
 
   // Soft Banner & Card Tints
-  static const Color consultationBannerBgStart = Color(0xFFEFF6FF);
   static const Color consultationBannerBgEnd = Color(0xFFDBEAFE);
   static const Color consultationBannerBorder = Color(0xFFBFDBFE);
   static const Color consultationBannerText = Color(0xFF1E3A8A);
   static const Color consultationBannerSubtext = Color(0xFF3B82F6);
 
   // Hero Card Accent Tokens
-  static const Color heroDarkBgStart = Color(0xFF0F172A);
   static const Color heroDarkBgEnd = Color(0xFF1E3A8A);
   static const Color heroDarkBorder = Color(0xFF3B82F6);
   static const Color heroAccentBlue = Color(0xFF60A5FA);
@@ -70,13 +62,10 @@ class AppColors {
   ); // High-contrast navy (#172033)
   static const Color textSecondary = Color(0xFF667085); // Slate (#667085)
   static const Color textMuted = Color(0xFF98A2B3); // Muted / Hint (#98A2B3)
-  static const Color textOnPrimary = Color(0xFFFFFFFF);
 
   // ==========================================
   // Icon Colors
   // ==========================================
-  static const Color iconDefault = Color(0xFF667085);
-  static const Color iconActive = Color(0xFF397BCF);
 
   // ==========================================
   // Status & Feedback Colors
@@ -90,20 +79,21 @@ class AppColors {
   static const Color errorBorder = Color(0xFFFECACA);
 
   static const Color warning = Color(0xFFF59E0B); // Amber 500
+  static const Color warningDark = Color(0xFFB45309);
   static const Color warningLight = Color(0xFFFFFBEB);
   static const Color warningBorder = Color(0xFFFDE68A);
-
-  static const Color info = Color(0xFF397BCF); // Primary Blue
-  static const Color infoLight = Color(0xFFEAF3FF);
-  static const Color infoBorder = Color(0xFFD4E6FC);
 
   // Brand Social Colors
   static const Color whatsapp = Color(0xFF25D366);
   static const Color whatsappDark = Color(0xFF1EBE5D);
   static const Color facebook = Color(0xFF1877F2);
+  static const Color facebookDark = Color(0xFF0056C6);
   static const Color facebookLightBg = Color(0xFFF2F7FE);
   static const Color facebookLightBorder = Color(0xFFD6E4FF);
   static const Color instagram = Color(0xFFE1306C);
+  static const Color instagramStart = Color(0xFF833AB4);
+  static const Color instagramMiddle = Color(0xFFFD1D1D);
+  static const Color instagramEnd = Color(0xFFFCB045);
   static const Color instagramAlt = Color(0xFFE4405F);
   static const Color instagramLightBg = Color(0xFFFDF2F7);
   static const Color instagramLightBorder = Color(0xFFFAD2E6);
@@ -123,13 +113,7 @@ class AppColors {
   // Status & Tag Color Tokens
   static const Color statusSuccessText = Color(0xFF059669);
   static const Color statusSuccessDarkText = Color(0xFF047857);
-  static const Color statusSuccessBgLight = Color(0xFFECFDF5);
-  static const Color statusSuccessBorderLight = Color(0xFFA7F3D0);
-  static const Color statusWarningText = Color(0xFFB45309);
   static const Color statusWarningDarkText = Color(0xFF92400E);
-  static const Color statusWarningBgLight = Color(0xFFFFFBEB);
-  static const Color statusWarningBorderLight = Color(0xFFFDE68A);
-  static const Color tagAmber = Color(0xFFD97706);
   static const Color tagTeal = Color(0xFF0D9488);
   static const Color tagIndigo = Color(0xFF6366F1);
 
@@ -140,8 +124,6 @@ class AppColors {
   static const Color textDarkGray = Color(0xFF1F2937);
 
   // Poster Template Theme Tokens
-  static const Color posterGold = Color(0xFFD97706);
-  static const Color posterGoldDark = Color(0xFFB45309);
   static const Color posterGoldLight = Color(0xFFFEF3C7);
   static const Color posterGoldBrown = Color(0xFF78350F);
   static const Color posterBlueSoft = Color(0xFF4A76A8);
@@ -158,14 +140,12 @@ class AppColors {
   static const Color darkSurface = Color(0xFF131D31); // Level 1 Surface
   static const Color darkSurfaceElevated = Color(0xFF1C2A44); // Level 2 Surface
   static const Color darkBorder = Color(0xFF233554);
-  static const Color darkTextPrimary = Color(0xFFF8FAFC);
   static const Color darkTextSecondary = Color(0xFF94A3B8);
 
   // ==========================================
   // Shimmer & Utility Colors
   // ==========================================
   static const Color shimmerBase = Color(0xFFE2E8F0);
-  static const Color shimmerHighlight = Color(0xFFF8FAFC);
 
   static const Color slate300 = Color(0xFFCBD5E1);
   static const Color slate400 = Color(0xFF94A3B8);
@@ -175,7 +155,7 @@ class AppColors {
   // ==========================================
   static const List<Color> primaryGradient = [primary500, primary700];
   static const List<Color> nexusGradient = [primary400, primary500, primary800];
-  static const List<Color> secondaryGradient = [secondary, secondaryDark];
+  static const List<Color> secondaryGradient = [primary800, primary900];
   static const List<Color> popularCardGradient = [
     Color(0xFF0B1A3B),
     Color(0xFF132D5E),

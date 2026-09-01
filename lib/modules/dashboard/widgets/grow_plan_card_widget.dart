@@ -46,7 +46,7 @@ class GrowPlanCardWidget extends StatelessWidget {
       case PlanBillingType.recurring:
         return AppColors.primary;
       case PlanBillingType.custom:
-        return AppColors.posterGold;
+        return AppColors.warning;
     }
   }
 
@@ -157,9 +157,7 @@ class GrowPlanCardWidget extends StatelessWidget {
                 const SizedBox(height: 16.0),
 
                 // Benefits List
-                Expanded(
-                  child: _buildBenefitsList(context),
-                ),
+                Expanded(child: _buildBenefitsList(context)),
 
                 const SizedBox(height: 16.0),
 
@@ -184,7 +182,7 @@ class GrowPlanCardWidget extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [AppColors.primary, AppColors.primaryDark],
+                    colors: [AppColors.primary, AppColors.primary700],
                   ),
                   borderRadius: BorderRadius.circular(20.0),
                   boxShadow: [
@@ -329,9 +327,7 @@ class GrowPlanCardWidget extends StatelessWidget {
           Text(
             plan.billingType.periodDisplay,
             style: AppTextStyles.body2.copyWith(
-              color: isPopular
-                  ? AppColors.slate400
-                  : AppColors.textMuted,
+              color: isPopular ? AppColors.slate400 : AppColors.textMuted,
               fontWeight: FontWeight.w500,
               fontSize: 13.0,
             ),
@@ -408,7 +404,8 @@ class GrowPlanCardWidget extends StatelessWidget {
 
     final titleParts = plan.title.trim().split(' ');
     final firstWord = titleParts.isNotEmpty ? titleParts.first : 'Package';
-    final capitalized = '${firstWord[0].toUpperCase()}${firstWord.substring(1).toLowerCase()}';
+    final capitalized =
+        '${firstWord[0].toUpperCase()}${firstWord.substring(1).toLowerCase()}';
     return 'Explore $capitalized';
   }
 
@@ -424,7 +421,7 @@ class GrowPlanCardWidget extends StatelessWidget {
         width: double.infinity,
         height: 48.0,
         borderRadius: 12.0,
-        gradientColors: const [AppColors.primary, AppColors.primaryDark],
+        gradientColors: const [AppColors.primary, AppColors.primary700],
         iconData: Icons.open_in_new_rounded,
         iconSize: 16.0,
       );

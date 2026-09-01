@@ -25,7 +25,7 @@ class VideoRequestTileWidget extends StatelessWidget {
       case VideoRequestStatus.pending:
         return AppColors.warning;
       case VideoRequestStatus.inProgress:
-        return AppColors.info;
+        return AppColors.primary;
       case VideoRequestStatus.completed:
         return AppColors.success;
       case VideoRequestStatus.cancelled:

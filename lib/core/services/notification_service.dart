@@ -41,7 +41,7 @@ class NotificationService {
         debugPrint('OneSignal NotificationService initialized successfully with App ID: $oneSignalAppId');
       } else {
         debugPrint(
-          'ONE_SIGNAL_APP_ID missing from String.fromEnvironment. Make sure to build/run with --dart-define-from-file=config.json',
+          'ONE_SIGNAL_APP_ID missing from String.fromEnvironment. Make sure to build/run with --dart-define-from-file=.env.dev',
         );
       }
     } catch (e) {

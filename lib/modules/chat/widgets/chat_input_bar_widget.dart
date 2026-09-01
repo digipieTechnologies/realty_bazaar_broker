@@ -258,7 +258,7 @@ class _ChatInputBarWidgetState extends State<ChatInputBarWidget> {
                         value: 'location',
                         label: 'Location',
                         iconData: Icons.location_on_rounded,
-                        iconColor: AppColors.secondary,
+                        iconColor: AppColors.primary800,
                       ),
                     ],
                     onSelected: (action) {

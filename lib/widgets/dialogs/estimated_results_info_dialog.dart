@@ -4,6 +4,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
 import '../buttons/app_button.dart';
@@ -34,14 +35,18 @@ class EstimatedResultsInfoDialog extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(14.0),
             decoration: BoxDecoration(
-              color: AppColors.consultationBannerBgStart,
+              color: AppColors.primary50,
               borderRadius: BorderRadius.circular(14.0),
               border: Border.all(color: AppColors.consultationBannerBorder),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.info_outline_rounded, size: 20.0, color: AppColors.primary),
+                const Icon(
+                  Icons.info_outline_rounded,
+                  size: 20.0,
+                  color: AppColors.primary,
+                ),
                 const SizedBox(width: 10.0),
                 Expanded(
                   child: Text(
@@ -73,7 +78,8 @@ class EstimatedResultsInfoDialog extends StatelessWidget {
             iconData: Icons.location_on_outlined,
             iconColor: AppColors.primary,
             title: 'Property Location & Area Demand',
-            description: 'Inquiry rates vary by city and micro-market. Prime high-demand locations typically see faster lead responses.',
+            description:
+                'Inquiry rates vary by city and micro-market. Prime high-demand locations typically see faster lead responses.',
           ),
           const SizedBox(height: 12.0),
 
@@ -81,7 +87,8 @@ class EstimatedResultsInfoDialog extends StatelessWidget {
             iconData: Icons.currency_rupee_rounded,
             iconColor: AppColors.success,
             title: 'Property Price Point & Category',
-            description: 'Affordable and mid-range residential listings convert faster than ultra-luxury niche properties.',
+            description:
+                'Affordable and mid-range residential listings convert faster than ultra-luxury niche properties.',
           ),
           const SizedBox(height: 12.0),
 
@@ -89,7 +96,8 @@ class EstimatedResultsInfoDialog extends StatelessWidget {
             iconData: Icons.palette_outlined,
             iconColor: AppColors.tagIndigo,
             title: 'Ad Design & Creative Quality',
-            description: 'Eye-catching property graphics and HD video walkthroughs significantly boost buyer engagement.',
+            description:
+                'Eye-catching property graphics and HD video walkthroughs significantly boost buyer engagement.',
           ),
           const SizedBox(height: 12.0),
 
@@ -97,7 +105,8 @@ class EstimatedResultsInfoDialog extends StatelessWidget {
             iconData: Icons.trending_up_rounded,
             iconColor: AppColors.warning,
             title: 'Market Activity & Target Audience',
-            description: 'Seasonal demand, interest rate trends, and demographic targeting affect conversion speeds.',
+            description:
+                'Seasonal demand, interest rate trends, and demographic targeting affect conversion speeds.',
           ),
         ],
       ),

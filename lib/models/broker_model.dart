@@ -12,7 +12,6 @@ class BrokerModel extends Equatable {
   final String? brokerCode;
   final String? businessName;
   final AddressModel? addressId;
-  final String? plan;
   final String? onboardingStatus;
   final bool? isActive;
   final DateTime? createdAt;
@@ -31,7 +30,6 @@ class BrokerModel extends Equatable {
     this.brokerCode,
     this.businessName,
     this.addressId,
-    this.plan,
     this.onboardingStatus,
     this.isActive,
     this.createdAt,
@@ -51,7 +49,6 @@ class BrokerModel extends Equatable {
       brokerCode: json['broker_code']?.toString(),
       businessName: json['business_name']?.toString() ?? '',
       addressId: json['address_id'] != null ? AddressModel.fromJson(json['address_id']) : null,
-      plan: json['plan']?.toString(),
       onboardingStatus: json['onboarding_status']?.toString() ?? onboardingStatusPending,
       isActive: json['is_active'] as bool? ?? true,
       createdAt: json['created_at'] != null
@@ -77,7 +74,6 @@ class BrokerModel extends Equatable {
     if (brokerCode != null) data['broker_code'] = brokerCode;
     data['business_name'] = businessName;
     data['address_id'] = addressId?.id;
-    data['plan'] = plan;
     data['onboarding_status'] = onboardingStatus;
     data['is_active'] = isActive;
     if (createdAt != null) {
@@ -102,7 +98,6 @@ class BrokerModel extends Equatable {
     String? brokerCode,
     String? businessName,
     AddressModel? addressId,
-    String? plan,
     String? onboardingStatus,
     bool? isActive,
     DateTime? createdAt,
@@ -117,7 +112,6 @@ class BrokerModel extends Equatable {
       brokerCode: brokerCode ?? this.brokerCode,
       businessName: businessName ?? this.businessName,
       addressId: addressId ?? this.addressId,
-      plan: plan ?? this.plan,
       onboardingStatus: onboardingStatus ?? this.onboardingStatus,
       isActive: isActive ?? this.isActive,
       createdAt: createdAt ?? this.createdAt,
@@ -135,7 +129,6 @@ class BrokerModel extends Equatable {
     brokerCode,
     businessName,
     addressId,
-    plan,
     onboardingStatus,
     isActive,
     createdAt,

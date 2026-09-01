@@ -335,12 +335,12 @@ class StepPlatformSelection extends StatelessWidget {
     String? accountName,
     required VoidCallback onTap,
   }) {
-    final badgeBgColor = isConnected ? AppColors.statusSuccessBgLight : AppColors.statusWarningBgLight;
+    final badgeBgColor = isConnected ? AppColors.successLight : AppColors.warningLight;
     final badgeBorderColor = isConnected
-        ? AppColors.statusSuccessBorderLight
-        : AppColors.statusWarningBorderLight;
-    final badgeTextColor = isConnected ? AppColors.statusSuccessDarkText : AppColors.statusWarningText;
-    final badgeDotColor = isConnected ? AppColors.statusSuccessText : AppColors.tagAmber;
+        ? AppColors.successBorder
+        : AppColors.warningBorder;
+    final badgeTextColor = isConnected ? AppColors.statusSuccessDarkText : AppColors.warningDark;
+    final badgeDotColor = isConnected ? AppColors.statusSuccessText : AppColors.warning;
     final statusText = isConnected
         ? (accountName != null ? '@$accountName' : context.tr('connected'))
         : context.tr('not_connected');

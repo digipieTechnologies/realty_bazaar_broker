@@ -45,7 +45,7 @@ class PostListHorizontalShimmerWidget extends StatelessWidget {
       ),
       child: package_shimmer.Shimmer.fromColors(
         baseColor: AppColors.shimmerBase,
-        highlightColor: AppColors.shimmerHighlight,
+        highlightColor: AppColors.background,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,

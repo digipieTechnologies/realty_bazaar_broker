@@ -43,7 +43,7 @@ class AppDropdown<T> extends StatelessWidget {
           validator: validator,
           isExpanded: true,
           style: AppTextStyles.textField,
-          icon: icon ?? const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.iconDefault),
+          icon: icon ?? const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.textSecondary),
           decoration: InputDecoration(
             hintText: hint,
             prefixIcon: prefixIcon,

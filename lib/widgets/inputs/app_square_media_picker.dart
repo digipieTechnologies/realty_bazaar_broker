@@ -209,7 +209,7 @@ class _AppSquareMediaPickerState extends State<AppSquareMediaPicker> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
               decoration: BoxDecoration(
-                color: AppColors.secondary.withValues(alpha: 0.1),
+                color: AppColors.primary800.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12.0),
               ),
               child: Text(
@@ -217,7 +217,7 @@ class _AppSquareMediaPickerState extends State<AppSquareMediaPicker> {
                 style: const TextStyle(
                   fontSize: 11.0,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.secondary,
+                  color: AppColors.primary800,
                 ),
               ),
             ),
@@ -261,7 +261,7 @@ class _AppSquareMediaPickerState extends State<AppSquareMediaPicker> {
     required VoidCallback onTap,
     bool isSecondary = false,
   }) {
-    final accentColor = isSecondary ? AppColors.secondary : AppColors.primary;
+    final accentColor = isSecondary ? AppColors.primary800 : AppColors.primary;
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,

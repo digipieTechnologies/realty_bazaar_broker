@@ -491,8 +491,8 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
               _buildThemeOption('black', 'Black', Colors.black, Colors.black),
               _buildThemeOption('white', 'White', Colors.white, Colors.white),
               _buildThemeOption('classic', 'Classic', Colors.red.shade900, Colors.blue.shade700),
-              _buildThemeOption('gold', 'Gold', AppColors.posterGold, AppColors.posterGoldDark),
-              _buildThemeOption('minimal', 'Minimal', AppColors.primary, AppColors.secondary),
+              _buildThemeOption('gold', 'Gold', AppColors.warning, AppColors.warningDark),
+              _buildThemeOption('minimal', 'Minimal', AppColors.primary, AppColors.primary800),
             ],
           ),
           const SizedBox(height: 8.0),
@@ -691,7 +691,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
         baseColor = Colors.black;
         break;
       case 'gold':
-        baseColor = AppColors.posterGold;
+        baseColor = AppColors.warning;
         break;
       case 'minimal':
         baseColor = AppColors.primary;
@@ -725,7 +725,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
         baseColor = Colors.black;
         break;
       case 'gold':
-        baseColor = AppColors.posterGoldDark;
+        baseColor = AppColors.warningDark;
         break;
       case 'minimal':
         baseColor = AppColors.primary;
@@ -762,7 +762,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
         baseColor = AppColors.posterGoldBrown;
         break;
       case 'minimal':
-        baseColor = AppColors.secondary;
+        baseColor = AppColors.primary800;
         break;
       case 'white':
         baseColor = Colors.white;

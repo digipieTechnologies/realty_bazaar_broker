@@ -15,6 +15,7 @@ import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/dialogs/app_dialog.dart';
 import '../../../widgets/inputs/app_textfield.dart';
 import '../../../widgets/toast/app_toast.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 class DeleteAccountScreen extends StatefulWidget {
   const DeleteAccountScreen({super.key});
@@ -169,7 +170,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
         actions: [
           if (isDesktop) ...[
             TextButton(
-              onPressed: () => context.push(AppRoutes.privacyPolicy),
+              onPressed: () => AppNavigator.navigateToPrivacyPolicy(context),
               child: Text(
                 context.tr('privacy_policy'),
                 style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600),
@@ -177,7 +178,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
             ),
             const SizedBox(width: 8),
             TextButton(
-              onPressed: () => context.push(AppRoutes.termsOfService),
+              onPressed: () => AppNavigator.navigateToTermsOfService(context),
               child: Text(
                 context.tr('terms_of_service'),
                 style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600),
@@ -297,7 +298,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                             child: Row(
                               children: [
                                 CircleAvatar(
-                                  backgroundColor: AppColors.primaryLight,
+                                  backgroundColor: AppColors.primary100,
                                   child: Text(
                                     ((userProfile.name?.isNotEmpty ?? false) ? userProfile.name![0] : 'U')
                                         .toUpperCase(),
@@ -342,7 +343,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                             hint: 'e.g. broker@example.com or +919876543210',
                             prefixIcon: const Icon(
                               Icons.account_circle_outlined,
-                              color: AppColors.iconDefault,
+                              color: AppColors.textSecondary,
                             ),
                             validator: (val) =>
                                 AppUtils.validateRequired(val, fieldName: 'Email or Phone Number'),

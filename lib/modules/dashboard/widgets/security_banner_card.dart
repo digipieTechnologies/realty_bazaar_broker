@@ -12,7 +12,7 @@ class SecurityBannerCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
-        color: AppColors.infoLight,
+        color: AppColors.primary100,
         borderRadius: BorderRadius.circular(16.0),
         border: Border.all(color: AppColors.border, width: 1.5),
       ),
@@ -30,13 +30,17 @@ class SecurityBannerCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10.0),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.info.withValues(alpha: 0.08),
+                      color: AppColors.primary.withValues(alpha: 0.08),
                       blurRadius: 4.0,
                       offset: const Offset(0, 2),
                     ),
                   ],
                 ),
-                child: const Icon(Icons.shield_outlined, color: AppColors.primary, size: 24.0),
+                child: const Icon(
+                  Icons.shield_outlined,
+                  color: AppColors.primary,
+                  size: 24.0,
+                ),
               ),
               const SizedBox(width: 14.0),
               Expanded(
@@ -80,7 +84,11 @@ class SecurityBannerCard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10.0),
       child: Row(
         children: [
-          const Icon(Icons.verified_outlined, color: AppColors.primary, size: 16.0),
+          const Icon(
+            Icons.verified_outlined,
+            color: AppColors.primary,
+            size: 16.0,
+          ),
           const SizedBox(width: 8.0),
           Expanded(
             child: Text(

@@ -43,7 +43,7 @@ class PasswordFieldWidget extends StatelessWidget {
       onChanged: onChanged,
       onFieldSubmitted: onFieldSubmitted,
       autofillHints: autofillHints,
-      prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.iconDefault),
+      prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.textSecondary),
       validator: validator,
     );
   }

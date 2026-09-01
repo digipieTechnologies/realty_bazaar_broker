@@ -40,7 +40,7 @@ class VideoRequestListShimmerWidget extends StatelessWidget {
         padding: const EdgeInsets.all(12.0),
         child: package_shimmer.Shimmer.fromColors(
           baseColor: AppColors.shimmerBase,
-          highlightColor: AppColors.shimmerHighlight,
+          highlightColor: AppColors.background,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -135,7 +135,7 @@ class VideoRequestListShimmerWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 14.0),
       child: package_shimmer.Shimmer.fromColors(
         baseColor: AppColors.shimmerBase,
-        highlightColor: AppColors.shimmerHighlight,
+        highlightColor: AppColors.background,
         child: Row(
           children: [
             // Flex 3: Property Details
@@ -244,7 +244,7 @@ class VideoRequestStatsShimmerWidget extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: package_shimmer.Shimmer.fromColors(
               baseColor: AppColors.shimmerBase,
-              highlightColor: AppColors.shimmerHighlight,
+              highlightColor: AppColors.background,
               child: Row(
                 children: [
                   Container(
@@ -293,7 +293,7 @@ class VideoRequestStatsShimmerWidget extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: package_shimmer.Shimmer.fromColors(
             baseColor: AppColors.shimmerBase,
-            highlightColor: AppColors.shimmerHighlight,
+            highlightColor: AppColors.background,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

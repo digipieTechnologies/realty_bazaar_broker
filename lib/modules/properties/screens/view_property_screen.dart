@@ -448,7 +448,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
               if (property.propertyCode != null && property.propertyCode!.isNotEmpty)
                 _buildBadge('${property.propertyCode}', AppColors.tagIndigo),
               _buildBadge(categoryLabel, AppColors.primary),
-              _buildBadge(listingLabel, AppColors.secondary),
+              _buildBadge(listingLabel, AppColors.primary800),
               _buildBadge(constStatusLabel, AppColors.success),
               _buildBadge(propertyStatusLabel, _statusColor(property.propertyStatus)),
             ],

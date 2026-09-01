@@ -25,6 +25,7 @@ import './property_location_card.dart';
 import './property_preview_buttons.dart';
 import './property_preview_media_gallery.dart';
 import './property_preview_specs_grid.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 class PropertyPreviewDialog extends StatefulWidget {
   final PropertyModel property;
@@ -177,7 +178,7 @@ class _PropertyPreviewDialogState extends State<PropertyPreviewDialog> {
 
     final navContext = AppRoutes.rootNavigatorKey.currentContext;
     if (navContext != null) {
-      AppRoutes.navigateToPropertyDetails(navContext, savedProp);
+      AppNavigator.navigateToPropertyDetails(navContext, savedProp);
     }
   }
 

@@ -13,6 +13,7 @@ import '../../../../widgets/badges/app_platform_badge.dart';
 import '../../../../widgets/buttons/app_circular_chevron.dart';
 import '../../../../widgets/common/user_avatar_widget.dart';
 import '../../../../widgets/icons/app_icons.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 class LeadTileWidget extends StatelessWidget {
   final SocialLeadModel lead;
@@ -91,7 +92,7 @@ class LeadTileWidget extends StatelessWidget {
           color: Colors.transparent,
           borderRadius: BorderRadius.circular(20.0),
           child: InkWell(
-            onTap: onTap ?? () => AppRoutes.navigateToLeadDetails(context, lead),
+            onTap: onTap ?? () => AppNavigator.navigateToLeadDetails(context, lead),
             borderRadius: BorderRadius.circular(20.0),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -191,7 +192,7 @@ class LeadTileWidget extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: onTap ?? () => AppRoutes.navigateToLeadDetails(context, lead),
+        onTap: onTap ?? () => AppNavigator.navigateToLeadDetails(context, lead),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 14.0),
           decoration: const BoxDecoration(

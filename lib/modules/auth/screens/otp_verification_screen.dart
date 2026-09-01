@@ -238,7 +238,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   height: 380,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: AppColors.secondary.withValues(alpha: 0.03),
+                    color: AppColors.primary800.withValues(alpha: 0.03),
                   ),
                 ),
               ),
@@ -311,7 +311,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              AppColors.primaryDark.withValues(alpha: 0.85),
+              AppColors.primary700.withValues(alpha: 0.85),
               AppColors.primary.withValues(alpha: 0.70),
             ],
             begin: Alignment.bottomCenter,

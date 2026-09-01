@@ -1,5 +1,5 @@
--- Migration: Update generate_user_otp RPC function with 30-second expiry and The Realty Bazaar branding.
--- File: supabase/migrations/20260824170000_update_otp_expiry_and_branding.sql
+-- Migration: Fix generate_user_otp RPC function with correct API keys and sender email
+-- File: supabase/migrations/20260901202000_fix_generate_user_otp.sql
 
 CREATE OR REPLACE FUNCTION public.generate_user_otp(
   p_email TEXT,
@@ -71,8 +71,8 @@ BEGIN
     url := 'https://btjzesvlexcvpqwisyet.supabase.co/functions/v1/send-email',
     headers := jsonb_build_object(
       'Content-Type', 'application/json',
-      'apikey', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pYnBwdHpucHBxbHd2Z3l0bmdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMzMjY5MzIsImV4cCI6MjA5ODkwMjkzMn0.f_wO4Wg75KB_XdapcLQBzQ_Uljel7jyI5ZnSkX4v8FA',
-      'Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pYnBwdHpucHBxbHd2Z3l0bmdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMzMjY5MzIsImV4cCI6MjA5ODkwMjkzMn0.f_wO4Wg75KB_XdapcLQBzQ_Uljel7jyI5ZnSkX4v8FA'
+      'apikey', 'sb_publishable_68yV-TwP5tS8TMG2yw50Nw_nllSeQXW',
+      'Authorization', 'Bearer sb_publishable_68yV-TwP5tS8TMG2yw50Nw_nllSeQXW'
     ),
     body := jsonb_build_object(
       'to', v_clean_email,

@@ -2,6 +2,7 @@
 // Purpose: Model class representing subscription plans in database (Supabase subscription_plans table) with duration options support.
 
 import 'package:equatable/equatable.dart';
+import 'payment_enums.dart';
 import 'subscription_enums.dart';
 
 class PlanDurationOption extends Equatable {
@@ -53,6 +54,7 @@ class SubscriptionPlanModel extends Equatable {
   final String title;
   final double amount;
   final PlanBillingType billingType;
+  final PaymentProviderEnum paymentProvider;
   final String description;
   final List<String> benefits;
   final List<PlanDurationOption> durationOptions;
@@ -69,6 +71,7 @@ class SubscriptionPlanModel extends Equatable {
     this.title = '',
     this.amount = 0.0,
     this.billingType = PlanBillingType.recurring,
+    this.paymentProvider = PaymentProviderEnum.razorpay,
     this.description = '',
     this.benefits = const [],
     this.durationOptions = const [],
@@ -102,6 +105,7 @@ class SubscriptionPlanModel extends Equatable {
       title: json['title']?.toString() ?? '',
       amount: double.tryParse(json['amount']?.toString() ?? '0') ?? 0.0,
       billingType: PlanBillingType.fromDbValue(json['billing_type'] ?? json['duration']),
+      paymentProvider: PaymentProviderEnum.fromDbValue(json['payment_provider']),
       description: json['description']?.toString() ?? '',
       benefits: parsedBenefits,
       durationOptions: parsedDurationOptions,
@@ -122,6 +126,7 @@ class SubscriptionPlanModel extends Equatable {
     data['title'] = title;
     data['amount'] = amount;
     data['billing_type'] = billingType.dbValue;
+    data['payment_provider'] = paymentProvider.dbValue;
     data['description'] = description;
     data['benefits'] = benefits;
     data['duration_options'] = durationOptions.map((e) => e.toJson()).toList();
@@ -138,6 +143,7 @@ class SubscriptionPlanModel extends Equatable {
     double? amount,
     PlanBillingType? billingType,
     PlanBillingType? duration,
+    PaymentProviderEnum? paymentProvider,
     String? description,
     List<String>? benefits,
     List<PlanDurationOption>? durationOptions,
@@ -151,6 +157,7 @@ class SubscriptionPlanModel extends Equatable {
       title: title ?? this.title,
       amount: amount ?? this.amount,
       billingType: billingType ?? duration ?? this.billingType,
+      paymentProvider: paymentProvider ?? this.paymentProvider,
       description: description ?? this.description,
       benefits: benefits ?? this.benefits,
       durationOptions: durationOptions ?? this.durationOptions,
@@ -167,6 +174,7 @@ class SubscriptionPlanModel extends Equatable {
         title,
         amount,
         billingType,
+        paymentProvider,
         description,
         benefits,
         durationOptions,

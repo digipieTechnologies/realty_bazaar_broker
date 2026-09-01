@@ -9,6 +9,7 @@ import '../../../app/app_routes.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../widgets/brand/app_logo.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 class TermsOfServiceScreen extends StatelessWidget {
   const TermsOfServiceScreen({super.key});
@@ -37,7 +38,7 @@ class TermsOfServiceScreen extends StatelessWidget {
         actions: [
           if (isDesktop) ...[
             TextButton(
-              onPressed: () => context.push(AppRoutes.privacyPolicy),
+              onPressed: () => AppNavigator.navigateToPrivacyPolicy(context),
               child: Text(
                 context.tr('privacy_policy'),
                 style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600),
@@ -45,7 +46,7 @@ class TermsOfServiceScreen extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             TextButton(
-              onPressed: () => context.push(AppRoutes.deleteAccount),
+              onPressed: () => AppNavigator.navigateToDeleteAccount(context),
               child: Text(
                 context.tr('delete_account'),
                 style: const TextStyle(color: AppColors.error, fontWeight: FontWeight.w600),
@@ -146,11 +147,11 @@ class TermsOfServiceScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           TextButton(
-                            onPressed: () => context.push(AppRoutes.privacyPolicy),
+                            onPressed: () => AppNavigator.navigateToPrivacyPolicy(context),
                             child: Text(context.tr('privacy_policy')),
                           ),
                           FilledButton(
-                            onPressed: () => context.push(AppRoutes.deleteAccount),
+                            onPressed: () => AppNavigator.navigateToDeleteAccount(context),
                             style: TextButton.styleFrom(
                               backgroundColor: AppColors.error,
                               foregroundColor: AppColors.white,

@@ -9,6 +9,7 @@ import '../../../../app/app_routes.dart';
 import '../../../../app/app_text_styles.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../widgets/buttons/app_button.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 class AdCampaignBannerWidget extends StatelessWidget {
   const AdCampaignBannerWidget({super.key});
@@ -79,7 +80,7 @@ class AdCampaignBannerWidget extends StatelessWidget {
             color: AppColors.surface,
             textColor: AppColors.primary,
             padding: const EdgeInsets.symmetric(horizontal: 14.0),
-            onPressed: () => AppRoutes.navigateToCampaignSettings(context),
+            onPressed: () => AppNavigator.navigateToCampaignSettings(context),
           ),
         ],
       ),

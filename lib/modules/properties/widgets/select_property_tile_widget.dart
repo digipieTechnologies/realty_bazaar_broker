@@ -113,7 +113,7 @@ class SelectPropertyTileWidget extends StatelessWidget {
                             AppColors.primary,
                             tooltip: property.price.toFullIndianCurrency(),
                           ),
-                        if (bhkStr.isNotEmpty) _buildBadge(bhkStr, AppColors.secondary),
+                        if (bhkStr.isNotEmpty) _buildBadge(bhkStr, AppColors.primary800),
                         _buildBadge(typeStr, AppColors.textSecondary),
                       ],
                     ),

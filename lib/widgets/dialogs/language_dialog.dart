@@ -115,7 +115,7 @@ class _LanguageDialogState extends State<LanguageDialog> {
                                 height: 20.0,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  border: Border.all(color: AppColors.iconDefault, width: 1.5),
+                                  border: Border.all(color: AppColors.textSecondary, width: 1.5),
                                 ),
                               ),
                           ],

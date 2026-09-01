@@ -61,7 +61,7 @@ class _PhoneFieldWidgetState extends State<PhoneFieldWidget> {
           child: DropdownButtonHideUnderline(
             child: DropdownButton<CountryCode>(
               value: _selectedCountry,
-              icon: const Icon(Icons.arrow_drop_down_rounded, color: AppColors.iconDefault),
+              icon: const Icon(Icons.arrow_drop_down_rounded, color: AppColors.textSecondary),
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               borderRadius: BorderRadius.circular(8.0),

@@ -15,6 +15,7 @@ import '../../../core/localization/app_localizations.dart';
 import '../../../providers/subscription/subscription_provider.dart';
 import '../../../widgets/shimmer/grow_plan_shimmer_widget.dart';
 import '../widgets/grow_plan_carousel_widget.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 class GrowTabScreen extends StatefulWidget {
   const GrowTabScreen({super.key});
@@ -60,7 +61,10 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
                     plans: provider.plans,
                     onSelectPlan: (plan) {
                       provider.setSelectedPlan(plan);
-                      AppRoutes.navigateToSubscriptionPackageDetail(context, plan);
+                      AppNavigator.navigateToSubscriptionPackageDetail(
+                        context,
+                        plan,
+                      );
                     },
                   )
                 else
@@ -91,7 +95,7 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
                   vertical: isMobile ? 5.0 : 6.0,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.consultationBannerBgStart,
+                  color: AppColors.primary50,
                   borderRadius: BorderRadius.circular(20.0),
                   border: Border.all(
                     color: AppColors.consultationBannerBorder,

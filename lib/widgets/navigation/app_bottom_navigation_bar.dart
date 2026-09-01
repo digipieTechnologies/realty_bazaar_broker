@@ -48,16 +48,16 @@ class AppBottomNavigationBar extends StatelessWidget {
       outlineIconAsset: AppAssets.icGrowOutline,
     ),
     BottomNavItem(
+      titleKey: 'properties',
+      path: '/properties',
+      filledIconAsset: AppAssets.icPropertiesFilled,
+      outlineIconAsset: AppAssets.icPropertiesOutline,
+    ),
+    BottomNavItem(
       titleKey: 'leads',
       path: '/leads',
       filledIconAsset: AppAssets.icLeadsFilled,
       outlineIconAsset: AppAssets.icLeadsOutline,
-    ),
-    BottomNavItem(
-      titleKey: 'profile',
-      path: '/profile',
-      filledIconAsset: AppAssets.icProfileFilled,
-      outlineIconAsset: AppAssets.icProfileOutline,
     ),
   ];
 

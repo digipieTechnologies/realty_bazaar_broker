@@ -22,6 +22,8 @@ import '../../../widgets/inputs/app_textfield.dart';
 import '../../../widgets/loaders/app_loader.dart';
 import '../../../widgets/toast/app_toast.dart';
 import '../../auth/widgets/phone_field_widget.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
+import '../../../widgets/common/common_app_bar.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -206,6 +208,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
+      appBar: isMobile 
+          ? CommonAppBar(title: context.tr('action_profile'))
+          : null,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: AppConstants.getTabPadding(context, bottomExtra: isMobile ? 80.0 : 24.0),
@@ -283,7 +288,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildHeader(dynamic profile, bool isDesktop) {
-    final plan = profile.brokerId?.plan ?? 'Free';
+    // TODO: Fetch active plan from user_subscriptions when integrated.
+    final plan = 'Free';
 
     return Row(
       children: [
@@ -382,7 +388,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 autofillHints: const [AutofillHints.name],
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) => _phoneFocusNode.requestFocus(),
-                prefixIcon: const Icon(Icons.person_outline, color: AppColors.iconDefault),
+                prefixIcon: const Icon(Icons.person_outline, color: AppColors.textSecondary),
                 validator: AppUtils.validateName,
               ),
             ),
@@ -411,9 +417,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 label: context.tr('email_address'),
                 hint: context.tr('email_address'),
                 readOnly: true,
-                prefixIcon: const Icon(Icons.email_outlined, color: AppColors.iconDefault),
+                prefixIcon: const Icon(Icons.email_outlined, color: AppColors.textSecondary),
                 suffixIcon: IconButton(
-                  icon: const Icon(Icons.copy_rounded, size: 18.0, color: AppColors.iconDefault),
+                  icon: const Icon(Icons.copy_rounded, size: 18.0, color: AppColors.textSecondary),
                   tooltip: context.tr('copy'),
                   onPressed: () {
                     final text = _emailController.text.trim();
@@ -462,7 +468,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 autofillHints: const [AutofillHints.organizationName],
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) => _fullAddressFocusNode.requestFocus(),
-                prefixIcon: const Icon(Icons.business_outlined, color: AppColors.iconDefault),
+                prefixIcon: const Icon(Icons.business_outlined, color: AppColors.textSecondary),
                 validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('business_name')),
               ),
             ),
@@ -474,9 +480,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 label: context.tr('broker_code'),
                 hint: context.tr('broker_code'),
                 readOnly: true,
-                prefixIcon: const Icon(Icons.badge_outlined, color: AppColors.iconDefault),
+                prefixIcon: const Icon(Icons.badge_outlined, color: AppColors.textSecondary),
                 suffixIcon: IconButton(
-                  icon: const Icon(Icons.copy_rounded, size: 18.0, color: AppColors.iconDefault),
+                  icon: const Icon(Icons.copy_rounded, size: 18.0, color: AppColors.textSecondary),
                   tooltip: context.tr('copy'),
                   onPressed: () {
                     final text = _brokerCodeController.text.trim();
@@ -502,7 +508,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) => _landmarkFocusNode.requestFocus(),
                 maxLines: 1,
-                prefixIcon: const Icon(Icons.location_on_outlined, color: AppColors.iconDefault),
+                prefixIcon: const Icon(Icons.location_on_outlined, color: AppColors.textSecondary),
                 validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('full_address')),
               ),
             ),
@@ -519,7 +525,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 autofillHints: const [AutofillHints.sublocality],
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) => _pincodeFocusNode.requestFocus(),
-                prefixIcon: const Icon(Icons.pin_drop_outlined, color: AppColors.iconDefault),
+                prefixIcon: const Icon(Icons.pin_drop_outlined, color: AppColors.textSecondary),
                 validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('landmark')),
               ),
             ),
@@ -540,7 +546,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         autofillHints: const [AutofillHints.postalCode],
                         textInputAction: TextInputAction.next,
                         onFieldSubmitted: (_) => _cityFocusNode.requestFocus(),
-                        prefixIcon: const Icon(Icons.numbers_outlined, color: AppColors.iconDefault),
+                        prefixIcon: const Icon(Icons.numbers_outlined, color: AppColors.textSecondary),
                         validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('pincode')),
                       ),
                     ),
@@ -558,7 +564,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         autofillHints: const [AutofillHints.addressCity],
                         textInputAction: TextInputAction.next,
                         onFieldSubmitted: (_) => _stateFocusNode.requestFocus(),
-                        prefixIcon: const Icon(Icons.location_city_outlined, color: AppColors.iconDefault),
+                        prefixIcon: const Icon(Icons.location_city_outlined, color: AppColors.textSecondary),
                         validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('city')),
                       ),
                     ),
@@ -580,7 +586,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         autofillHints: const [AutofillHints.addressState],
                         textInputAction: TextInputAction.next,
                         onFieldSubmitted: (_) => _countryFocusNode.requestFocus(),
-                        prefixIcon: const Icon(Icons.map_outlined, color: AppColors.iconDefault),
+                        prefixIcon: const Icon(Icons.map_outlined, color: AppColors.textSecondary),
                         validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('state')),
                       ),
                     ),
@@ -598,7 +604,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         autofillHints: const [AutofillHints.countryName],
                         textInputAction: TextInputAction.done,
                         onFieldSubmitted: (_) => _saveChanges(),
-                        prefixIcon: const Icon(Icons.public_outlined, color: AppColors.iconDefault),
+                        prefixIcon: const Icon(Icons.public_outlined, color: AppColors.textSecondary),
                         validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('country')),
                       ),
                     ),
@@ -617,7 +623,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   autofillHints: const [AutofillHints.postalCode],
                   textInputAction: TextInputAction.next,
                   onFieldSubmitted: (_) => _cityFocusNode.requestFocus(),
-                  prefixIcon: const Icon(Icons.numbers_outlined, color: AppColors.iconDefault),
+                  prefixIcon: const Icon(Icons.numbers_outlined, color: AppColors.textSecondary),
                   validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('pincode')),
                 ),
               ),
@@ -633,7 +639,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   autofillHints: const [AutofillHints.addressCity],
                   textInputAction: TextInputAction.next,
                   onFieldSubmitted: (_) => _stateFocusNode.requestFocus(),
-                  prefixIcon: const Icon(Icons.location_city_outlined, color: AppColors.iconDefault),
+                  prefixIcon: const Icon(Icons.location_city_outlined, color: AppColors.textSecondary),
                   validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('city')),
                 ),
               ),
@@ -649,7 +655,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   autofillHints: const [AutofillHints.addressState],
                   textInputAction: TextInputAction.next,
                   onFieldSubmitted: (_) => _countryFocusNode.requestFocus(),
-                  prefixIcon: const Icon(Icons.map_outlined, color: AppColors.iconDefault),
+                  prefixIcon: const Icon(Icons.map_outlined, color: AppColors.textSecondary),
                   validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('state')),
                 ),
               ),
@@ -665,7 +671,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   autofillHints: const [AutofillHints.countryName],
                   textInputAction: TextInputAction.done,
                   onFieldSubmitted: (_) => _saveChanges(),
-                  prefixIcon: const Icon(Icons.public_outlined, color: AppColors.iconDefault),
+                  prefixIcon: const Icon(Icons.public_outlined, color: AppColors.textSecondary),
                   validator: (val) => AppUtils.validateRequired(val, fieldName: context.tr('country')),
                 ),
               ),
@@ -789,7 +795,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               textColor: AppColors.error,
                               height: 38.0,
                               iconData: Icons.delete_outline_rounded,
-                              onPressed: () => context.push(AppRoutes.deleteAccount),
+                              onPressed: () => AppNavigator.navigateToDeleteAccount(context),
                             ),
                           ],
                         )
@@ -824,7 +830,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               height: 40.0,
                               width: double.infinity,
                               iconData: Icons.delete_outline_rounded,
-                              onPressed: () => context.push(AppRoutes.deleteAccount),
+                              onPressed: () => AppNavigator.navigateToDeleteAccount(context),
                             ),
                           ],
                         ),
@@ -838,7 +844,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Row(
                   children: [
                     TextButton(
-                      onPressed: () => context.push(AppRoutes.privacyPolicy),
+                      onPressed: () => AppNavigator.navigateToPrivacyPolicy(context),
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
                         minimumSize: const Size(50, 30),
@@ -858,7 +864,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Text('•', style: TextStyle(color: AppColors.textSecondary)),
                     ),
                     TextButton(
-                      onPressed: () => context.push(AppRoutes.termsOfService),
+                      onPressed: () => AppNavigator.navigateToTermsOfService(context),
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
                         minimumSize: const Size(50, 30),

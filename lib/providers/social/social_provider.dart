@@ -6,7 +6,6 @@ import '../../core/services/clarity_service.dart';
 import '../../core/services/supabase_storage_service.dart';
 import '../../core/supabase/supabase_config.dart';
 import '../../models/models.dart';
-import '../../models/social_enums.dart';
 import '../../util/app_utils.dart';
 import '../../widgets/toast/app_toast.dart';
 import '../auth/auth_provider.dart';
@@ -153,11 +152,7 @@ class SocialProvider extends ChangeNotifier {
   }
 
   // Fetch initial connection states for the current broker via Edge Function
-  Future<void> fetchInitialConnections(
-    String brokerId, {
-    bool forceShimmer = false,
-    AuthProvider? authProvider,
-  }) async {
+  Future<void> fetchInitialConnections(String brokerId, {bool forceShimmer = false, AuthProvider? authProvider}) async {
     // Only show shimmer if initial connections have NEVER been fetched yet or if forceShimmer is true
     final shouldShowShimmer = !_hasFetchedInitialConnections || forceShimmer;
 
@@ -285,10 +280,7 @@ class SocialProvider extends ChangeNotifier {
   // Trigger Direct Instagram connection OAuth dialog URL flow
   Future<void> connectInstagramDirectly(String brokerId) async {
     try {
-      final response = await SupabaseConfig.client.functions.invoke(
-        'instagram-connect',
-        body: {'broker_id': brokerId},
-      );
+      final response = await SupabaseConfig.client.functions.invoke('instagram-connect', body: {'broker_id': brokerId});
 
       debugPrint('Instagram-connect edge function status: ${response.status}');
 
@@ -324,10 +316,7 @@ class SocialProvider extends ChangeNotifier {
 
   Future<void> _invokeFacebookConnect(String brokerId) async {
     try {
-      final response = await SupabaseConfig.client.functions.invoke(
-        'facebook-connect',
-        body: {'broker_id': brokerId},
-      );
+      final response = await SupabaseConfig.client.functions.invoke('facebook-connect', body: {'broker_id': brokerId});
 
       debugPrint('Facebook-connect edge function status: ${response.status}');
 
@@ -482,11 +471,7 @@ class SocialProvider extends ChangeNotifier {
 
       Map<String, dynamic>? data;
       if (isUuid) {
-        data = await SupabaseConfig.client
-            .from('social_posts')
-            .select()
-            .eq('id', postId.trim())
-            .maybeSingle();
+        data = await SupabaseConfig.client.from('social_posts').select().eq('id', postId.trim()).maybeSingle();
       }
 
       if (data == null) {
@@ -597,8 +582,7 @@ class SocialProvider extends ChangeNotifier {
   // Disable automation by deleting post record
   Future<SocialPostModel?> disablePostAutomation(SocialPostModel post, String brokerId) async {
     try {
-      final dbId =
-          post.dbSocialPost?.id ?? (post.id != null && post.id != post.platformPostId ? post.id : null);
+      final dbId = post.dbSocialPost?.id ?? (post.id != null && post.id != post.platformPostId ? post.id : null);
       final targetPostId = post.postId ?? post.platformPostId ?? post.id;
       final platformVal = post.platform?.dbValue;
 
@@ -695,10 +679,7 @@ class SocialProvider extends ChangeNotifier {
     // Case 3: Fetch file bytes via Dio (works on all platforms: Web, Android, iOS, Desktop)
     if (media.path.isNotEmpty) {
       try {
-        final response = await Dio().get<List<int>>(
-          media.path,
-          options: Options(responseType: ResponseType.bytes),
-        );
+        final response = await Dio().get<List<int>>(media.path, options: Options(responseType: ResponseType.bytes));
         if (response.data != null && response.data!.isNotEmpty) {
           final fileBytes = Uint8List.fromList(response.data!);
           final sanitizedMediaName = media.name.replaceAll(RegExp(r'[^a-zA-Z0-9._-]'), '_');
@@ -717,10 +698,7 @@ class SocialProvider extends ChangeNotifier {
   // Helper method to resolve cover URL for videos
   Future<String?> _resolvePublicCoverUrl(PickedMedia media) async {
     if (media.thumbnailBytes != null && media.thumbnailBytes!.isNotEmpty) {
-      final sanitizedCoverName = (media.thumbnailName ?? "cover.jpg").replaceAll(
-        RegExp(r'[^a-zA-Z0-9._-]'),
-        '_',
-      );
+      final sanitizedCoverName = (media.thumbnailName ?? "cover.jpg").replaceAll(RegExp(r'[^a-zA-Z0-9._-]'), '_');
       final coverName = '${DateTime.now().millisecondsSinceEpoch}_cover_$sanitizedCoverName';
 
       return await uploadAsset(coverName, media.thumbnailBytes!, mimeType: 'image/jpeg');
@@ -757,9 +735,7 @@ class SocialProvider extends ChangeNotifier {
         // Test public accessibility of the uploaded URL
         try {
           final testRes = await Dio().head(mediaUrl);
-          debugPrint(
-            '[SocialProvider] Public URL accessibility check for $mediaUrl: Status ${testRes.statusCode}',
-          );
+          debugPrint('[SocialProvider] Public URL accessibility check for $mediaUrl: Status ${testRes.statusCode}');
         } catch (testErr) {
           debugPrint(
             '[SocialProvider] CRITICAL: The asset URL ($mediaUrl) is NOT publicly accessible! Error: $testErr',
@@ -784,12 +760,7 @@ class SocialProvider extends ChangeNotifier {
 
       final response = await SupabaseConfig.client.functions.invoke(
         'publish-instagram-post',
-        body: {
-          'broker_id': brokerId,
-          'property_id': propertyId,
-          'caption': caption,
-          'medias': mediaUrlsPayload,
-        },
+        body: {'broker_id': brokerId, 'property_id': propertyId, 'caption': caption, 'medias': mediaUrlsPayload},
       );
 
       if (response.status != 200) {
@@ -846,9 +817,7 @@ class SocialProvider extends ChangeNotifier {
         // Test public accessibility of the uploaded URL
         try {
           final testRes = await Dio().head(mediaUrl);
-          debugPrint(
-            '[SocialProvider] Public URL accessibility check for $mediaUrl: Status ${testRes.statusCode}',
-          );
+          debugPrint('[SocialProvider] Public URL accessibility check for $mediaUrl: Status ${testRes.statusCode}');
         } catch (testErr) {
           debugPrint(
             '[SocialProvider] CRITICAL: The asset URL ($mediaUrl) is NOT publicly accessible! Error: $testErr',
@@ -873,12 +842,7 @@ class SocialProvider extends ChangeNotifier {
 
       final response = await SupabaseConfig.client.functions.invoke(
         'publish-facebook-post',
-        body: {
-          'broker_id': brokerId,
-          'property_id': propertyId,
-          'caption': caption,
-          'medias': mediaUrlsPayload,
-        },
+        body: {'broker_id': brokerId, 'property_id': propertyId, 'caption': caption, 'medias': mediaUrlsPayload},
       );
 
       if (response.status != 200) {

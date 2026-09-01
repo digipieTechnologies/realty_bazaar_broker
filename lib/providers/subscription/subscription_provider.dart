@@ -118,4 +118,34 @@ class SubscriptionProvider extends ChangeNotifier {
         return 2;
     }
   }
+
+  Future<bool> processSubscriptionPayment({
+    required String brokerId,
+    required String subscriptionPlanId,
+    required double amount,
+    required String paymentId,
+    required String paymentProvider,
+    required int totalDays,
+    required String planCode,
+  }) async {
+    try {
+      final res = await SupabaseConfig.client.rpc(
+        'process_subscription_payment',
+        params: {
+          'p_broker_id': brokerId,
+          'p_subscription_plan_id': subscriptionPlanId,
+          'p_amount': amount,
+          'p_payment_id': paymentId,
+          'p_payment_provider': paymentProvider,
+          'p_total_days': totalDays,
+          'p_plan_code': planCode,
+        },
+      );
+      
+      return res['success'] == true;
+    } catch (e) {
+      debugPrint('Error processing subscription payment: $e');
+      return false;
+    }
+  }
 }

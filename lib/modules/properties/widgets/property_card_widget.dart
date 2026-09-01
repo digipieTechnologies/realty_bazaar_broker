@@ -17,6 +17,7 @@ import '../../../widgets/common/currency_text.dart';
 import '../../../widgets/dialogs/app_dialog.dart';
 import '../../../widgets/images/cached_image.dart';
 import '../../../widgets/toast/app_toast.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 class PropertyCardWidget extends StatelessWidget {
   final PropertyModel property;
@@ -53,7 +54,7 @@ class PropertyCardWidget extends StatelessWidget {
     if (onTileTap != null) {
       onTileTap!();
     } else {
-      AppRoutes.navigateToPropertyDetails(context, property);
+      AppNavigator.navigateToPropertyDetails(context, property);
     }
   }
 

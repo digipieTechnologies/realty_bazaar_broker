@@ -27,6 +27,7 @@ import '../widgets/auth_footer_link_widget.dart';
 import '../widgets/auth_header_widget.dart';
 import '../widgets/password_field_widget.dart';
 import '../widgets/phone_field_widget.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 enum AuthMode { login, signup, forgotPassword }
 
@@ -231,7 +232,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 380,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.secondary.withOpacity(0.03),
+                  color: AppColors.primary800.withOpacity(0.03),
                 ),
               ),
             ),
@@ -298,7 +299,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.primaryDark.withOpacity(0.85), AppColors.primary.withOpacity(0.70)],
+            colors: [AppColors.primary700.withOpacity(0.85), AppColors.primary.withOpacity(0.70)],
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
           ),
@@ -455,7 +456,7 @@ class _LoginScreenState extends State<LoginScreen> {
       autofillHints: const [AutofillHints.name],
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (_) => _emailFocusNode.requestFocus(),
-      prefixIcon: const Icon(Icons.person_outline, color: AppColors.iconDefault),
+      prefixIcon: const Icon(Icons.person_outline, color: AppColors.textSecondary),
       validator: (val) {
         if (val.isEmptyORNull) return context.tr('full_name_required');
         return null;
@@ -486,7 +487,7 @@ class _LoginScreenState extends State<LoginScreen> {
           _passwordFocusNode.requestFocus();
         }
       },
-      prefixIcon: const Icon(Icons.email_outlined, color: AppColors.iconDefault),
+      prefixIcon: const Icon(Icons.email_outlined, color: AppColors.textSecondary),
       validator: (val) {
         if (val.isEmptyORNull) return context.tr('email_required');
         if (!val.isEmail) return context.tr('valid_email_required');
@@ -612,7 +613,7 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             InkWell(
-              onTap: () => context.push(AppRoutes.privacyPolicy),
+              onTap: () => AppNavigator.navigateToPrivacyPolicy(context),
               child: Text(
                 context.tr('privacy_policy'),
                 style: const TextStyle(
@@ -627,7 +628,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
             ),
             InkWell(
-              onTap: () => context.push(AppRoutes.termsOfService),
+              onTap: () => AppNavigator.navigateToTermsOfService(context),
               child: Text(
                 context.tr('terms_of_service'),
                 style: const TextStyle(

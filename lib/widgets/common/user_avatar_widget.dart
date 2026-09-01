@@ -37,8 +37,8 @@ class UserAvatarWidget extends StatelessWidget {
   static Color getAvatarBgColor(String name) {
     final colors = [
       AppColors.primary.withValues(alpha: 0.12),
-      AppColors.secondary.withValues(alpha: 0.12),
-      AppColors.info.withValues(alpha: 0.12),
+      AppColors.primary800.withValues(alpha: 0.12),
+      AppColors.primary.withValues(alpha: 0.12),
       AppColors.warning.withValues(alpha: 0.12),
     ];
     final hash = name.codeUnits.fold(0, (prev, element) => prev + element);
@@ -46,7 +46,7 @@ class UserAvatarWidget extends StatelessWidget {
   }
 
   static Color getAvatarTextColor(String name) {
-    final colors = [AppColors.primaryDark, AppColors.secondaryDark, AppColors.info, AppColors.warning];
+    final colors = [AppColors.primary700, AppColors.primary900, AppColors.primary, AppColors.warning];
     final hash = name.codeUnits.fold(0, (prev, element) => prev + element);
     return colors[hash % colors.length];
   }

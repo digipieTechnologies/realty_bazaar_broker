@@ -4,6 +4,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../models/models.dart';
@@ -25,9 +26,11 @@ class PackageSummaryHeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double displayAmount =
-        selectedOption.amount > 0 ? selectedOption.amount : plan.amount;
-    final double originalAmount = displayAmount * 1.25; // 25% original savings value reference
+    final double displayAmount = selectedOption.amount > 0
+        ? selectedOption.amount
+        : plan.amount;
+    final double originalAmount =
+        displayAmount * 1.25; // 25% original savings value reference
     final double savingsAmount = originalAmount - displayAmount;
 
     final bool isRecommended = selectedOption.isRecommended;
@@ -37,10 +40,7 @@ class PackageSummaryHeroCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 18.0),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [
-            AppColors.heroDarkBgStart,
-            AppColors.heroDarkBgEnd,
-          ],
+          colors: [AppColors.shadow, AppColors.heroDarkBgEnd],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -109,10 +109,13 @@ class PackageSummaryHeroCard extends StatelessWidget {
               if (isRecommended) ...[
                 const SizedBox(width: 8.0),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10.0,
+                    vertical: 4.0,
+                  ),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
-                      colors: [AppColors.primary, AppColors.primaryDark],
+                      colors: [AppColors.primary, AppColors.primary700],
                     ),
                     borderRadius: BorderRadius.circular(12.0),
                     boxShadow: [
@@ -126,7 +129,11 @@ class PackageSummaryHeroCard extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.star_rounded, size: 12.0, color: AppColors.white),
+                      const Icon(
+                        Icons.star_rounded,
+                        size: 12.0,
+                        color: AppColors.white,
+                      ),
                       const SizedBox(width: 4.0),
                       Text(
                         'RECOMMENDED',
@@ -174,11 +181,16 @@ class PackageSummaryHeroCard extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0,
+                  vertical: 3.0,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.success.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8.0),
-                  border: Border.all(color: AppColors.success.withValues(alpha: 0.6)),
+                  border: Border.all(
+                    color: AppColors.success.withValues(alpha: 0.6),
+                  ),
                 ),
                 child: Text(
                   'Save ${_formatAmount(savingsAmount)}',

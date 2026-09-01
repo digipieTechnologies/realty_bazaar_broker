@@ -69,7 +69,7 @@ class LeadSummarySection extends StatelessWidget {
                 title: 'Conversion',
                 value: '${(conversionRate * 100).toStringAsFixed(1)}%',
                 icon: Icons.pie_chart_outline_rounded,
-                iconColor: AppColors.info,
+                iconColor: AppColors.primary,
                 isCompact: true,
               );
           }

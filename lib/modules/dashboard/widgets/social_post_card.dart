@@ -20,6 +20,7 @@ import '../../../widgets/icons/app_icons.dart';
 import '../../../widgets/images/cached_image.dart';
 import '../../../widgets/toast/app_toast.dart';
 import 'automation_confirmation_dialog.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 class SocialPostCard extends StatelessWidget {
   final SocialPostModel post;
@@ -51,7 +52,7 @@ class SocialPostCard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 16.0),
       child: AppCardContainer(
         borderRadius: 16.0,
-        onTap: () => AppRoutes.navigateToPostDetails(context, post),
+        onTap: () => AppNavigator.navigateToPostDetails(context, post),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -355,13 +356,13 @@ class _PostMetricsRow extends StatelessWidget {
         _buildMetricItem(
           icon: Icons.chat_bubble_outline_rounded,
           value: comments,
-          color: AppColors.secondary,
+          color: AppColors.primary800,
         ),
         const SizedBox(width: 10.0),
         _buildMetricItem(
           icon: isFB ? Icons.share_outlined : Icons.bookmark_border_rounded,
           value: sharesOrSaved,
-          color: AppColors.info,
+          color: AppColors.primary,
         ),
         if (showDate) ...[
           const Spacer(),

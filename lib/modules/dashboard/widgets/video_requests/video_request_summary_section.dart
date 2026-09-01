@@ -99,7 +99,7 @@ class VideoRequestSummarySection extends StatelessWidget {
                         title: context.tr('in_progress'),
                         value: '$inProgressRequests',
                         icon: Icons.run_circle_outlined,
-                        iconColor: AppColors.info,
+                        iconColor: AppColors.primary,
                         isCompact: true,
                       );
                     default:
@@ -148,7 +148,7 @@ class VideoRequestSummarySection extends StatelessWidget {
                         value: '$inProgressRequests',
                         subtitle: 'Field team filming',
                         icon: Icons.run_circle_outlined,
-                        iconColor: AppColors.info,
+                        iconColor: AppColors.primary,
                       );
                     default:
                       return LeadSummaryCard(

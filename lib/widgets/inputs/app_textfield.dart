@@ -111,7 +111,7 @@ class _AppTextFieldState extends State<AppTextField> {
                     child: IconButton(
                       icon: Icon(
                         _obscured ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                        color: AppColors.iconDefault,
+                        color: AppColors.textSecondary,
                       ),
                       onPressed: _toggleObscurity,
                     ),

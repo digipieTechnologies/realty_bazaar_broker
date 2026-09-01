@@ -581,7 +581,7 @@ class MediaExportService {
         base = Colors.black;
         break;
       case 'gold':
-        base = AppColors.posterGold;
+        base = AppColors.warning;
         break;
       case 'minimal':
         base = AppColors.posterIndigoSoft;
@@ -616,7 +616,7 @@ class MediaExportService {
         base = Colors.black;
         break;
       case 'gold':
-        base = AppColors.posterGoldDark;
+        base = AppColors.warningDark;
         break;
       case 'minimal':
         base = AppColors.posterIndigoSoft;

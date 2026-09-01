@@ -4,13 +4,17 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:the_realty_bazaar/modules/subscription/widgets/sticky_subscription_cta.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_constants.dart';
 import '../../../app/app_text_styles.dart';
+import '../../../core/services/razorpay_service.dart';
 import '../../../models/models.dart';
+import '../../../providers/auth/auth_provider.dart';
+import '../../../providers/subscription/subscription_provider.dart';
 import '../../../util/common_ext.dart';
 import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/common/common_app_bar.dart';
@@ -36,6 +40,8 @@ class _SubscriptionPackageDetailScreenState
     extends State<SubscriptionPackageDetailScreen> {
   late SubscriptionPlanModel _currentPlan;
   late PlanDurationOption _selectedOption;
+  late RazorpayService _razorpayService;
+  bool _isProcessingPayment = false;
 
   @override
   void initState() {
@@ -58,6 +64,60 @@ class _SubscriptionPackageDetailScreenState
         title: '30 Days',
       );
     }
+
+    _razorpayService = RazorpayService(
+      onSuccess: (response) async {
+        final authProvider = context.read<AuthProvider>();
+        final subProvider = context.read<SubscriptionProvider>();
+        final currentUser = authProvider.userProfile;
+        final actualBrokerId = currentUser?.brokerId?.id;
+        
+        if (actualBrokerId != null) {
+          final success = await subProvider.processSubscriptionPayment(
+            brokerId: actualBrokerId,
+            subscriptionPlanId: _currentPlan.id ?? '',
+            amount: _selectedOption.amount,
+            paymentId: response.paymentId ?? '',
+            paymentProvider: 'razorpay',
+            totalDays: _selectedOption.days,
+            planCode: _selectedOption.code,
+          );
+          
+          if (success) {
+            AppToast.showSuccess(
+              'Payment Successful',
+              'Your subscription has been activated!',
+            );
+          } else {
+            AppToast.showError(
+              'Update Failed',
+              'Payment succeeded but account update failed. Contact support.',
+            );
+          }
+        }
+        setState(() => _isProcessingPayment = false);
+      },
+      onFailure: (response) {
+        setState(() => _isProcessingPayment = false);
+        AppToast.showError(
+          'Payment Failed',
+          response.message ?? 'An error occurred during payment.',
+        );
+      },
+      onExternalWallet: (response) {
+        setState(() => _isProcessingPayment = false);
+        AppToast.showSuccess(
+          'External Wallet',
+          'Wallet selected: ${response.walletName}',
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _razorpayService.dispose();
+    super.dispose();
   }
 
   void _onDurationSelected(PlanDurationOption option) {
@@ -67,7 +127,10 @@ class _SubscriptionPackageDetailScreenState
   }
 
   Future<void> _makeSupportCall() async {
-    final Uri telUri = Uri(scheme: 'tel', path: AppConstants.supportPhoneNumber);
+    final Uri telUri = Uri(
+      scheme: 'tel',
+      path: AppConstants.supportPhoneNumber,
+    );
     try {
       if (await canLaunchUrl(telUri)) {
         await launchUrl(telUri);
@@ -85,11 +148,49 @@ class _SubscriptionPackageDetailScreenState
     }
   }
 
-  void _handlePurchase() {
-    AppToast.showSuccess(
-      'Package Selected',
-      'Proceeding with ${_selectedOption.title.isNotEmpty ? _selectedOption.title : "${_selectedOption.days} Days"} package.',
-    );
+  Future<void> _handlePurchase() async {
+    setState(() => _isProcessingPayment = true);
+
+    final authProvider = context.read<AuthProvider>();
+    final currentUser = authProvider.userProfile;
+
+    if (currentUser == null) {
+      setState(() => _isProcessingPayment = false);
+      AppToast.showError('Error', 'You must be logged in to subscribe.');
+      return;
+    }
+
+    try {
+      final actualBrokerId = currentUser.brokerId?.id;
+      if (actualBrokerId == null) {
+        throw Exception(
+          'No broker profile found. Please complete your profile setup first.',
+        );
+      }
+
+      final amountInPaise = (_selectedOption.amount * 100).toInt();
+
+      // 2. Open Razorpay checkout securely
+      final launched = _razorpayService.openCheckout(
+        amountInPaise: amountInPaise,
+        name: 'Realty Bazaar Subscription',
+        description: '${_currentPlan.title} - ${_selectedOption.title}',
+        contact: currentUser.phone ?? '',
+        email: currentUser.email ?? '',
+      );
+
+      // If it failed to launch (e.g. missing plugin, missing keys), stop loader immediately
+      if (!launched) {
+        setState(() => _isProcessingPayment = false);
+      }
+    } catch (e) {
+      debugPrint('Error creating order: $e');
+      setState(() => _isProcessingPayment = false);
+      AppToast.showError(
+        'Error',
+        'Could not initialize payment securely. Please try again.',
+      );
+    }
   }
 
   @override
@@ -126,7 +227,6 @@ class _SubscriptionPackageDetailScreenState
             maxWidth: isDesktop ? 800.0 : double.infinity,
           ),
           child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
             padding: AppConstants.getTabPadding(context, bottomExtra: 100.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,6 +285,7 @@ class _SubscriptionPackageDetailScreenState
         plan: _currentPlan,
         selectedOption: _selectedOption,
         onContinuePressed: _handlePurchase,
+        isLoading: _isProcessingPayment,
       ),
     );
   }
@@ -195,10 +296,7 @@ class _SubscriptionPackageDetailScreenState
       padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [
-            AppColors.consultationBannerBgStart,
-            AppColors.consultationBannerBgEnd,
-          ],
+          colors: [AppColors.primary50, AppColors.consultationBannerBgEnd],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

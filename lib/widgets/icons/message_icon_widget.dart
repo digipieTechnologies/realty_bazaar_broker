@@ -15,7 +15,7 @@ class MessageIconWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveColor = color ?? AppColors.info;
+    final effectiveColor = color ?? AppColors.primary;
     return SvgPicture.asset(
       AppAssets.icMessage,
       width: size,

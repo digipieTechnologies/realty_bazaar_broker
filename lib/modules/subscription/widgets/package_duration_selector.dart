@@ -88,7 +88,7 @@ class PackageDurationSelector extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? AppColors.primaryLight
+                              ? AppColors.primary100
                               : AppColors.surface,
                           gradient: isSelected
                               ? const LinearGradient(
@@ -160,7 +160,7 @@ class PackageDurationSelector extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.5),
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(
-                                  colors: [AppColors.primary, AppColors.primaryDark],
+                                  colors: [AppColors.primary, AppColors.primary700],
                                 ),
                                 borderRadius: BorderRadius.circular(10.0),
                                 boxShadow: [

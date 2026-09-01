@@ -113,14 +113,14 @@ class FieldInfoDialog extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(12.0),
               decoration: BoxDecoration(
-                color: AppColors.secondary.withValues(alpha: 0.08),
+                color: AppColors.primary800.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(10.0),
-                border: Border.all(color: AppColors.secondary.withValues(alpha: 0.3)),
+                border: Border.all(color: AppColors.primary800.withValues(alpha: 0.3)),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.lightbulb_rounded, color: AppColors.secondary, size: 18.0),
+                  const Icon(Icons.lightbulb_rounded, color: AppColors.primary800, size: 18.0),
                   const SizedBox(width: 8.0),
                   Expanded(
                     child: Text(

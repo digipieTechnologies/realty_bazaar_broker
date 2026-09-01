@@ -97,7 +97,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 height: 380,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.secondary.withOpacity(0.03),
+                  color: AppColors.primary800.withOpacity(0.03),
                 ),
               ),
             ),
@@ -210,7 +210,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.primaryDark.withOpacity(0.85), AppColors.primary.withOpacity(0.70)],
+            colors: [AppColors.primary700.withOpacity(0.85), AppColors.primary.withOpacity(0.70)],
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
           ),

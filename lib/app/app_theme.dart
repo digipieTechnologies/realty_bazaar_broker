@@ -18,7 +18,7 @@ class AppTheme {
 
       colorScheme: const ColorScheme.light(
         primary: AppColors.primary,
-        secondary: AppColors.secondary,
+        secondary: AppColors.primary800,
         surface: AppColors.surface,
         error: AppColors.error,
         onPrimary: AppColors.surface,
@@ -51,8 +51,8 @@ class AppTheme {
         hintStyle: AppTextStyles.caption.copyWith(color: AppColors.textMuted),
         labelStyle: AppTextStyles.label,
         errorStyle: AppTextStyles.error,
-        prefixIconColor: AppColors.iconDefault,
-        suffixIconColor: AppColors.iconDefault,
+        prefixIconColor: AppColors.textSecondary,
+        suffixIconColor: AppColors.textSecondary,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
           borderSide: const BorderSide(color: AppColors.border, width: 1.0),

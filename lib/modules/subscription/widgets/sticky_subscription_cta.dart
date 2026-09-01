@@ -4,6 +4,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../models/models.dart';
 import '../../../util/currency_formatter.dart';
@@ -13,12 +14,14 @@ class StickySubscriptionCta extends StatelessWidget {
   final SubscriptionPlanModel plan;
   final PlanDurationOption selectedOption;
   final VoidCallback onContinuePressed;
+  final bool isLoading;
 
   const StickySubscriptionCta({
     super.key,
     required this.plan,
     required this.selectedOption,
     required this.onContinuePressed,
+    this.isLoading = false,
   });
 
   String _formatAmount(double amount) {
@@ -27,13 +30,15 @@ class StickySubscriptionCta extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double displayAmount =
-        selectedOption.amount > 0 ? selectedOption.amount : plan.amount;
+    final double displayAmount = selectedOption.amount > 0
+        ? selectedOption.amount
+        : plan.amount;
     final String durationText = selectedOption.title.isNotEmpty
         ? selectedOption.title
         : '${selectedOption.days} Days';
 
-    final String buttonLabel = 'Continue with $durationText • ${_formatAmount(displayAmount)}';
+    final String buttonLabel =
+        'Continue with $durationText • ${_formatAmount(displayAmount)}';
 
     return Container(
       width: double.infinity,
@@ -60,7 +65,8 @@ class StickySubscriptionCta extends StatelessWidget {
               onPressed: onContinuePressed,
               height: 52.0,
               borderRadius: 14.0,
-              gradientColors: const [AppColors.primary, AppColors.primaryDark],
+              gradientColors: const [AppColors.primary, AppColors.primary700],
+              isLoading: isLoading,
             ),
           ),
         ),

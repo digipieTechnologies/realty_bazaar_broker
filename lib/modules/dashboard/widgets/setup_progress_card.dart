@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../providers/auth/auth_provider.dart';
 import '../../../../providers/dashboard/dashboard_provider.dart';
+import '../../../../providers/social/social_provider.dart';
 import '../../../../widgets/common/app_card_container.dart';
 import 'setup_step_tile_widget.dart';
 
@@ -15,9 +16,31 @@ class SetupProgressCard extends StatelessWidget {
   final bool showCardBorder;
   final VoidCallback? onClose;
 
-  const SetupProgressCard({super.key, this.showHeader = false, this.showCardBorder = false, this.onClose});
+  const SetupProgressCard({
+    super.key,
+    this.showHeader = false,
+    this.showCardBorder = false,
+    this.onClose,
+  });
 
   void _handleStepTap(BuildContext context, OnboardingStep step) {
+    if ((step.id == 'connect_facebook' || step.id == 'connect_instagram') &&
+        !step.isCompleted) {
+      final socialProvider = context.read<SocialProvider>();
+      final authProvider = context.read<AuthProvider>();
+      final brokerId = authProvider.userProfile?.brokerId?.id;
+
+      if (brokerId != null) {
+        if (step.id == 'connect_facebook') {
+          socialProvider.connectFacebook(brokerId);
+        } else if (step.id == 'connect_instagram') {
+          socialProvider.connectInstagramDirectly(brokerId);
+        }
+      }
+      // Do not close the dialog, wait for the real-time update to mark it completed
+      return;
+    }
+
     if (step.routePath.isEmpty) return;
 
     if (onClose != null) {
@@ -37,7 +60,9 @@ class SetupProgressCard extends StatelessWidget {
     final authProvider = context.watch<AuthProvider>();
     final setupDetails = authProvider.userProfile?.brokerId?.setupDetails;
 
-    final steps = dashboardProvider.getOnboardingSteps(setupDetails: setupDetails);
+    final steps = dashboardProvider.getOnboardingSteps(
+      setupDetails: setupDetails,
+    );
 
     final Widget content = Column(
       mainAxisSize: MainAxisSize.min,
@@ -57,8 +82,10 @@ class SetupProgressCard extends StatelessWidget {
                     return Column(
                       children: steps
                           .map(
-                            (step) =>
-                                SetupStepTileWidget(step: step, onTap: () => _handleStepTap(context, step)),
+                            (step) => SetupStepTileWidget(
+                              step: step,
+                              onTap: () => _handleStepTap(context, step),
+                            ),
                           )
                           .toList(),
                     );

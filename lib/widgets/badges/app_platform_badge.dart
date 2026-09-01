@@ -29,7 +29,10 @@ class AppPlatformBadge extends StatelessWidget {
     if (platform == null) {
       return Text(
         '--',
-        style: AppTextStyles.caption.copyWith(color: AppColors.textMuted, fontWeight: FontWeight.w600),
+        style: AppTextStyles.caption.copyWith(
+          color: AppColors.textMuted,
+          fontWeight: FontWeight.w600,
+        ),
       );
     }
 
@@ -37,14 +40,18 @@ class AppPlatformBadge extends StatelessWidget {
     final isInstagram = platform == SocialPlatform.instagram;
 
     final Color brandColor = isFacebook
-        ? const Color(0xFF1877F2)
-        : (isInstagram ? const Color(0xFFE1306C) : AppColors.textSecondary);
+        ? AppColors.facebook
+        : (isInstagram ? AppColors.instagram : AppColors.textSecondary);
 
-    final String labelText = isFacebook ? 'Facebook' : (isInstagram ? 'Instagram' : 'Other');
+    final String labelText = isFacebook
+        ? 'Facebook'
+        : (isInstagram ? 'Instagram' : 'Other');
 
     final Widget brandIcon = isFacebook
         ? FacebookIconWidget(size: iconSize)
-        : (isInstagram ? InstagramIconWidget(size: iconSize) : const Icon(Icons.public, size: 14.0));
+        : (isInstagram
+              ? InstagramIconWidget(size: iconSize)
+              : const Icon(Icons.public, size: 14.0));
 
     final EdgeInsetsGeometry effectivePadding =
         padding ?? const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0);
@@ -56,7 +63,11 @@ class AppPlatformBadge extends StatelessWidget {
           color: Colors.white.withValues(alpha: 0.92),
           borderRadius: BorderRadius.circular(20.0),
           boxShadow: [
-            BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 6, offset: const Offset(0, 2)),
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
           ],
         ),
         child: Row(
@@ -68,7 +79,11 @@ class AppPlatformBadge extends StatelessWidget {
               labelText,
               style:
                   textStyle ??
-                  TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: const Color(0xFF1E293B)),
+                  TextStyle(
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
             ),
           ],
         ),
@@ -88,7 +103,13 @@ class AppPlatformBadge extends StatelessWidget {
           const SizedBox(width: 6.0),
           Text(
             labelText,
-            style: textStyle ?? TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: brandColor),
+            style:
+                textStyle ??
+                TextStyle(
+                  fontSize: 11.5,
+                  fontWeight: FontWeight.bold,
+                  color: brandColor,
+                ),
           ),
         ],
       ),

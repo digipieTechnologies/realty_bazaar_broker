@@ -53,11 +53,11 @@ class ChatBubbleWidget extends StatelessWidget {
                 radius: 15.0,
                 backgroundColor: isMarketing
                     ? AppColors.primary.withValues(alpha: 0.12)
-                    : AppColors.secondary.withValues(alpha: 0.12),
+                    : AppColors.primary800.withValues(alpha: 0.12),
                 child: Icon(
                   isMarketing ? Icons.support_agent_rounded : Icons.person_rounded,
                   size: 16.0,
-                  color: isMarketing ? AppColors.primary : AppColors.secondary,
+                  color: isMarketing ? AppColors.primary : AppColors.primary800,
                 ),
               )
             else

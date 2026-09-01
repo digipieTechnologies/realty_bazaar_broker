@@ -40,7 +40,7 @@ class LeadListShimmerWidget extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         child: package_shimmer.Shimmer.fromColors(
           baseColor: AppColors.shimmerBase,
-          highlightColor: AppColors.shimmerHighlight,
+          highlightColor: AppColors.background,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -125,7 +125,7 @@ class LeadListShimmerWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 14.0),
       child: package_shimmer.Shimmer.fromColors(
         baseColor: AppColors.shimmerBase,
-        highlightColor: AppColors.shimmerHighlight,
+        highlightColor: AppColors.background,
         child: Row(
           children: [
             // Client Info

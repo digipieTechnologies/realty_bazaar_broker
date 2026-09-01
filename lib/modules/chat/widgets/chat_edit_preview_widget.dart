@@ -18,13 +18,13 @@ class ChatEditPreviewWidget extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 6.0),
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
       decoration: BoxDecoration(
-        color: AppColors.secondary.withValues(alpha: 0.08),
+        color: AppColors.primary800.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10.0),
-        border: const Border(left: BorderSide(color: AppColors.secondary, width: 3.5)),
+        border: const Border(left: BorderSide(color: AppColors.primary800, width: 3.5)),
       ),
       child: Row(
         children: [
-          const Icon(Icons.edit_rounded, size: 18.0, color: AppColors.secondary),
+          const Icon(Icons.edit_rounded, size: 18.0, color: AppColors.primary800),
           const SizedBox(width: 8.0),
           Expanded(
             child: Column(
@@ -33,7 +33,7 @@ class ChatEditPreviewWidget extends StatelessWidget {
               children: [
                 const Text(
                   'Editing message',
-                  style: TextStyle(fontSize: 11.0, fontWeight: FontWeight.bold, color: AppColors.secondary),
+                  style: TextStyle(fontSize: 11.0, fontWeight: FontWeight.bold, color: AppColors.primary800),
                 ),
                 const SizedBox(height: 2.0),
                 Text(

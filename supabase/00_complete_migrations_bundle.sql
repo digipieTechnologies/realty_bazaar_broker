@@ -1840,7 +1840,7 @@ BEGIN
 
     -- Invoke send-fcm-notification Edge Function asynchronously via pg_net
     PERFORM extensions.http_post(
-        url := 'https://oibpptznppqlwvgytngj.supabase.co/functions/v1/send-fcm-notification',
+        url := 'https://btjzesvlexcvpqwisyet.supabase.co/functions/v1/send-fcm-notification',
         headers := jsonb_build_object(
             'Content-Type', 'application/json'
         ),
@@ -4662,7 +4662,7 @@ BEGIN
 
   -- Fire send-email Edge Function via pg_net
   SELECT net.http_post(
-    url := 'https://oibpptznppqlwvgytngj.supabase.co/functions/v1/send-email',
+    url := 'https://btjzesvlexcvpqwisyet.supabase.co/functions/v1/send-email',
     headers := jsonb_build_object(
       'Content-Type', 'application/json',
       'apikey', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pYnBwdHpucHBxbHd2Z3l0bmdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMzMjY5MzIsImV4cCI6MjA5ODkwMjkzMn0.f_wO4Wg75KB_XdapcLQBzQ_Uljel7jyI5ZnSkX4v8FA',
@@ -4856,7 +4856,7 @@ BEGIN
 
   -- Fire send-email Edge Function via pg_net with verified domain sender
   SELECT net.http_post(
-    url := 'https://oibpptznppqlwvgytngj.supabase.co/functions/v1/send-email',
+    url := 'https://btjzesvlexcvpqwisyet.supabase.co/functions/v1/send-email',
     headers := jsonb_build_object(
       'Content-Type', 'application/json',
       'apikey', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pYnBwdHpucHBxbHd2Z3l0bmdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMzMjY5MzIsImV4cCI6MjA5ODkwMjkzMn0.f_wO4Wg75KB_XdapcLQBzQ_Uljel7jyI5ZnSkX4v8FA',
@@ -5095,7 +5095,7 @@ BEGIN
 
   -- Fire send-email Edge Function via pg_net with verified domain sender
   SELECT net.http_post(
-    url := 'https://oibpptznppqlwvgytngj.supabase.co/functions/v1/send-email',
+    url := 'https://btjzesvlexcvpqwisyet.supabase.co/functions/v1/send-email',
     headers := jsonb_build_object(
       'Content-Type', 'application/json',
       'apikey', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pYnBwdHpucHBxbHd2Z3l0bmdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMzMjY5MzIsImV4cCI6MjA5ODkwMjkzMn0.f_wO4Wg75KB_XdapcLQBzQ_Uljel7jyI5ZnSkX4v8FA',

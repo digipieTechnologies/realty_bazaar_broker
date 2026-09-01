@@ -23,7 +23,7 @@ BEGIN
 
     -- Invoke send-fcm-notification Edge Function asynchronously via pg_net
     PERFORM extensions.http_post(
-        url := 'https://oibpptznppqlwvgytngj.supabase.co/functions/v1/send-fcm-notification',
+        url := 'https://btjzesvlexcvpqwisyet.supabase.co/functions/v1/send-fcm-notification',
         headers := jsonb_build_object(
             'Content-Type', 'application/json'
         ),
