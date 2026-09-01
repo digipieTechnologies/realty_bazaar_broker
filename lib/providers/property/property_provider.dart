@@ -32,6 +32,9 @@ class PropertyProvider extends ChangeNotifier {
   String _searchQuery = '';
   String get searchQuery => _searchQuery;
 
+  bool _isLoadingMore = false;
+  bool get isLoadingMore => _isLoadingMore;
+
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
@@ -87,6 +90,53 @@ class PropertyProvider extends ChangeNotifier {
     _totalPages = 1;
     _hasMore = false;
     _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> loadMoreProperties({
+    required String brokerId,
+    bool forVideoRequest = false,
+  }) async {
+    if (_isLoading || _isLoadingMore || !_hasMore) return;
+    _isLoadingMore = true;
+    notifyListeners();
+
+    try {
+      final nextPage = _currentPage + 1;
+      final response = await SupabaseConfig.client.rpc(
+        'fetch_properties',
+        params: {
+          'p_broker_id': brokerId,
+          'p_page': nextPage,
+          'p_limit': _itemsPerPage,
+          'p_search_query': _searchQuery,
+          'p_for_video_request': forVideoRequest,
+        },
+      );
+
+      if (response != null) {
+        final Map<String, dynamic> resMap = response is Map<String, dynamic> ? response : {};
+
+        if (resMap['success'] == true && resMap['data'] is List) {
+          final rawList = resMap['data'] as List;
+          final newProps = rawList.map((json) => PropertyModel.fromJson(json)).toList();
+          final pagination = resMap['pagination'] as Map<String, dynamic>? ?? {};
+
+          _properties.addAll(newProps);
+          _currentPage = nextPage;
+          _totalItems = int.tryParse(pagination['total_items']?.toString() ?? '0') ?? _properties.length;
+          _totalPages = int.tryParse(pagination['total_pages']?.toString() ?? '1') ?? 1;
+          _hasMore = pagination['has_more'] as bool? ?? false;
+          _isLoadingMore = false;
+          notifyListeners();
+          return;
+        }
+      }
+    } catch (e) {
+      debugPrint('[PropertyProvider] Error loading more properties: $e');
+    }
+
+    _isLoadingMore = false;
     notifyListeners();
   }
 
