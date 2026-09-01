@@ -91,14 +91,21 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
                   vertical: isMobile ? 5.0 : 6.0,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFEFF6FF),
+                  color: AppColors.consultationBannerBgStart,
                   borderRadius: BorderRadius.circular(20.0),
-                  border: Border.all(color: const Color(0xFFBFDBFE), width: 1.0),
+                  border: Border.all(
+                    color: AppColors.consultationBannerBorder,
+                    width: 1.0,
+                  ),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.auto_awesome_rounded, size: isMobile ? 13.0 : 14.0, color: AppColors.primary),
+                    Icon(
+                      Icons.auto_awesome_rounded,
+                      size: isMobile ? 13.0 : 14.0,
+                      color: AppColors.primary,
+                    ),
                     const SizedBox(width: 6.0),
                     Text(
                       context.tr('grow_header_badge'),
@@ -116,12 +123,14 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
 
               // Title
               ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: isMobile ? double.infinity : 680.0),
+                constraints: BoxConstraints(
+                  maxWidth: isMobile ? double.infinity : 680.0,
+                ),
                 child: Text(
                   context.tr('grow_header_title'),
                   style: AppTextStyles.heading1.copyWith(
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF0F172A),
+                    color: AppColors.textPrimary,
                     fontSize: isMobile ? 20.0 : 32.0,
                     letterSpacing: -0.5,
                     height: 1.25,
@@ -133,7 +142,9 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
 
               // Subtitle
               ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: isMobile ? double.infinity : 620.0),
+                constraints: BoxConstraints(
+                  maxWidth: isMobile ? double.infinity : 620.0,
+                ),
                 child: Text(
                   context.tr('grow_header_subtitle'),
                   style: AppTextStyles.body1.copyWith(
@@ -156,11 +167,18 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 40.0),
       child: Column(
         children: [
-          Icon(Icons.inbox_rounded, size: 48.0, color: AppColors.textMuted.withValues(alpha: 0.5)),
+          Icon(
+            Icons.inbox_rounded,
+            size: 48.0,
+            color: AppColors.textMuted.withValues(alpha: 0.5),
+          ),
           const SizedBox(height: 12.0),
           Text(
             context.tr('grow_no_options'),
-            style: AppTextStyles.body1.copyWith(color: AppColors.textSecondary, fontWeight: FontWeight.w500),
+            style: AppTextStyles.body1.copyWith(
+              color: AppColors.textSecondary,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           const SizedBox(height: 4.0),
           Text(

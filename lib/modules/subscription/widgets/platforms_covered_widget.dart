@@ -1,5 +1,5 @@
 // File: lib/modules/subscription/widgets/platforms_covered_widget.dart
-// Purpose: Badge container displaying active ad distribution platforms (Facebook, Instagram, WhatsApp).
+// Purpose: Badge container displaying active ad distribution platforms (Facebook & Instagram).
 
 // ignore_for_file: deprecated_member_use
 
@@ -14,11 +14,18 @@ class PlatformsCoveredWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(18.0),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(18.0),
+        borderRadius: BorderRadius.circular(20.0),
         border: Border.all(color: AppColors.border.withValues(alpha: 0.8)),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.shadow.withValues(alpha: 0.04),
+            blurRadius: 12.0,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,23 +43,21 @@ class PlatformsCoveredWidget extends StatelessWidget {
             spacing: 10.0,
             runSpacing: 10.0,
             children: [
-              _buildPlatformChip(
-                label: 'Facebook Pages',
-                iconData: Icons.facebook_rounded,
-                iconColor: const Color(0xFF1877F2),
-                bgColor: const Color(0xFFEFF6FF),
+              _buildChannelPill(
+                assetPath: 'assets/icons/facebook.png',
+                fallbackIcon: Icons.facebook_rounded,
+                label: 'Facebook Page',
+                brandColor: AppColors.facebook,
+                bgColor: AppColors.facebook.withValues(alpha: 0.08),
+                borderColor: AppColors.facebook.withValues(alpha: 0.3),
               ),
-              _buildPlatformChip(
+              _buildChannelPill(
+                assetPath: 'assets/icons/instagram.png',
+                fallbackIcon: Icons.camera_alt_rounded,
                 label: 'Instagram Business',
-                iconData: Icons.camera_alt_rounded,
-                iconColor: const Color(0xFFE1306C),
-                bgColor: const Color(0xFFFDF2F8),
-              ),
-              _buildPlatformChip(
-                label: 'WhatsApp Direct',
-                iconData: Icons.chat_rounded,
-                iconColor: const Color(0xFF22C55E),
-                bgColor: const Color(0xFFF0FDF4),
+                brandColor: AppColors.instagram,
+                bgColor: AppColors.instagram.withValues(alpha: 0.08),
+                borderColor: AppColors.instagram.withValues(alpha: 0.3),
               ),
             ],
           ),
@@ -61,30 +66,41 @@ class PlatformsCoveredWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildPlatformChip({
+  Widget _buildChannelPill({
+    required String assetPath,
+    required IconData fallbackIcon,
     required String label,
-    required IconData iconData,
-    required Color iconColor,
+    required Color brandColor,
     required Color bgColor,
+    required Color borderColor,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(12.0),
-        border: Border.all(color: iconColor.withValues(alpha: 0.25)),
+        borderRadius: BorderRadius.circular(16.0),
+        border: Border.all(color: borderColor),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(iconData, size: 16.0, color: iconColor),
-          const SizedBox(width: 8.0),
+          Image.asset(
+            assetPath,
+            width: 14.0,
+            height: 14.0,
+            errorBuilder: (context, error, stackTrace) => Icon(
+              fallbackIcon,
+              size: 14.0,
+              color: brandColor,
+            ),
+          ),
+          const SizedBox(width: 6.0),
           Text(
             label,
-            style: AppTextStyles.caption.copyWith(
+            style: AppTextStyles.body2.copyWith(
+              color: brandColor,
+              fontSize: 12.0,
               fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
-              fontSize: 12.5,
             ),
           ),
         ],

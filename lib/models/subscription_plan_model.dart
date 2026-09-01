@@ -9,12 +9,14 @@ class PlanDurationOption extends Equatable {
   final double amount;
   final int days;
   final String title;
+  final bool isRecommended;
 
   const PlanDurationOption({
     this.code = '',
     this.amount = 0.0,
     this.days = 30,
     this.title = '',
+    this.isRecommended = false,
   });
 
   static PlanDurationOption fromJson(dynamic json) {
@@ -26,6 +28,7 @@ class PlanDurationOption extends Equatable {
       amount: double.tryParse(json['amount']?.toString() ?? '0') ?? 0.0,
       days: int.tryParse(json['days']?.toString() ?? '30') ?? 30,
       title: json['title']?.toString() ?? '',
+      isRecommended: (json['is_recommended'] as bool?) ?? (json['is_popular'] as bool?) ?? false,
     );
   }
 
@@ -35,11 +38,12 @@ class PlanDurationOption extends Equatable {
       'amount': amount,
       'days': days,
       if (title.isNotEmpty) 'title': title,
+      'is_recommended': isRecommended,
     };
   }
 
   @override
-  List<Object?> get props => [code, amount, days, title];
+  List<Object?> get props => [code, amount, days, title, isRecommended];
 }
 
 class SubscriptionPlanModel extends Equatable {
