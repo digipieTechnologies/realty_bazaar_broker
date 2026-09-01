@@ -44,6 +44,23 @@ class AppColors {
   static const Color surfaceLight = Color(0xFFF1F5F9); // Muted input background
   static const Color border = Color(0xFFE4EAF2); // Global border
   static const Color divider = Color(0xFFEEF2F6); // Soft divider
+  static const Color shadow = Color(0xFF0F172A); // Card shadow base (#0F172A)
+  static const Color shadowDark = Color(0xFF0B111E);
+
+  // Soft Banner & Card Tints
+  static const Color consultationBannerBgStart = Color(0xFFEFF6FF);
+  static const Color consultationBannerBgEnd = Color(0xFFDBEAFE);
+  static const Color consultationBannerBorder = Color(0xFFBFDBFE);
+  static const Color consultationBannerText = Color(0xFF1E3A8A);
+  static const Color consultationBannerSubtext = Color(0xFF3B82F6);
+
+  // Hero Card Accent Tokens
+  static const Color heroDarkBgStart = Color(0xFF0F172A);
+  static const Color heroDarkBgEnd = Color(0xFF1E3A8A);
+  static const Color heroDarkBorder = Color(0xFF3B82F6);
+  static const Color heroAccentBlue = Color(0xFF60A5FA);
+  static const Color heroSubtextBlue = Color(0xFF93C5FD);
+  static const Color emeraldTextLight = Color(0xFF34D399);
 
   // ==========================================
   // Typography Colors
@@ -159,6 +176,11 @@ class AppColors {
   static const List<Color> primaryGradient = [primary500, primary700];
   static const List<Color> nexusGradient = [primary400, primary500, primary800];
   static const List<Color> secondaryGradient = [secondary, secondaryDark];
+  static const List<Color> popularCardGradient = [
+    Color(0xFF0B1A3B),
+    Color(0xFF132D5E),
+    Color(0xFF1A3F7A),
+  ];
   static const List<Color> glassGradient = [
     Color(0x33FFFFFF),
     Color(0x0FFFFFFF),

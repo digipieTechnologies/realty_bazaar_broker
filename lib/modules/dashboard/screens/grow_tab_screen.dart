@@ -91,10 +91,10 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
                   vertical: isMobile ? 5.0 : 6.0,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFEFF6FF),
+                  color: AppColors.consultationBannerBgStart,
                   borderRadius: BorderRadius.circular(20.0),
                   border: Border.all(
-                    color: const Color(0xFFBFDBFE),
+                    color: AppColors.consultationBannerBorder,
                     width: 1.0,
                   ),
                 ),
@@ -130,7 +130,7 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
                   context.tr('grow_header_title'),
                   style: AppTextStyles.heading1.copyWith(
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF0F172A),
+                    color: AppColors.textPrimary,
                     fontSize: isMobile ? 20.0 : 32.0,
                     letterSpacing: -0.5,
                     height: 1.25,

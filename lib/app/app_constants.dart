@@ -7,6 +7,10 @@ class AppConstants {
 
   AppConstants._();
 
+  // Support Contact Phone Numbers
+  static const String supportPhoneNumber = '+919033582481';
+  static const String supportPhoneDisplay = '+91 90335 82481';
+
   // Layout Dimensions (Paddings, Margins, Spacings)
   static const double paddingXS = 4.0;
   static const double paddingS = 8.0;

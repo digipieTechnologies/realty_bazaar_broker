@@ -47,15 +47,16 @@ class ViewLeadScreen extends StatelessWidget {
     final isFacebook = platform == SocialPlatform.facebook;
 
     // Platform cover gradient
+    // Platform cover gradient
     final Gradient coverGradient = isInstagram
         ? const LinearGradient(
-            colors: [Color(0xFF833AB4), Color(0xFFFD1D1D), Color(0xFFFCB045)],
+            colors: AppColors.instagramGradient,
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           )
         : (isFacebook
             ? const LinearGradient(
-                colors: [Color(0xFF1877F2), Color(0xFF0056C6)],
+                colors: AppColors.gradientFacebook,
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               )
@@ -208,7 +209,7 @@ class ViewLeadScreen extends StatelessWidget {
         border: Border.all(color: AppColors.border, width: 1.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.shadow.withValues(alpha: 0.04),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -241,7 +242,7 @@ class ViewLeadScreen extends StatelessWidget {
                         height: 120,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.white.withValues(alpha: 0.12),
+                          color: AppColors.white.withValues(alpha: 0.12),
                         ),
                       ),
                     ),
@@ -253,7 +254,7 @@ class ViewLeadScreen extends StatelessWidget {
                         height: 100,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.white.withValues(alpha: 0.08),
+                          color: AppColors.white.withValues(alpha: 0.08),
                         ),
                       ),
                     ),
@@ -279,14 +280,14 @@ class ViewLeadScreen extends StatelessWidget {
                   children: [
                     Container(
                       padding: const EdgeInsets.all(4.0),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: Color(0x1F000000),
+                            color: AppColors.shadow.withValues(alpha: 0.12),
                             blurRadius: 12,
-                            offset: Offset(0, 4),
+                            offset: const Offset(0, 4),
                           ),
                         ],
                       ),
@@ -303,9 +304,9 @@ class ViewLeadScreen extends StatelessWidget {
                         width: 16.0,
                         height: 16.0,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF22C55E),
+                          color: AppColors.success,
                           shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2.5),
+                          border: Border.all(color: AppColors.white, width: 2.5),
                         ),
                       ),
                     ),
@@ -368,31 +369,31 @@ class ViewLeadScreen extends StatelessWidget {
                 _buildActionCalloutButton(
                   context,
                   label: 'Call',
-                  icon: const CallIconWidget(size: 24.0, color: Colors.white),
+                  icon: const CallIconWidget(size: 24.0, color: AppColors.white),
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)],
+                    colors: [AppColors.primary, AppColors.primaryDark],
                   ),
-                  shadowColor: const Color(0xFF2563EB),
+                  shadowColor: AppColors.primary,
                   onTap: () => AppUtils.launchAppUrl('tel:${lead.contactNumber}'),
                 ),
                 _buildActionCalloutButton(
                   context,
                   label: 'Message',
-                  icon: const MessageIconWidget(size: 24.0, color: Colors.white),
+                  icon: const MessageIconWidget(size: 24.0, color: AppColors.white),
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF0EA5E9), Color(0xFF0284C7)],
+                    colors: AppColors.gradientCyan,
                   ),
-                  shadowColor: const Color(0xFF0EA5E9),
+                  shadowColor: AppColors.gradientCyan.first,
                   onTap: () => AppUtils.launchAppUrl('sms:${lead.contactNumber}'),
                 ),
                 _buildActionCalloutButton(
                   context,
                   label: 'WhatsApp',
-                  icon: const WhatsappIconWidget(size: 24.0, color: Colors.white),
+                  icon: const WhatsappIconWidget(size: 24.0, color: AppColors.white),
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF25D366), Color(0xFF128C7E)],
+                    colors: [AppColors.whatsapp, AppColors.whatsappDark],
                   ),
-                  shadowColor: const Color(0xFF25D366),
+                  shadowColor: AppColors.whatsapp,
                   onTap: () => AppUtils.launchAppUrl(lead.buildWhatsappUrl()),
                 ),
               ],

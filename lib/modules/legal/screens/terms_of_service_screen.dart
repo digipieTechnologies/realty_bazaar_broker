@@ -69,8 +69,8 @@ class TermsOfServiceScreen extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16.0),
                     border: Border.all(color: AppColors.border, width: 1.0),
-                    boxShadow: const [
-                      BoxShadow(color: Color(0x08000000), blurRadius: 16, offset: Offset(0, 4)),
+                    boxShadow: [
+                      BoxShadow(color: AppColors.shadow.withValues(alpha: 0.05), blurRadius: 16, offset: const Offset(0, 4)),
                     ],
                   ),
                   child: Column(

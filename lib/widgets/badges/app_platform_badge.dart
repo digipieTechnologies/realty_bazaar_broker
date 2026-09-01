@@ -40,8 +40,8 @@ class AppPlatformBadge extends StatelessWidget {
     final isInstagram = platform == SocialPlatform.instagram;
 
     final Color brandColor = isFacebook
-        ? const Color(0xFF1877F2)
-        : (isInstagram ? const Color(0xFFE1306C) : AppColors.textSecondary);
+        ? AppColors.facebook
+        : (isInstagram ? AppColors.instagram : AppColors.textSecondary);
 
     final String labelText = isFacebook ? 'Facebook' : (isInstagram ? 'Instagram' : 'Other');
 
@@ -56,11 +56,11 @@ class AppPlatformBadge extends StatelessWidget {
       return Container(
         padding: effectivePadding,
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.92),
+          color: AppColors.white.withValues(alpha: 0.92),
           borderRadius: BorderRadius.circular(20.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: AppColors.shadow.withValues(alpha: 0.1),
               blurRadius: 6,
               offset: const Offset(0, 2),
             ),
@@ -77,7 +77,7 @@ class AppPlatformBadge extends StatelessWidget {
                   TextStyle(
                     fontSize: 11.5,
                     fontWeight: FontWeight.bold,
-                    color: const Color(0xFF1E293B),
+                    color: AppColors.textPrimary,
                   ),
             ),
           ],

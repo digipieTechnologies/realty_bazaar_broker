@@ -81,7 +81,7 @@ class SubscriptionFeatureSection extends StatelessWidget {
         ),
         const SizedBox(height: 14.0),
         SizedBox(
-          height: 185.0,
+          height: 135.0,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),

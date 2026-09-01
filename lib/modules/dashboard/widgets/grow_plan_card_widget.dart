@@ -5,12 +5,12 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../models/models.dart';
+import '../../../util/currency_formatter.dart';
 import '../../../widgets/buttons/app_button.dart';
 
 class GrowPlanCardWidget extends StatelessWidget {
@@ -27,20 +27,13 @@ class GrowPlanCardWidget extends StatelessWidget {
 
   /// Format amount to Indian currency: ₹4,499
   String _formatAmount(double amount) {
-    if (amount <= 0) return '';
-    final formatter = NumberFormat('#,##,###', 'en_IN');
-    final formatted = formatter.format(amount.toInt());
-    return '₹$formatted';
+    return CurrencyFormatter.format(amount);
   }
 
   /// Returns gradient colors based on plan duration
   List<Color> _getCardGradient() {
     if (plan.isPopular) {
-      return [
-        const Color(0xFF0B1A3B),
-        const Color(0xFF132D5E),
-        const Color(0xFF1A3F7A),
-      ];
+      return AppColors.popularCardGradient;
     }
     return [AppColors.surface, AppColors.surface];
   }
@@ -96,7 +89,7 @@ class GrowPlanCardWidget extends StatelessWidget {
                 )
               else ...[
                 BoxShadow(
-                  color: const Color(0xFF0F172A).withValues(alpha: 0.08),
+                  color: AppColors.shadow.withValues(alpha: 0.08),
                   blurRadius: 22.0,
                   spreadRadius: 0,
                   offset: const Offset(0, 8),
@@ -191,12 +184,12 @@ class GrowPlanCardWidget extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF3B82F6), Color(0xFF2563EB)],
+                    colors: [AppColors.primary, AppColors.primaryDark],
                   ),
                   borderRadius: BorderRadius.circular(20.0),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF3B82F6).withValues(alpha: 0.4),
+                      color: AppColors.primary.withValues(alpha: 0.4),
                       blurRadius: 10.0,
                       offset: const Offset(0, 3),
                     ),
@@ -208,13 +201,13 @@ class GrowPlanCardWidget extends StatelessWidget {
                     const Icon(
                       Icons.star_rounded,
                       size: 14.0,
-                      color: Color(0xFFFBBF24),
+                      color: AppColors.warning,
                     ),
                     const SizedBox(width: 4.0),
                     Text(
                       context.tr('grow_most_popular'),
                       style: AppTextStyles.caption.copyWith(
-                        color: Colors.white,
+                        color: AppColors.white,
                         fontWeight: FontWeight.w700,
                         fontSize: 11.0,
                         letterSpacing: 0.5,
@@ -275,14 +268,14 @@ class GrowPlanCardWidget extends StatelessWidget {
           Icon(
             titleIcon,
             size: 13.0,
-            color: isPopular ? const Color(0xFF93C5FD) : accent,
+            color: isPopular ? AppColors.heroSubtextBlue : accent,
           ),
           const SizedBox(width: 5.0),
           Flexible(
             child: Text(
               plan.title.toUpperCase(),
               style: AppTextStyles.caption.copyWith(
-                color: isPopular ? const Color(0xFF93C5FD) : accent,
+                color: isPopular ? AppColors.heroSubtextBlue : accent,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 0.5,
                 fontSize: 11.0,
@@ -307,7 +300,7 @@ class GrowPlanCardWidget extends StatelessWidget {
         child: Text(
           context.tr('grow_custom_label'),
           style: AppTextStyles.heading2.copyWith(
-            color: isPopular ? Colors.white : AppColors.textPrimary,
+            color: isPopular ? AppColors.white : AppColors.textPrimary,
             fontWeight: FontWeight.w800,
             fontSize: 28.0,
           ),
@@ -326,7 +319,7 @@ class GrowPlanCardWidget extends StatelessWidget {
           Text(
             formattedAmount,
             style: AppTextStyles.heading1.copyWith(
-              color: isPopular ? Colors.white : AppColors.textPrimary,
+              color: isPopular ? AppColors.white : AppColors.textPrimary,
               fontWeight: FontWeight.w800,
               fontSize: 30.0,
               letterSpacing: -0.5,
@@ -364,7 +357,7 @@ class GrowPlanCardWidget extends StatelessWidget {
               height: 20.0,
               decoration: BoxDecoration(
                 color: isPopular
-                    ? const Color(0xFF10B981).withValues(alpha: 0.15)
+                    ? AppColors.success.withValues(alpha: 0.15)
                     : AppColors.successLight,
                 shape: BoxShape.circle,
               ),
@@ -380,7 +373,7 @@ class GrowPlanCardWidget extends StatelessWidget {
                 plan.benefits[index],
                 style: AppTextStyles.body2.copyWith(
                   color: isPopular
-                      ? const Color(0xFFE2E8F0)
+                      ? AppColors.background
                       : AppColors.textPrimary,
                   fontSize: 13.0,
                   height: 1.4,
@@ -431,7 +424,7 @@ class GrowPlanCardWidget extends StatelessWidget {
         width: double.infinity,
         height: 48.0,
         borderRadius: 12.0,
-        gradientColors: const [Color(0xFF3B82F6), Color(0xFF2563EB)],
+        gradientColors: const [AppColors.primary, AppColors.primaryDark],
         iconData: Icons.open_in_new_rounded,
         iconSize: 16.0,
       );
@@ -444,8 +437,8 @@ class GrowPlanCardWidget extends StatelessWidget {
         width: double.infinity,
         height: 48.0,
         borderRadius: 12.0,
-        borderColor: const Color(0xFF1E293B),
-        textColor: const Color(0xFF1E293B),
+        borderColor: AppColors.textPrimary,
+        textColor: AppColors.textPrimary,
         iconData: Icons.arrow_forward_rounded,
         iconSize: 16.0,
       );
