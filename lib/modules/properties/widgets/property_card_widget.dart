@@ -212,6 +212,12 @@ class PropertyCardWidget extends StatelessWidget {
                             color: AppColors.primary,
                             isOutline: true,
                           ),
+                          if (property.propertyCode != null && property.propertyCode!.isNotEmpty)
+                            _buildChip(
+                              label: '${property.propertyCode}',
+                              color: AppColors.textSecondary,
+                              isOutline: true,
+                            ),
                           _buildChip(
                             label: PropertyLocalizer.getLocalizedPropertyType(context, property.propertyType),
                             color: AppColors.textSecondary,

@@ -59,6 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final _saveFocusNode = FocusNode();
 
   bool _isSaving = false;
+  bool _isSigningOut = false;
 
   @override
   void initState() {
@@ -675,151 +676,229 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildAccountActionsCard(bool isDesktop) {
-    return Card(
-      elevation: 0.0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16.0),
-        side: const BorderSide(color: AppColors.border, width: 1.0),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(isDesktop ? 24.0 : 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(context.tr('account_actions'), style: AppTextStyles.heading3),
-            Divider(height: isDesktop ? 32 : 24, color: AppColors.border),
+  Future<void> _showSignOutConfirmation() async {
+    final confirmed = await AppDialog.showConfirmationDialog(
+      context,
+      title: context.tr('confirm_sign_out'),
+      description: context.tr('sign_out_warning'),
+      confirmText: context.tr('sign_out_button'),
+      cancelText: context.tr('cancel'),
+      type: DialogType.info,
+    );
 
-            // Danger Zone (Separated & Styled cleanly)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(14.0),
-              decoration: BoxDecoration(
-                color: AppColors.error.withOpacity(0.04),
-                borderRadius: BorderRadius.circular(12.0),
-                border: Border.all(color: AppColors.error.withOpacity(0.2), width: 1.0),
+    if (confirmed == true && mounted) {
+      setState(() => _isSigningOut = true);
+      try {
+        final router = GoRouter.of(context);
+        await context.read<AuthProvider>().signOut(context);
+        if (mounted) {
+          router.go(AppRoutes.login);
+        }
+      } finally {
+        if (mounted) {
+          setState(() => _isSigningOut = false);
+        }
+      }
+    }
+  }
+
+  Widget _buildAccountActionsCard(bool isDesktop) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Card(
+          elevation: 0.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            side: const BorderSide(color: AppColors.border, width: 1.0),
+          ),
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              dividerColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+            ),
+            child: ExpansionTile(
+              initiallyExpanded: false,
+              tilePadding: EdgeInsets.all(16).copyWith(bottom: 8, top: 8),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+              childrenPadding: EdgeInsets.fromLTRB(
+                isDesktop ? 20.0 : 16.0,
+                0.0,
+                isDesktop ? 20.0 : 16.0,
+                isDesktop ? 20.0 : 16.0,
               ),
-              child: isDesktop
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                context.tr('delete_account'),
-                                style: const TextStyle(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.error,
-                                ),
-                              ),
-                              const SizedBox(height: 2.0),
-                              Text(
-                                context.tr('delete_account_subtitle'),
-                                style: const TextStyle(fontSize: 12.0, color: AppColors.textSecondary),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 16.0),
-                        AppButton(
-                          text: context.tr('delete_account'),
-                          variant: AppButtonVariant.outline,
-                          borderColor: AppColors.error.withOpacity(0.5),
-                          textColor: AppColors.error,
-                          height: 38.0,
-                          iconData: Icons.delete_outline_rounded,
-                          onPressed: () => context.push(AppRoutes.deleteAccount),
-                        ),
-                      ],
-                    )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+              leading: Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: const Icon(Icons.manage_accounts_outlined, size: 22.0, color: AppColors.primary),
+              ),
+              title: Text(
+                context.tr('account_actions'),
+                style: AppTextStyles.heading3.copyWith(fontSize: 16.0),
+              ),
+              subtitle: Text(
+                context.tr('sign_out_subtitle'),
+                style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
+              ),
+              children: [
+                const Divider(height: 24, color: AppColors.border),
+                const SizedBox(height: 8.0),
+
+                // Danger Zone (Delete Account)
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(14.0),
+                  decoration: BoxDecoration(
+                    color: AppColors.error.withOpacity(0.04),
+                    borderRadius: BorderRadius.circular(12.0),
+                    border: Border.all(color: AppColors.error.withOpacity(0.2), width: 1.0),
+                  ),
+                  child: isDesktop
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Icon(Icons.warning_amber_rounded, size: 18.0, color: AppColors.error),
-                            const SizedBox(width: 6.0),
-                            Text(
-                              context.tr('delete_account'),
-                              style: const TextStyle(
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.error,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    context.tr('delete_account'),
+                                    style: const TextStyle(
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.error,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2.0),
+                                  Text(
+                                    context.tr('delete_account_subtitle'),
+                                    style: const TextStyle(fontSize: 12.0, color: AppColors.textSecondary),
+                                  ),
+                                ],
                               ),
+                            ),
+                            const SizedBox(width: 16.0),
+                            AppButton(
+                              text: context.tr('delete_account'),
+                              variant: AppButtonVariant.outline,
+                              borderColor: AppColors.error.withOpacity(0.5),
+                              textColor: AppColors.error,
+                              height: 38.0,
+                              iconData: Icons.delete_outline_rounded,
+                              onPressed: () => context.push(AppRoutes.deleteAccount),
+                            ),
+                          ],
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const Icon(Icons.warning_amber_rounded, size: 18.0, color: AppColors.error),
+                                const SizedBox(width: 6.0),
+                                Text(
+                                  context.tr('delete_account'),
+                                  style: const TextStyle(
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.error,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4.0),
+                            Text(
+                              context.tr('delete_account_subtitle'),
+                              style: const TextStyle(fontSize: 12.0, color: AppColors.textSecondary),
+                            ),
+                            const SizedBox(height: 12.0),
+                            AppButton(
+                              text: context.tr('delete_account'),
+                              variant: AppButtonVariant.outline,
+                              borderColor: AppColors.error.withOpacity(0.5),
+                              textColor: AppColors.error,
+                              height: 40.0,
+                              width: double.infinity,
+                              iconData: Icons.delete_outline_rounded,
+                              onPressed: () => context.push(AppRoutes.deleteAccount),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 4.0),
-                        Text(
-                          context.tr('delete_account_subtitle'),
-                          style: const TextStyle(fontSize: 12.0, color: AppColors.textSecondary),
-                        ),
-                        const SizedBox(height: 12.0),
-                        AppButton(
-                          text: context.tr('delete_account'),
-                          variant: AppButtonVariant.outline,
-                          borderColor: AppColors.error.withOpacity(0.5),
-                          textColor: AppColors.error,
-                          height: 40.0,
-                          width: double.infinity,
-                          iconData: Icons.delete_outline_rounded,
-                          onPressed: () => context.push(AppRoutes.deleteAccount),
-                        ),
-                      ],
-                    ),
-            ),
-
-            const SizedBox(height: 16.0),
-            const Divider(color: AppColors.border),
-            const SizedBox(height: 8.0),
-
-            // Legal links footer
-            Row(
-              children: [
-                TextButton(
-                  onPressed: () => context.push(AppRoutes.privacyPolicy),
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    minimumSize: const Size(50, 30),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  child: Text(
-                    context.tr('privacy_policy'),
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text('•', style: TextStyle(color: AppColors.textSecondary)),
-                ),
-                TextButton(
-                  onPressed: () => context.push(AppRoutes.termsOfService),
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    minimumSize: const Size(50, 30),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  child: Text(
-                    context.tr('terms_of_service'),
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.w500,
+
+                const SizedBox(height: 16.0),
+                const Divider(color: AppColors.border),
+                const SizedBox(height: 8.0),
+
+                // Legal links footer
+                Row(
+                  children: [
+                    TextButton(
+                      onPressed: () => context.push(AppRoutes.privacyPolicy),
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: const Size(50, 30),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      child: Text(
+                        context.tr('privacy_policy'),
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
-                  ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text('•', style: TextStyle(color: AppColors.textSecondary)),
+                    ),
+                    TextButton(
+                      onPressed: () => context.push(AppRoutes.termsOfService),
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: const Size(50, 30),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      child: Text(
+                        context.tr('terms_of_service'),
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
-      ),
+
+        const SizedBox(height: 20.0),
+
+        // Sign Out Button below Account Actions card
+        Align(
+          alignment: isDesktop ? Alignment.centerLeft : Alignment.center,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 4, right: 4),
+            child: AppButton.outline(
+              text: context.tr('sign_out_button'),
+              iconData: Icons.logout_rounded,
+              width: isDesktop ? 180.0 : double.infinity,
+              height: 44.0,
+              textColor: AppColors.textPrimary,
+              isLoading: _isSigningOut,
+              onPressed: _isSigningOut || _isSaving ? null : _showSignOutConfirmation,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
