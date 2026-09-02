@@ -1,5 +1,5 @@
 // File: lib/widgets/common/app_pagination_widget.dart
-// Purpose: Common pagination widget for list and table views with responsive ellipsis (...) pagination and hand cursor hover effects.
+// Purpose: Common pagination widget for list, grid, and table views with responsive ellipsis (...) pagination, standalone card styling, and hand cursor hover effects.
 
 import 'package:flutter/material.dart';
 
@@ -14,6 +14,7 @@ class AppPaginationWidget extends StatelessWidget {
   final int itemsPerPage;
   final String itemLabel;
   final ValueChanged<int> onPageChanged;
+  final bool isStandalone;
 
   const AppPaginationWidget({
     super.key,
@@ -23,6 +24,7 @@ class AppPaginationWidget extends StatelessWidget {
     this.itemsPerPage = 10,
     this.itemLabel = 'items',
     required this.onPageChanged,
+    this.isStandalone = false,
   });
 
   List<dynamic> _getPageNumbers(bool isMobile) {
@@ -56,32 +58,68 @@ class AppPaginationWidget extends StatelessWidget {
     final endItem = (currentPage * itemsPerPage) > totalItems ? totalItems : (currentPage * itemsPerPage);
     final isMobile = context.isMobileUI;
 
-    final infoText = 'Showing $startItem to $endItem of $totalItems $itemLabel';
+    final infoWidget = RichText(
+      text: TextSpan(
+        style: AppTextStyles.body2.copyWith(
+          color: AppColors.textSecondary,
+          fontSize: 13.0,
+          fontWeight: FontWeight.w500,
+        ),
+        children: [
+          const TextSpan(text: 'Showing '),
+          TextSpan(
+            text: '$startItem–$endItem',
+            style: const TextStyle(
+              fontWeight: FontWeight.w700,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const TextSpan(text: ' of '),
+          TextSpan(
+            text: '$totalItems',
+            style: const TextStyle(
+              fontWeight: FontWeight.w700,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          TextSpan(text: ' $itemLabel'),
+        ],
+      ),
+    );
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(16.0),
-          bottomRight: Radius.circular(16.0),
-        ),
-        border: Border(top: BorderSide(color: AppColors.border, width: 1.0)),
+      padding: EdgeInsets.symmetric(
+        horizontal: isStandalone ? 20.0 : 16.0,
+        vertical: isStandalone ? 14.0 : 12.0,
       ),
+      decoration: isStandalone
+          ? BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(14.0),
+              border: Border.all(color: AppColors.border, width: 1.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.02),
+                  blurRadius: 8.0,
+                  offset: const Offset(0, 2.0),
+                ),
+              ],
+            )
+          : const BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(16.0),
+                bottomRight: Radius.circular(16.0),
+              ),
+              border: Border(top: BorderSide(color: AppColors.border, width: 1.0)),
+            ),
       child: isMobile
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  infoText,
-                  style: AppTextStyles.caption.copyWith(
-                    color: AppColors.textSecondary,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 13.0,
-                  ),
-                ),
-                const SizedBox(height: 10.0),
+                infoWidget,
+                const SizedBox(height: 12.0),
                 Align(alignment: Alignment.centerRight, child: _buildPageControls(isMobile)),
               ],
             )
@@ -89,14 +127,7 @@ class AppPaginationWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  infoText,
-                  style: AppTextStyles.caption.copyWith(
-                    color: AppColors.textSecondary,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 13.0,
-                  ),
-                ),
+                infoWidget,
                 _buildPageControls(isMobile),
               ],
             ),
@@ -118,7 +149,7 @@ class AppPaginationWidget extends StatelessWidget {
           onTap: () => onPageChanged(currentPage - 1),
           isMobile: isMobile,
         ),
-        SizedBox(width: isMobile ? 2.0 : 4.0),
+        SizedBox(width: isMobile ? 3.0 : 6.0),
 
         // Page Numbers & Ellipses
         for (int i = 0; i < pages.length; i++) ...[
@@ -133,7 +164,7 @@ class AppPaginationWidget extends StatelessWidget {
           ],
         ],
 
-        SizedBox(width: isMobile ? 2.0 : 4.0),
+        SizedBox(width: isMobile ? 3.0 : 6.0),
 
         // Next Button
         _buildNavigationButton(
@@ -152,7 +183,7 @@ class AppPaginationWidget extends StatelessWidget {
     required VoidCallback onTap,
     required bool isMobile,
   }) {
-    final size = isMobile ? 30.0 : 34.0;
+    final size = isMobile ? 32.0 : 36.0;
     return MouseRegion(
       cursor: enabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
       child: Material(
@@ -167,11 +198,18 @@ class AppPaginationWidget extends StatelessWidget {
             width: size,
             height: size,
             alignment: Alignment.center,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
+            decoration: BoxDecoration(
+              color: enabled ? const Color(0xFFF8FAFC) : Colors.transparent,
+              borderRadius: BorderRadius.circular(8.0),
+              border: Border.all(
+                color: enabled ? AppColors.border : AppColors.border.withValues(alpha: 0.4),
+                width: 1.0,
+              ),
+            ),
             child: Icon(
               icon,
               size: isMobile ? 18.0 : 20.0,
-              color: enabled ? AppColors.textPrimary : AppColors.textMuted.withValues(alpha: 0.5),
+              color: enabled ? AppColors.textPrimary : AppColors.textMuted.withValues(alpha: 0.4),
             ),
           ),
         ),
@@ -180,15 +218,17 @@ class AppPaginationWidget extends StatelessWidget {
   }
 
   Widget _buildPageNumberItem({required int page, required bool isSelected, required bool isMobile}) {
-    final size = isMobile ? 28.0 : 32.0;
+    final size = isMobile ? 30.0 : 34.0;
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: isMobile ? 1.5 : 2.0),
+        margin: EdgeInsets.symmetric(horizontal: isMobile ? 1.5 : 2.5),
         child: Material(
-          color: isSelected ? AppColors.primary : Colors.transparent,
+          color: isSelected ? AppColors.primary : const Color(0xFFF8FAFC),
           borderRadius: BorderRadius.circular(8.0),
+          elevation: isSelected ? 1.0 : 0.0,
+          shadowColor: isSelected ? AppColors.primary.withValues(alpha: 0.4) : Colors.transparent,
           child: InkWell(
             onTap: () => onPageChanged(page),
             borderRadius: BorderRadius.circular(8.0),
@@ -198,12 +238,18 @@ class AppPaginationWidget extends StatelessWidget {
               width: size,
               height: size,
               alignment: Alignment.center,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                border: Border.all(
+                  color: isSelected ? AppColors.primary : AppColors.border,
+                  width: 1.0,
+                ),
+              ),
               child: Text(
                 '$page',
                 style: TextStyle(
                   fontSize: isMobile ? 12.0 : 13.0,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                  fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
                   color: isSelected ? Colors.white : AppColors.textPrimary,
                 ),
               ),
@@ -216,7 +262,7 @@ class AppPaginationWidget extends StatelessWidget {
 
   Widget _buildEllipsisItem({required int index, required bool isMobile}) {
     final width = isMobile ? 22.0 : 26.0;
-    final height = isMobile ? 28.0 : 32.0;
+    final height = isMobile ? 30.0 : 34.0;
 
     return Container(
       width: width,

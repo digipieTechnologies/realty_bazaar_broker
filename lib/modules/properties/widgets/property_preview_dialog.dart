@@ -19,7 +19,6 @@ import '../../../providers/property/property_provider.dart';
 import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/dialogs/app_base_dialog.dart';
 import '../../../widgets/toast/app_toast.dart';
-import '../screens/view_property_screen.dart';
 import './property_amenities_wrap.dart';
 import './property_location_card.dart';
 import './property_preview_buttons.dart';
