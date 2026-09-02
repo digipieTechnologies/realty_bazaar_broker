@@ -14,11 +14,7 @@ class EstimatedResultsCard extends StatelessWidget {
   final double planAmount;
   final int days;
 
-  const EstimatedResultsCard({
-    super.key,
-    required this.planAmount,
-    required this.days,
-  });
+  const EstimatedResultsCard({super.key, required this.planAmount, required this.days});
 
   @override
   Widget build(BuildContext context) {
@@ -68,11 +64,7 @@ class EstimatedResultsCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16.0),
                 child: const Padding(
                   padding: EdgeInsets.all(4.0),
-                  child: Icon(
-                    Icons.info_outline_rounded,
-                    size: 17.0,
-                    color: AppColors.primary,
-                  ),
+                  child: Icon(Icons.info_outline_rounded, size: 17.0, color: AppColors.primary),
                 ),
               ),
             ],
@@ -138,10 +130,7 @@ class EstimatedResultsCard extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              color: iconColor.withValues(alpha: 0.12),
-              shape: BoxShape.circle,
-            ),
+            decoration: BoxDecoration(color: iconColor.withValues(alpha: 0.12), shape: BoxShape.circle),
             child: Icon(iconData, size: 18.0, color: iconColor),
           ),
           const SizedBox(width: 10.0),

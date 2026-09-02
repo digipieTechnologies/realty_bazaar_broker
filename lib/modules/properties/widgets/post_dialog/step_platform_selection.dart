@@ -336,9 +336,7 @@ class StepPlatformSelection extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     final badgeBgColor = isConnected ? AppColors.successLight : AppColors.warningLight;
-    final badgeBorderColor = isConnected
-        ? AppColors.successBorder
-        : AppColors.warningBorder;
+    final badgeBorderColor = isConnected ? AppColors.successBorder : AppColors.warningBorder;
     final badgeTextColor = isConnected ? AppColors.statusSuccessDarkText : AppColors.warningDark;
     final badgeDotColor = isConnected ? AppColors.statusSuccessText : AppColors.warning;
     final statusText = isConnected

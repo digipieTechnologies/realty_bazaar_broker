@@ -69,18 +69,12 @@ class AppPaginationWidget extends StatelessWidget {
           const TextSpan(text: 'Showing '),
           TextSpan(
             text: '$startItem–$endItem',
-            style: const TextStyle(
-              fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.textPrimary),
           ),
           const TextSpan(text: ' of '),
           TextSpan(
             text: '$totalItems',
-            style: const TextStyle(
-              fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.textPrimary),
           ),
           TextSpan(text: ' $itemLabel'),
         ],
@@ -126,10 +120,7 @@ class AppPaginationWidget extends StatelessWidget {
           : Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                infoWidget,
-                _buildPageControls(isMobile),
-              ],
+              children: [infoWidget, _buildPageControls(isMobile)],
             ),
     );
   }
@@ -240,10 +231,7 @@ class AppPaginationWidget extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8.0),
-                border: Border.all(
-                  color: isSelected ? AppColors.primary : AppColors.border,
-                  width: 1.0,
-                ),
+                border: Border.all(color: isSelected ? AppColors.primary : AppColors.border, width: 1.0),
               ),
               child: Text(
                 '$page',

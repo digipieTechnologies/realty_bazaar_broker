@@ -106,7 +106,7 @@ class MediaPickerHelper {
           if (kIsWeb) {
             if (file.bytes == null) continue;
             bytes = file.bytes!;
-          } else if (file.path != null) {
+          } else if (file.path != null && !isVideo) {
             try {
               bytes = file.bytes ?? await io.File(file.path!).readAsBytes();
             } catch (e) {
@@ -294,12 +294,10 @@ class MediaPickerHelper {
           continue;
         }
 
-        Uint8List bytes;
+        Uint8List? bytes;
         if (kIsWeb) {
           if (file.bytes == null) continue;
-          bytes = file.bytes!;
-        } else {
-          bytes = file.bytes ?? await io.File(file.path!).readAsBytes();
+          bytes = file.bytes;
         }
 
         Uint8List? thumbBytes;

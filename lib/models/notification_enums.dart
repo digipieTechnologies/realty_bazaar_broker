@@ -6,6 +6,7 @@ enum NotificationType {
   lead('lead');
 
   final String dbValue;
+
   const NotificationType(this.dbValue);
 
   static NotificationType fromDbValue(String? value) {

@@ -58,7 +58,9 @@ extension ContextX on BuildContext {
 
   /// Responsive Breakpoint checkers
   bool get isMobileUI => width < mobileBreakpoint;
+
   bool get isTabletUI => width >= mobileBreakpoint && width < desktopBreakpoint;
+
   bool get isDesktop => width >= desktopBreakpoint;
 
   /// Helper to evaluate desktop layout state from constraints width.

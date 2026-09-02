@@ -152,10 +152,13 @@ class AppUtils {
   // --- SCREEN SIZE HELPERS ---
 
   static double getScreenWidth(BuildContext context) => context.width;
+
   static double getScreenHeight(BuildContext context) => context.height;
 
   static bool isMobile(BuildContext context) => context.isMobileUI;
+
   static bool isTablet(BuildContext context) => context.isTabletUI;
+
   static bool isDesktop(BuildContext context) => context.isDesktop;
 
   // --- DEBOUNCER ---

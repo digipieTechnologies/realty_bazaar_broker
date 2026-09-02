@@ -3,13 +3,12 @@
 // using design system tokens (AppColors) and unified buttons (AppButton).
 
 import 'package:flutter/material.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 import '../../../../app/app_colors.dart';
-import '../../../../app/app_routes.dart';
 import '../../../../app/app_text_styles.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../widgets/buttons/app_button.dart';
-import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 class AdCampaignBannerWidget extends StatelessWidget {
   const AdCampaignBannerWidget({super.key});

@@ -7,15 +7,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 import '../../../app/app_colors.dart';
-import '../../../app/app_routes.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../providers/subscription/subscription_provider.dart';
 import '../../../widgets/shimmer/grow_plan_shimmer_widget.dart';
 import '../widgets/grow_plan_carousel_widget.dart';
-import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 class GrowTabScreen extends StatefulWidget {
   const GrowTabScreen({super.key});
@@ -61,10 +60,7 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
                     plans: provider.plans,
                     onSelectPlan: (plan) {
                       provider.setSelectedPlan(plan);
-                      AppNavigator.navigateToSubscriptionPackageDetail(
-                        context,
-                        plan,
-                      );
+                      AppNavigator.navigateToSubscriptionPackageDetail(context, plan);
                     },
                   )
                 else
@@ -97,19 +93,12 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
                 decoration: BoxDecoration(
                   color: AppColors.primary50,
                   borderRadius: BorderRadius.circular(20.0),
-                  border: Border.all(
-                    color: AppColors.consultationBannerBorder,
-                    width: 1.0,
-                  ),
+                  border: Border.all(color: AppColors.consultationBannerBorder, width: 1.0),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
-                      Icons.auto_awesome_rounded,
-                      size: isMobile ? 13.0 : 14.0,
-                      color: AppColors.primary,
-                    ),
+                    Icon(Icons.auto_awesome_rounded, size: isMobile ? 13.0 : 14.0, color: AppColors.primary),
                     const SizedBox(width: 6.0),
                     Text(
                       context.tr('grow_header_badge'),
@@ -127,9 +116,7 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
 
               // Title
               ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: isMobile ? double.infinity : 680.0,
-                ),
+                constraints: BoxConstraints(maxWidth: isMobile ? double.infinity : 680.0),
                 child: Text(
                   context.tr('grow_header_title'),
                   style: AppTextStyles.heading1.copyWith(
@@ -146,9 +133,7 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
 
               // Subtitle
               ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: isMobile ? double.infinity : 620.0,
-                ),
+                constraints: BoxConstraints(maxWidth: isMobile ? double.infinity : 620.0),
                 child: Text(
                   context.tr('grow_header_subtitle'),
                   style: AppTextStyles.body1.copyWith(
@@ -171,18 +156,11 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 40.0),
       child: Column(
         children: [
-          Icon(
-            Icons.inbox_rounded,
-            size: 48.0,
-            color: AppColors.textMuted.withValues(alpha: 0.5),
-          ),
+          Icon(Icons.inbox_rounded, size: 48.0, color: AppColors.textMuted.withValues(alpha: 0.5)),
           const SizedBox(height: 12.0),
           Text(
             context.tr('grow_no_options'),
-            style: AppTextStyles.body1.copyWith(
-              color: AppColors.textSecondary,
-              fontWeight: FontWeight.w500,
-            ),
+            style: AppTextStyles.body1.copyWith(color: AppColors.textSecondary, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 4.0),
           Text(

@@ -15,10 +15,7 @@ class EstimatedResultsInfoDialog extends StatelessWidget {
 
   /// Static helper to display the dialog
   static Future<void> show(BuildContext context) {
-    return AppBaseDialog.show(
-      context: context,
-      child: const EstimatedResultsInfoDialog(),
-    );
+    return AppBaseDialog.show(context: context, child: const EstimatedResultsInfoDialog());
   }
 
   @override
@@ -42,11 +39,7 @@ class EstimatedResultsInfoDialog extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(
-                  Icons.info_outline_rounded,
-                  size: 20.0,
-                  color: AppColors.primary,
-                ),
+                const Icon(Icons.info_outline_rounded, size: 20.0, color: AppColors.primary),
                 const SizedBox(width: 10.0),
                 Expanded(
                   child: Text(
@@ -133,10 +126,7 @@ class EstimatedResultsInfoDialog extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.all(7.0),
-          decoration: BoxDecoration(
-            color: iconColor.withValues(alpha: 0.1),
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: iconColor.withValues(alpha: 0.1), shape: BoxShape.circle),
           child: Icon(iconData, size: 16.0, color: iconColor),
         ),
         const SizedBox(width: 12.0),

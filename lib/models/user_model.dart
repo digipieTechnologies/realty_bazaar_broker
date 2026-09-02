@@ -22,6 +22,7 @@ class UserModel extends Equatable {
   final DateTime? updatedAt;
 
   String? get roleString => role?.dbValue;
+
   String? get genderString => gender?.dbValue;
 
   const UserModel({

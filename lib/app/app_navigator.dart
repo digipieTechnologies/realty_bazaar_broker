@@ -9,11 +9,11 @@ import '../modules/auth/screens/delete_account_screen.dart';
 import '../modules/dashboard/screens/ad_campaign_settings_screen.dart';
 import '../modules/dashboard/screens/profile_screen.dart';
 import '../modules/dashboard/screens/request_video_tab_screen.dart';
+import '../modules/dashboard/screens/view_post_screen.dart';
 import '../modules/leads/screens/view_lead_screen.dart';
 import '../modules/legal/screens/privacy_policy_screen.dart';
 import '../modules/legal/screens/terms_of_service_screen.dart';
 import '../modules/properties/screens/view_property_screen.dart';
-import '../modules/dashboard/screens/view_post_screen.dart';
 import '../modules/subscription/screens/subscription_package_detail_screen.dart';
 import '../util/common_ext.dart';
 import 'app_routes.dart';
@@ -22,10 +22,7 @@ class AppNavigator {
   AppNavigator._();
 
   /// Navigates to Property Details (URL deep link on Desktop, rootNavigator on Mobile)
-  static void navigateToPropertyDetails(
-    BuildContext context,
-    PropertyModel property,
-  ) {
+  static void navigateToPropertyDetails(BuildContext context, PropertyModel property) {
     final identifier = property.propertyCode?.isNotEmpty == true
         ? property.propertyCode!
         : (property.id ?? '');
@@ -38,18 +35,14 @@ class AppNavigator {
     } else {
       Navigator.of(context, rootNavigator: true).push(
         MaterialPageRoute(
-          builder: (context) =>
-              ViewPropertyScreen(property: property, propertyId: identifier),
+          builder: (context) => ViewPropertyScreen(property: property, propertyId: identifier),
         ),
       );
     }
   }
 
   /// Navigates to Lead Details (URL deep link on Desktop, rootNavigator on Mobile)
-  static void navigateToLeadDetails(
-    BuildContext context,
-    SocialLeadModel lead,
-  ) {
+  static void navigateToLeadDetails(BuildContext context, SocialLeadModel lead) {
     final targetId = lead.id ?? '';
     if (context.isDesktop) {
       if (targetId.isNotEmpty) {
@@ -67,10 +60,7 @@ class AppNavigator {
   }
 
   /// Navigates to Post Details (URL deep link on Desktop, rootNavigator on Mobile)
-  static void navigateToPostDetails(
-    BuildContext context,
-    SocialPostModel post,
-  ) {
+  static void navigateToPostDetails(BuildContext context, SocialPostModel post) {
     final targetId = post.id ?? post.postId ?? post.platformPostId ?? '';
     if (context.isDesktop) {
       if (targetId.isNotEmpty) {
@@ -92,9 +82,10 @@ class AppNavigator {
     if (context.isDesktop) {
       context.go('/request-video');
     } else {
-      Navigator.of(context, rootNavigator: true).push(
-        MaterialPageRoute(builder: (context) => const RequestVideoTabScreen()),
-      );
+      Navigator.of(
+        context,
+        rootNavigator: true,
+      ).push(MaterialPageRoute(builder: (context) => const RequestVideoTabScreen()));
     }
   }
 
@@ -103,11 +94,10 @@ class AppNavigator {
     if (context.isDesktop) {
       context.push(AppRoutes.campaignSettings);
     } else {
-      Navigator.of(context, rootNavigator: true).push(
-        MaterialPageRoute(
-          builder: (context) => const AdCampaignSettingsScreen(),
-        ),
-      );
+      Navigator.of(
+        context,
+        rootNavigator: true,
+      ).push(MaterialPageRoute(builder: (context) => const AdCampaignSettingsScreen()));
     }
   }
 
@@ -128,9 +118,10 @@ class AppNavigator {
     if (context.isDesktop) {
       AppNavigator.navigateToPrivacyPolicy(context);
     } else {
-      Navigator.of(context, rootNavigator: true).push(
-        MaterialPageRoute(builder: (context) => const PrivacyPolicyScreen()),
-      );
+      Navigator.of(
+        context,
+        rootNavigator: true,
+      ).push(MaterialPageRoute(builder: (context) => const PrivacyPolicyScreen()));
     }
   }
 
@@ -139,9 +130,10 @@ class AppNavigator {
     if (context.isDesktop) {
       AppNavigator.navigateToTermsOfService(context);
     } else {
-      Navigator.of(context, rootNavigator: true).push(
-        MaterialPageRoute(builder: (context) => const TermsOfServiceScreen()),
-      );
+      Navigator.of(
+        context,
+        rootNavigator: true,
+      ).push(MaterialPageRoute(builder: (context) => const TermsOfServiceScreen()));
     }
   }
 
@@ -150,21 +142,18 @@ class AppNavigator {
     if (context.isDesktop) {
       AppNavigator.navigateToDeleteAccount(context);
     } else {
-      Navigator.of(context, rootNavigator: true).push(
-        MaterialPageRoute(builder: (context) => const DeleteAccountScreen()),
-      );
+      Navigator.of(
+        context,
+        rootNavigator: true,
+      ).push(MaterialPageRoute(builder: (context) => const DeleteAccountScreen()));
     }
   }
 
   /// Navigates to Subscription Package Detail full screen route (hides bottom nav bar)
-  static void navigateToSubscriptionPackageDetail(
-    BuildContext context,
-    SubscriptionPlanModel plan,
-  ) {
-    Navigator.of(context, rootNavigator: true).push(
-      MaterialPageRoute(
-        builder: (context) => SubscriptionPackageDetailScreen(initialPlan: plan),
-      ),
-    );
+  static void navigateToSubscriptionPackageDetail(BuildContext context, SubscriptionPlanModel plan) {
+    Navigator.of(
+      context,
+      rootNavigator: true,
+    ).push(MaterialPageRoute(builder: (context) => SubscriptionPackageDetailScreen(initialPlan: plan)));
   }
 }

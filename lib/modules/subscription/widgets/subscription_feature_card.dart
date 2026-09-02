@@ -4,6 +4,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 
@@ -29,10 +30,7 @@ class SubscriptionFeatureCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(18.0),
-        border: Border.all(
-          color: AppColors.border.withValues(alpha: 0.85),
-          width: 1.2,
-        ),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.85), width: 1.2),
         boxShadow: [
           BoxShadow(
             color: AppColors.shadow.withValues(alpha: 0.05),
@@ -62,10 +60,7 @@ class SubscriptionFeatureCard extends StatelessWidget {
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(
-                    color: AppColors.primary.withValues(alpha: 0.12),
-                    width: 1.0,
-                  ),
+                  border: Border.all(color: AppColors.primary.withValues(alpha: 0.12), width: 1.0),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(7.0),
@@ -73,11 +68,7 @@ class SubscriptionFeatureCard extends StatelessWidget {
                     assetIconPath,
                     fit: BoxFit.contain,
                     errorBuilder: (context, error, stackTrace) {
-                      return const Icon(
-                        Icons.auto_awesome_rounded,
-                        color: AppColors.primary,
-                        size: 20.0,
-                      );
+                      return const Icon(Icons.auto_awesome_rounded, color: AppColors.primary, size: 20.0);
                     },
                   ),
                 ),
@@ -107,11 +98,7 @@ class SubscriptionFeatureCard extends StatelessWidget {
           // Compact Feature Description
           Text(
             description,
-            style: AppTextStyles.body2.copyWith(
-              color: AppColors.textSecondary,
-              fontSize: 12.0,
-              height: 1.32,
-            ),
+            style: AppTextStyles.body2.copyWith(color: AppColors.textSecondary, fontSize: 12.0, height: 1.32),
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
           ),

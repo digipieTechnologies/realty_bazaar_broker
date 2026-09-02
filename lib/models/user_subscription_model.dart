@@ -8,12 +8,12 @@ class UserSubscriptionModel extends Equatable {
   static const String tableName = 'user_subscriptions';
 
   final String id;
-  
+
   // Mapped as Model objects following project convention
   final BrokerModel? brokerId;
   final UserPaymentModel? paymentId;
   final SubscriptionPlanModel? subscriptionPlanId;
-  
+
   final DateTime startDate;
   final DateTime endDate;
   final bool isExpired;
@@ -63,7 +63,7 @@ class UserSubscriptionModel extends Equatable {
         parsedBroker = BrokerModel.fromJson(json['brokers'][0]);
       }
     } else if (json['broker_id'] != null) {
-       parsedBroker = BrokerModel(id: json['broker_id'].toString(), businessName: '', brokerCode: '');
+      parsedBroker = BrokerModel(id: json['broker_id'].toString(), businessName: '', brokerCode: '');
     }
 
     UserPaymentModel? parsedPayment;
@@ -76,7 +76,7 @@ class UserSubscriptionModel extends Equatable {
         parsedPayment = UserPaymentModel.fromJson(json['user_payments'][0]);
       }
     } else if (json['payment_id'] != null) {
-       parsedPayment = UserPaymentModel.fromJson({'id': json['payment_id']});
+      parsedPayment = UserPaymentModel.fromJson({'id': json['payment_id']});
     }
 
     SubscriptionPlanModel? parsedPlan;
@@ -89,7 +89,12 @@ class UserSubscriptionModel extends Equatable {
         parsedPlan = SubscriptionPlanModel.fromJson(json['subscription_plans'][0]);
       }
     } else if (json['subscription_plan_id'] != null) {
-       parsedPlan = SubscriptionPlanModel(id: json['subscription_plan_id'].toString(), title: '', description: '', amount: 0);
+      parsedPlan = SubscriptionPlanModel(
+        id: json['subscription_plan_id'].toString(),
+        title: '',
+        description: '',
+        amount: 0,
+      );
     }
 
     return UserSubscriptionModel(
@@ -97,22 +102,14 @@ class UserSubscriptionModel extends Equatable {
       brokerId: parsedBroker,
       paymentId: parsedPayment,
       subscriptionPlanId: parsedPlan,
-      startDate: json['start_date'] != null
-          ? DateTime.parse(json['start_date'].toString())
-          : DateTime.now(),
-      endDate: json['end_date'] != null
-          ? DateTime.parse(json['end_date'].toString())
-          : DateTime.now(),
+      startDate: json['start_date'] != null ? DateTime.parse(json['start_date'].toString()) : DateTime.now(),
+      endDate: json['end_date'] != null ? DateTime.parse(json['end_date'].toString()) : DateTime.now(),
       isExpired: json['is_expired'] as bool? ?? false,
       totalDays: int.tryParse(json['total_days']?.toString() ?? '0') ?? 0,
       amount: double.tryParse(json['amount']?.toString() ?? '0') ?? 0.0,
       planCode: json['plan_code']?.toString() ?? '',
-      createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'].toString())
-          : DateTime.now(),
-      updatedAt: json['updated_at'] != null
-          ? DateTime.parse(json['updated_at'].toString())
-          : DateTime.now(),
+      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at'].toString()) : DateTime.now(),
+      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at'].toString()) : DateTime.now(),
     );
   }
 
@@ -131,10 +128,10 @@ class UserSubscriptionModel extends Equatable {
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
     };
-    
+
     // Remove nulls before sending to database
     data.removeWhere((key, value) => value == null);
-    
+
     return data;
   }
 

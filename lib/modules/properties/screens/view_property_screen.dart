@@ -311,9 +311,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
           ),
           child: Align(
             alignment: Alignment.topCenter,
-            child: isDesktop
-                ? _buildDesktopLayout(context, property)
-                : _buildMobileLayout(context, property),
+            child: isDesktop ? _buildDesktopLayout(context, property) : _buildMobileLayout(context, property),
           ),
         ),
       ),
@@ -417,8 +415,12 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
   // ---------------------------------------------------------------------------
   Widget _buildTopHeroCard(BuildContext context, PropertyModel property) {
     final listingLabel = property.listingType == ListingType.rent ? 'For Rent' : 'For Sale';
-    final categoryLabel = PropertyLocalizer.getLocalizedPropertyType(context, property.propertyType).toUpperCase();
-    final addressText = property.address?.fullAddress ??
+    final categoryLabel = PropertyLocalizer.getLocalizedPropertyType(
+      context,
+      property.propertyType,
+    ).toUpperCase();
+    final addressText =
+        property.address?.fullAddress ??
         '${property.address?.city ?? "Surat"}, ${property.address?.state ?? "Gujarat"}';
 
     final double areaValue = property.area > 0 ? property.area : 1;
@@ -464,7 +466,12 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                     ? 'Per Month'
                     : '₹${ratePerSqft.toStringAsFixed(0)} / sq ft',
               ),
-              Container(height: 44.0, width: 1.0, color: AppColors.border, margin: const EdgeInsets.symmetric(horizontal: 14.0)),
+              Container(
+                height: 44.0,
+                width: 1.0,
+                color: AppColors.border,
+                margin: const EdgeInsets.symmetric(horizontal: 14.0),
+              ),
 
               // Stat 2: Super Built-up Area
               _buildHeroStatColumn(
@@ -480,7 +487,12 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                 ),
                 subValue: '${areaSqm.toStringAsFixed(1)} sq m',
               ),
-              Container(height: 44.0, width: 1.0, color: AppColors.border, margin: const EdgeInsets.symmetric(horizontal: 14.0)),
+              Container(
+                height: 44.0,
+                width: 1.0,
+                color: AppColors.border,
+                margin: const EdgeInsets.symmetric(horizontal: 14.0),
+              ),
 
               // Stat 3: Configuration
               _buildHeroStatColumn(
@@ -546,7 +558,11 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                     ),
                     child: Text(
                       listingLabel,
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12.0),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 12.0,
+                      ),
                     ),
                   ),
                   Container(
@@ -734,11 +750,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
         const SizedBox(height: 2.0),
         Text(
           subValue,
-          style: const TextStyle(
-            fontSize: 11.5,
-            color: AppColors.textMuted,
-            fontWeight: FontWeight.w500,
-          ),
+          style: const TextStyle(fontSize: 11.5, color: AppColors.textMuted, fontWeight: FontWeight.w500),
         ),
       ],
     );
@@ -790,12 +802,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.0),
         border: Border.all(color: AppColors.border),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 10.0,
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 10.0)],
       ),
       child: Stack(
         fit: StackFit.expand,
@@ -831,7 +838,11 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                     const SizedBox(width: 6.0),
                     Text(
                       '1 of $mediasCount Photos',
-                      style: const TextStyle(color: Colors.white, fontSize: 12.0, fontWeight: FontWeight.w700),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ],
                 ),
@@ -892,10 +903,18 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
       _FeatureTileData(icon: Icons.bathtub_outlined, label: 'BATHROOMS', value: '${property.bathrooms}'),
       _FeatureTileData(icon: Icons.balcony_outlined, label: 'BALCONY', value: '${property.balconies}'),
       _FeatureTileData(icon: Icons.apartment_outlined, label: 'FLOOR', value: floorText),
-      _FeatureTileData(icon: Icons.domain_outlined, label: 'PROPERTY TYPE', value: property.propertyType.displayName),
+      _FeatureTileData(
+        icon: Icons.domain_outlined,
+        label: 'PROPERTY TYPE',
+        value: property.propertyType.displayName,
+      ),
       _FeatureTileData(icon: Icons.key_outlined, label: 'POSSESSION', value: possessionText),
       _FeatureTileData(icon: Icons.explore_outlined, label: 'FACING', value: facingText),
-      _FeatureTileData(icon: Icons.directions_car_outlined, label: 'PARKING', value: '${property.parking} Reserved'),
+      _FeatureTileData(
+        icon: Icons.directions_car_outlined,
+        label: 'PARKING',
+        value: '${property.parking} Reserved',
+      ),
     ];
 
     return Container(
@@ -917,11 +936,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
             children: tiles.map((tile) {
               return SizedBox(
                 width: itemWidth,
-                child: _buildFeatureTileItem(
-                  icon: tile.icon,
-                  label: tile.label,
-                  value: tile.value,
-                ),
+                child: _buildFeatureTileItem(icon: tile.icon, label: tile.label, value: tile.value),
               );
             }).toList(),
           );
@@ -930,11 +945,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
     );
   }
 
-  Widget _buildFeatureTileItem({
-    required IconData icon,
-    required String label,
-    required String value,
-  }) {
+  Widget _buildFeatureTileItem({required IconData icon, required String label, required String value}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
       decoration: BoxDecoration(
@@ -1009,21 +1020,10 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
         children: [
           const Text(
             'About This Property',
-            style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textPrimary,
-            ),
+            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
           ),
           const SizedBox(height: 14.0),
-          Text(
-            desc,
-            style: const TextStyle(
-              fontSize: 14.0,
-              color: Color(0xFF475569),
-              height: 1.6,
-            ),
-          ),
+          Text(desc, style: const TextStyle(fontSize: 14.0, color: Color(0xFF475569), height: 1.6)),
         ],
       ),
     );
@@ -1046,11 +1046,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
         children: [
           const Text(
             'Amenities & Facilities',
-            style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textPrimary,
-            ),
+            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
           ),
           const SizedBox(height: 16.0),
           Wrap(
@@ -1130,11 +1126,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
         children: [
           const Text(
             'Property Overview',
-            style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textPrimary,
-            ),
+            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
           ),
           const SizedBox(height: 18.0),
 
@@ -1198,7 +1190,11 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
               const SizedBox(width: 6.0),
               Text(
                 'Listed on $dateString',
-                style: const TextStyle(fontSize: 12.0, color: AppColors.textMuted, fontWeight: FontWeight.w500),
+                style: const TextStyle(
+                  fontSize: 12.0,
+                  color: AppColors.textMuted,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),
@@ -1225,10 +1221,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
             children: [
               Container(
                 padding: const EdgeInsets.all(10.0),
-                decoration: const BoxDecoration(
-                  color: Color(0xFFEFF6FF),
-                  shape: BoxShape.circle,
-                ),
+                decoration: const BoxDecoration(color: Color(0xFFEFF6FF), shape: BoxShape.circle),
                 child: const Icon(Icons.campaign_outlined, color: AppColors.primary, size: 22.0),
               ),
               const SizedBox(width: 12.0),
@@ -1249,11 +1242,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
           const SizedBox(height: 10.0),
           Text(
             context.tr('post_property_feature_desc'),
-            style: AppTextStyles.body2.copyWith(
-              color: AppColors.textSecondary,
-              fontSize: 12.5,
-              height: 1.45,
-            ),
+            style: AppTextStyles.body2.copyWith(color: AppColors.textSecondary, fontSize: 12.5, height: 1.45),
           ),
           const SizedBox(height: 18.0),
           SizedBox(
@@ -1287,10 +1276,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
             children: [
               Container(
                 padding: const EdgeInsets.all(10.0),
-                decoration: const BoxDecoration(
-                  color: Color(0xFFEFF6FF),
-                  shape: BoxShape.circle,
-                ),
+                decoration: const BoxDecoration(color: Color(0xFFEFF6FF), shape: BoxShape.circle),
                 child: const Icon(Icons.videocam_outlined, color: AppColors.primary, size: 22.0),
               ),
               const SizedBox(width: 12.0),
@@ -1311,11 +1297,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
           const SizedBox(height: 10.0),
           Text(
             context.tr('video_request_feature_desc'),
-            style: AppTextStyles.body2.copyWith(
-              color: AppColors.textSecondary,
-              fontSize: 12.5,
-              height: 1.45,
-            ),
+            style: AppTextStyles.body2.copyWith(color: AppColors.textSecondary, fontSize: 12.5, height: 1.45),
           ),
           const SizedBox(height: 18.0),
           SizedBox(
@@ -1347,20 +1329,12 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
         children: [
           const Text(
             'Manage Property',
-            style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textPrimary,
-            ),
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
           ),
           const SizedBox(height: 6.0),
           const Text(
             'Edit property specifications or permanently remove this listing.',
-            style: TextStyle(
-              fontSize: 12.0,
-              color: AppColors.textSecondary,
-              height: 1.4,
-            ),
+            style: TextStyle(fontSize: 12.0, color: AppColors.textSecondary, height: 1.4),
           ),
           const SizedBox(height: 16.0),
 
@@ -1765,6 +1739,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
 class _OverviewBox {
   final String label;
   final String value;
+
   const _OverviewBox({required this.label, required this.value});
 }
 
@@ -1772,5 +1747,6 @@ class _FeatureTileData {
   final IconData icon;
   final String label;
   final String value;
+
   const _FeatureTileData({required this.icon, required this.label, required this.value});
 }

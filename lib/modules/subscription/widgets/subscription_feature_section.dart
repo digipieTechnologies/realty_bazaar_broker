@@ -2,6 +2,7 @@
 // Purpose: Horizontal scrollable feature section for SubscriptionPackageDetailScreen.
 
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import 'subscription_feature_card.dart';
@@ -21,31 +22,32 @@ class SubscriptionFeatureItemData {
 class SubscriptionFeatureSection extends StatelessWidget {
   final List<SubscriptionFeatureItemData> features;
 
-  const SubscriptionFeatureSection({
-    super.key,
-    required this.features,
-  });
+  const SubscriptionFeatureSection({super.key, required this.features});
 
   static List<SubscriptionFeatureItemData> getDefaultFeatures() {
     return const [
       SubscriptionFeatureItemData(
         title: 'Ad Designing',
-        description: 'Our professional designers create high-converting ad graphics customized for your property listing.',
+        description:
+            'Our professional designers create high-converting ad graphics customized for your property listing.',
         assetPath: 'assets/images/subscription_features/ad_design.png',
       ),
       SubscriptionFeatureItemData(
         title: 'Content & Copywriting',
-        description: 'Engaging real estate post captions and ad copies optimized for maximum buyer inquiries.',
+        description:
+            'Engaging real estate post captions and ad copies optimized for maximum buyer inquiries.',
         assetPath: 'assets/images/subscription_features/content_creation.png',
       ),
       SubscriptionFeatureItemData(
         title: 'WhatsApp Lead Delivery',
-        description: 'Receive instant notifications and buyer contact details directly inside your WhatsApp inbox.',
+        description:
+            'Receive instant notifications and buyer contact details directly inside your WhatsApp inbox.',
         assetPath: 'assets/images/subscription_features/whatsapp_leads.png',
       ),
       SubscriptionFeatureItemData(
         title: 'Precision Targeting',
-        description: 'Target active homebuyers and high-net-worth investors in your specific city and micro-market.',
+        description:
+            'Target active homebuyers and high-net-worth investors in your specific city and micro-market.',
         assetPath: 'assets/images/subscription_features/audience_targeting.png',
       ),
       SubscriptionFeatureItemData(
@@ -55,7 +57,8 @@ class SubscriptionFeatureSection extends StatelessWidget {
       ),
       SubscriptionFeatureItemData(
         title: 'Live Analytics',
-        description: 'Track ad views, click-through rates, and total leads captured on your growth dashboard.',
+        description:
+            'Track ad views, click-through rates, and total leads captured on your growth dashboard.',
         assetPath: 'assets/images/subscription_features/analytics.png',
       ),
     ];

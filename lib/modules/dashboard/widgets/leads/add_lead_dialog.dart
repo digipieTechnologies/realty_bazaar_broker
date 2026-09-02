@@ -181,7 +181,8 @@ class _AddLeadDialogState extends State<AddLeadDialog> {
               controller: _propertyDetailsController,
               label: context.tr('property_details_required_label'),
               hint: context.tr('property_details_hint'),
-              maxLines: 1, // Single line requirement
+              maxLines: 1,
+              // Single line requirement
               prefixIcon: const Icon(Icons.location_city_outlined, size: 20.0, color: AppColors.primary),
               validator: _validatePropertyDetails,
               textInputAction: TextInputAction.next,

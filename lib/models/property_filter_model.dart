@@ -94,7 +94,8 @@ class PropertyFilterModel {
       final state = addr?.state?.toLowerCase() ?? '';
       final code = property.propertyCode?.toLowerCase() ?? '';
 
-      final matchesKeyword = title.contains(query) ||
+      final matchesKeyword =
+          title.contains(query) ||
           desc.contains(query) ||
           city.contains(query) ||
           address.contains(query) ||
@@ -164,8 +165,7 @@ class PropertyFilterModel {
     // 7. Furnishing
     if (furnishing != 'all') {
       final targetFurnishing = furnishing.asFurnishingStatus;
-      if (targetFurnishing != FurnishingStatus.unknown &&
-          property.furnishingStatus != targetFurnishing) {
+      if (targetFurnishing != FurnishingStatus.unknown && property.furnishingStatus != targetFurnishing) {
         return false;
       }
     }

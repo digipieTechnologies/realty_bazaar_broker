@@ -32,12 +32,10 @@ class SubscriptionPackageDetailScreen extends StatefulWidget {
   const SubscriptionPackageDetailScreen({super.key, required this.initialPlan});
 
   @override
-  State<SubscriptionPackageDetailScreen> createState() =>
-      _SubscriptionPackageDetailScreenState();
+  State<SubscriptionPackageDetailScreen> createState() => _SubscriptionPackageDetailScreenState();
 }
 
-class _SubscriptionPackageDetailScreenState
-    extends State<SubscriptionPackageDetailScreen> {
+class _SubscriptionPackageDetailScreenState extends State<SubscriptionPackageDetailScreen> {
   late SubscriptionPlanModel _currentPlan;
   late PlanDurationOption _selectedOption;
   late RazorpayService _razorpayService;
@@ -71,7 +69,7 @@ class _SubscriptionPackageDetailScreenState
         final subProvider = context.read<SubscriptionProvider>();
         final currentUser = authProvider.userProfile;
         final actualBrokerId = currentUser?.brokerId?.id;
-        
+
         if (actualBrokerId != null) {
           final success = await subProvider.processSubscriptionPayment(
             brokerId: actualBrokerId,
@@ -82,12 +80,9 @@ class _SubscriptionPackageDetailScreenState
             totalDays: _selectedOption.days,
             planCode: _selectedOption.code,
           );
-          
+
           if (success) {
-            AppToast.showSuccess(
-              'Payment Successful',
-              'Your subscription has been activated!',
-            );
+            AppToast.showSuccess('Payment Successful', 'Your subscription has been activated!');
           } else {
             AppToast.showError(
               'Update Failed',
@@ -99,17 +94,11 @@ class _SubscriptionPackageDetailScreenState
       },
       onFailure: (response) {
         setState(() => _isProcessingPayment = false);
-        AppToast.showError(
-          'Payment Failed',
-          response.message ?? 'An error occurred during payment.',
-        );
+        AppToast.showError('Payment Failed', response.message ?? 'An error occurred during payment.');
       },
       onExternalWallet: (response) {
         setState(() => _isProcessingPayment = false);
-        AppToast.showSuccess(
-          'External Wallet',
-          'Wallet selected: ${response.walletName}',
-        );
+        AppToast.showSuccess('External Wallet', 'Wallet selected: ${response.walletName}');
       },
     );
   }
@@ -127,10 +116,7 @@ class _SubscriptionPackageDetailScreenState
   }
 
   Future<void> _makeSupportCall() async {
-    final Uri telUri = Uri(
-      scheme: 'tel',
-      path: AppConstants.supportPhoneNumber,
-    );
+    final Uri telUri = Uri(scheme: 'tel', path: AppConstants.supportPhoneNumber);
     try {
       if (await canLaunchUrl(telUri)) {
         await launchUrl(telUri);
@@ -163,9 +149,7 @@ class _SubscriptionPackageDetailScreenState
     try {
       final actualBrokerId = currentUser.brokerId?.id;
       if (actualBrokerId == null) {
-        throw Exception(
-          'No broker profile found. Please complete your profile setup first.',
-        );
+        throw Exception('No broker profile found. Please complete your profile setup first.');
       }
 
       final amountInPaise = (_selectedOption.amount * 100).toInt();
@@ -186,25 +170,18 @@ class _SubscriptionPackageDetailScreenState
     } catch (e) {
       debugPrint('Error creating order: $e');
       setState(() => _isProcessingPayment = false);
-      AppToast.showError(
-        'Error',
-        'Could not initialize payment securely. Please try again.',
-      );
+      AppToast.showError('Error', 'Could not initialize payment securely. Please try again.');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool isDesktop = ContextX.isDesktopWidth(
-      MediaQuery.of(context).size.width,
-    );
+    final bool isDesktop = ContextX.isDesktopWidth(MediaQuery.of(context).size.width);
 
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: CommonAppBar(
-        title: _currentPlan.title.isNotEmpty
-            ? _currentPlan.title
-            : 'Explore Package',
+        title: _currentPlan.title.isNotEmpty ? _currentPlan.title : 'Explore Package',
         showBackButton: true,
         actions: [
           Padding(
@@ -223,19 +200,14 @@ class _SubscriptionPackageDetailScreenState
       ),
       body: Center(
         child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: isDesktop ? 800.0 : double.infinity,
-          ),
+          constraints: BoxConstraints(maxWidth: isDesktop ? 800.0 : double.infinity),
           child: SingleChildScrollView(
             padding: AppConstants.getTabPadding(context, bottomExtra: 100.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // 1. Package Summary Hero Card
-                PackageSummaryHeroCard(
-                  plan: _currentPlan,
-                  selectedOption: _selectedOption,
-                ),
+                PackageSummaryHeroCard(plan: _currentPlan, selectedOption: _selectedOption),
 
                 const SizedBox(height: 24.0),
 
@@ -256,9 +228,7 @@ class _SubscriptionPackageDetailScreenState
 
                 // 4. Estimated Results Metric Card
                 EstimatedResultsCard(
-                  planAmount: _selectedOption.amount > 0
-                      ? _selectedOption.amount
-                      : _currentPlan.amount,
+                  planAmount: _selectedOption.amount > 0 ? _selectedOption.amount : _currentPlan.amount,
                   days: _selectedOption.days > 0 ? _selectedOption.days : 30,
                 ),
 

@@ -101,6 +101,8 @@ extension FileStringExtension on String {
 
 extension DateTimeFormatterX on DateTime {
   String get formatMediumDate => DateFormat('dd MMM yyyy').format(this);
+
   String get formatTimeAmPm => DateFormat('hh:mm a').format(this);
+
   String get formatTimestamp => DateFormat('dd MMM yyyy, hh:mm a').format(this);
 }

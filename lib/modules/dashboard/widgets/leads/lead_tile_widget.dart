@@ -2,9 +2,9 @@
 // Purpose: Modern, colorful, and highly polished lead tile widget matching modern card layout design with avatar platform overlay, top-right platform badge, soft property pill, and action chevron.
 
 import 'package:flutter/material.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 import '../../../../app/app_colors.dart';
-import '../../../../app/app_routes.dart';
 import '../../../../app/app_text_styles.dart';
 import '../../../../models/social_enums.dart';
 import '../../../../models/social_lead_model.dart';
@@ -13,7 +13,6 @@ import '../../../../widgets/badges/app_platform_badge.dart';
 import '../../../../widgets/buttons/app_circular_chevron.dart';
 import '../../../../widgets/common/user_avatar_widget.dart';
 import '../../../../widgets/icons/app_icons.dart';
-import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 class LeadTileWidget extends StatelessWidget {
   final SocialLeadModel lead;

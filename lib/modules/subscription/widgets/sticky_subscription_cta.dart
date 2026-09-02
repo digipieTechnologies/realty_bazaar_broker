@@ -30,15 +30,12 @@ class StickySubscriptionCta extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double displayAmount = selectedOption.amount > 0
-        ? selectedOption.amount
-        : plan.amount;
+    final double displayAmount = selectedOption.amount > 0 ? selectedOption.amount : plan.amount;
     final String durationText = selectedOption.title.isNotEmpty
         ? selectedOption.title
         : '${selectedOption.days} Days';
 
-    final String buttonLabel =
-        'Continue with $durationText • ${_formatAmount(displayAmount)}';
+    final String buttonLabel = 'Continue with $durationText • ${_formatAmount(displayAmount)}';
 
     return Container(
       width: double.infinity,

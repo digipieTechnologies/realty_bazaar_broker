@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_routes.dart';
@@ -15,7 +16,6 @@ import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/dialogs/app_dialog.dart';
 import '../../../widgets/inputs/app_textfield.dart';
 import '../../../widgets/toast/app_toast.dart';
-import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 class DeleteAccountScreen extends StatefulWidget {
   const DeleteAccountScreen({super.key});
@@ -203,7 +203,11 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                     borderRadius: BorderRadius.circular(16.0),
                     border: Border.all(color: AppColors.border, width: 1.0),
                     boxShadow: [
-                      BoxShadow(color: AppColors.shadow.withValues(alpha: 0.05), blurRadius: 16, offset: const Offset(0, 4)),
+                      BoxShadow(
+                        color: AppColors.shadow.withValues(alpha: 0.05),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                      ),
                     ],
                   ),
                   child: Form(
@@ -269,11 +273,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                               Expanded(
                                 child: Text(
                                   context.tr('delete_account_warning'),
-                                  style: const TextStyle(
-                                    fontSize: 13.5,
-                                    color: AppColors.error,
-                                    height: 1.4,
-                                  ),
+                                  style: const TextStyle(fontSize: 13.5, color: AppColors.error, height: 1.4),
                                 ),
                               ),
                             ],

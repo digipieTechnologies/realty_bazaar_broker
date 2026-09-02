@@ -16,16 +16,10 @@ class SetupProgressCard extends StatelessWidget {
   final bool showCardBorder;
   final VoidCallback? onClose;
 
-  const SetupProgressCard({
-    super.key,
-    this.showHeader = false,
-    this.showCardBorder = false,
-    this.onClose,
-  });
+  const SetupProgressCard({super.key, this.showHeader = false, this.showCardBorder = false, this.onClose});
 
   void _handleStepTap(BuildContext context, OnboardingStep step) {
-    if ((step.id == 'connect_facebook' || step.id == 'connect_instagram') &&
-        !step.isCompleted) {
+    if ((step.id == 'connect_facebook' || step.id == 'connect_instagram') && !step.isCompleted) {
       final socialProvider = context.read<SocialProvider>();
       final authProvider = context.read<AuthProvider>();
       final brokerId = authProvider.userProfile?.brokerId?.id;
@@ -60,9 +54,7 @@ class SetupProgressCard extends StatelessWidget {
     final authProvider = context.watch<AuthProvider>();
     final setupDetails = authProvider.userProfile?.brokerId?.setupDetails;
 
-    final steps = dashboardProvider.getOnboardingSteps(
-      setupDetails: setupDetails,
-    );
+    final steps = dashboardProvider.getOnboardingSteps(setupDetails: setupDetails);
 
     final Widget content = Column(
       mainAxisSize: MainAxisSize.min,
@@ -82,10 +74,8 @@ class SetupProgressCard extends StatelessWidget {
                     return Column(
                       children: steps
                           .map(
-                            (step) => SetupStepTileWidget(
-                              step: step,
-                              onTap: () => _handleStepTap(context, step),
-                            ),
+                            (step) =>
+                                SetupStepTileWidget(step: step, onTap: () => _handleStepTap(context, step)),
                           )
                           .toList(),
                     );

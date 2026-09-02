@@ -11,11 +11,7 @@ class RazorpayService {
   final Function(PaymentFailureResponse)? onFailure;
   final Function(ExternalWalletResponse)? onExternalWallet;
 
-  RazorpayService({
-    this.onSuccess,
-    this.onFailure,
-    this.onExternalWallet,
-  }) {
+  RazorpayService({this.onSuccess, this.onFailure, this.onExternalWallet}) {
     _razorpay = Razorpay();
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
@@ -58,7 +54,7 @@ class RazorpayService {
     String? orderId, // Optional, normally fetched from your backend
   }) {
     const keyId = String.fromEnvironment('RAZORPAY_KEY_ID');
-    
+
     if (keyId.isEmpty || keyId == 'rzp_test_placeholder_key') {
       AppToast.showError('Configuration Error', 'Razorpay Key ID is missing or invalid.');
       return false;
@@ -69,13 +65,10 @@ class RazorpayService {
       'amount': amountInPaise,
       'name': name,
       'description': description,
-      'prefill': {
-        'contact': contact,
-        'email': email,
-      },
+      'prefill': {'contact': contact, 'email': email},
       'theme': {
         'color': '#0F325E', // Match AppColors.primary (primary900)
-      }
+      },
     };
 
     if (orderId != null && orderId.isNotEmpty) {

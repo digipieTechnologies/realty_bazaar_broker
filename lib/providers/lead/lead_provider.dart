@@ -9,33 +9,42 @@ import '../../models/social_lead_model.dart';
 
 class LeadProvider extends ChangeNotifier {
   bool _isLoading = false;
+
   bool get isLoading => _isLoading;
 
   List<SocialLeadModel> _leads = [];
+
   List<SocialLeadModel> get leads => _leads;
 
   int _currentPage = 1;
+
   int get currentPage => _currentPage;
 
   final int _itemsPerPage = 10;
+
   int get itemsPerPage => _itemsPerPage;
 
   int _totalItems = 0;
+
   int get totalItems => _totalItems;
 
   int _totalPages = 1;
+
   int get totalPages => _totalPages;
 
   bool _hasMore = false;
+
   bool get hasMore => _hasMore;
 
   String _searchQuery = '';
+
   String get searchQuery => _searchQuery;
 
   List<String> _platformsFilter = []; // Empty = All platforms, or ['facebook'], ['instagram'], ['other']
   List<String> get platformsFilter => _platformsFilter;
 
   String? _errorMessage;
+
   String? get errorMessage => _errorMessage;
 
   RealtimeChannel? _leadSubscription;

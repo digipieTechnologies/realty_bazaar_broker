@@ -3,8 +3,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart' as package_shimmer;
-import '../containers/container_corner.dart';
+
 import '../../app/app_colors.dart';
+import '../containers/container_corner.dart';
 
 // Wrapper class to ensure the user's requested syntax for Shimmer works perfectly
 // with the third-party package:shimmer/shimmer.dart package.

@@ -17,8 +17,8 @@ import '../../../providers/property/property_provider.dart';
 import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/common/app_card_container.dart';
 import '../../../widgets/common/app_empty_state_widget.dart';
-import '../../../widgets/shimmer/app_shimmer_container.dart';
 import '../../../widgets/common/search_filter_header_widget.dart';
+import '../../../widgets/shimmer/app_shimmer_container.dart';
 import '../widgets/web/property_web_filter_dialog.dart';
 import '../widgets/web/property_web_grid_card.dart';
 import 'add_edit_property_screen.dart';
@@ -103,11 +103,10 @@ class _PropertiesWebViewState extends State<PropertiesWebView> {
   }
 
   void _openAddEditPropertyScreen([PropertyModel? property]) {
-    Navigator.of(context, rootNavigator: true).push(
-      MaterialPageRoute(
-        builder: (context) => AddEditPropertyScreen(propertyToEdit: property),
-      ),
-    );
+    Navigator.of(
+      context,
+      rootNavigator: true,
+    ).push(MaterialPageRoute(builder: (context) => AddEditPropertyScreen(propertyToEdit: property)));
   }
 
   @override
@@ -153,16 +152,18 @@ class _PropertiesWebViewState extends State<PropertiesWebView> {
                   // -----------------------------------------------------------
                   // 2. SUBHEADER: Count, Subtitle, FILTER BUTTON & SORT DROPDOWN
                   // -----------------------------------------------------------
-                  _buildSubheader(displayedProperties.length, provider.totalItems, activeFilterCount, rawProperties),
+                  _buildSubheader(
+                    displayedProperties.length,
+                    provider.totalItems,
+                    activeFilterCount,
+                    rawProperties,
+                  ),
                   const SizedBox(height: 12.0),
 
                   // -----------------------------------------------------------
                   // 3. ACTIVE FILTERS TAGS (if any active)
                   // -----------------------------------------------------------
-                  if (_filter.hasActiveFilters) ...[
-                    _buildActiveFilterChips(),
-                    const SizedBox(height: 16.0),
-                  ],
+                  if (_filter.hasActiveFilters) ...[_buildActiveFilterChips(), const SizedBox(height: 16.0)],
 
                   // -----------------------------------------------------------
                   // 4. MAIN CONTENT AREA (Loading / Error / Empty / Grid)
@@ -186,7 +187,9 @@ class _PropertiesWebViewState extends State<PropertiesWebView> {
                     LayoutBuilder(
                       builder: (context, constraints) {
                         final width = constraints.maxWidth;
-                        final int crossAxisCount = width >= 1350 ? 4 : (width >= 900 ? 3 : (width >= 560 ? 2 : 1));
+                        final int crossAxisCount = width >= 1350
+                            ? 4
+                            : (width >= 900 ? 3 : (width >= 560 ? 2 : 1));
 
                         return GridView.builder(
                           shrinkWrap: true,
@@ -223,10 +226,7 @@ class _PropertiesWebViewState extends State<PropertiesWebView> {
                               const SizedBox(
                                 width: 20.0,
                                 height: 20.0,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                  color: AppColors.primary,
-                                ),
+                                child: CircularProgressIndicator(strokeWidth: 2.5, color: AppColors.primary),
                               ),
                               const SizedBox(width: 12.0),
                               Text(
@@ -254,7 +254,11 @@ class _PropertiesWebViewState extends State<PropertiesWebView> {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(Icons.check_circle_outline_rounded, size: 16.0, color: AppColors.primary),
+                                const Icon(
+                                  Icons.check_circle_outline_rounded,
+                                  size: 16.0,
+                                  color: AppColors.primary,
+                                ),
                                 const SizedBox(width: 6.0),
                                 Text(
                                   'All ${displayedProperties.length} properties loaded',
@@ -394,7 +398,11 @@ class _PropertiesWebViewState extends State<PropertiesWebView> {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     value: _filter.sortOption,
-                    icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 18.0, color: AppColors.textSecondary),
+                    icon: const Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      size: 18.0,
+                      color: AppColors.textSecondary,
+                    ),
                     style: AppTextStyles.body2.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
@@ -423,21 +431,14 @@ class _PropertiesWebViewState extends State<PropertiesWebView> {
         if (isCompact) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              titleColumn,
-              const SizedBox(height: 12.0),
-              controlsRow,
-            ],
+            children: [titleColumn, const SizedBox(height: 12.0), controlsRow],
           );
         }
 
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            titleColumn,
-            controlsRow,
-          ],
+          children: [titleColumn, controlsRow],
         );
       },
     );
@@ -462,54 +463,70 @@ class _PropertiesWebViewState extends State<PropertiesWebView> {
 
     if (_filter.purpose != 'all') {
       final label = _filter.purpose == 'sale' ? 'For Sale' : 'For Rent';
-      chips.add(_buildChipTag(label, () {
-        setState(() => _filter = _filter.copyWith(purpose: 'all'));
-      }));
+      chips.add(
+        _buildChipTag(label, () {
+          setState(() => _filter = _filter.copyWith(purpose: 'all'));
+        }),
+      );
     }
 
     if (_filter.city != 'all') {
-      chips.add(_buildChipTag('City: ${_filter.city.toUpperCase()}', () {
-        setState(() => _filter = _filter.copyWith(city: 'all'));
-      }));
+      chips.add(
+        _buildChipTag('City: ${_filter.city.toUpperCase()}', () {
+          setState(() => _filter = _filter.copyWith(city: 'all'));
+        }),
+      );
     }
 
     if (_filter.propertyType != 'all') {
       final typeEnum = _filter.propertyType.asPropertyType;
-      chips.add(_buildChipTag(typeEnum.displayName, () {
-        setState(() => _filter = _filter.copyWith(propertyType: 'all'));
-      }));
+      chips.add(
+        _buildChipTag(typeEnum.displayName, () {
+          setState(() => _filter = _filter.copyWith(propertyType: 'all'));
+        }),
+      );
     }
 
     if (_filter.bedrooms != null) {
       final label = _filter.bedrooms == 4 ? '4+ BHK' : '${_filter.bedrooms} BHK';
-      chips.add(_buildChipTag(label, () {
-        setState(() => _filter = _filter.copyWith(bedrooms: () => null));
-      }));
+      chips.add(
+        _buildChipTag(label, () {
+          setState(() => _filter = _filter.copyWith(bedrooms: () => null));
+        }),
+      );
     }
 
     if (_filter.budgetRange != 'any') {
-      chips.add(_buildChipTag('Budget Filter', () {
-        setState(() => _filter = _filter.copyWith(budgetRange: 'any'));
-      }));
+      chips.add(
+        _buildChipTag('Budget Filter', () {
+          setState(() => _filter = _filter.copyWith(budgetRange: 'any'));
+        }),
+      );
     }
 
     if (_filter.furnishing != 'all') {
       final furn = _filter.furnishing.asFurnishingStatus;
-      chips.add(_buildChipTag(furn.displayName, () {
-        setState(() => _filter = _filter.copyWith(furnishing: 'all'));
-      }));
+      chips.add(
+        _buildChipTag(furn.displayName, () {
+          setState(() => _filter = _filter.copyWith(furnishing: 'all'));
+        }),
+      );
     }
 
     if (_filter.verifiedOnly) {
-      chips.add(_buildChipTag('Verified Only', () {
-        setState(() => _filter = _filter.copyWith(verifiedOnly: false));
-      }));
+      chips.add(
+        _buildChipTag('Verified Only', () {
+          setState(() => _filter = _filter.copyWith(verifiedOnly: false));
+        }),
+      );
     }
 
     if (_filter.featuredOnly) {
-      chips.add(_buildChipTag('Featured Only', () {
-        setState(() => _filter = _filter.copyWith(featuredOnly: false));
-      }));
+      chips.add(
+        _buildChipTag('Featured Only', () {
+          setState(() => _filter = _filter.copyWith(featuredOnly: false));
+        }),
+      );
     }
 
     chips.add(
@@ -557,11 +574,7 @@ class _PropertiesWebViewState extends State<PropertiesWebView> {
         children: [
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 12.0,
-              fontWeight: FontWeight.w700,
-              color: AppColors.primary,
-            ),
+            style: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w700, color: AppColors.primary),
           ),
           const SizedBox(width: 4.0),
           InkWell(
@@ -603,11 +616,7 @@ class _PropertiesWebViewState extends State<PropertiesWebView> {
               child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AppShimmerContainer(
-                    width: double.infinity,
-                    height: 175.0,
-                    borderRadius: 18.0,
-                  ),
+                  AppShimmerContainer(width: double.infinity, height: 175.0, borderRadius: 18.0),
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.all(14.0),
@@ -672,10 +681,7 @@ class _PropertiesWebViewState extends State<PropertiesWebView> {
         children: [
           Container(
             padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: AppColors.error.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
+            decoration: BoxDecoration(color: AppColors.error.withValues(alpha: 0.1), shape: BoxShape.circle),
             child: const Icon(Icons.cloud_off_rounded, size: 44.0, color: AppColors.error),
           ),
           const SizedBox(height: 20.0),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../properties/screens/properties_screen.dart';
 
 class PropertiesTabScreen extends StatelessWidget {

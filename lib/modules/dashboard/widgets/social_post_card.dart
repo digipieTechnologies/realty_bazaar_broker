@@ -3,9 +3,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 import '../../../app/app_colors.dart';
-import '../../../app/app_routes.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../app/app_utils.dart';
 import '../../../core/localization/app_localizations.dart';
@@ -20,7 +20,6 @@ import '../../../widgets/icons/app_icons.dart';
 import '../../../widgets/images/cached_image.dart';
 import '../../../widgets/toast/app_toast.dart';
 import 'automation_confirmation_dialog.dart';
-import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 class SocialPostCard extends StatelessWidget {
   final SocialPostModel post;

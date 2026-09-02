@@ -92,5 +92,6 @@ class _DetailItem {
   final IconData icon;
   final String label;
   final String value;
+
   const _DetailItem({required this.icon, required this.label, required this.value});
 }

@@ -3,13 +3,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 import 'package:the_realty_bazaar/widgets/brand/app_logo.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_routes.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
-import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {
   const PrivacyPolicyScreen({super.key});
@@ -72,7 +72,11 @@ class PrivacyPolicyScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16.0),
                     border: Border.all(color: AppColors.border, width: 1.0),
                     boxShadow: [
-                      BoxShadow(color: AppColors.shadow.withValues(alpha: 0.05), blurRadius: 16, offset: const Offset(0, 4)),
+                      BoxShadow(
+                        color: AppColors.shadow.withValues(alpha: 0.05),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                      ),
                     ],
                   ),
                   child: Column(

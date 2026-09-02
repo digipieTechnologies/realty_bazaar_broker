@@ -43,6 +43,7 @@ class ChatMessageModel extends Equatable {
 
   double? get latitude =>
       (locationData?['latitude'] as num?)?.toDouble() ?? (locationData?['lat'] as num?)?.toDouble();
+
   double? get longitude =>
       (locationData?['longitude'] as num?)?.toDouble() ?? (locationData?['lng'] as num?)?.toDouble();
 

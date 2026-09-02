@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 import '../../../app/app_assets.dart';
 import '../../../app/app_colors.dart';
-import '../../../app/app_routes.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../providers/dashboard/dashboard_provider.dart';
 import '../../../util/common_ext.dart';
 import '../../../widgets/shimmer/dashboard_summary_shimmer_widget.dart';
-import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 class DashboardSummaryWidget extends StatefulWidget {
   const DashboardSummaryWidget({super.key});
@@ -29,10 +28,7 @@ class _DashboardSummaryWidgetState extends State<DashboardSummaryWidget> {
       if (!mounted) return;
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final brokerId = authProvider.userProfile?.brokerId?.id;
-      final dashboardProvider = Provider.of<DashboardProvider>(
-        context,
-        listen: false,
-      );
+      final dashboardProvider = Provider.of<DashboardProvider>(context, listen: false);
 
       if (brokerId != null && brokerId.isNotEmpty) {
         dashboardProvider.fetchDashboardSummary(brokerId);
@@ -118,9 +114,7 @@ class _DashboardSummaryWidgetState extends State<DashboardSummaryWidget> {
                 )
                 .toList()
               ..removeLast()
-              ..add(
-                Expanded(child: _StatCard(data: cards.last, isDesktop: true)),
-              ),
+              ..add(Expanded(child: _StatCard(data: cards.last, isDesktop: true))),
       );
     }
 
@@ -191,10 +185,7 @@ class _StatCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: data.cardBgColor,
             borderRadius: borderRadius,
-            border: Border.all(
-              color: data.iconBgColor.withValues(alpha: 0.25),
-              width: 1.0,
-            ),
+            border: Border.all(color: data.iconBgColor.withValues(alpha: 0.25), width: 1.0),
             boxShadow: [
               BoxShadow(
                 color: data.iconBgColor.withValues(alpha: 0.08),
@@ -213,35 +204,22 @@ class _StatCard extends StatelessWidget {
                 children: [
                   Container(
                     padding: EdgeInsets.all(isDesktop ? 8.0 : 6.0),
-                    decoration: BoxDecoration(
-                      color: data.iconBgColor,
-                      shape: BoxShape.circle,
-                    ),
+                    decoration: BoxDecoration(color: data.iconBgColor, shape: BoxShape.circle),
                     child: data.svgAsset != null
                         ? SvgPicture.asset(
                             data.svgAsset!,
                             width: isDesktop ? 18.0 : 15.0,
                             height: isDesktop ? 18.0 : 15.0,
-                            colorFilter: ColorFilter.mode(
-                              data.iconColor,
-                              BlendMode.srcIn,
-                            ),
+                            colorFilter: ColorFilter.mode(data.iconColor, BlendMode.srcIn),
                           )
-                        : Icon(
-                            data.icon,
-                            color: data.iconColor,
-                            size: isDesktop ? 18.0 : 15.0,
-                          ),
+                        : Icon(data.icon, color: data.iconColor, size: isDesktop ? 18.0 : 15.0),
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(
                       horizontal: isDesktop ? 9.0 : 7.0,
                       vertical: isDesktop ? 4.0 : 3.0,
                     ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
+                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12.0)),
                     child: Text(
                       data.tagText,
                       style: AppTextStyles.caption.copyWith(

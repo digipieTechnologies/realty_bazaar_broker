@@ -3,8 +3,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import '../services/permission_service.dart';
+
 import '../../widgets/toast/app_toast.dart';
+import '../services/permission_service.dart';
 
 class LocationHelper {
   LocationHelper._();

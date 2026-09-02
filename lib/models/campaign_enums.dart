@@ -7,6 +7,7 @@ enum CampaignGender {
   female('female');
 
   final String dbValue;
+
   const CampaignGender(this.dbValue);
 
   String get labelKey {

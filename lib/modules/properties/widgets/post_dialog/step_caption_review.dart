@@ -299,7 +299,8 @@ class _StepCaptionReviewState extends State<StepCaptionReview> {
           controller: widget.captionController,
           enabled: !widget.isGeneratingCaption,
           minLines: 8,
-          maxLines: null, // grows to fit full rich caption
+          maxLines: null,
+          // grows to fit full rich caption
           style: AppTextStyles.body2.copyWith(fontSize: 13.0, height: 1.55),
           decoration: InputDecoration(
             hintText: widget.isGeneratingCaption

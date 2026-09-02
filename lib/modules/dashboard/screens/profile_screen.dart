@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_constants.dart';
@@ -16,14 +17,13 @@ import '../../../providers/auth/auth_provider.dart';
 import '../../../util/common_ext.dart';
 import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/buttons/language_selector_button.dart';
+import '../../../widgets/common/common_app_bar.dart';
 import '../../../widgets/dialogs/app_dialog.dart';
 import '../../../widgets/dividers/app_divider.dart';
 import '../../../widgets/inputs/app_textfield.dart';
 import '../../../widgets/loaders/app_loader.dart';
 import '../../../widgets/toast/app_toast.dart';
 import '../../auth/widgets/phone_field_widget.dart';
-import 'package:the_realty_bazaar/app/app_navigator.dart';
-import '../../../widgets/common/common_app_bar.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -208,9 +208,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: isMobile 
-          ? CommonAppBar(title: context.tr('action_profile'))
-          : null,
+      appBar: isMobile ? CommonAppBar(title: context.tr('action_profile')) : null,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: AppConstants.getTabPadding(context, bottomExtra: isMobile ? 80.0 : 24.0),
