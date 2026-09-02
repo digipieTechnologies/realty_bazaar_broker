@@ -813,7 +813,8 @@ class SocialProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('Error publishing instagram post: $e');
       _updatePublishingState(false, '', 0.0);
-      AppToast.showError('Publish Failed', e.toString());
+      final friendlyError = _formatUserFriendlyErrorMessage(e, platform: 'Instagram');
+      AppToast.showError('Publish Failed', friendlyError);
       return false;
     }
   }
@@ -902,9 +903,74 @@ class SocialProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('Error publishing facebook post: $e');
       _updatePublishingState(false, '', 0.0);
-      AppToast.showError('Publish Failed', e.toString());
+      final friendlyError = _formatUserFriendlyErrorMessage(e, platform: 'Facebook');
+      AppToast.showError('Publish Failed', friendlyError);
       return false;
     }
+  }
+
+  /// Helper to convert technical exceptions/Edge Function responses into clear, friendly messages
+  String _formatUserFriendlyErrorMessage(dynamic error, {required String platform}) {
+    if (error == null) return 'Failed to publish to $platform. Please try again.';
+
+    String msg = '';
+    if (error is FunctionException) {
+      if (error.details is Map && error.details['message'] != null) {
+        msg = error.details['message'].toString();
+      } else if (error.details != null) {
+        msg = error.details.toString();
+      } else {
+        msg = error.reasonPhrase ?? error.toString();
+      }
+    } else if (error is Exception) {
+      msg = error.toString().replaceFirst('Exception: ', '');
+    } else {
+      msg = error.toString();
+    }
+
+    final lower = msg.toLowerCase();
+
+    if (lower.contains('invalid oauth') ||
+        lower.contains('cannot parse access token') ||
+        lower.contains('session has expired') ||
+        lower.contains('code: 190') ||
+        lower.contains('token has expired') ||
+        lower.contains('error validating access token')) {
+      return 'Your $platform session has expired. Please go to Profile > Social Connections and reconnect your account.';
+    }
+
+    if (lower.contains('permission') || lower.contains('not authorized') || lower.contains('missing permissions')) {
+      return 'Publishing permission missing. Please reconnect your $platform account and grant publishing permissions.';
+    }
+
+    if (lower.contains('aspect_ratio') || lower.contains('aspect ratio') || lower.contains('invalid aspect')) {
+      return 'Media aspect ratio not supported by $platform. Please select a standard landscape, square, or vertical photo/video.';
+    }
+
+    if (lower.contains('rate limit') || lower.contains('too many requests') || lower.contains('limit reached')) {
+      return 'Post limit reached on $platform. Please wait a few moments before publishing another post.';
+    }
+
+    if (lower.contains('video') && (lower.contains('duration') || lower.contains('too long') || lower.contains('length'))) {
+      return 'The video length does not meet $platform requirements. Please select a video under 15 minutes.';
+    }
+
+    if (lower.contains('no active') || lower.contains('not connected')) {
+      return 'No active $platform account found. Please connect your account first in Social Connections.';
+    }
+
+    if (lower.contains('missing required parameter') || lower.contains('at least one media item')) {
+      return 'Please select at least one photo or video before publishing.';
+    }
+
+    if (msg.contains('Meta Graph API') || msg.contains('FunctionException')) {
+      final parts = msg.split(': ');
+      if (parts.length > 1) {
+        return parts.sublist(1).join(': ').replaceAll('{', '').replaceAll('}', '');
+      }
+    }
+
+    return msg;
   }
 
   /// Reset state and unsubscribe on user sign out
