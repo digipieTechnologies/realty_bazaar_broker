@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:the_realty_bazaar/util/common_ext.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_constants.dart';
@@ -11,7 +12,6 @@ import '../../../app/app_text_styles.dart';
 import '../../../models/social_enums.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../providers/social/social_provider.dart';
-import '../../../util/common_ext.dart';
 import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/common/app_card_container.dart';
 import '../../../widgets/common/app_pagination_widget.dart';
@@ -52,22 +52,17 @@ class _PostsTabScreenState extends State<PostsTabScreen> {
     final authProvider = context.watch<AuthProvider>();
     final socialProvider = context.watch<SocialProvider>();
     final brokerId = authProvider.userProfile?.brokerId?.id;
-    final isMobile = context.isMobileUI;
+    final isMobile = context.isMobile;
 
     final isFacebookTab = socialProvider.selectedPlatformTab == SocialPlatform.facebook;
-    final isConnected = isFacebookTab
-        ? socialProvider.isFacebookConnected
-        : socialProvider.isInstagramConnected;
+    final isConnected = isFacebookTab ? socialProvider.isFacebookConnected : socialProvider.isInstagramConnected;
     final isFetchingPosts = isFacebookTab
         ? socialProvider.isFetchingFacebookPosts
         : socialProvider.isFetchingInstagramPosts;
-    final isFetchingInitial =
-        !socialProvider.hasFetchedInitialConnections || socialProvider.isFetchingConnections;
+    final isFetchingInitial = !socialProvider.hasFetchedInitialConnections || socialProvider.isFetchingConnections;
     final isLoading = isFetchingPosts || isFetchingInitial;
     final posts = isFacebookTab ? socialProvider.facebookPosts : socialProvider.instagramPosts;
-    final currentPage = isFacebookTab
-        ? socialProvider.facebookCurrentPage
-        : socialProvider.instagramCurrentPage;
+    final currentPage = isFacebookTab ? socialProvider.facebookCurrentPage : socialProvider.instagramCurrentPage;
     final totalPages = isFacebookTab ? socialProvider.facebookTotalPages : socialProvider.instagramTotalPages;
     final totalItems = isFacebookTab ? socialProvider.facebookTotalItems : socialProvider.instagramTotalItems;
 
@@ -119,10 +114,7 @@ class _PostsTabScreenState extends State<PostsTabScreen> {
                     itemCount: posts.length,
                     itemBuilder: (context, index) {
                       final p = posts[index];
-                      return SocialPostCard(
-                        key: ValueKey('${p.platformPostId ?? p.id}_${p.isStoredInDb}'),
-                        post: p,
-                      );
+                      return SocialPostCard(key: ValueKey('${p.platformPostId ?? p.id}_${p.isStoredInDb}'), post: p);
                     },
                   )
                 else
@@ -175,12 +167,7 @@ class _PostsTabScreenState extends State<PostsTabScreen> {
     );
   }
 
-  Widget _buildNotConnectedState(
-    BuildContext context,
-    bool isFacebook,
-    SocialProvider provider,
-    String? brokerId,
-  ) {
+  Widget _buildNotConnectedState(BuildContext context, bool isFacebook, SocialProvider provider, String? brokerId) {
     final platformName = isFacebook ? 'Facebook Page' : 'Instagram Business';
     final assetIcon = isFacebook ? 'assets/icons/facebook.png' : 'assets/icons/instagram.png';
     final buttonColor = isFacebook ? AppColors.facebook : AppColors.instagramAlt;
@@ -203,11 +190,8 @@ class _PostsTabScreenState extends State<PostsTabScreen> {
                   width: 48.0,
                   height: 48.0,
                   fit: BoxFit.contain,
-                  errorBuilder: (context, error, stackTrace) => Icon(
-                    isFacebook ? Icons.facebook : Icons.camera_alt_rounded,
-                    size: 48.0,
-                    color: buttonColor,
-                  ),
+                  errorBuilder: (context, error, stackTrace) =>
+                      Icon(isFacebook ? Icons.facebook : Icons.camera_alt_rounded, size: 48.0, color: buttonColor),
                 ),
               ),
               const SizedBox(height: 20.0),
@@ -219,11 +203,7 @@ class _PostsTabScreenState extends State<PostsTabScreen> {
               const SizedBox(height: 8.0),
               Text(
                 'Connect your $platformName account to view live posts, reels, impressions, engagement, and reach metrics in real time.',
-                style: AppTextStyles.body2.copyWith(
-                  color: AppColors.textSecondary,
-                  height: 1.5,
-                  fontSize: 13.0,
-                ),
+                style: AppTextStyles.body2.copyWith(color: AppColors.textSecondary, height: 1.5, fontSize: 13.0),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24.0),
@@ -266,10 +246,7 @@ class _PostsTabScreenState extends State<PostsTabScreen> {
           children: [
             Container(
               padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.08),
-                shape: BoxShape.circle,
-              ),
+              decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.08), shape: BoxShape.circle),
               child: const Icon(Icons.post_add_rounded, size: 40.0, color: AppColors.primary),
             ),
             const SizedBox(height: 20.0),

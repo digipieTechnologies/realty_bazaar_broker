@@ -103,39 +103,56 @@ serve(async (req) => {
       }
     }
 
-    // 4. Soft Disconnect: Update connection record in `social_accounts` table to is_connected = false & is_active = false
+    // 4. Force Delete: Remove connection record from `social_accounts` table
     if (account?.id) {
-      console.log(`[Disconnect] Updating ${platform} account ID ${account.id} in social_accounts table to is_connected = false for broker: ${brokerId}`);
-      const { error: updateError } = await supabase
+      console.log(`[Disconnect] Force deleting ${platform} account ID ${account.id} from social_accounts table for broker: ${brokerId}`);
+      const { error: deleteError } = await supabase
         .from("social_accounts")
-        .update({
-          is_connected: false,
-          is_active: false,
-          updated_at: new Date().toISOString(),
-        })
+        .delete()
         .eq("id", account.id);
 
-      if (updateError) {
-        throw new Error(`Failed to update social connection record in database: ${updateError.message}`);
+      if (deleteError) {
+        console.warn(`[Disconnect] Force delete by ID failed (${deleteError.message}), attempting fallback update.`);
+        const { error: updateError } = await supabase
+          .from("social_accounts")
+          .update({
+            is_connected: false,
+            is_active: false,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", account.id);
+
+        if (updateError) {
+          throw new Error(`Failed to disconnect social connection record in database: ${updateError.message}`);
+        }
       }
     } else {
-      console.log(`[Disconnect] Updating ${platform} account by broker_id for broker: ${brokerId}`);
-      const { error: updateError } = await supabase
+      console.log(`[Disconnect] Force deleting ${platform} account by broker_id for broker: ${brokerId}`);
+      const { error: deleteError } = await supabase
         .from("social_accounts")
-        .update({
-          is_connected: false,
-          is_active: false,
-          updated_at: new Date().toISOString(),
-        })
+        .delete()
         .eq("broker_id", brokerId)
-        .filter("platform", "eq", platform);
+        .eq("platform", platform);
 
-      if (updateError) {
-        throw new Error(`Failed to update social connection record in database: ${updateError.message}`);
+      if (deleteError) {
+        console.warn(`[Disconnect] Force delete by broker_id failed (${deleteError.message}), attempting fallback update.`);
+        const { error: updateError } = await supabase
+          .from("social_accounts")
+          .update({
+            is_connected: false,
+            is_active: false,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("broker_id", brokerId)
+          .eq("platform", platform);
+
+        if (updateError) {
+          throw new Error(`Failed to disconnect social connection record in database: ${updateError.message}`);
+        }
       }
     }
 
-    console.log(`[Disconnect] ${platform} connection successfully marked as disconnected (is_connected = false) for broker ${brokerId}`);
+    console.log(`[Disconnect] ${platform} connection successfully removed/disconnected for broker ${brokerId}`);
 
     return new Response(
       JSON.stringify({

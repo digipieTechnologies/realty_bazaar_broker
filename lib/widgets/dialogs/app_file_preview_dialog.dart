@@ -6,11 +6,12 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:the_realty_bazaar/widgets/buttons/app_button.dart';
 
 import '../../app/app_colors.dart';
+import '../../core/localization/app_localizations.dart';
 import '../../core/utils/common_ext.dart';
 import '../../util/app_utils.dart';
-import '../buttons/app_button.dart';
 import '../images/cached_image.dart';
 import '../toast/app_toast.dart';
 
@@ -21,12 +22,7 @@ class AppFilePreviewDialog extends StatefulWidget {
 
   const AppFilePreviewDialog({super.key, this.fileUrl, this.filePath, required this.fileName});
 
-  static Future<void> show(
-    BuildContext context, {
-    String? fileUrl,
-    String? filePath,
-    required String fileName,
-  }) {
+  static Future<void> show(BuildContext context, {String? fileUrl, String? filePath, required String fileName}) {
     return showDialog(
       context: context,
       useSafeArea: false,
@@ -77,10 +73,7 @@ class _AppFilePreviewDialogState extends State<AppFilePreviewDialog> {
       }
 
       if (widget.fileUrl != null && widget.fileUrl!.isNotEmpty) {
-        final response = await Dio().get<String>(
-          widget.fileUrl!,
-          options: Options(responseType: ResponseType.plain),
-        );
+        final response = await Dio().get<String>(widget.fileUrl!, options: Options(responseType: ResponseType.plain));
         if (mounted) {
           setState(() {
             _textContent = response.data;
@@ -163,8 +156,8 @@ class _AppFilePreviewDialogState extends State<AppFilePreviewDialog> {
     if (widget.fileName.isImageUrl) {
       final imageSource = widget.fileUrl ?? widget.filePath;
       if (imageSource == null || imageSource.isEmpty) {
-        return const Center(
-          child: Text('Image path is missing', style: TextStyle(color: Colors.white)),
+        return Center(
+          child: Text(context.tr('image_path_missing'), style: const TextStyle(color: Colors.white)),
         );
       }
       return InteractiveViewer(
@@ -181,7 +174,7 @@ class _AppFilePreviewDialogState extends State<AppFilePreviewDialog> {
           children: [
             const CircularProgressIndicator(color: AppColors.primary),
             const SizedBox(height: 16.0),
-            Text('Loading $ext content preview...', style: const TextStyle(color: Colors.white70)),
+            Text(context.tr('loading_preview').replaceAll('{ext}', ext), style: const TextStyle(color: Colors.white70)),
           ],
         );
       }
@@ -209,11 +202,7 @@ class _AppFilePreviewDialogState extends State<AppFilePreviewDialog> {
                     ),
                     child: Text(
                       ext,
-                      style: const TextStyle(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12.0,
-                      ),
+                      style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 12.0),
                     ),
                   ),
                   Text(
@@ -253,18 +242,13 @@ class _AppFilePreviewDialogState extends State<AppFilePreviewDialog> {
         children: [
           Container(
             padding: const EdgeInsets.all(28.0),
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.15),
-              shape: BoxShape.circle,
-            ),
+            decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.15), shape: BoxShape.circle),
             child: Icon(
               widget.fileName.isCsvUrl
                   ? Icons.table_chart_rounded
                   : (widget.fileName.isSqlUrl
                         ? Icons.code_rounded
-                        : (widget.fileName.isPdfUrl
-                              ? Icons.picture_as_pdf_rounded
-                              : Icons.insert_drive_file_rounded)),
+                        : (widget.fileName.isPdfUrl ? Icons.picture_as_pdf_rounded : Icons.insert_drive_file_rounded)),
               size: 64.0,
               color: AppColors.primary,
             ),
@@ -286,7 +270,7 @@ class _AppFilePreviewDialogState extends State<AppFilePreviewDialog> {
           ],
           const SizedBox(height: 32.0),
           AppButton.solid(
-            text: 'Open or Download $ext File',
+            text: context.tr('open_download_file').replaceAll('{ext}', ext),
             iconData: Icons.file_download_rounded,
             height: 48.0,
             borderRadius: 10.0,

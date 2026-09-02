@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:the_realty_bazaar/util/common_ext.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_constants.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../providers/video_request/video_request_provider.dart';
-import '../../../util/common_ext.dart';
 import '../../../widgets/common/common_app_bar.dart';
 import '../../../widgets/dialogs/select_property_for_video_request_dialog.dart';
 import '../../../widgets/shimmer/video_request_list_shimmer_widget.dart';
@@ -58,10 +58,7 @@ class _RequestVideoTabScreenState extends State<RequestVideoTabScreen> {
     final success = await provider.cancelRequest(req.id, brokerId: _brokerId);
     if (!mounted) return;
     if (success) {
-      AppToast.showSuccess(
-        context.tr('toast_request_cancelled_title'),
-        context.tr('toast_request_cancelled_desc'),
-      );
+      AppToast.showSuccess(context.tr('toast_request_cancelled_title'), context.tr('toast_request_cancelled_desc'));
     } else {
       AppToast.showError(context.tr('toast_action_failed_title'), context.tr('toast_action_failed_desc'));
     }
@@ -82,7 +79,7 @@ class _RequestVideoTabScreenState extends State<RequestVideoTabScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = context.isMobileUI;
+    final isMobile = context.isMobile;
     final canPop = Navigator.of(context).canPop();
 
     return Scaffold(
@@ -136,11 +133,7 @@ class _RequestVideoTabScreenState extends State<RequestVideoTabScreen> {
                     statusesFilter: provider.statusesFilter,
                     onStatusesFilterChanged: (newStatuses) {
                       provider.setStatusesFilter(newStatuses);
-                      provider.fetchVideoRequests(
-                        brokerId: _brokerId,
-                        page: 1,
-                        searchQuery: provider.searchQuery,
-                      );
+                      provider.fetchVideoRequests(brokerId: _brokerId, page: 1, searchQuery: provider.searchQuery);
                     },
                     onRequestVideoPressed: _handleRequestVideo,
                   ),

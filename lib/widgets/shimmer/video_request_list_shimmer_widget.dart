@@ -15,7 +15,7 @@ class VideoRequestListShimmerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = context.isMobileUI;
+    final isMobile = context.isMobile;
 
     return ListView.builder(
       shrinkWrap: true,
@@ -220,7 +220,7 @@ class VideoRequestStatsShimmerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = context.isMobileUI;
+    final isMobile = context.isMobile;
     final isDesktop = context.isDesktop;
 
     if (isMobile) {

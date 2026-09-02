@@ -4,7 +4,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../app/app_colors.dart';
-import '../../../../app/app_routes.dart';
 import '../../../../app/app_text_styles.dart';
 import '../../../../models/social_enums.dart';
 import '../../../../models/social_lead_model.dart';

@@ -2,6 +2,7 @@
 // Purpose: Responsive container section for top lead summary metrics.
 
 import 'package:flutter/material.dart';
+import 'package:the_realty_bazaar/core/localization/app_localizations.dart';
 
 import '../../../../app/app_colors.dart';
 import '../../../../util/common_ext.dart';
@@ -23,7 +24,7 @@ class LeadSummarySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = context.isMobileUI;
+    final isMobile = context.isMobile;
     final isDesktop = context.isDesktop;
 
     if (isMobile) {
@@ -42,7 +43,7 @@ class LeadSummarySection extends StatelessWidget {
           switch (index) {
             case 0:
               return LeadSummaryCard(
-                title: 'Total Leads',
+                title: context.tr('total_leads'),
                 value: '$totalLeads',
                 icon: Icons.trending_up_rounded,
                 iconColor: AppColors.success,
@@ -50,7 +51,7 @@ class LeadSummarySection extends StatelessWidget {
               );
             case 1:
               return LeadSummaryCard(
-                title: 'Qualified',
+                title: context.tr('qualified'),
                 value: '$qualifiedLeads',
                 icon: Icons.check_circle_outline_rounded,
                 iconColor: AppColors.primary,
@@ -58,7 +59,7 @@ class LeadSummarySection extends StatelessWidget {
               );
             case 2:
               return LeadSummaryCard(
-                title: 'Nurturing',
+                title: context.tr('nurturing'),
                 value: '$nurturingLeads',
                 icon: Icons.access_time_rounded,
                 iconColor: AppColors.warning,
@@ -66,7 +67,7 @@ class LeadSummarySection extends StatelessWidget {
               );
             default:
               return LeadSummaryCard(
-                title: 'Conversion',
+                title: context.tr('conversion'),
                 value: '${(conversionRate * 100).toStringAsFixed(1)}%',
                 icon: Icons.pie_chart_outline_rounded,
                 iconColor: AppColors.primary,
@@ -93,32 +94,32 @@ class LeadSummarySection extends StatelessWidget {
       itemBuilder: (context, index) {
         switch (index) {
           case 0:
-            return const LeadSummaryCard(
-              title: 'Total Leads',
-              value: '1,284',
-              subtitle: '+12% this month',
+            return LeadSummaryCard(
+              title: context.tr('total_leads'),
+              value: '$totalLeads',
+              subtitle: context.tr('plus_twelve_percent_month'),
               icon: Icons.trending_up_rounded,
               iconColor: AppColors.success,
             );
           case 1:
-            return const LeadSummaryCard(
-              title: 'Qualified',
-              value: '412',
-              subtitle: 'High priority',
+            return LeadSummaryCard(
+              title: context.tr('qualified'),
+              value: '$qualifiedLeads',
+              subtitle: context.tr('high_priority'),
               icon: Icons.check_circle_outline_rounded,
               iconColor: AppColors.primary,
             );
           case 2:
-            return const LeadSummaryCard(
-              title: 'Nurturing',
-              value: '756',
-              subtitle: 'In pipeline',
+            return LeadSummaryCard(
+              title: context.tr('nurturing'),
+              value: '$nurturingLeads',
+              subtitle: context.tr('in_pipeline'),
               icon: Icons.access_time_rounded,
               iconColor: AppColors.warning,
             );
           default:
             return LeadSummaryCard(
-              title: 'Conversion Rate',
+              title: context.tr('conversion_rate'),
               value: '${(conversionRate * 100).toStringAsFixed(1)}%',
               progress: conversionRate,
             );

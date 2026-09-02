@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
+import '../../../core/localization/app_localizations.dart';
 import 'subscription_feature_card.dart';
 
 class SubscriptionFeatureItemData {
@@ -26,36 +27,36 @@ class SubscriptionFeatureSection extends StatelessWidget {
     required this.features,
   });
 
-  static List<SubscriptionFeatureItemData> getDefaultFeatures() {
-    return const [
+  static List<SubscriptionFeatureItemData> getDefaultFeatures(BuildContext context) {
+    return [
       SubscriptionFeatureItemData(
-        title: 'Ad Designing',
-        description: 'Our professional designers create high-converting ad graphics customized for your property listing.',
+        title: context.tr('feature_ad_design_title'),
+        description: context.tr('feature_ad_design_desc'),
         assetPath: 'assets/images/subscription_features/ad_design.png',
       ),
       SubscriptionFeatureItemData(
-        title: 'Content & Copywriting',
-        description: 'Engaging real estate post captions and ad copies optimized for maximum buyer inquiries.',
+        title: context.tr('feature_copywriting_title'),
+        description: context.tr('feature_copywriting_desc'),
         assetPath: 'assets/images/subscription_features/content_creation.png',
       ),
       SubscriptionFeatureItemData(
-        title: 'WhatsApp Lead Delivery',
-        description: 'Receive instant notifications and buyer contact details directly inside your WhatsApp inbox.',
+        title: context.tr('feature_whatsapp_title'),
+        description: context.tr('feature_whatsapp_desc'),
         assetPath: 'assets/images/subscription_features/whatsapp_leads.png',
       ),
       SubscriptionFeatureItemData(
-        title: 'Precision Targeting',
-        description: 'Target active homebuyers and high-net-worth investors in your specific city and micro-market.',
+        title: context.tr('feature_targeting_title'),
+        description: context.tr('feature_targeting_desc'),
         assetPath: 'assets/images/subscription_features/audience_targeting.png',
       ),
       SubscriptionFeatureItemData(
-        title: 'AI Optimization',
-        description: 'Real-time campaign budget reallocation to maximize leads while lowering cost-per-lead.',
+        title: context.tr('feature_ai_opt_title'),
+        description: context.tr('feature_ai_opt_desc'),
         assetPath: 'assets/images/subscription_features/campaign_optimization.png',
       ),
       SubscriptionFeatureItemData(
-        title: 'Live Analytics',
-        description: 'Track ad views, click-through rates, and total leads captured on your growth dashboard.',
+        title: context.tr('feature_analytics_title'),
+        description: context.tr('feature_analytics_desc'),
         assetPath: 'assets/images/subscription_features/analytics.png',
       ),
     ];
@@ -63,7 +64,7 @@ class SubscriptionFeatureSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final list = features.isNotEmpty ? features : getDefaultFeatures();
+    final list = features.isNotEmpty ? features : getDefaultFeatures(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,7 +72,7 @@ class SubscriptionFeatureSection extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4.0),
           child: Text(
-            'Package Includes',
+            context.tr('package_includes'),
             style: AppTextStyles.heading3.copyWith(
               fontWeight: FontWeight.w800,
               color: AppColors.textPrimary,

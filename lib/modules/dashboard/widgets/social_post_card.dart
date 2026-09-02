@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../app/app_colors.dart';
-import '../../../app/app_routes.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../app/app_utils.dart';
 import '../../../core/localization/app_localizations.dart';
@@ -33,7 +32,7 @@ class SocialPostCard extends StatelessWidget {
     if (isMinimalView) {
       return _buildDashboardMinimalCard(context);
     }
-    final isMobile = context.isMobileUI;
+    final isMobile = context.isMobile;
     final isFB = post.platform == SocialPlatform.facebook;
 
     final mediaUrl =

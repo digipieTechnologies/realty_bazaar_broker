@@ -99,7 +99,7 @@ class _LeadTableWidgetState extends State<LeadTableWidget> {
                 ),
                 const SizedBox(width: 12.0),
                 AppFilterButton(
-                  title: 'Filter Leads',
+                  title: context.tr('filter_leads'),
                   onClear: () {
                     setState(() {
                       _localPlatformsFilter = [];
@@ -120,13 +120,11 @@ class _LeadTableWidgetState extends State<LeadTableWidget> {
                 ),
                 const SizedBox(width: 12.0),
                 AppButton(
-                  text: context.isMobileUI ? null : context.tr('add_new_lead'),
+                  text: context.isMobile ? null : context.tr('add_new_lead'),
                   iconData: Icons.person_add_alt_1_rounded,
                   height: 42.0,
-                  width: context.isMobileUI ? 42.0 : null,
-                  padding: context.isMobileUI
-                      ? EdgeInsets.zero
-                      : const EdgeInsets.symmetric(horizontal: 16.0),
+                  width: context.isMobile ? 42.0 : null,
+                  padding: context.isMobile ? EdgeInsets.zero : const EdgeInsets.symmetric(horizontal: 16.0),
                   borderRadius: 10.0,
                   color: AppColors.primary,
                   tooltip: context.tr('add_new_lead'),
@@ -138,12 +136,12 @@ class _LeadTableWidgetState extends State<LeadTableWidget> {
 
           // Desktop Table Header Row (Only shown on full Desktop Web view)
           if (!useTileView)
-            const AppTableHeaderRow(
+            AppTableHeaderRow(
               columns: [
-                AppTableColumnDef(title: 'LEAD DETAILS', flex: 3),
-                AppTableColumnDef(title: 'SOURCE', flex: 2, alignment: Alignment.center),
-                AppTableColumnDef(title: 'PROPERTY DETAILS', flex: 4),
-                AppTableColumnDef(title: 'CREATED AT', flex: 2),
+                AppTableColumnDef(title: context.tr('col_lead_details'), flex: 3),
+                AppTableColumnDef(title: context.tr('col_source'), flex: 2, alignment: Alignment.center),
+                AppTableColumnDef(title: context.tr('col_property_details'), flex: 4),
+                AppTableColumnDef(title: context.tr('col_created_at'), flex: 2),
               ],
               endSpacing: 40.0,
             ),
@@ -161,9 +159,7 @@ class _LeadTableWidgetState extends State<LeadTableWidget> {
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              padding: useTileView
-                  ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0)
-                  : EdgeInsets.zero,
+              padding: useTileView ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0) : EdgeInsets.zero,
               itemCount: widget.leads.length,
               itemBuilder: (context, index) {
                 final lead = widget.leads[index];

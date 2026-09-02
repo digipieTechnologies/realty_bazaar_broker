@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_constants.dart';
@@ -16,14 +17,14 @@ import '../../../providers/auth/auth_provider.dart';
 import '../../../util/common_ext.dart';
 import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/buttons/language_selector_button.dart';
+import '../../../widgets/common/app_tag_chip.dart';
+import '../../../widgets/common/common_app_bar.dart';
 import '../../../widgets/dialogs/app_dialog.dart';
 import '../../../widgets/dividers/app_divider.dart';
 import '../../../widgets/inputs/app_textfield.dart';
 import '../../../widgets/loaders/app_loader.dart';
 import '../../../widgets/toast/app_toast.dart';
 import '../../auth/widgets/phone_field_widget.dart';
-import 'package:the_realty_bazaar/app/app_navigator.dart';
-import '../../../widgets/common/common_app_bar.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -198,7 +199,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final authProvider = Provider.of<AuthProvider>(context);
     final profile = authProvider.userProfile;
     final isDesktop = context.isDesktop;
-    final isMobile = context.isMobileUI;
+    final isMobile = context.isMobile;
 
     if (profile == null) {
       return Scaffold(
@@ -208,9 +209,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: isMobile 
-          ? CommonAppBar(title: context.tr('action_profile'))
-          : null,
+      appBar: isMobile ? CommonAppBar(title: context.tr('action_profile')) : null,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: AppConstants.getTabPadding(context, bottomExtra: isMobile ? 80.0 : 24.0),
@@ -223,7 +222,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Heading Section
-                    _buildHeader(profile, isDesktop),
+                    _buildHeader(profile, authProvider.activeSubscription, isDesktop),
                     SizedBox(height: isDesktop ? 24.0 : 14.0),
 
                     // Forms Layout
@@ -287,22 +286,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildHeader(dynamic profile, bool isDesktop) {
-    // TODO: Fetch active plan from user_subscriptions when integrated.
-    final plan = 'Free';
+  Widget _buildHeader(UserModel profile, UserSubscriptionModel? activeSub, bool isDesktop) {
+    final bool hasActivePlan = activeSub != null && !activeSub.isExpired;
+    final String planTitle = hasActivePlan
+        ? (activeSub.subscriptionPlanId?.title.isNotEmpty == true
+              ? activeSub.subscriptionPlanId!.title
+              : (activeSub.planCode.isNotEmpty ? activeSub.planCode.toUpperCase() : context.tr('active_plan')))
+        : context.tr('no_active_plan');
 
     return Row(
       children: [
         CircleAvatar(
           radius: isDesktop ? 36 : 28,
-          backgroundColor: AppColors.primary.withOpacity(0.1),
+          backgroundColor: AppColors.primary.withValues(alpha: 0.1),
           child: Text(
-            (profile.name as String? ?? 'B').substring(0, 1).toUpperCase(),
-            style: TextStyle(
-              fontSize: isDesktop ? 28 : 20,
-              fontWeight: FontWeight.bold,
-              color: AppColors.primary,
-            ),
+            (profile.name?.isNotEmpty == true ? profile.name! : 'B').substring(0, 1).toUpperCase(),
+            style: TextStyle(fontSize: isDesktop ? 28 : 20, fontWeight: FontWeight.bold, color: AppColors.primary),
           ),
         ),
         SizedBox(width: isDesktop ? 20.0 : 12.0),
@@ -314,42 +313,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 profile.name ?? 'Broker Profile',
                 style: AppTextStyles.heading1.copyWith(fontSize: isDesktop ? 26.0 : 20.0),
               ),
-              const SizedBox(height: 4.0),
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      (profile.role?.displayName ?? 'Broker').toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 10.0,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8.0),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: AppColors.success.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      plan.toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 10.0,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.success,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              const SizedBox(height: 6.0),
+              if (hasActivePlan)
+                AppTagChip(
+                  label: planTitle,
+                  icon: Icons.workspace_premium_rounded,
+                  trailingIcon: Icons.arrow_forward_ios_rounded,
+                  backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+                  textColor: AppColors.primary,
+                  borderColor: AppColors.primary.withValues(alpha: 0.3),
+                  onTap: () => AppNavigator.navigateToActivePlanDetail(context),
+                )
+              else
+                AppTagChip(
+                  label: context.tr('no_active_plan'),
+                  trailingIcon: Icons.arrow_forward_ios_rounded,
+                  backgroundColor: AppColors.warning.withValues(alpha: 0.1),
+                  textColor: AppColors.warning,
+                  borderColor: AppColors.warning.withValues(alpha: 0.3),
+                  onTap: () => AppNavigator.navigateToActivePlanDetail(context),
+                ),
             ],
           ),
         ),
@@ -742,10 +725,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 child: const Icon(Icons.manage_accounts_outlined, size: 22.0, color: AppColors.primary),
               ),
-              title: Text(
-                context.tr('account_actions'),
-                style: AppTextStyles.heading3.copyWith(fontSize: 16.0),
-              ),
+              title: Text(context.tr('account_actions'), style: AppTextStyles.heading3.copyWith(fontSize: 16.0)),
               subtitle: Text(
                 context.tr('sign_out_subtitle'),
                 style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
@@ -852,11 +832,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       child: Text(
                         context.tr('privacy_policy'),
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w500,
-                        ),
+                        style: const TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w500),
                       ),
                     ),
                     const Padding(
@@ -872,11 +848,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       child: Text(
                         context.tr('terms_of_service'),
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w500,
-                        ),
+                        style: const TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w500),
                       ),
                     ),
                   ],

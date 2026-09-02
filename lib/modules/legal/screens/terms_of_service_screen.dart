@@ -3,21 +3,21 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
+import 'package:the_realty_bazaar/util/common_ext.dart';
+import 'package:the_realty_bazaar/widgets/brand/app_logo.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_routes.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
-import '../../../widgets/brand/app_logo.dart';
-import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 class TermsOfServiceScreen extends StatelessWidget {
   const TermsOfServiceScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isDesktop = screenWidth >= 800;
+    final isDesktop = context.isDesktop;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -63,7 +63,7 @@ class TermsOfServiceScreen extends StatelessWidget {
             child: SingleChildScrollView(
               padding: EdgeInsets.all(isDesktop ? 36.0 : 16.0),
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: isDesktop ? 900 : double.infinity),
+                constraints: BoxConstraints(maxWidth: context.screenWidth800),
                 child: Container(
                   padding: EdgeInsets.all(isDesktop ? 24.0 : 16),
                   decoration: BoxDecoration(
@@ -71,7 +71,11 @@ class TermsOfServiceScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16.0),
                     border: Border.all(color: AppColors.border, width: 1.0),
                     boxShadow: [
-                      BoxShadow(color: AppColors.shadow.withValues(alpha: 0.05), blurRadius: 16, offset: const Offset(0, 4)),
+                      BoxShadow(
+                        color: AppColors.shadow.withValues(alpha: 0.05),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                      ),
                     ],
                   ),
                   child: Column(
@@ -98,45 +102,33 @@ class TermsOfServiceScreen extends StatelessWidget {
                       const SizedBox(height: 20),
 
                       _buildSection(
-                        title: '1. Agreement to Terms',
-                        content:
-                            'By accessing or using The Realty Bazaar Broker mobile application or web portal, you agree to be bound by these Terms of Service. If you do not agree, please do not use our services.',
+                        title: context.tr('tos_section_1_title'),
+                        content: context.tr('tos_section_1_content'),
                       ),
 
                       _buildSection(
-                        title: '2. Broker Accounts & Responsibilities',
-                        content:
-                            '• You must provide accurate, current, and complete information during registration.\n'
-                            '• You are responsible for safeguarding your login credentials and for all activities that occur under your account.\n'
-                            '• You represent that you are a licensed or authorized real estate professional or broker compliant with local regulations.',
+                        title: context.tr('tos_section_2_title'),
+                        content: context.tr('tos_section_2_content'),
                       ),
 
                       _buildSection(
-                        title: '3. Property Listings & Content Accuracy',
-                        content:
-                            '• You retain ownership of property descriptions, photos, and materials you upload.\n'
-                            '• You warrant that all property details, pricing, and availability uploaded to the platform are accurate and truthful.\n'
-                            '• We reserve the right to remove listings that violate laws, copyright, or platform safety rules.',
+                        title: context.tr('tos_section_3_title'),
+                        content: context.tr('tos_section_3_content'),
                       ),
 
                       _buildSection(
-                        title: '4. Social Media Integrations & Publishing',
-                        content:
-                            '• When publishing listings to Meta (Facebook/Instagram), you grant us permission to act via your authorized page token.\n'
-                            '• You are responsible for adhering to Meta Platform policies regarding real estate advertising and community standards.',
+                        title: context.tr('tos_section_4_title'),
+                        content: context.tr('tos_section_4_content'),
                       ),
 
                       _buildSection(
-                        title: '5. Account Termination & Deletion',
-                        content:
-                            '• You may terminate your account at any time via the Delete Account option in the app or via our public deletion form.\n'
-                            '• We reserve the right to suspend or terminate accounts that engage in fraudulent behavior, abuse, or policy violations.',
+                        title: context.tr('tos_section_5_title'),
+                        content: context.tr('tos_section_5_content'),
                       ),
 
                       _buildSection(
-                        title: '6. Limitation of Liability',
-                        content:
-                            'The Realty Bazaar is provided "as is" without warranty of any kind. We are not liable for direct, indirect, incidental, or consequential damages resulting from your use of the platform or property transactions between parties.',
+                        title: context.tr('tos_section_6_title'),
+                        content: context.tr('tos_section_6_content'),
                       ),
 
                       const SizedBox(height: 24),

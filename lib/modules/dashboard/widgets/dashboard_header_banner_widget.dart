@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../providers/auth/auth_provider.dart';
+import '../../../util/common_ext.dart';
 
 class DashboardHeaderBannerWidget extends StatefulWidget {
   const DashboardHeaderBannerWidget({super.key});
@@ -15,16 +16,14 @@ class DashboardHeaderBannerWidget extends StatefulWidget {
   State<DashboardHeaderBannerWidget> createState() => _DashboardHeaderBannerWidgetState();
 }
 
-class _DashboardHeaderBannerWidgetState extends State<DashboardHeaderBannerWidget>
-    with SingleTickerProviderStateMixin {
+class _DashboardHeaderBannerWidgetState extends State<DashboardHeaderBannerWidget> with SingleTickerProviderStateMixin {
   late AnimationController _animController;
   late Animation<double> _floatAnim;
 
   @override
   void initState() {
     super.initState();
-    _animController = AnimationController(vsync: this, duration: const Duration(seconds: 4))
-      ..repeat(reverse: true);
+    _animController = AnimationController(vsync: this, duration: const Duration(seconds: 4))..repeat(reverse: true);
 
     _floatAnim = Tween<double>(
       begin: -6.0,
@@ -41,8 +40,7 @@ class _DashboardHeaderBannerWidgetState extends State<DashboardHeaderBannerWidge
   @override
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthProvider>();
-    final name =
-        authProvider.userProfile?.name ?? authProvider.userProfile?.email?.split('@').first ?? 'Broker';
+    final name = authProvider.userProfile?.name ?? authProvider.userProfile?.email?.split('@').first ?? 'Broker';
 
     final rawBusinessName = authProvider.userProfile?.brokerId?.businessName;
     final categoryTag =
@@ -52,7 +50,7 @@ class _DashboardHeaderBannerWidgetState extends State<DashboardHeaderBannerWidge
         ? rawBusinessName.toUpperCase()
         : 'REAL ESTATE BROKER';
 
-    final isMobile = MediaQuery.of(context).size.width < 600;
+    final isMobile = context.isMobile;
 
     return Container(
       width: double.infinity,
@@ -65,11 +63,7 @@ class _DashboardHeaderBannerWidgetState extends State<DashboardHeaderBannerWidge
         ),
         borderRadius: BorderRadius.circular(22.0),
         boxShadow: [
-          BoxShadow(
-            color: AppColors.primary500.withValues(alpha: 0.25),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
-          ),
+          BoxShadow(color: AppColors.primary500.withValues(alpha: 0.25), blurRadius: 16, offset: const Offset(0, 6)),
         ],
       ),
       child: ClipRRect(
@@ -102,10 +96,7 @@ class _DashboardHeaderBannerWidgetState extends State<DashboardHeaderBannerWidge
                         child: Container(
                           width: 42,
                           height: 42,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.accentGold,
-                          ),
+                          decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.accentGold),
                         ),
                       ),
                       Positioned(
@@ -128,10 +119,7 @@ class _DashboardHeaderBannerWidgetState extends State<DashboardHeaderBannerWidge
 
             // Banner Content
             Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 14.0 : 22.0,
-                vertical: isMobile ? 14.0 : 20.0,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: isMobile ? 14.0 : 22.0, vertical: isMobile ? 14.0 : 20.0),
               child: Row(
                 children: [
                   Expanded(
@@ -203,11 +191,7 @@ class _DashboardHeaderBannerWidgetState extends State<DashboardHeaderBannerWidge
                       ],
                     ),
                     child: Center(
-                      child: Icon(
-                        Icons.verified_user_rounded,
-                        color: Colors.white,
-                        size: isMobile ? 22.0 : 28.0,
-                      ),
+                      child: Icon(Icons.verified_user_rounded, color: Colors.white, size: isMobile ? 22.0 : 28.0),
                     ),
                   ),
                 ],

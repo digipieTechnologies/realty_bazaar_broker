@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
+import '../../core/localization/app_localizations.dart';
+import '../../util/common_ext.dart';
 import '../buttons/app_button.dart';
 
 class AppFilterButton extends StatefulWidget {
@@ -84,7 +86,7 @@ class _AppFilterButtonState extends State<AppFilterButton> {
         final renderBox = this.context.findRenderObject() as RenderBox;
         final buttonSize = renderBox.size;
         final buttonPosition = renderBox.localToGlobal(Offset.zero);
-        final screenWidth = MediaQuery.of(context).size.width;
+        final screenWidth = context.width;
         const padding = 16.0;
 
         // Dynamic responsive width: clamp to fit screen width on narrow devices
@@ -184,7 +186,7 @@ class _AppFilterButtonState extends State<AppFilterButton> {
                                 if (widget.onClear != null)
                                   Expanded(
                                     child: AppButton.outline(
-                                      text: 'Clear All',
+                                      text: context.tr('clear_all'),
                                       height: 42.0,
                                       borderRadius: 10.0,
                                       borderColor: AppColors.border,
@@ -200,7 +202,7 @@ class _AppFilterButtonState extends State<AppFilterButton> {
                                 if (widget.onApply != null)
                                   Expanded(
                                     child: AppButton.solid(
-                                      text: 'Apply',
+                                      text: context.tr('apply'),
                                       height: 42.0,
                                       borderRadius: 10.0,
                                       color: AppColors.primary,
@@ -230,7 +232,7 @@ class _AppFilterButtonState extends State<AppFilterButton> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 600;
+    final isMobile = context.isMobile;
 
     return CompositedTransformTarget(
       link: _layerLink,

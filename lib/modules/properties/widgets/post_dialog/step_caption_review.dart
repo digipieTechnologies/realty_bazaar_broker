@@ -7,6 +7,7 @@ import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
 import '../../../../models/media_model.dart';
 import '../../../../providers/social/social_provider.dart';
+import '../../../../util/common_ext.dart';
 import '../../../../widgets/images/cached_image.dart';
 import '../../../../widgets/media/full_screen_media_viewer.dart';
 import 'step_media_preview_edit.dart';
@@ -66,8 +67,7 @@ class _StepCaptionReviewState extends State<StepCaptionReview> {
             pathLower.endsWith('.mp4') ||
             pathLower.endsWith('.mov'));
 
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isDesktop = screenWidth >= 600;
+    final isDesktop = context.isDesktop;
 
     return SingleChildScrollView(
       padding: EdgeInsets.all(isDesktop ? 16.0 : 10.0),

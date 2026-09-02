@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:the_realty_bazaar/util/common_ext.dart';
 
 import '../../../app/app_assets.dart';
 import '../../../app/app_colors.dart';
@@ -14,7 +15,6 @@ import '../../../core/localization/app_localizations.dart';
 import '../../../models/models.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../providers/campaign/ad_campaign_provider.dart';
-import '../../../util/common_ext.dart';
 import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/common/app_section_header.dart';
 import '../../../widgets/common/common_app_bar.dart';
@@ -216,7 +216,6 @@ class _AdCampaignSettingsScreenState extends State<AdCampaignSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<AdCampaignProvider>();
-    final isMobile = context.isMobileUI;
 
     return PopScope(
       canPop: false,
@@ -234,7 +233,7 @@ class _AdCampaignSettingsScreenState extends State<AdCampaignSettingsScreen> {
                   padding: AppConstants.getTabPadding(context),
                   child: Center(
                     child: Container(
-                      constraints: BoxConstraints(maxWidth: isMobile ? 600.0 : 900.0),
+                      constraints: BoxConstraints(maxWidth: context.screenWidth800),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -376,21 +375,13 @@ class _AdCampaignSettingsScreenState extends State<AdCampaignSettingsScreen> {
         borderRadius: BorderRadius.circular(16.0),
         border: Border.all(color: AppColors.border, width: 1.0),
         boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
+          BoxShadow(color: AppColors.primary.withValues(alpha: 0.04), blurRadius: 10, offset: const Offset(0, 4)),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppSectionHeader(
-            title: context.tr('advanced_settings'),
-            icon: Icons.tune_rounded,
-            padding: EdgeInsets.zero,
-          ),
+          AppSectionHeader(title: context.tr('advanced_settings'), icon: Icons.tune_rounded, padding: EdgeInsets.zero),
           const SizedBox(height: 20.0),
 
           // Age Range Slider

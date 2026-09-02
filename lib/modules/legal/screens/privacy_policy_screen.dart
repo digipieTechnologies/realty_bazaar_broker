@@ -3,21 +3,21 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
+import 'package:the_realty_bazaar/core/localization/app_localizations.dart';
+import 'package:the_realty_bazaar/util/common_ext.dart';
 import 'package:the_realty_bazaar/widgets/brand/app_logo.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_routes.dart';
 import '../../../app/app_text_styles.dart';
-import '../../../core/localization/app_localizations.dart';
-import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {
   const PrivacyPolicyScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isDesktop = screenWidth >= 800;
+    final isDesktop = context.isDesktop;
 
     return Scaffold(
       appBar: AppBar(
@@ -64,7 +64,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             child: SingleChildScrollView(
               padding: EdgeInsets.all(isDesktop ? 36.0 : 16.0),
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: isDesktop ? 900 : double.infinity),
+                constraints: BoxConstraints(maxWidth: context.screenWidth800),
                 child: Container(
                   padding: EdgeInsets.all(isDesktop ? 24.0 : 16),
                   decoration: BoxDecoration(
@@ -72,7 +72,11 @@ class PrivacyPolicyScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16.0),
                     border: Border.all(color: AppColors.border, width: 1.0),
                     boxShadow: [
-                      BoxShadow(color: AppColors.shadow.withValues(alpha: 0.05), blurRadius: 16, offset: const Offset(0, 4)),
+                      BoxShadow(
+                        color: AppColors.shadow.withValues(alpha: 0.05),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                      ),
                     ],
                   ),
                   child: Column(
@@ -98,51 +102,33 @@ class PrivacyPolicyScreen extends StatelessWidget {
                       const Divider(color: AppColors.border),
                       const SizedBox(height: 20),
                       _buildSection(
-                        title: '1. Introduction & Overview',
-                        content:
-                            'The Realty Bazaar Broker ("we", "our", or "us") respects your privacy and is committed to protecting the personal data of our real estate brokers, agents, and platform users. This Privacy Policy explains what information we collect, how we use it, how it is safeguarded, and your data deletion rights under Google Play Store and Apple App Store policies.',
+                        title: context.tr('pp_section_1_title'),
+                        content: context.tr('pp_section_1_content'),
                       ),
 
                       _buildSection(
-                        title: '2. Information We Collect',
-                        content:
-                            '• Account Information: Name, email address, phone number, business/brokerage name, business address, and profile photo.\n'
-                            '• Property & Listing Data: Real estate listings, pricing, dimensions, location coordinates, uploaded property photos, and videos.\n'
-                            '• Social Media Integrations: When you connect your Facebook Page or Instagram Business accounts, we store OAuth tokens to post property listings and sync inquiries on your behalf.\n'
-                            '• Device & Usage Data: IP address, device identifiers, diagnostic crash logs, and interaction data via telemetry tools.',
+                        title: context.tr('pp_section_2_title'),
+                        content: context.tr('pp_section_2_content'),
                       ),
 
                       _buildSection(
-                        title: '3. Device Permissions & Usage',
-                        content:
-                            '• Camera & Photo Library: Used solely to allow you to capture or upload property media, floorplans, and profile pictures.\n'
-                            '• Notifications: Used to send lead alerts, video request updates, and direct chat messages.',
+                        title: context.tr('pp_section_3_title'),
+                        content: context.tr('pp_section_3_content'),
                       ),
 
                       _buildSection(
-                        title: '4. Third-Party Services & Integrations',
-                        content:
-                            'We integrate with trusted service providers to run our operations:\n'
-                            '• Supabase: Secure cloud authentication and database hosting.\n'
-                            '• Meta Graph API (Facebook & Instagram): Publishing property posts and synchronizing prospective leads.\n'
-                            '• Cloudflare R2 / AWS: Encrypted storage for property photos and video assets.',
+                        title: context.tr('pp_section_4_title'),
+                        content: context.tr('pp_section_4_content'),
                       ),
 
                       _buildSection(
-                        title: '5. Data Retention & Account Deletion',
-                        content:
-                            'You have the right to request deletion of your account and personal data at any time.\n'
-                            '• In-app deletion is available directly from your Profile > Account Actions.\n'
-                            '• A public deletion request form is available at any time via our Account Deletion page.\n'
-                            '• Upon request, personal identifiers and credentials are immediately deactivated. Operational data is purged in accordance with our 30-day retention schedule.',
+                        title: context.tr('pp_section_5_title'),
+                        content: context.tr('pp_section_5_content'),
                       ),
 
                       _buildSection(
-                        title: '6. Contact Support',
-                        content:
-                            'If you have questions or inquiries regarding your data privacy, please contact our Data Protection Team at:\n'
-                            'Email: support@therealtybazaar.com\n'
-                            'Website: https://therealtybazaar.com',
+                        title: context.tr('pp_section_6_title'),
+                        content: context.tr('pp_section_6_content'),
                       ),
 
                       const SizedBox(height: 24),

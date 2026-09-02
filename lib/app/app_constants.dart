@@ -3,6 +3,8 @@
 
 import 'package:flutter/widgets.dart';
 
+import '../util/common_ext.dart';
+
 class AppConstants {
   AppConstants._();
 
@@ -22,7 +24,7 @@ class AppConstants {
   static const EdgeInsets tabScreenPadding = EdgeInsets.all(24.0);
 
   static EdgeInsets getTabPadding(BuildContext context, {double bottomExtra = 0.0}) {
-    final isMobile = MediaQuery.of(context).size.width < breakpointMobile;
+    final isMobile = context.isMobile;
     final hPadding = isMobile ? 12.0 : 24.0;
     final vPadding = isMobile ? 12.0 : 24.0;
     return EdgeInsets.fromLTRB(hPadding, vPadding, hPadding, vPadding + bottomExtra);

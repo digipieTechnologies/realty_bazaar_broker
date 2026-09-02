@@ -62,8 +62,7 @@ class _VideoRequestTableWidgetState extends State<VideoRequestTableWidget> {
   @override
   void initState() {
     super.initState();
-    _localStatusesFilter =
-        widget.statusesFilter ?? (widget.statusFilter != null ? [widget.statusFilter!] : []);
+    _localStatusesFilter = widget.statusesFilter ?? (widget.statusFilter != null ? [widget.statusFilter!] : []);
   }
 
   @override
@@ -97,7 +96,7 @@ class _VideoRequestTableWidgetState extends State<VideoRequestTableWidget> {
                 ),
                 const SizedBox(width: 12.0),
                 AppFilterButton(
-                  title: 'Filter Requests',
+                  title: context.tr('filter_requests'),
                   onClear: () {
                     setState(() {
                       _localStatusesFilter = [];
@@ -129,13 +128,11 @@ class _VideoRequestTableWidgetState extends State<VideoRequestTableWidget> {
                 if (widget.onRequestVideoPressed != null) ...[
                   const SizedBox(width: 12.0),
                   AppButton(
-                    text: context.isMobileUI ? null : context.tr('generate_video_request'),
+                    text: context.isMobile ? null : context.tr('generate_video_request'),
                     iconData: Icons.add_rounded,
                     height: 42.0,
-                    width: context.isMobileUI ? 42.0 : null,
-                    padding: context.isMobileUI
-                        ? EdgeInsets.zero
-                        : const EdgeInsets.symmetric(horizontal: 16.0),
+                    width: context.isMobile ? 42.0 : null,
+                    padding: context.isMobile ? EdgeInsets.zero : const EdgeInsets.symmetric(horizontal: 16.0),
                     borderRadius: 10.0,
                     color: AppColors.primary,
                     tooltip: context.tr('generate_video_request'),
@@ -148,14 +145,14 @@ class _VideoRequestTableWidgetState extends State<VideoRequestTableWidget> {
 
           // Desktop Table Header Row
           if (!useTileView)
-            const AppTableHeaderRow(
+            AppTableHeaderRow(
               columns: [
-                AppTableColumnDef(title: 'PROPERTY DETAILS', flex: 3),
-                AppTableColumnDef(title: 'STATUS', flex: 2),
-                AppTableColumnDef(title: 'BROKER NOTES', flex: 4),
-                AppTableColumnDef(title: 'CREATED AT', flex: 2),
+                AppTableColumnDef(title: context.tr('col_property_name'), flex: 3),
+                AppTableColumnDef(title: context.tr('col_request_by'), flex: 2),
+                AppTableColumnDef(title: context.tr('col_schedule'), flex: 2),
+                AppTableColumnDef(title: context.tr('col_status'), flex: 2),
+                AppTableColumnDef(title: context.tr('col_actions'), flex: 2, alignment: Alignment.center),
               ],
-              endSpacing: 40.0,
             ),
 
           // Table Body / List
@@ -171,9 +168,7 @@ class _VideoRequestTableWidgetState extends State<VideoRequestTableWidget> {
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              padding: useTileView
-                  ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0)
-                  : EdgeInsets.zero,
+              padding: useTileView ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0) : EdgeInsets.zero,
               itemCount: widget.requests.length,
               itemBuilder: (context, index) {
                 final req = widget.requests[index];

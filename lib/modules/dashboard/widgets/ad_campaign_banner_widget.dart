@@ -3,13 +3,12 @@
 // using design system tokens (AppColors) and unified buttons (AppButton).
 
 import 'package:flutter/material.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 import '../../../../app/app_colors.dart';
-import '../../../../app/app_routes.dart';
 import '../../../../app/app_text_styles.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../widgets/buttons/app_button.dart';
-import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 class AdCampaignBannerWidget extends StatelessWidget {
   const AdCampaignBannerWidget({super.key});
@@ -27,21 +26,14 @@ class AdCampaignBannerWidget extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
+          BoxShadow(color: AppColors.primary.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4)),
         ],
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              color: AppColors.surface.withValues(alpha: 0.18),
-              shape: BoxShape.circle,
-            ),
+            decoration: BoxDecoration(color: AppColors.surface.withValues(alpha: 0.18), shape: BoxShape.circle),
             child: const Icon(Icons.campaign_rounded, color: AppColors.surface, size: 24.0),
           ),
           const SizedBox(width: 14.0),

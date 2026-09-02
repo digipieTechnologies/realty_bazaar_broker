@@ -89,11 +89,11 @@ class _ChatInputBarWidgetState extends State<ChatInputBarWidget> {
 
     final confirmed = await AppDialog.showConfirmationDialog(
       context,
-      title: 'Share Location?',
-      description: 'Are you sure you want to share your location with this user?',
+      title: context.tr('share_location_title'),
+      description: context.tr('share_location_desc'),
       type: DialogType.info,
-      confirmText: 'Share Location',
-      cancelText: 'Cancel',
+      confirmText: context.tr('share_location'),
+      cancelText: context.tr('cancel'),
     );
 
     if (confirmed != true || !mounted) return;
@@ -247,16 +247,16 @@ class _ChatInputBarWidgetState extends State<ChatInputBarWidget> {
                       padding: EdgeInsets.all(8.0),
                       child: Icon(Icons.add_rounded, color: AppColors.primary, size: 26.0),
                     ),
-                    items: const [
+                    items: [
                       AppPopupMenuItem<String>(
                         value: 'media',
-                        label: 'Photos & Videos',
+                        label: context.tr('photos_and_videos'),
                         iconData: Icons.photo_library_rounded,
                         iconColor: AppColors.primary,
                       ),
                       AppPopupMenuItem<String>(
                         value: 'location',
-                        label: 'Location',
+                        label: context.tr('location'),
                         iconData: Icons.location_on_rounded,
                         iconColor: AppColors.primary800,
                       ),

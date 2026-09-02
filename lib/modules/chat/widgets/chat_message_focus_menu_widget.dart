@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:the_realty_bazaar/core/localization/app_localizations.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../models/chat_enums.dart';
@@ -32,9 +33,7 @@ class ChatMessageFocusMenuWidget extends StatelessWidget {
 
   void _showFocusMenu(BuildContext context, Offset globalPosition) async {
     final isTextOnlyMessage =
-        message.messageType == ChatMessageMessageType.text &&
-        message.medias.isEmpty &&
-        message.locationData == null;
+        message.messageType == ChatMessageMessageType.text && message.medias.isEmpty && message.locationData == null;
 
     final String? action = await AppPopupMenu.show<String>(
       context: context,
@@ -42,35 +41,35 @@ class ChatMessageFocusMenuWidget extends StatelessWidget {
       items: [
         // 1. Copy Option
         if (message.message != null && message.message!.isNotEmpty)
-          const AppPopupMenuItem<String>(
+          AppPopupMenuItem<String>(
             value: 'copy',
-            label: 'Copy',
+            label: context.tr('action_copy'),
             iconData: Icons.copy_rounded,
             iconColor: AppColors.textPrimary,
           ),
 
         // 2. Reply Option
-        const AppPopupMenuItem<String>(
+        AppPopupMenuItem<String>(
           value: 'reply',
-          label: 'Reply',
+          label: context.tr('action_reply'),
           iconData: Icons.reply_rounded,
           iconColor: AppColors.textPrimary,
         ),
 
         // 3. Edit Option (only for text-only messages sent by current user)
         if (isMe && !message.isDeleted && isTextOnlyMessage)
-          const AppPopupMenuItem<String>(
+          AppPopupMenuItem<String>(
             value: 'edit',
-            label: 'Edit',
+            label: context.tr('action_edit'),
             iconData: Icons.edit_outlined,
             iconColor: AppColors.textPrimary,
           ),
 
         // 4. Delete Option (only for messages sent by current user)
         if (isMe && !message.isDeleted)
-          const AppPopupMenuItem<String>(
+          AppPopupMenuItem<String>(
             value: 'delete',
-            label: 'Delete',
+            label: context.tr('action_delete'),
             iconData: Icons.delete_outline_rounded,
             iconColor: AppColors.error,
             textColor: AppColors.error,
@@ -84,7 +83,7 @@ class ChatMessageFocusMenuWidget extends StatelessWidget {
       case 'copy':
         if (message.message != null) {
           await Clipboard.setData(ClipboardData(text: message.message!));
-          AppToast.showSuccess('Copied', 'Message copied to clipboard.');
+          AppToast.showSuccess(context.tr('copied'), context.tr('message_copied'));
           onCopy?.call();
         }
         break;

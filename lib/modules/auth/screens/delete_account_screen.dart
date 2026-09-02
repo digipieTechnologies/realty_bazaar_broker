@@ -4,6 +4,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
+import 'package:the_realty_bazaar/util/common_ext.dart';
+import 'package:the_realty_bazaar/widgets/toast/app_toast.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_routes.dart';
@@ -14,8 +17,6 @@ import '../../../providers/auth/auth_provider.dart';
 import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/dialogs/app_dialog.dart';
 import '../../../widgets/inputs/app_textfield.dart';
-import '../../../widgets/toast/app_toast.dart';
-import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 class DeleteAccountScreen extends StatefulWidget {
   const DeleteAccountScreen({super.key});
@@ -145,8 +146,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isDesktop = screenWidth >= 800;
+    final isDesktop = context.isDesktop;
     final authProvider = context.watch<AuthProvider>();
     final isAuthenticated = authProvider.isAuthenticated;
     final userProfile = authProvider.userProfile;
@@ -195,7 +195,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
             child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: isDesktop ? 48.0 : 16.0, vertical: 24.0),
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: isDesktop ? 800 : double.infinity),
+                constraints: BoxConstraints(maxWidth: context.screenWidth800),
                 child: Container(
                   padding: EdgeInsets.all(isDesktop ? 36.0 : 16.0),
                   decoration: BoxDecoration(
@@ -203,7 +203,11 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                     borderRadius: BorderRadius.circular(16.0),
                     border: Border.all(color: AppColors.border, width: 1.0),
                     boxShadow: [
-                      BoxShadow(color: AppColors.shadow.withValues(alpha: 0.05), blurRadius: 16, offset: const Offset(0, 4)),
+                      BoxShadow(
+                        color: AppColors.shadow.withValues(alpha: 0.05),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                      ),
                     ],
                   ),
                   child: Form(
@@ -220,11 +224,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                                 color: AppColors.errorLight,
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              child: const Icon(
-                                Icons.delete_forever_outlined,
-                                color: AppColors.error,
-                                size: 28,
-                              ),
+                              child: const Icon(Icons.delete_forever_outlined, color: AppColors.error, size: 28),
                             ),
                             const SizedBox(width: 14),
                             Expanded(
@@ -269,11 +269,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                               Expanded(
                                 child: Text(
                                   context.tr('delete_account_warning'),
-                                  style: const TextStyle(
-                                    fontSize: 13.5,
-                                    color: AppColors.error,
-                                    height: 1.4,
-                                  ),
+                                  style: const TextStyle(fontSize: 13.5, color: AppColors.error, height: 1.4),
                                 ),
                               ),
                             ],
@@ -283,10 +279,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
 
                         // If Authenticated: Show active user details
                         if (isAuthenticated && userProfile != null) ...[
-                          Text(
-                            context.tr('personal_details'),
-                            style: AppTextStyles.heading3.copyWith(fontSize: 15),
-                          ),
+                          Text(context.tr('personal_details'), style: AppTextStyles.heading3.copyWith(fontSize: 15)),
                           const SizedBox(height: 8),
                           Container(
                             padding: const EdgeInsets.all(14),
@@ -302,10 +295,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                                   child: Text(
                                     ((userProfile.name?.isNotEmpty ?? false) ? userProfile.name![0] : 'U')
                                         .toUpperCase(),
-                                    style: const TextStyle(
-                                      color: AppColors.primary,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 const SizedBox(width: 12),
@@ -339,23 +329,16 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                           const SizedBox(height: 8),
                           AppTextField(
                             controller: _emailPhoneController,
-                            label: 'Email or Phone Number',
+                            label: context.tr('email_or_phone_number'),
                             hint: 'e.g. broker@example.com or +919876543210',
-                            prefixIcon: const Icon(
-                              Icons.account_circle_outlined,
-                              color: AppColors.textSecondary,
-                            ),
-                            validator: (val) =>
-                                AppUtils.validateRequired(val, fieldName: 'Email or Phone Number'),
+                            prefixIcon: const Icon(Icons.account_circle_outlined, color: AppColors.textSecondary),
+                            validator: (val) => AppUtils.validateRequired(val, fieldName: 'Email or Phone Number'),
                           ),
                           const SizedBox(height: 24),
                         ],
 
                         // Reason Selection
-                        Text(
-                          context.tr('delete_reason_label'),
-                          style: AppTextStyles.heading3.copyWith(fontSize: 15),
-                        ),
+                        Text(context.tr('delete_reason_label'), style: AppTextStyles.heading3.copyWith(fontSize: 15)),
                         const SizedBox(height: 10),
                         ..._reasonKeys.map((key) {
                           return Material(
@@ -436,10 +419,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                         const SizedBox(height: 20),
 
                         // Google Play Policy Disclosures
-                        Text(
-                          context.tr('delete_steps_title'),
-                          style: AppTextStyles.heading3.copyWith(fontSize: 14),
-                        ),
+                        Text(context.tr('delete_steps_title'), style: AppTextStyles.heading3.copyWith(fontSize: 14)),
                         const SizedBox(height: 8),
                         Text(
                           context.tr('delete_step_1'),
@@ -457,10 +437,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                         ),
                         const SizedBox(height: 16),
 
-                        Text(
-                          context.tr('data_retention_title'),
-                          style: AppTextStyles.heading3.copyWith(fontSize: 14),
-                        ),
+                        Text(context.tr('data_retention_title'), style: AppTextStyles.heading3.copyWith(fontSize: 14)),
                         const SizedBox(height: 6),
                         Text(
                           context.tr('data_retention_desc'),

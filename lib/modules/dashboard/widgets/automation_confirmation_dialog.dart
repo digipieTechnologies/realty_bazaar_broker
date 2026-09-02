@@ -11,15 +11,11 @@ class AutomationConfirmationDialog extends StatelessWidget {
 
   const AutomationConfirmationDialog({super.key, required this.isEnabling});
 
-  static Future<bool> show(
-    BuildContext context, {
-    required bool isEnabling,
-  }) async {
+  static Future<bool> show(BuildContext context, {required bool isEnabling}) async {
     final result = await showDialog<bool>(
       context: context,
       barrierDismissible: true,
-      builder: (context) =>
-          AutomationConfirmationDialog(isEnabling: isEnabling),
+      builder: (context) => AutomationConfirmationDialog(isEnabling: isEnabling),
     );
     return result ?? false;
   }
@@ -27,64 +23,54 @@ class AutomationConfirmationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeColor = isEnabling ? AppColors.primary : AppColors.error;
-    final title = isEnabling
-        ? context.tr('get_leads_title')
-        : context.tr('pause_leads_title');
+    final title = isEnabling ? context.tr('get_leads_title') : context.tr('pause_leads_title');
 
     final points = isEnabling
-        ? const [
+        ? [
             _AutomationPoint(
               icon: Icons.chat_bubble_outline_rounded,
               iconColor: AppColors.primary,
-              title: 'Instant Comment Replies',
-              description:
-                  'Instantly reply to any user commenting on this social post.',
+              title: context.tr('automation_instant_replies_title'),
+              description: context.tr('automation_instant_replies_desc'),
             ),
             _AutomationPoint(
               icon: Icons.person_add_alt_1_rounded,
               iconColor: AppColors.primary800,
-              title: 'Direct Lead Capture',
-              description:
-                  'Interested commenters will be captured as leads in your dashboard.',
+              title: context.tr('automation_lead_capture_title'),
+              description: context.tr('automation_lead_capture_desc'),
             ),
             _AutomationPoint(
               icon: Icons.insights_rounded,
               iconColor: AppColors.success,
-              title: 'Real-Time Insights',
-              description:
-                  'Track comment engagements, lead conversion, and post metrics.',
+              title: context.tr('automation_real_time_insights_title'),
+              description: context.tr('automation_real_time_insights_desc'),
             ),
           ]
-        : const [
+        : [
             _AutomationPoint(
               icon: Icons.pause_circle_outline_rounded,
               iconColor: AppColors.warning,
-              title: 'Pause Comment Replies',
-              description: 'Stop responding to new comments on this post.',
+              title: context.tr('automation_pause_replies_title'),
+              description: context.tr('automation_pause_replies_desc'),
             ),
             _AutomationPoint(
               icon: Icons.person_off_rounded,
               iconColor: AppColors.error,
-              title: 'Pause Lead Generation',
-              description:
-                  'New comments will no longer create lead entries in your CRM.',
+              title: context.tr('automation_pause_leads_title'),
+              description: context.tr('automation_pause_leads_desc'),
             ),
             _AutomationPoint(
               icon: Icons.verified_user_outlined,
               iconColor: AppColors.success,
-              title: 'Existing Data Preserved',
-              description:
-                  'All previously captured leads and reply history from this post remain safely saved.',
+              title: context.tr('automation_data_preserved_title'),
+              description: context.tr('automation_data_preserved_desc'),
             ),
           ];
 
     return Dialog(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      insetPadding: const EdgeInsets.symmetric(
-        horizontal: 20.0,
-        vertical: 24.0,
-      ),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
       child: ContainerCorner(
         width: 440.0,
         color: AppColors.surface,
@@ -105,9 +91,7 @@ class AutomationConfirmationDialog extends StatelessWidget {
                   color: themeColor.withValues(alpha: 0.1),
                   alignment: Alignment.center,
                   child: Icon(
-                    isEnabling
-                        ? Icons.auto_awesome_rounded
-                        : Icons.do_not_disturb_on_rounded,
+                    isEnabling ? Icons.auto_awesome_rounded : Icons.do_not_disturb_on_rounded,
                     color: themeColor,
                     size: 26.0,
                   ),
@@ -117,32 +101,18 @@ class AutomationConfirmationDialog extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        title,
-                        style: AppTextStyles.heading3.copyWith(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      Text(title, style: AppTextStyles.heading3.copyWith(fontSize: 18.0, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 2.0),
                       Text(
-                        isEnabling
-                            ? context.tr('get_leads_subtitle')
-                            : context.tr('pause_leads_subtitle'),
-                        style: AppTextStyles.caption.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
+                        isEnabling ? context.tr('get_leads_subtitle') : context.tr('pause_leads_subtitle'),
+                        style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary),
                       ),
                     ],
                   ),
                 ),
                 IconButton(
                   onPressed: () => Navigator.of(context).pop(false),
-                  icon: const Icon(
-                    Icons.close_rounded,
-                    size: 20.0,
-                    color: AppColors.textMuted,
-                  ),
+                  icon: const Icon(Icons.close_rounded, size: 20.0, color: AppColors.textMuted),
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                   splashRadius: 20.0,
@@ -176,11 +146,7 @@ class AutomationConfirmationDialog extends StatelessWidget {
                               borderRadius: 10.0,
                               color: point.iconColor.withValues(alpha: 0.12),
                               alignment: Alignment.center,
-                              child: Icon(
-                                point.icon,
-                                size: 18.0,
-                                color: point.iconColor,
-                              ),
+                              child: Icon(point.icon, size: 18.0, color: point.iconColor),
                             ),
                             const SizedBox(width: 12.0),
                             Expanded(
@@ -197,10 +163,7 @@ class AutomationConfirmationDialog extends StatelessWidget {
                                   const SizedBox(height: 3.0),
                                   Text(
                                     point.description,
-                                    style: AppTextStyles.caption.copyWith(
-                                      color: AppColors.textSecondary,
-                                      height: 1.35,
-                                    ),
+                                    style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary, height: 1.35),
                                   ),
                                 ],
                               ),
@@ -232,9 +195,7 @@ class AutomationConfirmationDialog extends StatelessWidget {
                 const SizedBox(width: 12.0),
                 Expanded(
                   child: AppButton.solid(
-                    text: isEnabling
-                        ? context.tr('get_leads')
-                        : context.tr('pause_leads'),
+                    text: isEnabling ? context.tr('get_leads') : context.tr('pause_leads'),
                     iconData: isEnabling ? Icons.auto_awesome_rounded : null,
                     onPressed: () => Navigator.of(context).pop(true),
                     height: 42.0,
@@ -258,10 +219,5 @@ class _AutomationPoint {
   final String title;
   final String description;
 
-  const _AutomationPoint({
-    required this.icon,
-    required this.iconColor,
-    required this.title,
-    required this.description,
-  });
+  const _AutomationPoint({required this.icon, required this.iconColor, required this.title, required this.description});
 }

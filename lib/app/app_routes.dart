@@ -33,6 +33,8 @@ import '../modules/leads/screens/view_lead_screen.dart';
 import '../modules/legal/screens/privacy_policy_screen.dart';
 import '../modules/legal/screens/terms_of_service_screen.dart';
 import '../modules/properties/screens/view_property_screen.dart';
+import '../modules/subscription/screens/active_plan_detail_screen.dart';
+import '../modules/subscription/screens/subscription_success_screen.dart';
 import '../widgets/common/common_app_bar.dart';
 
 class AppRoutes {
@@ -57,6 +59,8 @@ class AppRoutes {
   static const String home = '/dashboard';
   static const String details = '/details';
   static const String campaignSettings = '/campaign-settings';
+  static const String subscriptionSuccess = '/subscription-success';
+  static const String activePlanDetail = '/active-plan-detail';
   static const String propertyDetails = '/properties/:idOrCode';
   static const String leadDetails = '/leads/:id';
   static const String postDetails = '/posts/:id';
@@ -87,9 +91,7 @@ class AppRoutes {
       final goingToSplash = state.matchedLocation == initial;
 
       final goingToLoginOrSignup =
-          state.matchedLocation == login ||
-          state.matchedLocation == signUp ||
-          state.matchedLocation == forgotPassword;
+          state.matchedLocation == login || state.matchedLocation == signUp || state.matchedLocation == forgotPassword;
 
       // 1. Unauthenticated user trying to access protected content
       if (!isLoggedIn && !goingToAuth && !goingToSplash && !goingToPublicLegal) {
@@ -115,10 +117,7 @@ class AppRoutes {
     },
     errorBuilder: (context, state) => Scaffold(
       body: Center(
-        child: Text(
-          'Route not found: ${state.uri.path}',
-          style: const TextStyle(color: Colors.red, fontSize: 16),
-        ),
+        child: Text('Route not found: ${state.uri.path}', style: const TextStyle(color: Colors.red, fontSize: 16)),
       ),
     ),
     routes: [
@@ -138,16 +137,8 @@ class AppRoutes {
         name: 'forgot_password',
         builder: (context, state) => const LoginScreen(initialMode: AuthMode.forgotPassword),
       ),
-      GoRoute(
-        path: deleteAccount,
-        name: 'delete_account',
-        builder: (context, state) => const DeleteAccountScreen(),
-      ),
-      GoRoute(
-        path: privacyPolicy,
-        name: 'privacy_policy',
-        builder: (context, state) => const PrivacyPolicyScreen(),
-      ),
+      GoRoute(path: deleteAccount, name: 'delete_account', builder: (context, state) => const DeleteAccountScreen()),
+      GoRoute(path: privacyPolicy, name: 'privacy_policy', builder: (context, state) => const PrivacyPolicyScreen()),
       GoRoute(
         path: termsOfService,
         name: 'terms_of_service',
@@ -191,11 +182,7 @@ class AppRoutes {
           return ShellLayoutScreen(child: child);
         },
         routes: [
-          GoRoute(
-            path: '/dashboard',
-            name: 'dashboard',
-            builder: (context, state) => const DashboardTabScreen(),
-          ),
+          GoRoute(path: '/dashboard', name: 'dashboard', builder: (context, state) => const DashboardTabScreen()),
           GoRoute(
             path: '/leads',
             name: 'leads',
@@ -253,17 +240,9 @@ class AppRoutes {
             name: 'request_video',
             builder: (context, state) => const RequestVideoTabScreen(),
           ),
-          GoRoute(
-            path: '/referrals',
-            name: 'referrals',
-            builder: (context, state) => const ReferralsTabScreen(),
-          ),
+          GoRoute(path: '/referrals', name: 'referrals', builder: (context, state) => const ReferralsTabScreen()),
           GoRoute(path: '/reports', name: 'reports', builder: (context, state) => const ReportsTabScreen()),
-          GoRoute(
-            path: '/settings',
-            name: 'settings',
-            builder: (context, state) => const SettingsTabScreen(),
-          ),
+          GoRoute(path: '/settings', name: 'settings', builder: (context, state) => const SettingsTabScreen()),
           GoRoute(path: '/profile', name: 'profile', builder: (context, state) => const ProfileScreen()),
           GoRoute(path: '/help', name: 'help', builder: (context, state) => const HelpTabScreen()),
         ],
@@ -275,6 +254,32 @@ class AppRoutes {
         builder: (context, state) => const AdCampaignSettingsScreen(),
       ),
       GoRoute(
+        path: subscriptionSuccess,
+        name: 'subscription_success',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final rawBenefits = extra?['benefits'];
+          List<String> benefitsList = [];
+          if (rawBenefits is List) {
+            benefitsList = rawBenefits.map((e) => e.toString()).toList();
+          }
+          return SubscriptionSuccessScreen(
+            planName: extra?['planName'] as String? ?? 'Activated Subscription',
+            amount: (extra?['amount'] as num?)?.toDouble() ?? 0.0,
+            startDate: extra?['startDate'] as DateTime? ?? DateTime.now(),
+            endDate: extra?['endDate'] as DateTime? ?? DateTime.now().add(const Duration(days: 30)),
+            paymentId: extra?['paymentId'] as String? ?? '',
+            durationTitle: extra?['durationTitle'] as String? ?? '30 Days',
+            benefits: benefitsList,
+          );
+        },
+      ),
+      GoRoute(
+        path: activePlanDetail,
+        name: 'active_plan_detail',
+        builder: (context, state) => const ActivePlanDetailScreen(),
+      ),
+      GoRoute(
         path: details,
         name: 'details',
         builder: (context, state) {
@@ -282,9 +287,7 @@ class AppRoutes {
           final title = extra?['title'] as String? ?? 'Details';
           return Scaffold(
             appBar: CommonAppBar(title: title),
-            body: Center(
-              child: Text('Placeholder details screen for $title', style: const TextStyle(fontSize: 16)),
-            ),
+            body: Center(child: Text('Placeholder details screen for $title', style: const TextStyle(fontSize: 16))),
           );
         },
       ),

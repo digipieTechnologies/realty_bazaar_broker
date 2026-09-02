@@ -2,6 +2,7 @@
 // Purpose: Separate modular filter widget for lead platform filtering with multi-select checkboxes in a Wrap layout.
 
 import 'package:flutter/material.dart';
+import 'package:the_realty_bazaar/core/localization/app_localizations.dart';
 
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
@@ -57,7 +58,7 @@ class LeadFilterPopover extends StatelessWidget {
           spacing: 12.0,
           runSpacing: 10.0,
           children: [
-            _buildCheckboxRow(label: 'All', isChecked: isAllSelected, onTap: _selectAll),
+            _buildCheckboxRow(label: context.tr('filter_all'), isChecked: isAllSelected, onTap: _selectAll),
             for (final opt in platformOptions)
               _buildCheckboxRow(
                 label: opt['label']!,

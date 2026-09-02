@@ -2,6 +2,7 @@
 // Purpose: Standalone reusable widget for rendering inline reply snippets inside chat bubbles.
 
 import 'package:flutter/material.dart';
+import 'package:the_realty_bazaar/core/localization/app_localizations.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../models/chat_enums.dart';
@@ -18,8 +19,8 @@ class ChatReplySnippetWidget extends StatelessWidget {
     final parent = replyMessage;
     final parentSenderIsMarketing = parent?.senderType == 'marketing' || parent?.senderType == 'admin';
     final parentSenderLabel = parent == null
-        ? 'Message'
-        : (parentSenderIsMarketing ? 'Marketing Team' : 'Broker');
+        ? context.tr('message')
+        : (parentSenderIsMarketing ? context.tr('marketing_team') : context.tr('broker'));
 
     return Container(
       width: double.infinity,
@@ -43,18 +44,18 @@ class ChatReplySnippetWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 2.0),
-          _buildReplyContentWidget(parent),
+          _buildReplyContentWidget(context, parent),
         ],
       ),
     );
   }
 
-  Widget _buildReplyContentWidget(ChatMessageModel? parent) {
+  Widget _buildReplyContentWidget(BuildContext context, ChatMessageModel? parent) {
     final textStyle = TextStyle(fontSize: 11.5, color: isMe ? Colors.white70 : AppColors.textSecondary);
     final iconColor = isMe ? Colors.white70 : AppColors.textSecondary;
 
     if (parent == null) {
-      return Text('Message', style: textStyle);
+      return Text(context.tr('message'), style: textStyle);
     }
 
     // 1. Location Message
@@ -64,7 +65,7 @@ class ChatReplySnippetWidget extends StatelessWidget {
         children: [
           Icon(Icons.location_on_rounded, size: 14.0, color: iconColor),
           const SizedBox(width: 4.0),
-          Text('Location', style: textStyle),
+          Text(context.tr('location'), style: textStyle),
         ],
       );
     }
@@ -81,9 +82,7 @@ class ChatReplySnippetWidget extends StatelessWidget {
       for (final m in medias) {
         final isVideo = m.isVideo;
         final isDoc =
-            m.type == 'document' ||
-            m.type == 'file' ||
-            (m.type != 'video' && m.type != 'image' && m.type != 'photo');
+            m.type == 'document' || m.type == 'file' || (m.type != 'video' && m.type != 'image' && m.type != 'photo');
         if (isVideo) {
           hasVideo = true;
         } else if (isDoc) {
@@ -98,13 +97,13 @@ class ChatReplySnippetWidget extends StatelessWidget {
 
       if (hasDoc || (hasVideo && hasImage)) {
         iconData = Icons.insert_drive_file_rounded;
-        label = count == 1 ? '1 Document' : '$count Documents';
+        label = count == 1 ? context.tr('one_document') : context.tr('count_documents').replaceAll('{count}', '$count');
       } else if (hasVideo && !hasImage) {
         iconData = Icons.videocam_rounded;
-        label = count == 1 ? '1 Video' : '$count Videos';
+        label = count == 1 ? context.tr('one_video') : context.tr('count_videos').replaceAll('{count}', '$count');
       } else {
         iconData = Icons.image_rounded;
-        label = count == 1 ? '1 Photo' : '$count Photos';
+        label = count == 1 ? context.tr('one_photo') : context.tr('count_photos').replaceAll('{count}', '$count');
       }
 
       return Row(
@@ -128,7 +127,7 @@ class ChatReplySnippetWidget extends StatelessWidget {
           const SizedBox(width: 4.0),
           Flexible(
             child: Text(
-              parent.message != null && parent.message!.isNotEmpty ? parent.message! : '1 Document',
+              parent.message != null && parent.message!.isNotEmpty ? parent.message! : context.tr('one_document'),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: textStyle,

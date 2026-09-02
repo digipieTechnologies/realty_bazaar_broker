@@ -11,10 +11,10 @@ import '../../../core/extensions/currency_extensions.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/localization/property_localizer.dart';
 import '../../../models/models.dart';
-import '../../../models/social_enums.dart';
 import '../../../providers/lead/lead_provider.dart';
 import '../../../util/app_date_utils.dart';
 import '../../../util/app_utils.dart';
+import '../../../util/common_ext.dart';
 import '../../../widgets/badges/app_platform_badge.dart';
 import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/common/app_section_header.dart';
@@ -102,7 +102,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => Navigator.of(context).maybePop(),
-                child: const Text('Go Back'),
+                child: Text(context.tr('go_back')),
               ),
             ],
           ),
@@ -152,7 +152,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
         physics: const ClampingScrollPhysics(),
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final isDesktop = constraints.maxWidth > 900;
+            final isDesktop = context.isDesktop;
 
             final profileHeroCard = _buildHeroProfileCard(
               context,
@@ -187,7 +187,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                 // Centered single column for leads without property details or notes
                 return Center(
                   child: Container(
-                    constraints: const BoxConstraints(maxWidth: 720.0),
+                    constraints: BoxConstraints(maxWidth: context.screenWidth800),
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -450,7 +450,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
               children: [
                 _buildActionCalloutButton(
                   context,
-                  label: 'Call',
+                  label: context.tr('action_call'),
                   icon: const CallIconWidget(size: 24.0, color: Colors.white),
                   gradient: const LinearGradient(
                     colors: [AppColors.primary600, AppColors.primary700],
@@ -461,7 +461,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                 ),
                 _buildActionCalloutButton(
                   context,
-                  label: 'Message',
+                  label: context.tr('action_message'),
                   icon: const MessageIconWidget(
                     size: 24.0,
                     color: Colors.white,
@@ -475,7 +475,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                 ),
                 _buildActionCalloutButton(
                   context,
-                  label: 'WhatsApp',
+                  label: context.tr('action_whatsapp'),
                   icon: const WhatsappIconWidget(
                     size: 24.0,
                     color: Colors.white,

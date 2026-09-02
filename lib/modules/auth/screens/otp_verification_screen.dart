@@ -85,7 +85,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     AppUtils.dismissKeyboard(context);
     final otp = _pinController.text.trim();
     if (otp.length < 6) {
-      AppToast.showError('Invalid OTP', 'Please enter the full 6-digit verification code.');
+      AppToast.showError(context.tr('invalid_otp_title'), context.tr('invalid_otp_desc'));
       return;
     }
 
@@ -103,14 +103,14 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       if (success && mounted) {
         TextInput.finishAutofillContext(shouldSave: true);
         AppToast.showSuccess(
-          'Security Code Verified',
-          'Verification successful. Please set up your new password.',
+          context.tr('security_code_verified_title'),
+          context.tr('security_code_verified_desc'),
         );
         context.go(AppRoutes.resetPassword, extra: {'email': widget.email});
       } else if (mounted) {
         AppToast.showError(
-          'Verification Failed',
-          authProvider.errorMessage ?? 'Invalid or expired verification code.',
+          context.tr('verification_failed_title'),
+          authProvider.errorMessage ?? context.tr('invalid_expired_otp_desc'),
         );
       }
     } else if (widget.isPreSignup && widget.signUpData != null) {
@@ -120,14 +120,14 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       if (success && mounted) {
         TextInput.finishAutofillContext(shouldSave: true);
         AppToast.showSuccess(
-          'Registration Complete',
-          'Your email has been verified and your account is created!',
+          context.tr('registration_complete_title'),
+          context.tr('registration_complete_desc'),
         );
         context.go(AppRoutes.home);
       } else if (mounted) {
         AppToast.showError(
-          'Verification Failed',
-          authProvider.errorMessage ?? 'Invalid or expired verification code.',
+          context.tr('verification_failed_title'),
+          authProvider.errorMessage ?? context.tr('invalid_expired_otp_desc'),
         );
       }
     } else {
@@ -140,12 +140,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       );
 
       if (success && mounted) {
-        AppToast.showSuccess('Email Verified', 'Your email has been verified successfully.');
+        AppToast.showSuccess(context.tr('email_verified_title'), context.tr('email_verified_desc'));
         context.go(AppRoutes.home);
       } else if (mounted) {
         AppToast.showError(
-          'Verification Failed',
-          authProvider.errorMessage ?? 'Invalid or expired OTP code.',
+          context.tr('verification_failed_title'),
+          authProvider.errorMessage ?? context.tr('invalid_expired_otp_desc'),
         );
       }
     }
@@ -162,7 +162,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     final targetEmail = widget.email ?? widget.signUpData?['email'];
 
     if (targetEmail == null || targetEmail.isEmpty) {
-      AppToast.showError('Error', 'Email address is missing.');
+      AppToast.showError(context.tr('error'), context.tr('email_missing_desc'));
       setState(() {
         _isResending = false;
       });
@@ -181,14 +181,14 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       });
       if (success) {
         AppToast.showSuccess(
-          'Code Sent',
-          'A new 6-digit verification code (valid for 30 secs) has been sent to your email.',
+          context.tr('code_sent_toast_title'),
+          context.tr('new_code_sent_desc'),
         );
         _startResendTimer();
       } else {
         AppToast.showError(
-          'Resend Failed',
-          authProvider.errorMessage ?? 'Failed to resend verification code.',
+          context.tr('resend_failed_title'),
+          authProvider.errorMessage ?? context.tr('resend_failed_desc'),
         );
       }
     }
@@ -361,8 +361,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           AuthHeaderWidget(
-            title: 'Verify Your Email',
-            subtitle: 'We sent a 6-digit verification code to:\n$email',
+            title: context.tr('verify_email_title'),
+            subtitle: context.tr('verify_email_subtitle').replaceAll('{email}', email),
           ),
           const SizedBox(height: 32.0),
 
@@ -379,7 +379,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
           // Verify button
           AppButton(
-            text: 'Verify Email',
+            text: context.tr('verify_email_btn'),
             variant: AppButtonVariant.gradient,
             isLoading: isLoading,
             isDisabled: isLoading,
@@ -393,10 +393,11 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Didn't receive code? ", style: AppTextStyles.body2.copyWith(color: AppColors.textMuted)),
+              Text(context.tr('did_not_receive_code'), style: AppTextStyles.body2.copyWith(color: AppColors.textMuted)),
+              const SizedBox(width: 4.0),
               _resendCountdown > 0
                   ? Text(
-                      "Resend in ${_resendCountdown}s",
+                      context.tr('resend_in_seconds', arguments: {'seconds': '$_resendCountdown'}),
                       style: AppTextStyles.body2.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.bold,
@@ -408,7 +409,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
                         child: Text(
-                          _isResending ? 'Sending...' : 'Resend Code',
+                          _isResending ? context.tr('sending_code') : context.tr('resend_code'),
                           style: AppTextStyles.body2.copyWith(
                             color: AppColors.primary,
                             fontWeight: FontWeight.bold,
@@ -452,7 +453,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 const Icon(Icons.chevron_left_rounded, color: AppColors.textPrimary, size: 20.0),
                 const SizedBox(width: 8.0),
                 Text(
-                  'Back to Login',
+                  context.tr('back_to_login'),
                   style: AppTextStyles.button.copyWith(
                     color: AppColors.textPrimary,
                     fontSize: 13.0,

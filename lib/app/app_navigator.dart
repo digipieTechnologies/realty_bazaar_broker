@@ -14,7 +14,9 @@ import '../modules/legal/screens/privacy_policy_screen.dart';
 import '../modules/legal/screens/terms_of_service_screen.dart';
 import '../modules/properties/screens/view_property_screen.dart';
 import '../modules/dashboard/screens/view_post_screen.dart';
+import '../modules/subscription/screens/active_plan_detail_screen.dart';
 import '../modules/subscription/screens/subscription_package_detail_screen.dart';
+import '../modules/subscription/screens/subscription_success_screen.dart';
 import '../util/common_ext.dart';
 import 'app_routes.dart';
 
@@ -166,5 +168,77 @@ class AppNavigator {
         builder: (context) => SubscriptionPackageDetailScreen(initialPlan: plan),
       ),
     );
+  }
+
+  /// Navigates to Subscription Purchase Success full screen route
+  static void navigateToSubscriptionSuccess(
+    BuildContext context, {
+    required String planName,
+    required double amount,
+    required DateTime startDate,
+    required DateTime endDate,
+    required String paymentId,
+    String durationTitle = '30 Days',
+    List<String> benefits = const [],
+  }) {
+    if (context.isDesktop) {
+      context.push(
+        AppRoutes.subscriptionSuccess,
+        extra: {
+          'planName': planName,
+          'amount': amount,
+          'startDate': startDate,
+          'endDate': endDate,
+          'paymentId': paymentId,
+          'durationTitle': durationTitle,
+          'benefits': benefits,
+        },
+      );
+    } else {
+      Navigator.of(context, rootNavigator: true).push(
+        MaterialPageRoute(
+          builder: (context) => SubscriptionSuccessScreen(
+            planName: planName,
+            amount: amount,
+            startDate: startDate,
+            endDate: endDate,
+            paymentId: paymentId,
+            durationTitle: durationTitle,
+            benefits: benefits,
+          ),
+        ),
+      );
+    }
+  }
+
+  /// Navigates to Subscription / Grow tab
+  static void navigateToGrowTab(BuildContext context) {
+    popAllAndGo(context, '/grow');
+  }
+
+  /// Pops all active rootNavigator overlays (modals/dialogs) and navigates cleanly to target path
+  static void popAllAndGo(BuildContext context, String path) {
+    try {
+      Navigator.of(context, rootNavigator: true).popUntil((route) => route.isFirst);
+    } catch (_) {}
+    AppRoutes.router.go(path);
+  }
+
+  /// Navigates to Home / Dashboard clearing all rootNavigator overlays
+  static void navigateToHome(BuildContext context) {
+    popAllAndGo(context, AppRoutes.home);
+  }
+
+  /// Navigates to Active Plan Detail full screen route
+  static void navigateToActivePlanDetail(BuildContext context) {
+    if (context.isDesktop) {
+      context.push(AppRoutes.activePlanDetail);
+    } else {
+      Navigator.of(context, rootNavigator: true).push(
+        MaterialPageRoute(
+          builder: (context) => const ActivePlanDetailScreen(),
+        ),
+      );
+    }
   }
 }

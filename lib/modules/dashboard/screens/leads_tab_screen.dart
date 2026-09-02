@@ -3,13 +3,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:the_realty_bazaar/util/common_ext.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_constants.dart';
 import '../../../models/social_lead_model.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../providers/lead/lead_provider.dart';
-import '../../../util/common_ext.dart';
 import '../widgets/leads/add_lead_dialog.dart';
 import '../widgets/leads/lead_table_widget.dart';
 
@@ -48,10 +48,7 @@ class _LeadsTabScreenState extends State<LeadsTabScreen> {
   }
 
   Future<void> _handleAddLead() async {
-    final newLead = await showDialog<SocialLeadModel>(
-      context: context,
-      builder: (context) => const AddLeadDialog(),
-    );
+    final newLead = await showDialog<SocialLeadModel>(context: context, builder: (context) => const AddLeadDialog());
     if (newLead != null && mounted) {
       context.read<LeadProvider>().fetchLeads(
         brokerId: _brokerId,
@@ -63,7 +60,7 @@ class _LeadsTabScreenState extends State<LeadsTabScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = context.isMobileUI;
+    final isMobile = context.isMobile;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -90,11 +87,7 @@ class _LeadsTabScreenState extends State<LeadsTabScreen> {
                       provider.fetchLeads(brokerId: _brokerId, page: 1, searchQuery: query);
                     },
                     onPageChanged: (newPage) {
-                      provider.fetchLeads(
-                        brokerId: _brokerId,
-                        page: newPage,
-                        searchQuery: provider.searchQuery,
-                      );
+                      provider.fetchLeads(brokerId: _brokerId, page: newPage, searchQuery: provider.searchQuery);
                     },
                     onAddLeadPressed: _handleAddLead,
                   ),

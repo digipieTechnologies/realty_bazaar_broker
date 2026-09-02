@@ -12,6 +12,7 @@ import '../../../models/social_enums.dart';
 import '../../../models/social_post_model.dart';
 import '../../../providers/social/social_provider.dart';
 import '../../../util/app_utils.dart';
+import '../../../util/common_ext.dart';
 import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/common/app_card_container.dart';
 import '../../../widgets/common/common_app_bar.dart';
@@ -122,7 +123,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
         padding: const EdgeInsets.all(20.0),
         child: Center(
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 800),
+            constraints: BoxConstraints(maxWidth: context.screenWidth800),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

@@ -98,7 +98,9 @@ class SubscriptionProvider extends ChangeNotifier {
         _selectedPlan = popularPlan ?? _plans.first;
       }
 
-      debugPrint('[SubscriptionProvider] Fetched ${_plans.length} active subscription plans successfully.');
+      debugPrint(
+        '[SubscriptionProvider] Fetched ${_plans.length} active subscription plans successfully.',
+      );
     } catch (e) {
       _errorMessage = 'Failed to load subscription plans: ${e.toString()}';
       debugPrint('[SubscriptionProvider] Error fetching subscription plans: $e');
@@ -141,11 +143,40 @@ class SubscriptionProvider extends ChangeNotifier {
           'p_plan_code': planCode,
         },
       );
-      
+
       return res['success'] == true;
     } catch (e) {
       debugPrint('Error processing subscription payment: $e');
       return false;
     }
+  }
+
+  /// Fetches the currently running active subscription for a broker using RPC
+  Future<UserSubscriptionModel?> fetchActiveBrokerSubscription(
+    String brokerId,
+  ) async {
+    try {
+      final res = await SupabaseConfig.client.rpc(
+        'get_broker_active_subscription',
+        params: {'p_broker_id': brokerId},
+      );
+
+      if (res != null) {
+        return UserSubscriptionModel.fromJson(res);
+      }
+      return null;
+    } catch (e) {
+      debugPrint('Error fetching active broker subscription: $e');
+      return null;
+    }
+  }
+
+  /// Resets state on logout
+  void clear() {
+    _plans = [];
+    _selectedPlan = null;
+    _errorMessage = null;
+    _isLoading = false;
+    notifyListeners();
   }
 }

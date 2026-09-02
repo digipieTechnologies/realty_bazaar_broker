@@ -84,7 +84,7 @@ class _PropertiesMobileViewState extends State<PropertiesMobileView> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = context.isMobileUI;
+    final isMobile = context.isMobile;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -127,11 +127,7 @@ class _PropertiesMobileViewState extends State<PropertiesMobileView> {
                     return _buildErrorState(provider.errorMessage!, () {
                       final authProvider = Provider.of<AuthProvider>(context, listen: false);
                       final brokerId = authProvider.userProfile?.brokerId?.id ?? '';
-                      provider.fetchProperties(
-                        brokerId: brokerId,
-                        page: 1,
-                        searchQuery: _searchController.text,
-                      );
+                      provider.fetchProperties(brokerId: brokerId, page: 1, searchQuery: _searchController.text);
                     });
                   }
 
@@ -168,10 +164,7 @@ class _PropertiesMobileViewState extends State<PropertiesMobileView> {
                                 const SizedBox(
                                   width: 18.0,
                                   height: 18.0,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2.5,
-                                    color: AppColors.primary,
-                                  ),
+                                  child: CircularProgressIndicator(strokeWidth: 2.5, color: AppColors.primary),
                                 ),
                                 const SizedBox(width: 10.0),
                                 Text(

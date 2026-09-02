@@ -288,6 +288,8 @@ class AuthProvider extends ChangeNotifier {
 
   UserModel? get userProfile => _userProfile;
 
+  UserSubscriptionModel? activeSubscription;
+
   bool get isAuthenticated =>
       _userProfile != null ||
       (_storage.read<String>(sessionKey)?.isNotEmpty ?? false);
@@ -495,11 +497,10 @@ class AuthProvider extends ChangeNotifier {
   /// Fetches the currently logged-in user profile, performing active session checks, role access validation, and auto sign-out if deactivated/deleted.
   Future<UserModel?> fetchCurrentUserProfile(String id) async {
     try {
-      final response = await SupabaseConfig.client
-          .from('users')
-          .select('*, broker_id(*, address_id(*))')
-          .eq('id', id)
-          .maybeSingle();
+      final response = await SupabaseConfig.client.rpc(
+        'get_user_profile_details',
+        params: {'p_user_id': id},
+      );
 
       if (response == null) {
         _userProfile = null;
@@ -516,6 +517,7 @@ class AuthProvider extends ChangeNotifier {
       }
 
       final profile = UserModel.fromJson(response);
+      activeSubscription = profile.userSubscription;
 
       // Check soft-delete status
       if (profile.isDeleted ?? false) {
@@ -575,8 +577,13 @@ class AuthProvider extends ChangeNotifier {
       }
 
       _userProfile = profile;
+      activeSubscription = profile.userSubscription;
       notifyListeners();
       subscribeToCurrentUserRealtime(id);
+      final actualBrokerId = profile.brokerId?.id;
+      if (actualBrokerId != null && actualBrokerId.isNotEmpty) {
+        subscribeToUserSubscriptionRealtime(actualBrokerId);
+      }
       syncDeviceToken(id);
 
       // Identify user and tag role in Microsoft Clarity
@@ -600,6 +607,8 @@ class AuthProvider extends ChangeNotifier {
   /// Subscribes to realtime updates for the current logged-in user in public.users
   void subscribeToCurrentUserRealtime(String userId) {
     unsubscribeCurrentUserRealtime();
+
+    debugPrint('📡 [AuthProvider Realtime] Subscribing to user_realtime_$userId');
 
     _userRealtimeChannel = SupabaseConfig.client
         .channel('user_realtime_$userId')
@@ -647,6 +656,7 @@ class AuthProvider extends ChangeNotifier {
   Future<void> _handleRemoteLogout(String title, String message) async {
     unsubscribeCurrentUserRealtime();
     _userProfile = null;
+    activeSubscription = null;
     notifyListeners();
     await signOut();
     AppRoutes.router.go(AppRoutes.login);
@@ -657,19 +667,97 @@ class AuthProvider extends ChangeNotifier {
 
   void unsubscribeCurrentUserRealtime() {
     if (_userRealtimeChannel != null) {
+      debugPrint('🔕 [AuthProvider Realtime] Unsubscribing user_realtime channel');
       SupabaseConfig.client.removeChannel(_userRealtimeChannel!);
       _userRealtimeChannel = null;
     }
+    unsubscribeUserSubscriptionRealtime();
+  }
+
+  RealtimeChannel? _subscriptionRealtimeChannel;
+
+  /// Subscribes to realtime updates for user_subscriptions table matching current broker_id
+  void subscribeToUserSubscriptionRealtime(String brokerId) {
+    unsubscribeUserSubscriptionRealtime();
+
+    debugPrint('📡 [AuthProvider Realtime] Subscribing to subscription_realtime_$brokerId');
+
+    _subscriptionRealtimeChannel = SupabaseConfig.client
+        .channel('subscription_realtime_$brokerId')
+        .onPostgresChanges(
+          event: PostgresChangeEvent.all,
+          schema: 'public',
+          table: 'user_subscriptions',
+          filter: PostgresChangeFilter(
+            type: PostgresChangeFilterType.eq,
+            column: 'broker_id',
+            value: brokerId,
+          ),
+          callback: (payload) async {
+            debugPrint(
+              '🔔 [AuthProvider Realtime] user_subscriptions event for broker: $brokerId',
+            );
+            final activeSub = await fetchActiveBrokerSubscription(brokerId);
+            activeSubscription = activeSub;
+            if (_userProfile != null) {
+              _userProfile = _userProfile!.copyWith(
+                userSubscription: activeSub,
+                clearUserSubscription: true,
+              );
+            }
+            notifyListeners();
+          },
+        )
+        .subscribe();
+  }
+
+  void unsubscribeUserSubscriptionRealtime() {
+    if (_subscriptionRealtimeChannel != null) {
+      debugPrint('🔕 [AuthProvider Realtime] Unsubscribing subscription_realtime channel');
+      SupabaseConfig.client.removeChannel(_subscriptionRealtimeChannel!);
+      _subscriptionRealtimeChannel = null;
+    }
+  }
+
+  /// Helper to fetch active broker subscription via RPC
+  Future<UserSubscriptionModel?> fetchActiveBrokerSubscription(
+    String brokerId,
+  ) async {
+    try {
+      final res = await SupabaseConfig.client.rpc(
+        'get_broker_active_subscription',
+        params: {'p_broker_id': brokerId},
+      );
+
+      if (res != null) {
+        return UserSubscriptionModel.fromJson(res);
+      }
+      return null;
+    } catch (e) {
+      debugPrint('Error fetching active broker subscription: $e');
+      return null;
+    }
+  }
+
+  /// Updates local userSubscription property in UserModel cache and notifies UI listeners
+  void updateUserSubscriptionLocally(UserSubscriptionModel? subscription) {
+    activeSubscription = subscription;
+    if (_userProfile != null) {
+      _userProfile = _userProfile!.copyWith(
+        userSubscription: subscription,
+        clearUserSubscription: true,
+      );
+    }
+    notifyListeners();
   }
 
   /// Pure query helper to fetch any user details by UUID without triggering auth session side-effects or logouts.
   Future<UserModel?> getUserById(String id) async {
     try {
-      final response = await SupabaseConfig.client
-          .from('users')
-          .select('*, broker_id(*, address_id(*))')
-          .eq('id', id)
-          .maybeSingle();
+      final response = await SupabaseConfig.client.rpc(
+        'get_user_profile_details',
+        params: {'p_user_id': id},
+      );
       if (response != null) {
         return UserModel.fromJson(response);
       }
@@ -843,6 +931,7 @@ class AuthProvider extends ChangeNotifier {
 
       // 6. Clear cached user profile and error state
       _userProfile = null;
+      activeSubscription = null;
       _errorMessage = null;
 
       // 7. Reset all feature provider in-memory data AFTER successful sign out

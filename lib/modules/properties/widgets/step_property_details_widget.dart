@@ -7,6 +7,7 @@ import '../../../core/localization/property_localizer.dart';
 import '../../../core/utils/property_amenity_helper.dart';
 import '../../../models/media_model.dart';
 import '../../../models/property_enums.dart';
+import '../../../util/common_ext.dart';
 import '../../../widgets/inputs/app_dropdown.dart';
 import '../../../widgets/inputs/app_square_media_picker.dart';
 import '../../../widgets/inputs/app_textfield.dart';
@@ -104,8 +105,7 @@ class _StepPropertyDetailsWidgetState extends State<StepPropertyDetailsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
+    final isMobile = context.isMobile;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

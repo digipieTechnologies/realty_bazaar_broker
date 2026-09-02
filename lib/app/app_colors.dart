@@ -29,6 +29,7 @@ class AppColors {
   // ==========================================
   // Secondary & Dynamic Accents
   // ==========================================
+  static const Color secondary = primary700;
 
   // ==========================================
   // Neutral Palette (Backgrounds, Surfaces, Borders)
@@ -57,9 +58,7 @@ class AppColors {
   // ==========================================
   // Typography Colors
   // ==========================================
-  static const Color textPrimary = Color(
-    0xFF172033,
-  ); // High-contrast navy (#172033)
+  static const Color textPrimary = Color(0xFF172033); // High-contrast navy (#172033)
   static const Color textSecondary = Color(0xFF667085); // Slate (#667085)
   static const Color textMuted = Color(0xFF98A2B3); // Muted / Hint (#98A2B3)
 
@@ -80,6 +79,7 @@ class AppColors {
 
   static const Color warning = Color(0xFFF59E0B); // Amber 500
   static const Color warningDark = Color(0xFFB45309);
+  static const Color warningAmberDark = Color(0xFFD97706);
   static const Color warningLight = Color(0xFFFFFBEB);
   static const Color warningBorder = Color(0xFFFDE68A);
 
@@ -97,10 +97,7 @@ class AppColors {
   static const Color instagramAlt = Color(0xFFE4405F);
   static const Color instagramLightBg = Color(0xFFFDF2F7);
   static const Color instagramLightBorder = Color(0xFFFAD2E6);
-  static const List<Color> instagramGradient = [
-    Color(0xFFFCAF45),
-    Color(0xFFC13584),
-  ];
+  static const List<Color> instagramGradient = [Color(0xFFFCAF45), Color(0xFFC13584)];
 
   // Demo Accent Palette (Card Highlights)
   static const Color accentCoral = Color(0xFFFF5252);
@@ -156,41 +153,29 @@ class AppColors {
   static const List<Color> primaryGradient = [primary500, primary700];
   static const List<Color> nexusGradient = [primary400, primary500, primary800];
   static const List<Color> secondaryGradient = [primary800, primary900];
-  static const List<Color> popularCardGradient = [
-    Color(0xFF0B1A3B),
-    Color(0xFF132D5E),
-    Color(0xFF1A3F7A),
-  ];
-  static const List<Color> glassGradient = [
-    Color(0x33FFFFFF),
-    Color(0x0FFFFFFF),
-  ];
+  static const List<Color> popularCardGradient = [Color(0xFF0B1A3B), Color(0xFF132D5E), Color(0xFF1A3F7A)];
+  static const List<Color> glassGradient = [Color(0x33FFFFFF), Color(0x0FFFFFFF)];
 
   static const Color setupTileSuccessBg = Color(0xFFF0FDF4);
   static const Color setupTileSuccessBorder = Color(0xFFBBF7D0);
 
-  static const List<Color> gradientEmerald = [
-    Color(0xFF10B981),
-    Color(0xFF059669),
-  ];
-  static const List<Color> gradientCyan = [
-    Color(0xFF06B6D4),
-    Color(0xFF0891B2),
-  ];
-  static const List<Color> gradientFacebook = [
-    Color(0xFF1877F2),
-    Color(0xFF0055FF),
-  ];
-  static const List<Color> gradientInstagramTile = [
-    Color(0xFFE1306C),
-    Color(0xFFF58529),
-  ];
-  static const List<Color> gradientAmber = [
-    Color(0xFFF59E0B),
-    Color(0xFFD97706),
-  ];
-  static const List<Color> gradientIndigo = [
-    Color(0xFF6366F1),
-    Color(0xFF4F46E5),
-  ];
+  static const List<Color> gradientEmerald = [Color(0xFF10B981), Color(0xFF059669)];
+  static const List<Color> gradientCyan = [Color(0xFF06B6D4), Color(0xFF0891B2)];
+  static const List<Color> gradientFacebook = [Color(0xFF1877F2), Color(0xFF0055FF)];
+  static const List<Color> gradientInstagramTile = [Color(0xFFE1306C), Color(0xFFF58529)];
+  static const List<Color> gradientAmber = [Color(0xFFF59E0B), Color(0xFFD97706)];
+  static const List<Color> gradientIndigo = [Color(0xFF6366F1), Color(0xFF4F46E5)];
+
+  // Subscription Canvas & 3D Badge Color Tokens
+  static const Color mintGradientStart = Color(0xFFE6F7F0);
+  static const Color skyGradientEnd = Color(0xFFEFF6FF);
+  static const Color mintBadgeBgStart = Color(0xFFE0F2FE);
+  static const Color mintBadgeBgEnd = Color(0xFFECFDF5);
+  static const Color goldStarBg = Color(0xFFFEF3C7);
+  static const Color goldStarIcon = Color(0xFFD97706);
+  static const Color skyBlueAccent = Color(0xFF38BDF8);
+  static const Color cyanAccent = Color(0xFF06B6D4);
+  static const Color pinkConfetti = Color(0xFFEC4899);
+  static const Color indigoConfetti = Color(0xFF6366F1);
+  static const Color emeraldDark = Color(0xFF047857);
 }

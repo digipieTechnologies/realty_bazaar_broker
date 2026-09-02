@@ -8,6 +8,7 @@ import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
 import '../../../../core/extensions/currency_extensions.dart';
 import '../../../../core/localization/app_localizations.dart';
+import '../../../../util/common_ext.dart';
 import '../../../../models/property_model.dart';
 import '../../../../providers/social/social_provider.dart';
 import '../../../../widgets/buttons/app_button.dart';
@@ -37,8 +38,7 @@ class StepPlatformSelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 540;
+    final isMobile = context.isMobile;
 
     return SingleChildScrollView(
       padding: EdgeInsets.all(isMobile ? 12.0 : 18.0),
@@ -58,13 +58,7 @@ class StepPlatformSelection extends StatelessWidget {
 
           // Responsive Platform Cards (Vertical on Mobile < 540px, Horizontal Row on Desktop/Web)
           if (isMobile)
-            Column(
-              children: [
-                _buildInstagramCard(context),
-                const SizedBox(height: 12.0),
-                _buildFacebookCard(context),
-              ],
-            )
+            Column(children: [_buildInstagramCard(context), const SizedBox(height: 12.0), _buildFacebookCard(context)])
           else
             Row(
               children: [
@@ -75,10 +69,7 @@ class StepPlatformSelection extends StatelessWidget {
             ),
 
           // Connection Error / Warning Banner
-          if (connectionErrorMessage != null) ...[
-            const SizedBox(height: 16.0),
-            _buildConnectionErrorBanner(context),
-          ],
+          if (connectionErrorMessage != null) ...[const SizedBox(height: 16.0), _buildConnectionErrorBanner(context)],
 
           const SizedBox(height: 18.0),
 
@@ -237,11 +228,7 @@ class StepPlatformSelection extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10.0),
-          _buildTipRow(
-            Icons.psychology_rounded,
-            context.tr('ai_captions_title'),
-            context.tr('ai_captions_desc'),
-          ),
+          _buildTipRow(Icons.psychology_rounded, context.tr('ai_captions_title'), context.tr('ai_captions_desc')),
           const SizedBox(height: 8.0),
           _buildTipRow(
             Icons.photo_library_rounded,
@@ -249,11 +236,7 @@ class StepPlatformSelection extends StatelessWidget {
             context.tr('multimedia_grid_desc'),
           ),
           const SizedBox(height: 8.0),
-          _buildTipRow(
-            Icons.contact_phone_rounded,
-            context.tr('direct_reach_title'),
-            context.tr('direct_reach_desc'),
-          ),
+          _buildTipRow(Icons.contact_phone_rounded, context.tr('direct_reach_title'), context.tr('direct_reach_desc')),
         ],
       ),
     );
@@ -289,7 +272,7 @@ class StepPlatformSelection extends StatelessWidget {
 
     return _buildPlatformCard(
       context: context,
-      title: 'Instagram',
+      title: context.tr('instagram'),
       subtitle: context.tr('ig_feed_desc'),
       logoPath: 'assets/icons/instagram.png',
       fallbackIcon: Icons.camera_alt_rounded,
@@ -309,7 +292,7 @@ class StepPlatformSelection extends StatelessWidget {
 
     return _buildPlatformCard(
       context: context,
-      title: 'Facebook Page',
+      title: context.tr('facebook_page'),
       subtitle: context.tr('fb_page_desc'),
       logoPath: 'assets/icons/facebook.png',
       fallbackIcon: Icons.facebook_rounded,
@@ -336,9 +319,7 @@ class StepPlatformSelection extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     final badgeBgColor = isConnected ? AppColors.successLight : AppColors.warningLight;
-    final badgeBorderColor = isConnected
-        ? AppColors.successBorder
-        : AppColors.warningBorder;
+    final badgeBorderColor = isConnected ? AppColors.successBorder : AppColors.warningBorder;
     final badgeTextColor = isConnected ? AppColors.statusSuccessDarkText : AppColors.warningDark;
     final badgeDotColor = isConnected ? AppColors.statusSuccessText : AppColors.warning;
     final statusText = isConnected
@@ -354,18 +335,9 @@ class StepPlatformSelection extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected ? brandColor.withValues(alpha: 0.05) : AppColors.surface,
           borderRadius: BorderRadius.circular(14.0),
-          border: Border.all(
-            color: isSelected ? brandColor : AppColors.border,
-            width: isSelected ? 2.0 : 1.0,
-          ),
+          border: Border.all(color: isSelected ? brandColor : AppColors.border, width: isSelected ? 2.0 : 1.0),
           boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: brandColor.withValues(alpha: 0.12),
-                    blurRadius: 10.0,
-                    offset: const Offset(0, 4),
-                  ),
-                ]
+              ? [BoxShadow(color: brandColor.withValues(alpha: 0.12), blurRadius: 10.0, offset: const Offset(0, 4))]
               : [],
         ),
         child: Column(
@@ -379,8 +351,7 @@ class StepPlatformSelection extends StatelessWidget {
                   logoPath,
                   width: 32.0,
                   height: 32.0,
-                  errorBuilder: (context, error, stackTrace) =>
-                      Icon(fallbackIcon, size: 30.0, color: brandColor),
+                  errorBuilder: (context, error, stackTrace) => Icon(fallbackIcon, size: 30.0, color: brandColor),
                 ),
                 const SizedBox(width: 10.0),
                 Expanded(

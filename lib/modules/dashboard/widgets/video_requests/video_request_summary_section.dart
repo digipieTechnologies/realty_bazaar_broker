@@ -32,7 +32,7 @@ class VideoRequestSummarySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = context.isMobileUI;
+    final isMobile = context.isMobile;
     final isDesktop = context.isDesktop;
 
     return AppCardContainer(
@@ -130,7 +130,7 @@ class VideoRequestSummarySection extends StatelessWidget {
                       return LeadSummaryCard(
                         title: context.tr('total_requests'),
                         value: '$totalRequests',
-                        subtitle: 'Submitted shoots',
+                        subtitle: context.tr('submitted_shoots'),
                         icon: Icons.trending_up_rounded,
                         iconColor: AppColors.success,
                       );
@@ -138,7 +138,7 @@ class VideoRequestSummarySection extends StatelessWidget {
                       return LeadSummaryCard(
                         title: context.tr('pending'),
                         value: '$pendingRequests',
-                        subtitle: 'Awaiting review',
+                        subtitle: context.tr('awaiting_review'),
                         icon: Icons.hourglass_empty_rounded,
                         iconColor: AppColors.warning,
                       );
@@ -146,7 +146,7 @@ class VideoRequestSummarySection extends StatelessWidget {
                       return LeadSummaryCard(
                         title: context.tr('in_progress'),
                         value: '$inProgressRequests',
-                        subtitle: 'Field team filming',
+                        subtitle: context.tr('field_team_filming'),
                         icon: Icons.run_circle_outlined,
                         iconColor: AppColors.primary,
                       );
@@ -154,7 +154,7 @@ class VideoRequestSummarySection extends StatelessWidget {
                       return LeadSummaryCard(
                         title: context.tr('completed'),
                         value: '$completedRequests',
-                        subtitle: 'Uploaded to listings',
+                        subtitle: context.tr('uploaded_to_listings'),
                         icon: Icons.check_circle_outline,
                         iconColor: AppColors.success,
                       );
