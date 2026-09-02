@@ -103,12 +103,14 @@ serve(async (req) => {
       }
     }
 
-    // 4. Soft Disconnect: Update connection record in `social_accounts` table to is_connected = false & is_active = false
+    // 4. Disconnect: Clear access tokens and update connection record in `social_accounts` table
     if (account?.id) {
-      console.log(`[Disconnect] Updating ${platform} account ID ${account.id} in social_accounts table to is_connected = false for broker: ${brokerId}`);
+      console.log(`[Disconnect] Updating ${platform} account ID ${account.id} in social_accounts table: clearing tokens and setting is_connected = false for broker: ${brokerId}`);
       const { error: updateError } = await supabase
         .from("social_accounts")
         .update({
+          access_token: null,
+          page_access_token: null,
           is_connected: false,
           is_active: false,
           updated_at: new Date().toISOString(),
@@ -123,6 +125,8 @@ serve(async (req) => {
       const { error: updateError } = await supabase
         .from("social_accounts")
         .update({
+          access_token: null,
+          page_access_token: null,
           is_connected: false,
           is_active: false,
           updated_at: new Date().toISOString(),
