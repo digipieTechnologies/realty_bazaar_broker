@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_routes.dart';
@@ -27,7 +28,7 @@ class PropertyWebGridCard extends StatelessWidget {
   });
 
   void _handleCardTap(BuildContext context) {
-    AppRoutes.navigateToPropertyDetails(context, property);
+    AppNavigator.navigateToPropertyDetails(context, property);
   }
 
   void _handleShare(BuildContext context) {

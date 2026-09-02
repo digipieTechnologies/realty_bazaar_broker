@@ -10,7 +10,6 @@ import '../models/otp_type.dart';
 import '../models/property_model.dart';
 import '../models/social_lead_model.dart';
 import '../models/social_post_model.dart';
-import '../models/subscription_plan_model.dart';
 import '../modules/auth/screens/delete_account_screen.dart';
 import '../modules/auth/screens/login_screen.dart';
 import '../modules/auth/screens/otp_verification_screen.dart';
@@ -43,8 +42,7 @@ class AppRoutes {
   static const String pendingRedirectKey = 'pending_redirect_url';
 
   // Global Navigator Key for AppOverlay/Toasts access
-  static final GlobalKey<NavigatorState> rootNavigatorKey =
-      GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
   // Route Paths
   static const String initial = '/';
@@ -94,10 +92,7 @@ class AppRoutes {
           state.matchedLocation == forgotPassword;
 
       // 1. Unauthenticated user trying to access protected content
-      if (!isLoggedIn &&
-          !goingToAuth &&
-          !goingToSplash &&
-          !goingToPublicLegal) {
+      if (!isLoggedIn && !goingToAuth && !goingToSplash && !goingToPublicLegal) {
         // Save the intended destination URL so user returns here after login
         final targetUri = state.uri.toString();
         if (targetUri.isNotEmpty && targetUri != '/' && targetUri != '/login') {
@@ -109,10 +104,7 @@ class AppRoutes {
       // 2. Authenticated user landing on login / signup screens
       if (isLoggedIn && goingToLoginOrSignup) {
         final pendingUrl = storage.read<String>(pendingRedirectKey);
-        if (pendingUrl != null &&
-            pendingUrl.isNotEmpty &&
-            pendingUrl != '/login' &&
-            pendingUrl != '/') {
+        if (pendingUrl != null && pendingUrl.isNotEmpty && pendingUrl != '/login' && pendingUrl != '/') {
           storage.remove(pendingRedirectKey);
           return pendingUrl;
         }
@@ -130,28 +122,21 @@ class AppRoutes {
       ),
     ),
     routes: [
-      GoRoute(
-        path: initial,
-        name: 'splash',
-        builder: (context, state) => const SplashScreen(),
-      ),
+      GoRoute(path: initial, name: 'splash', builder: (context, state) => const SplashScreen()),
       GoRoute(
         path: login,
         name: 'login',
-        builder: (context, state) =>
-            const LoginScreen(initialMode: AuthMode.login),
+        builder: (context, state) => const LoginScreen(initialMode: AuthMode.login),
       ),
       GoRoute(
         path: signUp,
         name: 'signup',
-        builder: (context, state) =>
-            const LoginScreen(initialMode: AuthMode.signup),
+        builder: (context, state) => const LoginScreen(initialMode: AuthMode.signup),
       ),
       GoRoute(
         path: forgotPassword,
         name: 'forgot_password',
-        builder: (context, state) =>
-            const LoginScreen(initialMode: AuthMode.forgotPassword),
+        builder: (context, state) => const LoginScreen(initialMode: AuthMode.forgotPassword),
       ),
       GoRoute(
         path: deleteAccount,
@@ -176,8 +161,7 @@ class AppRoutes {
           final email = extra?['email'] as String?;
           final userId = extra?['userId'] as String?;
           final isPreSignup = extra?['isPreSignup'] as bool? ?? false;
-          final otpType =
-              extra?['otpType'] as AppOtpType? ?? AppOtpType.emailVerify;
+          final otpType = extra?['otpType'] as AppOtpType? ?? AppOtpType.emailVerify;
           final signUpData = extra?['signUpData'] as Map<String, String>?;
           return OtpVerificationScreen(
             email: email,
@@ -223,9 +207,7 @@ class AppRoutes {
                 name: 'lead_details',
                 builder: (context, state) {
                   final id = state.pathParameters['id'];
-                  final leadExtra = state.extra is SocialLeadModel
-                      ? state.extra as SocialLeadModel
-                      : null;
+                  final leadExtra = state.extra is SocialLeadModel ? state.extra as SocialLeadModel : null;
                   return ViewLeadScreen(lead: leadExtra, leadId: id);
                 },
               ),
@@ -242,9 +224,7 @@ class AppRoutes {
                 name: 'post_details',
                 builder: (context, state) {
                   final id = state.pathParameters['id'];
-                  final postExtra = state.extra is SocialPostModel
-                      ? state.extra as SocialPostModel
-                      : null;
+                  final postExtra = state.extra is SocialPostModel ? state.extra as SocialPostModel : null;
                   return ViewPostScreen(post: postExtra, postId: id);
                 },
               ),
@@ -261,22 +241,13 @@ class AppRoutes {
                 name: 'property_details',
                 builder: (context, state) {
                   final idOrCode = state.pathParameters['idOrCode'];
-                  final propertyExtra = state.extra is PropertyModel
-                      ? state.extra as PropertyModel
-                      : null;
-                  return ViewPropertyScreen(
-                    property: propertyExtra,
-                    propertyId: idOrCode,
-                  );
+                  final propertyExtra = state.extra is PropertyModel ? state.extra as PropertyModel : null;
+                  return ViewPropertyScreen(property: propertyExtra, propertyId: idOrCode);
                 },
               ),
             ],
           ),
-          GoRoute(
-            path: '/grow',
-            name: 'grow',
-            builder: (context, state) => const GrowTabScreen(),
-          ),
+          GoRoute(path: '/grow', name: 'grow', builder: (context, state) => const GrowTabScreen()),
           GoRoute(
             path: '/request-video',
             name: 'request_video',
@@ -287,26 +258,14 @@ class AppRoutes {
             name: 'referrals',
             builder: (context, state) => const ReferralsTabScreen(),
           ),
-          GoRoute(
-            path: '/reports',
-            name: 'reports',
-            builder: (context, state) => const ReportsTabScreen(),
-          ),
+          GoRoute(path: '/reports', name: 'reports', builder: (context, state) => const ReportsTabScreen()),
           GoRoute(
             path: '/settings',
             name: 'settings',
             builder: (context, state) => const SettingsTabScreen(),
           ),
-          GoRoute(
-            path: '/profile',
-            name: 'profile',
-            builder: (context, state) => const ProfileScreen(),
-          ),
-          GoRoute(
-            path: '/help',
-            name: 'help',
-            builder: (context, state) => const HelpTabScreen(),
-          ),
+          GoRoute(path: '/profile', name: 'profile', builder: (context, state) => const ProfileScreen()),
+          GoRoute(path: '/help', name: 'help', builder: (context, state) => const HelpTabScreen()),
         ],
       ),
 
@@ -324,10 +283,7 @@ class AppRoutes {
           return Scaffold(
             appBar: CommonAppBar(title: title),
             body: Center(
-              child: Text(
-                'Placeholder details screen for $title',
-                style: const TextStyle(fontSize: 16),
-              ),
+              child: Text('Placeholder details screen for $title', style: const TextStyle(fontSize: 16)),
             ),
           );
         },
