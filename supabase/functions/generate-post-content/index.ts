@@ -59,28 +59,77 @@ serve(async (req) => {
     let brokerPhone = "";
     let brokerName = "";
 
-    const resolvedBrokerId = brokerId ?? property.broker_id;
+    const rawBroker = brokerId ?? property.broker_id;
+    let resolvedBrokerId: string = "";
+    if (typeof rawBroker === "string") {
+      resolvedBrokerId = rawBroker.trim();
+    } else if (rawBroker && typeof rawBroker === "object") {
+      resolvedBrokerId = (rawBroker.id || "").toString().trim();
+    }
+    if (!resolvedBrokerId && property.broker_id) {
+      resolvedBrokerId = (typeof property.broker_id === "object" ? property.broker_id.id : property.broker_id).toString().trim();
+    }
+
     if (resolvedBrokerId) {
-      // Try by broker_id column first, then fallback to id column
-      const { data: brokerByBrokerId } = await supabase
+      // 1. Try finding user by broker_id (associated broker's user record)
+      let { data: userRecord } = await supabase
         .from("users")
-        .select("name, phone")
+        .select("name, phone, phone_country_code, broker_id")
         .eq("broker_id", resolvedBrokerId)
+        .eq("is_deleted", false)
         .maybeSingle();
 
-      if (brokerByBrokerId) {
-        brokerPhone = brokerByBrokerId.phone ?? "";
-        brokerName = brokerByBrokerId.name ?? "";
-      } else {
-        const { data: brokerById } = await supabase
+      // 2. Fallback search by id in case resolvedBrokerId is the user ID directly
+      if (!userRecord) {
+        const { data: userById } = await supabase
           .from("users")
-          .select("name, phone")
+          .select("name, phone, phone_country_code, broker_id")
           .eq("id", resolvedBrokerId)
+          .eq("is_deleted", false)
           .maybeSingle();
 
-        if (brokerById) {
-          brokerPhone = brokerById.phone ?? "";
-          brokerName = brokerById.name ?? "";
+        if (userById) {
+          userRecord = userById;
+        }
+      }
+
+      // Priority 1: Check business_name from brokers table first
+      const targetBrokerUuid = userRecord?.broker_id || property.broker_id || resolvedBrokerId;
+      if (targetBrokerUuid) {
+        const { data: brokerData } = await supabase
+          .from("brokers")
+          .select("business_name")
+          .eq("id", targetBrokerUuid)
+          .maybeSingle();
+
+        if (brokerData?.business_name && brokerData.business_name.trim().length > 0) {
+          brokerName = brokerData.business_name.trim();
+        }
+      }
+
+      // Priority 2: If business_name is empty, fallback to user name from users table
+      if (!brokerName && userRecord?.name && userRecord.name.trim().length > 0) {
+        brokerName = userRecord.name.trim();
+      }
+
+      // Format phone number
+      if (userRecord) {
+        const rawPhone = (userRecord.phone ?? "").trim();
+        let countryCode = (userRecord.phone_country_code ?? "91").toString().trim().replace(/^\+/, "");
+        if (!countryCode) countryCode = "91";
+
+        if (rawPhone) {
+          const cleanPhone = rawPhone.replace(/\D/g, "");
+          if (countryCode && cleanPhone.startsWith(countryCode) && cleanPhone.length > countryCode.length + 8) {
+            const nationalNumber = cleanPhone.slice(countryCode.length);
+            brokerPhone = `+${countryCode}-${nationalNumber}`;
+          } else if (cleanPhone.length === 10) {
+            brokerPhone = `+${countryCode}-${cleanPhone}`;
+          } else if (cleanPhone.length > 10 && cleanPhone.startsWith("91")) {
+            brokerPhone = `+91-${cleanPhone.slice(2)}`;
+          } else {
+            brokerPhone = `+${countryCode}-${cleanPhone}`;
+          }
         }
       }
     }

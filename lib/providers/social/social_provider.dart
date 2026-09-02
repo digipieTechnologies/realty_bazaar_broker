@@ -735,6 +735,7 @@ class SocialProvider extends ChangeNotifier {
     String? propertyId,
     required String caption,
     required List<PickedMedia> medias,
+    List<Map<String, dynamic>>? userTags,
   }) async {
     try {
       // 1. Uploading / Resolving media files
@@ -787,6 +788,7 @@ class SocialProvider extends ChangeNotifier {
           'property_id': propertyId,
           'caption': caption,
           'medias': mediaUrlsPayload,
+          if (userTags != null && userTags.isNotEmpty) 'user_tags': userTags,
         },
       );
 

@@ -135,6 +135,7 @@ serve(async (req) => {
     let propertyId: string | null = null;
     let caption = "";
     let medias: MediaItem[] = [];
+    let userTags: Array<{ username: string; x: number; y: number }> = [];
 
     try {
       const body = await req.json();
@@ -142,6 +143,25 @@ serve(async (req) => {
       propertyId = body?.property_id || body?.propertyId || null;
       caption = body?.caption || body?.Caption || "";
       medias = body?.medias || [];
+
+      const rawUserTags = body?.user_tags || body?.userTags || [];
+      if (Array.isArray(rawUserTags)) {
+        userTags = rawUserTags
+          .map((tag: any) => {
+            if (typeof tag === "string") {
+              const clean = tag.replace(/^@/, "").trim();
+              return clean ? { username: clean, x: 0.5, y: 0.5 } : null;
+            }
+            if (tag && typeof tag === "object" && tag.username) {
+              const clean = String(tag.username).replace(/^@/, "").trim();
+              const x = typeof tag.x === "number" && !isNaN(tag.x) ? Math.max(0, Math.min(1, tag.x)) : 0.5;
+              const y = typeof tag.y === "number" && !isNaN(tag.y) ? Math.max(0, Math.min(1, tag.y)) : 0.5;
+              return clean ? { username: clean, x, y } : null;
+            }
+            return null;
+          })
+          .filter(Boolean) as Array<{ username: string; x: number; y: number }>;
+      }
     } catch (_err) {
       throw new Error("Invalid request body. Expected JSON payload.");
     }
@@ -154,7 +174,7 @@ serve(async (req) => {
       throw new Error("At least one media item (image or video) is required.");
     }
 
-    console.log(`[Publish Instagram Post] Starting for broker: ${brokerId} with ${medias.length} media item(s)`);
+    console.log(`[Publish Instagram Post] Starting for broker: ${brokerId} with ${medias.length} media item(s) and ${userTags.length} user tag(s)`);
 
     const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
@@ -237,8 +257,22 @@ serve(async (req) => {
           image_url: media.media_url,
           caption: caption,
         };
+        if (userTags.length > 0) {
+          payload.user_tags = userTags;
+        }
 
-        const container = await graphPost(apiBase, `${instagram_account_id}/media`, payload, effectiveToken);
+        let container;
+        try {
+          container = await graphPost(apiBase, `${instagram_account_id}/media`, payload, effectiveToken);
+        } catch (postErr) {
+          if (payload.user_tags) {
+            console.warn(`[publish-instagram-post] Image container creation with user_tags failed (${postErr.message}). Retrying without user_tags...`);
+            delete payload.user_tags;
+            container = await graphPost(apiBase, `${instagram_account_id}/media`, payload, effectiveToken);
+          } else {
+            throw postErr;
+          }
+        }
         await pollContainerStatus(apiBase, container.id, effectiveToken);
 
         const publishResult = await graphPost(
@@ -266,14 +300,33 @@ serve(async (req) => {
           itemPayload.video_url = item.media_url;
         } else {
           itemPayload.image_url = item.media_url;
+          if (userTags.length > 0) {
+            itemPayload.user_tags = userTags;
+          }
         }
 
-        const itemContainer = await graphPost(
-          apiBase,
-          `${instagram_account_id}/media`,
-          itemPayload,
-          effectiveToken
-        );
+        let itemContainer;
+        try {
+          itemContainer = await graphPost(
+            apiBase,
+            `${instagram_account_id}/media`,
+            itemPayload,
+            effectiveToken
+          );
+        } catch (itemErr) {
+          if (itemPayload.user_tags) {
+            console.warn(`[publish-instagram-post] Carousel item creation with user_tags failed (${itemErr.message}). Retrying without user_tags...`);
+            delete itemPayload.user_tags;
+            itemContainer = await graphPost(
+              apiBase,
+              `${instagram_account_id}/media`,
+              itemPayload,
+              effectiveToken
+            );
+          } else {
+            throw itemErr;
+          }
+        }
         itemContainerIds.push(itemContainer.id);
       }
 
