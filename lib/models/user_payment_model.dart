@@ -8,16 +8,16 @@ class UserPaymentModel extends Equatable {
   static const String tableName = 'user_payments';
 
   final String id;
-  
+
   // Mapped as Model objects following project convention
   final BrokerModel? brokerId;
   final SubscriptionPlanModel? subscriptionPlanId;
-  
+
   final double amount;
   final PaymentPurpose purpose;
   final PaymentStatus status;
   final PaymentProviderEnum paymentProvider; // e.g. razorpay
-  
+
   final String? paymentId;
   final Map<String, dynamic>? metadata;
 
@@ -61,7 +61,7 @@ class UserPaymentModel extends Equatable {
         parsedBroker = BrokerModel.fromJson(json['brokers'][0]);
       }
     } else if (json['broker_id'] != null) {
-       parsedBroker = BrokerModel(id: json['broker_id'].toString(), businessName: '', brokerCode: '');
+      parsedBroker = BrokerModel(id: json['broker_id'].toString(), businessName: '', brokerCode: '');
     }
 
     SubscriptionPlanModel? parsedPlan;
@@ -74,7 +74,12 @@ class UserPaymentModel extends Equatable {
         parsedPlan = SubscriptionPlanModel.fromJson(json['subscription_plans'][0]);
       }
     } else if (json['subscription_plan_id'] != null) {
-       parsedPlan = SubscriptionPlanModel(id: json['subscription_plan_id'].toString(), title: '', description: '', amount: 0);
+      parsedPlan = SubscriptionPlanModel(
+        id: json['subscription_plan_id'].toString(),
+        title: '',
+        description: '',
+        amount: 0,
+      );
     }
 
     return UserPaymentModel(
@@ -87,12 +92,8 @@ class UserPaymentModel extends Equatable {
       paymentProvider: PaymentProviderEnum.fromDbValue(json['payment_provider']),
       paymentId: json['payment_id']?.toString(),
       metadata: json['metadata'] as Map<String, dynamic>?,
-      createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'].toString())
-          : DateTime.now(),
-      updatedAt: json['updated_at'] != null
-          ? DateTime.parse(json['updated_at'].toString())
-          : DateTime.now(),
+      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at'].toString()) : DateTime.now(),
+      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at'].toString()) : DateTime.now(),
     );
   }
 
@@ -110,10 +111,10 @@ class UserPaymentModel extends Equatable {
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
     };
-    
+
     // Remove nulls before sending to database
     data.removeWhere((key, value) => value == null);
-    
+
     return data;
   }
 

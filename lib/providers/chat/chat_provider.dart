@@ -1,38 +1,44 @@
 // File: lib/providers/chat/chat_provider.dart
 // Purpose: Generic Chat state provider supporting room initialization, real-time message streaming, seamless scroll pagination, soft-delete, inline edit, and multi-media attachments via JSONB medias.
 
-import 'dart:io' as io;
-
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../core/services/supabase_storage_service.dart';
+import '../../core/services/r2_storage_service.dart';
 import '../../core/supabase/supabase_config.dart';
 import '../../models/models.dart';
 
 class ChatProvider extends ChangeNotifier {
   bool _isLoading = false;
+
   bool get isLoading => _isLoading;
 
   bool _isSending = false;
+
   bool get isSending => _isSending;
 
   bool _isLoadingMore = false;
+
   bool get isLoadingMore => _isLoadingMore;
 
   bool _hasMore = true;
+
   bool get hasMore => _hasMore;
 
   final int _limit = 20;
+
   int get limit => _limit;
 
   ChatRoomModel? _currentRoom;
+
   ChatRoomModel? get currentRoom => _currentRoom;
 
   List<ChatMessageModel> _messages = [];
+
   List<ChatMessageModel> get messages => List.unmodifiable(_messages);
 
   ChatMessageModel? _editingMessage;
+
   ChatMessageModel? get editingMessage => _editingMessage;
 
   void setEditingMessage(ChatMessageModel? message) {
@@ -48,6 +54,7 @@ class ChatProvider extends ChangeNotifier {
 
   RealtimeChannel? _chatSubscription;
   String? _errorMessage;
+
   String? get errorMessage => _errorMessage;
 
   /// Initialize or fetch chat room for a specific video request ID
@@ -216,9 +223,14 @@ class ChatProvider extends ChangeNotifier {
     }
   }
 
-  /// Helper to upload local file attachment to Supabase Storage bucket 'chat_attachments'
-  Future<String?> _uploadChatMedia(String localPath) async {
-    return await SupabaseStorageService.uploadFile(filePath: localPath, bucketName: 'chat_attachments');
+  /// Helper to upload local file attachment to Cloudflare R2
+  Future<String?> _uploadChatMedia(String localPath, {Uint8List? fileBytes}) async {
+    return await R2StorageService.uploadFile(
+      filePath: localPath,
+      entityType: 'chat',
+      entityId: _currentRoom?.id,
+      fileBytes: fileBytes,
+    );
   }
 
   /// Send a text message with single or multi-media attachments via JSONB medias or locationData
@@ -250,15 +262,9 @@ class ChatProvider extends ChangeNotifier {
             uploadedUrl = await _uploadChatMedia(item.url!);
           }
 
-          if (item.thumbnailBytes != null) {
-            final tempPath =
-                '${io.Directory.systemTemp.path}/thumb_${DateTime.now().millisecondsSinceEpoch}.jpg';
-            final tempFile = io.File(tempPath);
-            await tempFile.writeAsBytes(item.thumbnailBytes!);
-            uploadedThumb = await _uploadChatMedia(tempFile.path);
-            try {
-              await tempFile.delete();
-            } catch (_) {}
+          if (item.thumbnailBytes != null && item.thumbnailBytes!.isNotEmpty) {
+            final thumbName = 'thumb_${DateTime.now().millisecondsSinceEpoch}.jpg';
+            uploadedThumb = await _uploadChatMedia(thumbName, fileBytes: item.thumbnailBytes);
           }
 
           uploadedMedias.add(

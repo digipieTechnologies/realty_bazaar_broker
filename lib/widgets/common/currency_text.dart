@@ -2,6 +2,7 @@
 // Purpose: Reusable Currency Text widget displaying compact currency with an interactive tooltip showing the full exact amount in Indian notation.
 
 import 'package:flutter/material.dart';
+
 import '../../core/extensions/currency_extensions.dart';
 
 /// A widget that displays a compact formatted currency amount with a built-in

@@ -19,10 +19,15 @@ class AdCampaignProvider extends ChangeNotifier {
   String? _errorMessage;
 
   AdCampaignSettingsModel? get settings => _settings;
+
   bool get isLoading => _isLoading;
+
   bool get isSaving => _isSaving;
+
   bool get isSearchingAreas => _isSearchingAreas;
+
   List<TargetAreaModel> get areaSearchResults => _areaSearchResults;
+
   String? get errorMessage => _errorMessage;
 
   /// Fetches existing campaign settings for a given broker ID from Supabase

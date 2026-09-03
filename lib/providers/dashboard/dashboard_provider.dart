@@ -102,6 +102,7 @@ class DashboardProvider extends ChangeNotifier {
   bool _isLoadingSummary = false;
 
   DashboardSummaryModel? get summary => _summary;
+
   bool get isLoadingSummary => _isLoadingSummary;
 
   void clear() {

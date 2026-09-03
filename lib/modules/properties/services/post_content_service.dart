@@ -52,7 +52,7 @@ class PostContentService {
           'generate-post-content',
           body: {
             'propertyId': prop.id,
-            'brokerId': prop.brokerId,
+            'brokerId': prop.brokerId?.id,
             'instagramUsername': socialProvider.instagramAccount?.instagramUsername,
             'facebookPageName': socialProvider.facebookAccount?.pageName,
           },

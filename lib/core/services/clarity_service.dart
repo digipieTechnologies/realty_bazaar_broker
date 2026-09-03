@@ -8,6 +8,7 @@ import 'clarity_stub.dart' if (dart.library.io) 'package:clarity_flutter/clarity
 
 class ClarityService {
   ClarityService._();
+
   static final ClarityService instance = ClarityService._();
 
   static const String _defaultProjectId = String.fromEnvironment('CLARITY_PROJECT_ID');

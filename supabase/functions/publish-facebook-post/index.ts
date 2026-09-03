@@ -15,6 +15,7 @@ interface MediaItem {
 
 // Meta Graph API POST helper
 async function graphPost(apiBase: string, endpoint: string, payload: Record<string, any>, accessToken: string) {
+  const cleanToken = accessToken.trim();
   const params = new URLSearchParams();
   for (const [key, value] of Object.entries(payload)) {
     if (key === "attached_media" && Array.isArray(value)) {
@@ -29,11 +30,12 @@ async function graphPost(apiBase: string, endpoint: string, payload: Record<stri
     }
   }
 
-  const url = `${apiBase}/${endpoint}?access_token=${accessToken}`;
+  const url = `${apiBase}/${endpoint}?access_token=${encodeURIComponent(cleanToken)}`;
   const response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
+      "Authorization": `Bearer ${cleanToken}`,
     },
     body: params.toString(),
   });
@@ -42,21 +44,32 @@ async function graphPost(apiBase: string, endpoint: string, payload: Record<stri
     const errorData = await response.json().catch(() => ({}));
     const err = errorData.error || {};
     const errMsg = err.message || response.statusText;
-    throw new Error(`Meta Graph API POST error on ${endpoint}: ${errMsg}`);
+    const errUserMsg = err.error_user_msg ? ` (${err.error_user_msg})` : "";
+    const subcode = err.error_subcode ? ` [subcode: ${err.error_subcode}]` : "";
+    const code = err.code ? ` [code: ${err.code}]` : "";
+    throw new Error(`Meta Graph API POST error on ${endpoint}: ${errMsg}${errUserMsg}${code}${subcode}`);
   }
   return await response.json();
 }
 
 // Meta Graph API GET helper
 async function graphGet(apiBase: string, endpoint: string, fields: string, accessToken: string) {
-  const url = `${apiBase}/${endpoint}?fields=${fields}&access_token=${accessToken}`;
-  const response = await fetch(url);
+  const cleanToken = accessToken.trim();
+  const url = `${apiBase}/${endpoint}?fields=${encodeURIComponent(fields)}&access_token=${encodeURIComponent(cleanToken)}`;
+  const response = await fetch(url, {
+    headers: {
+      "Authorization": `Bearer ${cleanToken}`,
+    },
+  });
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
     const err = errorData.error || {};
     const errMsg = err.message || response.statusText;
-    throw new Error(`Meta Graph API GET error on ${endpoint}: ${errMsg}`);
+    const errUserMsg = err.error_user_msg ? ` (${err.error_user_msg})` : "";
+    const subcode = err.error_subcode ? ` [subcode: ${err.error_subcode}]` : "";
+    const code = err.code ? ` [code: ${err.code}]` : "";
+    throw new Error(`Meta Graph API GET error on ${endpoint}: ${errMsg}${errUserMsg}${code}${subcode}`);
   }
   return await response.json();
 }
@@ -290,13 +303,53 @@ serve(async (req) => {
     );
 
   } catch (e) {
-    const errorMsg = e instanceof Error ? e.message : "Unknown error";
-    console.error(`Error publishing Facebook post: ${errorMsg}`);
-    
+    const rawErrorMsg = e instanceof Error ? e.message : "Unknown error";
+    console.error(`Error publishing Facebook post: ${rawErrorMsg}`);
+
+    const lower = rawErrorMsg.toLowerCase();
+    let userFriendlyMsg = "Unable to publish to Facebook Page. Please verify your connection and try again.";
+
+    if (
+      lower.includes("invalid oauth") ||
+      lower.includes("cannot parse access token") ||
+      lower.includes("code: 190") ||
+      lower.includes("session has expired") ||
+      lower.includes("error validating access token") ||
+      lower.includes("token has expired")
+    ) {
+      userFriendlyMsg =
+        "Your Facebook Page session has expired. Please go to Profile > Social Connections and reconnect your Facebook account.";
+
+      try {
+        const supabaseUrl = Deno.env.get("SUPABASE_URL");
+        const supabaseServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+        if (supabaseUrl && supabaseServiceRoleKey && brokerId) {
+          const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+          await supabase
+            .from("social_accounts")
+            .update({ is_active: false, updated_at: new Date().toISOString() })
+            .eq("broker_id", brokerId)
+            .eq("platform", "facebook");
+        }
+      } catch (deactErr) {
+        console.error("Failed to deactivate expired Facebook social account:", deactErr);
+      }
+    } else if (lower.includes("permission") || lower.includes("not authorized") || lower.includes("missing permissions")) {
+      userFriendlyMsg =
+        "Publishing permission missing. Please reconnect your Facebook Page and grant page publishing permissions.";
+    } else if (lower.includes("no active facebook page connection")) {
+      userFriendlyMsg =
+        "No active Facebook Page connected. Please connect your Facebook Page in Social Connections first.";
+    } else if (lower.includes("missing required parameter: medias")) {
+      userFriendlyMsg = "Please select at least one photo or video before publishing.";
+    } else if (!rawErrorMsg.includes("Meta Graph API") && !rawErrorMsg.includes("Exception")) {
+      userFriendlyMsg = rawErrorMsg;
+    }
+
     return new Response(
       JSON.stringify({
         success: false,
-        message: errorMsg,
+        message: userFriendlyMsg,
       }),
       {
         status: 400,

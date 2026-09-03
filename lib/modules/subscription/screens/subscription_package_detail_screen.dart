@@ -181,10 +181,7 @@ class _SubscriptionPackageDetailScreenState extends State<SubscriptionPackageDet
     final activeSub = authProvider.activeSubscription;
     if (activeSub != null && !activeSub.isExpired) {
       setState(() => _isProcessingPayment = false);
-      AppToast.showError(
-        context.tr('active_plan_exists_title'),
-        context.tr('active_plan_exists_desc'),
-      );
+      AppToast.showError(context.tr('active_plan_exists_title'), context.tr('active_plan_exists_desc'));
       return;
     }
 

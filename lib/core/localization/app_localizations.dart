@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 
 class AppLocalizations {
   final Locale locale;
+
   AppLocalizations(this.locale);
 
   /// Helper method to keep code clean

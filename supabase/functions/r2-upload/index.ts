@@ -6,7 +6,7 @@ import { getSignedUrl } from "https://esm.sh/@aws-sdk/s3-request-presigner@3.450
 const R2_ACCOUNT_ID = Deno.env.get("R2_ACCOUNT_ID") || "";
 const R2_ACCESS_KEY_ID = Deno.env.get("R2_ACCESS_KEY_ID") || "";
 const R2_SECRET_ACCESS_KEY = Deno.env.get("R2_SECRET_ACCESS_KEY") || "";
-const R2_BUCKET_NAME = Deno.env.get("R2_BUCKET_NAME") || "brokers";
+const R2_BUCKET_NAME = Deno.env.get("R2_BUCKET_NAME") || "realty-bazaar";
 const R2_PUBLIC_DOMAIN = Deno.env.get("R2_PUBLIC_DOMAIN") || "";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") || "";

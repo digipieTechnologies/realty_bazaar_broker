@@ -12,11 +12,7 @@ class PropertyWebFilterDialog extends StatefulWidget {
   final PropertyFilterModel initialFilter;
   final List<String> availableCities;
 
-  const PropertyWebFilterDialog({
-    super.key,
-    required this.initialFilter,
-    this.availableCities = const [],
-  });
+  const PropertyWebFilterDialog({super.key, required this.initialFilter, this.availableCities = const []});
 
   static Future<PropertyFilterModel?> show(
     BuildContext context, {
@@ -30,10 +26,7 @@ class PropertyWebFilterDialog extends StatefulWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         insetPadding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
-        child: PropertyWebFilterDialog(
-          initialFilter: initialFilter,
-          availableCities: availableCities,
-        ),
+        child: PropertyWebFilterDialog(initialFilter: initialFilter, availableCities: availableCities),
       ),
     );
   }
@@ -114,9 +107,7 @@ class _PropertyWebFilterDialogState extends State<PropertyWebFilterDialog> {
 
     return Container(
       width: 580.0,
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.90,
-      ),
+      constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.90),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20.0),
@@ -266,8 +257,15 @@ class _PropertyWebFilterDialogState extends State<PropertyWebFilterDialog> {
                                 value: cityList.contains(_city) ? _city : 'all',
                                 isExpanded: true,
                                 underline: const SizedBox(),
-                                icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 18.0, color: AppColors.textSecondary),
-                                style: AppTextStyles.body2.copyWith(color: AppColors.textPrimary, fontWeight: FontWeight.w600),
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  size: 18.0,
+                                  color: AppColors.textSecondary,
+                                ),
+                                style: AppTextStyles.body2.copyWith(
+                                  color: AppColors.textPrimary,
+                                  fontWeight: FontWeight.w600,
+                                ),
                                 dropdownColor: AppColors.surface,
                                 items: cityList.map((c) {
                                   return DropdownMenuItem<String>(
@@ -297,8 +295,15 @@ class _PropertyWebFilterDialogState extends State<PropertyWebFilterDialog> {
                                 value: _propertyType,
                                 isExpanded: true,
                                 underline: const SizedBox(),
-                                icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 18.0, color: AppColors.textSecondary),
-                                style: AppTextStyles.body2.copyWith(color: AppColors.textPrimary, fontWeight: FontWeight.w600),
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  size: 18.0,
+                                  color: AppColors.textSecondary,
+                                ),
+                                style: AppTextStyles.body2.copyWith(
+                                  color: AppColors.textPrimary,
+                                  fontWeight: FontWeight.w600,
+                                ),
                                 dropdownColor: AppColors.surface,
                                 items: const [
                                   DropdownMenuItem(value: 'all', child: Text('All Types')),
@@ -364,8 +369,15 @@ class _PropertyWebFilterDialogState extends State<PropertyWebFilterDialog> {
                       value: _furnishing,
                       isExpanded: true,
                       underline: const SizedBox(),
-                      icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 18.0, color: AppColors.textSecondary),
-                      style: AppTextStyles.body2.copyWith(color: AppColors.textPrimary, fontWeight: FontWeight.w600),
+                      icon: const Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        size: 18.0,
+                        color: AppColors.textSecondary,
+                      ),
+                      style: AppTextStyles.body2.copyWith(
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w600,
+                      ),
                       dropdownColor: AppColors.surface,
                       items: const [
                         DropdownMenuItem(value: 'all', child: Text('Any Furnishing')),
@@ -526,10 +538,7 @@ class _PropertyWebFilterDialogState extends State<PropertyWebFilterDialog> {
           decoration: BoxDecoration(
             color: isSelected ? AppColors.primary : const Color(0xFFF8FAFC),
             borderRadius: BorderRadius.circular(8.0),
-            border: Border.all(
-              color: isSelected ? AppColors.primary : AppColors.border,
-              width: 1.0,
-            ),
+            border: Border.all(color: isSelected ? AppColors.primary : AppColors.border, width: 1.0),
           ),
           child: Text(
             title,
@@ -571,12 +580,7 @@ class _PropertyWebFilterDialogState extends State<PropertyWebFilterDialog> {
     );
   }
 
-  Widget _buildCheckboxRow(
-    String title,
-    String subtitle,
-    bool value,
-    ValueChanged<bool?> onChanged,
-  ) {
+  Widget _buildCheckboxRow(String title, String subtitle, bool value, ValueChanged<bool?> onChanged) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
@@ -601,10 +605,7 @@ class _PropertyWebFilterDialogState extends State<PropertyWebFilterDialog> {
                 ),
                 Text(
                   subtitle,
-                  style: AppTextStyles.caption.copyWith(
-                    color: AppColors.textSecondary,
-                    fontSize: 11.0,
-                  ),
+                  style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary, fontSize: 11.0),
                 ),
               ],
             ),

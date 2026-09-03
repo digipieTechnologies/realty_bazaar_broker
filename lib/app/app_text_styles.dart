@@ -2,6 +2,7 @@
 // Purpose: Design system typography tokens with enhanced legibility sizes.
 
 import 'package:flutter/material.dart';
+
 import 'app_colors.dart';
 
 class AppTextStyles {

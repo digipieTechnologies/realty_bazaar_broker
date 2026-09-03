@@ -7,6 +7,7 @@ enum AppOtpType {
   changePassword('change_password');
 
   final String dbValue;
+
   const AppOtpType(this.dbValue);
 
   String get displayName {

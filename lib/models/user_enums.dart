@@ -7,6 +7,7 @@ enum UserRole {
   marketing('marketing');
 
   final String dbValue;
+
   const UserRole(this.dbValue);
 
   String get displayName {
@@ -49,6 +50,7 @@ enum UserGender {
   other('other');
 
   final String dbValue;
+
   const UserGender(this.dbValue);
 
   String get displayName {

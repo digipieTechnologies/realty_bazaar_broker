@@ -66,13 +66,18 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
 
   // Convenience getters — delegate to widget-supplied controllers.
   TextEditingController get _titleBadgeController => widget.titleBadgeController;
+
   TextEditingController get _handleBadgeController => widget.handleBadgeController;
+
   TextEditingController get _locationBadgeController => widget.locationBadgeController;
+
   TextEditingController get _contactBadgeController => widget.contactBadgeController;
 
   // Lifted state accessors.
   String get _selectedTheme => widget.selectedTheme;
+
   bool get _enableOverlay => widget.enableOverlay;
+
   bool get _isTransparent => widget.isTransparent;
 
   // No initState controller creation or dispose needed — parent owns them.

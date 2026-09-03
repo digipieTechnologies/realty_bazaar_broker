@@ -13,40 +13,87 @@ interface MediaItem {
   type: string;
 }
 
-// Meta Graph API POST helper
+// Meta Graph API POST helper with dual-host retry (supports both graph.instagram.com and graph.facebook.com)
 async function graphPost(apiBase: string, endpoint: string, payload: Record<string, any>, accessToken: string) {
-  const url = `${apiBase}/${endpoint}?access_token=${accessToken}`;
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
+  const cleanToken = accessToken.trim();
+  
+  const executePost = async (base: string) => {
+    const url = `${base}/${endpoint}?access_token=${encodeURIComponent(cleanToken)}`;
+    return await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${cleanToken}`,
+      },
+      body: JSON.stringify({
+        ...payload,
+        access_token: cleanToken,
+      }),
+    });
+  };
 
+  let response = await executePost(apiBase);
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
     const err = errorData.error || {};
     const errMsg = err.message || response.statusText;
+
+    // If token parsing/invalid token error, try alternative host (graph.instagram.com <-> graph.facebook.com)
+    if (errMsg.includes("Cannot parse access token") || errMsg.includes("Invalid OAuth access token") || errMsg.includes("OAuthException")) {
+      const altBase = apiBase.includes("facebook.com")
+        ? "https://graph.instagram.com/v23.0"
+        : "https://graph.facebook.com/v23.0";
+      
+      console.log(`[publish-instagram-post] Retrying graphPost on alternate host: ${altBase}`);
+      const altResponse = await executePost(altBase);
+      if (altResponse.ok) {
+        return await altResponse.json();
+      }
+    }
+
     const errUserMsg = err.error_user_msg ? ` (${err.error_user_msg})` : "";
     const subcode = err.error_subcode ? ` [subcode: ${err.error_subcode}]` : "";
-    throw new Error(`Meta Graph API POST error on ${endpoint}: ${errMsg}${errUserMsg}${subcode}`);
+    const code = err.code ? ` [code: ${err.code}]` : "";
+    throw new Error(`Meta Graph API POST error on ${endpoint}: ${errMsg}${errUserMsg}${code}${subcode}`);
   }
   return await response.json();
 }
 
-// Meta Graph API GET helper
+// Meta Graph API GET helper with dual-host retry
 async function graphGet(apiBase: string, endpoint: string, fields: string, accessToken: string) {
-  const url = `${apiBase}/${endpoint}?fields=${fields}&access_token=${accessToken}`;
-  const response = await fetch(url);
+  const cleanToken = accessToken.trim();
+  
+  const executeGet = async (base: string) => {
+    const url = `${base}/${endpoint}?fields=${encodeURIComponent(fields)}&access_token=${encodeURIComponent(cleanToken)}`;
+    return await fetch(url, {
+      headers: {
+        "Authorization": `Bearer ${cleanToken}`,
+      },
+    });
+  };
 
+  let response = await executeGet(apiBase);
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
     const err = errorData.error || {};
     const errMsg = err.message || response.statusText;
+
+    if (errMsg.includes("Cannot parse access token") || errMsg.includes("Invalid OAuth access token") || errMsg.includes("OAuthException")) {
+      const altBase = apiBase.includes("facebook.com")
+        ? "https://graph.instagram.com/v23.0"
+        : "https://graph.facebook.com/v23.0";
+      
+      console.log(`[publish-instagram-post] Retrying graphGet on alternate host: ${altBase}`);
+      const altResponse = await executeGet(altBase);
+      if (altResponse.ok) {
+        return await altResponse.json();
+      }
+    }
+
     const errUserMsg = err.error_user_msg ? ` (${err.error_user_msg})` : "";
     const subcode = err.error_subcode ? ` [subcode: ${err.error_subcode}]` : "";
-    throw new Error(`Meta Graph API GET error on ${endpoint}: ${errMsg}${errUserMsg}${subcode}`);
+    const code = err.code ? ` [code: ${err.code}]` : "";
+    throw new Error(`Meta Graph API GET error on ${endpoint}: ${errMsg}${errUserMsg}${code}${subcode}`);
   }
   return await response.json();
 }
@@ -88,6 +135,7 @@ serve(async (req) => {
     let propertyId: string | null = null;
     let caption = "";
     let medias: MediaItem[] = [];
+    let userTags: Array<{ username: string; x: number; y: number }> = [];
 
     try {
       const body = await req.json();
@@ -95,6 +143,25 @@ serve(async (req) => {
       propertyId = body?.property_id || body?.propertyId || null;
       caption = body?.caption || body?.Caption || "";
       medias = body?.medias || [];
+
+      const rawUserTags = body?.user_tags || body?.userTags || [];
+      if (Array.isArray(rawUserTags)) {
+        userTags = rawUserTags
+          .map((tag: any) => {
+            if (typeof tag === "string") {
+              const clean = tag.replace(/^@/, "").trim();
+              return clean ? { username: clean, x: 0.5, y: 0.5 } : null;
+            }
+            if (tag && typeof tag === "object" && tag.username) {
+              const clean = String(tag.username).replace(/^@/, "").trim();
+              const x = typeof tag.x === "number" && !isNaN(tag.x) ? Math.max(0, Math.min(1, tag.x)) : 0.5;
+              const y = typeof tag.y === "number" && !isNaN(tag.y) ? Math.max(0, Math.min(1, tag.y)) : 0.5;
+              return clean ? { username: clean, x, y } : null;
+            }
+            return null;
+          })
+          .filter(Boolean) as Array<{ username: string; x: number; y: number }>;
+      }
     } catch (_err) {
       throw new Error("Invalid request body. Expected JSON payload.");
     }
@@ -107,7 +174,7 @@ serve(async (req) => {
       throw new Error("At least one media item (image or video) is required.");
     }
 
-    console.log(`[Publish Instagram Post] Starting for broker: ${brokerId} with ${medias.length} media item(s)`);
+    console.log(`[Publish Instagram Post] Starting for broker: ${brokerId} with ${medias.length} media item(s) and ${userTags.length} user tag(s)`);
 
     const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
@@ -136,7 +203,15 @@ serve(async (req) => {
       throw new Error("Instagram account configuration is incomplete (missing Page/User access token).");
     }
 
-    const apiBase = "https://graph.facebook.com/v23.0";
+    const isDirectIgToken =
+      effectiveToken.startsWith("IG") ||
+      effectiveToken.startsWith("IGAA") ||
+      effectiveToken.startsWith("IGQ") ||
+      (!page_access_token && Boolean(access_token));
+
+    const apiBase = isDirectIgToken
+      ? "https://graph.instagram.com/v23.0"
+      : "https://graph.facebook.com/v23.0";
     let publishedMediaId: string = "";
 
     const isVideo = (item: MediaItem) => {
@@ -182,8 +257,22 @@ serve(async (req) => {
           image_url: media.media_url,
           caption: caption,
         };
+        if (userTags.length > 0) {
+          payload.user_tags = userTags;
+        }
 
-        const container = await graphPost(apiBase, `${instagram_account_id}/media`, payload, effectiveToken);
+        let container;
+        try {
+          container = await graphPost(apiBase, `${instagram_account_id}/media`, payload, effectiveToken);
+        } catch (postErr) {
+          if (payload.user_tags) {
+            console.warn(`[publish-instagram-post] Image container creation with user_tags failed (${postErr.message}). Retrying without user_tags...`);
+            delete payload.user_tags;
+            container = await graphPost(apiBase, `${instagram_account_id}/media`, payload, effectiveToken);
+          } else {
+            throw postErr;
+          }
+        }
         await pollContainerStatus(apiBase, container.id, effectiveToken);
 
         const publishResult = await graphPost(
@@ -211,14 +300,33 @@ serve(async (req) => {
           itemPayload.video_url = item.media_url;
         } else {
           itemPayload.image_url = item.media_url;
+          if (userTags.length > 0) {
+            itemPayload.user_tags = userTags;
+          }
         }
 
-        const itemContainer = await graphPost(
-          apiBase,
-          `${instagram_account_id}/media`,
-          itemPayload,
-          effectiveToken
-        );
+        let itemContainer;
+        try {
+          itemContainer = await graphPost(
+            apiBase,
+            `${instagram_account_id}/media`,
+            itemPayload,
+            effectiveToken
+          );
+        } catch (itemErr) {
+          if (itemPayload.user_tags) {
+            console.warn(`[publish-instagram-post] Carousel item creation with user_tags failed (${itemErr.message}). Retrying without user_tags...`);
+            delete itemPayload.user_tags;
+            itemContainer = await graphPost(
+              apiBase,
+              `${instagram_account_id}/media`,
+              itemPayload,
+              effectiveToken
+            );
+          } else {
+            throw itemErr;
+          }
+        }
         itemContainerIds.push(itemContainer.id);
       }
 
@@ -318,13 +426,63 @@ serve(async (req) => {
       }
     );
   } catch (e) {
-    const errorMsg = e instanceof Error ? e.message : "Unknown error";
-    console.error(`Error publishing Instagram post: ${errorMsg}`);
+    const rawErrorMsg = e instanceof Error ? e.message : "Unknown error";
+    console.error(`Error publishing Instagram post: ${rawErrorMsg}`);
+
+    const lower = rawErrorMsg.toLowerCase();
+    let userFriendlyMsg = "Unable to publish to Instagram. Please verify your connection and try again.";
+
+    if (
+      lower.includes("invalid oauth") ||
+      lower.includes("cannot parse access token") ||
+      lower.includes("code: 190") ||
+      lower.includes("session has expired") ||
+      lower.includes("error validating access token") ||
+      lower.includes("token has expired")
+    ) {
+      userFriendlyMsg =
+        "Your Instagram session has expired. Please go to Profile > Social Connections and reconnect your Instagram account.";
+
+      // Attempt to set is_active: false on the social_account record
+      try {
+        const supabaseUrl = Deno.env.get("SUPABASE_URL");
+        const supabaseServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+        if (supabaseUrl && supabaseServiceRoleKey && brokerId) {
+          const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+          await supabase
+            .from("social_accounts")
+            .update({ is_active: false, updated_at: new Date().toISOString() })
+            .eq("broker_id", brokerId)
+            .eq("platform", "instagram");
+        }
+      } catch (deactErr) {
+        console.error("Failed to deactivate expired social account:", deactErr);
+      }
+    } else if (lower.includes("permission") || lower.includes("not authorized") || lower.includes("missing permissions")) {
+      userFriendlyMsg =
+        "Publishing permission missing. Please reconnect your Instagram account and grant all publishing permissions.";
+    } else if (lower.includes("aspect_ratio") || lower.includes("aspect ratio") || lower.includes("invalid aspect")) {
+      userFriendlyMsg =
+        "Photo or video aspect ratio is not supported by Instagram. Please select standard landscape (1.91:1), square (1:1), or vertical (4:5) media.";
+    } else if (lower.includes("rate limit") || lower.includes("user request limit reached")) {
+      userFriendlyMsg =
+        "Instagram post limit reached. Please wait a few minutes before sharing another post.";
+    } else if (lower.includes("video length") || lower.includes("video duration") || lower.includes("invalid video")) {
+      userFriendlyMsg =
+        "The selected video format or duration is not supported. Please ensure your video is under 15 minutes.";
+    } else if (lower.includes("no active instagram account")) {
+      userFriendlyMsg =
+        "No active Instagram account connected. Please connect your account in Social Connections first.";
+    } else if (lower.includes("at least one media item") || lower.includes("missing required parameter")) {
+      userFriendlyMsg = "Please select at least one photo or video before publishing.";
+    } else if (!rawErrorMsg.includes("Meta Graph API") && !rawErrorMsg.includes("Exception")) {
+      userFriendlyMsg = rawErrorMsg;
+    }
 
     return new Response(
       JSON.stringify({
         success: false,
-        message: errorMsg,
+        message: userFriendlyMsg,
       }),
       {
         status: 400,

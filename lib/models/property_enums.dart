@@ -32,10 +32,15 @@ extension PropertyTypeParser on String? {
 
 extension PropertyTypeExtensions on PropertyType {
   bool get isApartment => this == PropertyType.apartment;
+
   bool get isVilla => this == PropertyType.villa;
+
   bool get isRowHouse => this == PropertyType.rowHouse;
+
   bool get isPenthouse => this == PropertyType.penthouse;
+
   bool get isCommercial => this == PropertyType.commercial;
+
   bool get isPlot => this == PropertyType.plot;
 
   String get displayName {
@@ -99,7 +104,9 @@ extension ListingTypeParser on String? {
 
 extension ListingTypeExtensions on ListingType {
   bool get isSale => this == ListingType.sale;
+
   bool get isRent => this == ListingType.rent;
+
   bool get isLease => this == ListingType.lease;
 
   String get displayName {
@@ -157,7 +164,9 @@ extension ConstructionStatusParser on String? {
 
 extension ConstructionStatusExtensions on ConstructionStatus {
   bool get isReadyToMove => this == ConstructionStatus.readyToMove;
+
   bool get isUnderConstruction => this == ConstructionStatus.underConstruction;
+
   bool get isNewLaunch => this == ConstructionStatus.newLaunch;
 
   String get displayName {
@@ -215,7 +224,9 @@ extension FurnishingStatusParser on String? {
 
 extension FurnishingStatusExtensions on FurnishingStatus {
   bool get isUnfurnished => this == FurnishingStatus.unfurnished;
+
   bool get isSemiFurnished => this == FurnishingStatus.semiFurnished;
+
   bool get isFullyFurnished => this == FurnishingStatus.fullyFurnished;
 
   String get displayName {
@@ -270,8 +281,11 @@ extension PropertyStatusParser on String? {
 
 extension PropertyStatusExtensions on PropertyStatus {
   bool get isAvailable => this == PropertyStatus.available;
+
   bool get isSold => this == PropertyStatus.sold;
+
   bool get isRented => this == PropertyStatus.rented;
+
   bool get isUnderOffer => this == PropertyStatus.underOffer;
 
   String get displayName {

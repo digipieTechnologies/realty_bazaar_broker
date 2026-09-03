@@ -9,6 +9,7 @@ import '../../models/notification_enums.dart';
 
 class NotificationService {
   NotificationService._();
+
   static final NotificationService instance = NotificationService._();
 
   bool _isInitialized = false;

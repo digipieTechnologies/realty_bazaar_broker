@@ -4,6 +4,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 
@@ -17,32 +18,34 @@ class FaqItemData {
 class SubscriptionFaqSection extends StatelessWidget {
   final List<FaqItemData> faqs;
 
-  const SubscriptionFaqSection({
-    super.key,
-    this.faqs = const [],
-  });
+  const SubscriptionFaqSection({super.key, this.faqs = const []});
 
   static List<FaqItemData> getDefaultFaqs() {
     return const [
       FaqItemData(
         question: 'What happens after I purchase a package?',
-        answer: 'Our dedicated marketing team will immediately contact you to review your property details, target location, and create custom ad designs for Meta & Google.',
+        answer:
+            'Our dedicated marketing team will immediately contact you to review your property details, target location, and create custom ad designs for Meta & Google.',
       ),
       FaqItemData(
         question: 'Is Facebook & Instagram ad spend included in this price?',
-        answer: 'Yes! 80% of your total package fee goes directly towards Meta and Google ad spend. There are zero hidden fees.',
+        answer:
+            'Yes! 80% of your total package fee goes directly towards Meta and Google ad spend. There are zero hidden fees.',
       ),
       FaqItemData(
         question: 'Where will my property ad be displayed?',
-        answer: 'Your ad will be showcased across Facebook Feed, Instagram Stories, Instagram Reels, and Meta Audience Network targeting active property buyers.',
+        answer:
+            'Your ad will be showcased across Facebook Feed, Instagram Stories, Instagram Reels, and Meta Audience Network targeting active property buyers.',
       ),
       FaqItemData(
         question: 'How are leads delivered to me?',
-        answer: 'Leads are delivered instantly to your Realty Bazaar app dashboard and sent straight to your WhatsApp number via direct notification.',
+        answer:
+            'Leads are delivered instantly to your Realty Bazaar app dashboard and sent straight to your WhatsApp number via direct notification.',
       ),
       FaqItemData(
         question: 'When does the package duration start?',
-        answer: 'The duration countdown (7, 15, or 30 days) begins only AFTER your ad design is approved and goes live on Meta.',
+        answer:
+            'The duration countdown (7, 15, or 30 days) begins only AFTER your ad design is approved and goes live on Meta.',
       ),
     ];
   }

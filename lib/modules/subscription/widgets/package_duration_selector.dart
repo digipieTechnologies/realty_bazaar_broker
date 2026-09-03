@@ -4,6 +4,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../models/models.dart';
@@ -30,8 +31,7 @@ class PackageDurationSelector extends StatelessWidget {
     if (options.isEmpty) return const SizedBox.shrink();
 
     // Sort options Low to High (e.g. 7 Days -> 15 Days -> 30 Days)
-    final sortedOptions = List<PlanDurationOption>.from(options)
-      ..sort((a, b) => a.days.compareTo(b.days));
+    final sortedOptions = List<PlanDurationOption>.from(options)..sort((a, b) => a.days.compareTo(b.days));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,7 +71,8 @@ class PackageDurationSelector extends StatelessWidget {
               itemCount: sortedOptions.length,
               itemBuilder: (context, index) {
                 final option = sortedOptions[index];
-                final bool isSelected = option.code == selectedOption.code ||
+                final bool isSelected =
+                    option.code == selectedOption.code ||
                     (option.days == selectedOption.days && option.days > 0);
                 final bool isRecommended = option.isRecommended;
 
@@ -87,9 +88,7 @@ class PackageDurationSelector extends StatelessWidget {
                         margin: const EdgeInsets.only(top: 6.0),
                         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
                         decoration: BoxDecoration(
-                          color: isSelected
-                              ? AppColors.primary100
-                              : AppColors.surface,
+                          color: isSelected ? AppColors.primary100 : AppColors.surface,
                           gradient: isSelected
                               ? const LinearGradient(
                                   colors: [AppColors.primary50, AppColors.primary100],
@@ -99,9 +98,7 @@ class PackageDurationSelector extends StatelessWidget {
                               : null,
                           borderRadius: BorderRadius.circular(18.0),
                           border: Border.all(
-                            color: isSelected
-                                ? AppColors.primary
-                                : AppColors.border,
+                            color: isSelected ? AppColors.primary : AppColors.border,
                             width: isSelected ? 2.0 : 1.2,
                           ),
                           boxShadow: [

@@ -28,24 +28,14 @@ class PostInsightsDialog extends StatelessWidget {
     final insights = post.insights ?? const PostInsightsModel();
     final isFacebook = post.platform == SocialPlatform.facebook;
     final platformName = isFacebook ? 'Facebook' : 'Instagram';
-    final platformColor = isFacebook
-        ? AppColors.facebook
-        : AppColors.instagramAlt;
-    final assetIcon = isFacebook
-        ? 'assets/icons/facebook.png'
-        : 'assets/icons/instagram.png';
+    final platformColor = isFacebook ? AppColors.facebook : AppColors.instagramAlt;
+    final assetIcon = isFacebook ? 'assets/icons/facebook.png' : 'assets/icons/instagram.png';
 
-    final impressions = insights.impressions > 0
-        ? insights.impressions
-        : (post.viewsCount ?? 0);
-    final reach = insights.reach > 0
-        ? insights.reach
-        : (impressions > 0 ? (impressions * 0.8).round() : 0);
+    final impressions = insights.impressions > 0 ? insights.impressions : (post.viewsCount ?? 0);
+    final reach = insights.reach > 0 ? insights.reach : (impressions > 0 ? (impressions * 0.8).round() : 0);
     final engagement = insights.engagement > 0
         ? insights.engagement
-        : ((post.likesCount ?? 0) +
-              (post.commentCount ?? 0) +
-              (post.shareCount ?? 0));
+        : ((post.likesCount ?? 0) + (post.commentCount ?? 0) + (post.shareCount ?? 0));
 
     return AppBaseDialog(
       headerIconWidget: Image.asset(
@@ -90,15 +80,9 @@ class PostInsightsDialog extends StatelessWidget {
                 color: AppColors.warning,
               ),
               _buildMetricCard(
-                title: isFacebook
-                    ? context.tr('shares_caps')
-                    : context.tr('saved_caps'),
-                value: isFacebook
-                    ? '${insights.shareCount}'
-                    : '${insights.savedCount}',
-                icon: isFacebook
-                    ? Icons.share_rounded
-                    : Icons.bookmark_border_rounded,
+                title: isFacebook ? context.tr('shares_caps') : context.tr('saved_caps'),
+                value: isFacebook ? '${insights.shareCount}' : '${insights.savedCount}',
+                icon: isFacebook ? Icons.share_rounded : Icons.bookmark_border_rounded,
                 color: AppColors.primary,
               ),
             ],
@@ -169,23 +153,15 @@ class PostInsightsDialog extends StatelessWidget {
           Row(
             children: [
               Icon(
-                post.isStoredInDb
-                    ? Icons.check_circle_rounded
-                    : Icons.info_outline_rounded,
+                post.isStoredInDb ? Icons.check_circle_rounded : Icons.info_outline_rounded,
                 size: 16.0,
-                color: post.isStoredInDb
-                    ? AppColors.success
-                    : AppColors.textMuted,
+                color: post.isStoredInDb ? AppColors.success : AppColors.textMuted,
               ),
               const SizedBox(width: 6.0),
               Text(
-                post.isStoredInDb
-                    ? context.tr('leads_active')
-                    : context.tr('live_meta_post'),
+                post.isStoredInDb ? context.tr('leads_active') : context.tr('live_meta_post'),
                 style: AppTextStyles.caption.copyWith(
-                  color: post.isStoredInDb
-                      ? AppColors.success
-                      : AppColors.textMuted,
+                  color: post.isStoredInDb ? AppColors.success : AppColors.textMuted,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -275,13 +251,7 @@ class PostInsightsDialog extends StatelessWidget {
       children: [
         Icon(icon, size: 18.0, color: iconColor),
         const SizedBox(width: 10.0),
-        Text(
-          label,
-          style: AppTextStyles.body2.copyWith(
-            color: AppColors.textSecondary,
-            fontSize: 13.0,
-          ),
-        ),
+        Text(label, style: AppTextStyles.body2.copyWith(color: AppColors.textSecondary, fontSize: 13.0)),
         const Spacer(),
         Text(
           value,

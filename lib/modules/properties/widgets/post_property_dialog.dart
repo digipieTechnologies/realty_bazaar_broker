@@ -158,8 +158,11 @@ class _PostPropertyDialogState extends State<PostPropertyDialog> {
       final result = await PostContentService.generate(
         property: widget.property,
         socialProvider: sp,
-        localBrokerPhone: ap.userProfile?.phone,
-        localBrokerName: ap.userProfile?.name,
+        localBrokerPhone: ap.userProfile?.formattedPhone ?? ap.userProfile?.phone,
+        localBrokerName: (ap.userProfile?.brokerId?.businessName != null &&
+                ap.userProfile!.brokerId!.businessName!.trim().isNotEmpty)
+            ? ap.userProfile!.brokerId!.businessName!.trim()
+            : ap.userProfile?.name,
       );
 
       if (!mounted) return;
@@ -381,8 +384,11 @@ class _PostPropertyDialogState extends State<PostPropertyDialog> {
               final result = await PostContentService.generate(
                 property: widget.property,
                 socialProvider: sp,
-                localBrokerPhone: ap.userProfile?.phone,
-                localBrokerName: ap.userProfile?.name,
+                localBrokerPhone: ap.userProfile?.formattedPhone ?? ap.userProfile?.phone,
+                localBrokerName: (ap.userProfile?.brokerId?.businessName != null &&
+                        ap.userProfile!.brokerId!.businessName!.trim().isNotEmpty)
+                    ? ap.userProfile!.brokerId!.businessName!.trim()
+                    : ap.userProfile?.name,
               );
               if (!mounted) return;
               _postContent = result;

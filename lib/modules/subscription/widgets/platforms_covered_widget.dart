@@ -4,6 +4,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 
@@ -88,11 +89,7 @@ class PlatformsCoveredWidget extends StatelessWidget {
             assetPath,
             width: 14.0,
             height: 14.0,
-            errorBuilder: (context, error, stackTrace) => Icon(
-              fallbackIcon,
-              size: 14.0,
-              color: brandColor,
-            ),
+            errorBuilder: (context, error, stackTrace) => Icon(fallbackIcon, size: 14.0, color: brandColor),
           ),
           const SizedBox(width: 6.0),
           Text(

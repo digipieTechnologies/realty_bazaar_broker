@@ -79,9 +79,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
       return Scaffold(
         backgroundColor: AppColors.background,
         appBar: CommonAppBar(title: context.tr('lead_details')),
-        body: const Center(
-          child: CircularProgressIndicator(color: AppColors.primary),
-        ),
+        body: const Center(child: CircularProgressIndicator(color: AppColors.primary)),
       );
     }
 
@@ -95,15 +93,9 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
             children: [
               const Icon(Icons.error_outline, size: 48, color: AppColors.error),
               const SizedBox(height: 16),
-              Text(
-                _errorMessage ?? 'Lead details not found.',
-                style: AppTextStyles.body1,
-              ),
+              Text(_errorMessage ?? 'Lead details not found.', style: AppTextStyles.body1),
               const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () => Navigator.of(context).maybePop(),
-                child: Text(context.tr('go_back')),
-              ),
+              ElevatedButton(onPressed: () => Navigator.of(context).maybePop(), child: Text(context.tr('go_back'))),
             ],
           ),
         ),
@@ -113,9 +105,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
     final lead = _lead!;
     final socialPost = lead.socialPost;
     final platform = socialPost?.platform;
-    final hasPermalink =
-        socialPost?.permalink != null &&
-        socialPost!.permalink!.trim().isNotEmpty;
+    final hasPermalink = socialPost?.permalink != null && socialPost!.permalink!.trim().isNotEmpty;
     final PropertyModel? property = socialPost?.propertyId;
     final propertyTitle = property?.propertyTitle.isNotEmpty == true
         ? property!.propertyTitle
@@ -154,31 +144,15 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
           builder: (context, constraints) {
             final isDesktop = context.isDesktop;
 
-            final profileHeroCard = _buildHeroProfileCard(
-              context,
-              lead,
-              coverGradient,
-              platform,
-            );
-            final contactInfoCard = _buildContactInfoCard(
-              context,
-              lead,
-              platform,
-            );
+            final profileHeroCard = _buildHeroProfileCard(context, lead, coverGradient, platform);
+            final contactInfoCard = _buildContactInfoCard(context, lead, platform);
             final propertyCard = (propertyTitle.isNotEmpty || property != null)
-                ? _buildPropertyCard(
-                    context,
-                    propertyTitle,
-                    property,
-                    mediaUrls,
-                  )
+                ? _buildPropertyCard(context, propertyTitle, property, mediaUrls)
                 : null;
             final notesCard = (notesText != null && notesText.trim().isNotEmpty)
                 ? _buildInquiryNotesCard(context, notesText.trim())
                 : null;
-            final permalinkButton = hasPermalink
-                ? _buildSocialPostButton(context, socialPost.permalink!)
-                : null;
+            final permalinkButton = hasPermalink ? _buildSocialPostButton(context, socialPost.permalink!) : null;
 
             final hasRightContent = propertyCard != null || notesCard != null;
 
@@ -195,10 +169,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                         profileHeroCard,
                         const SizedBox(height: 14.0),
                         contactInfoCard,
-                        if (permalinkButton != null) ...[
-                          const SizedBox(height: 14.0),
-                          permalinkButton,
-                        ],
+                        if (permalinkButton != null) ...[const SizedBox(height: 14.0), permalinkButton],
                       ],
                     ),
                   ),
@@ -222,10 +193,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                             profileHeroCard,
                             const SizedBox(height: 14.0),
                             contactInfoCard,
-                            if (permalinkButton != null) ...[
-                              const SizedBox(height: 14.0),
-                              permalinkButton,
-                            ],
+                            if (permalinkButton != null) ...[const SizedBox(height: 14.0), permalinkButton],
                           ],
                         ),
                       ),
@@ -237,14 +205,8 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            if (propertyCard != null) ...[
-                              propertyCard,
-                              const SizedBox(height: 14.0),
-                            ],
-                            if (notesCard != null) ...[
-                              notesCard,
-                              const SizedBox(height: 14.0),
-                            ],
+                            if (propertyCard != null) ...[propertyCard, const SizedBox(height: 14.0)],
+                            if (notesCard != null) ...[notesCard, const SizedBox(height: 14.0)],
                           ],
                         ),
                       ),
@@ -263,18 +225,9 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                   profileHeroCard,
                   const SizedBox(height: 14.0),
                   contactInfoCard,
-                  if (propertyCard != null) ...[
-                    const SizedBox(height: 14.0),
-                    propertyCard,
-                  ],
-                  if (notesCard != null) ...[
-                    const SizedBox(height: 14.0),
-                    notesCard,
-                  ],
-                  if (permalinkButton != null) ...[
-                    const SizedBox(height: 14.0),
-                    permalinkButton,
-                  ],
+                  if (propertyCard != null) ...[const SizedBox(height: 14.0), propertyCard],
+                  if (notesCard != null) ...[const SizedBox(height: 14.0), notesCard],
+                  if (permalinkButton != null) ...[const SizedBox(height: 14.0), permalinkButton],
                   const SizedBox(height: 16.0),
                 ],
               ),
@@ -299,13 +252,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20.0),
         border: Border.all(color: AppColors.border, width: 1.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 16, offset: const Offset(0, 4))],
       ),
       child: Column(
         children: [
@@ -319,9 +266,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   gradient: coverGradient,
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(19.0),
-                  ),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(19.0)),
                 ),
                 child: Stack(
                   children: [
@@ -330,9 +275,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                       right: -10,
                       bottom: -10,
                       child: Icon(
-                        platform == SocialPlatform.facebook
-                            ? Icons.facebook_rounded
-                            : Icons.camera_alt_rounded,
+                        platform == SocialPlatform.facebook ? Icons.facebook_rounded : Icons.camera_alt_rounded,
                         size: 90.0,
                         color: Colors.white.withValues(alpha: 0.12),
                       ),
@@ -340,11 +283,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                     Positioned(
                       top: 12.0,
                       right: 12.0,
-                      child: AppPlatformBadge(
-                        platform: platform,
-                        isHeaderStyle: true,
-                        iconSize: 16.0,
-                      ),
+                      child: AppPlatformBadge(platform: platform, isHeaderStyle: true, iconSize: 16.0),
                     ),
                   ],
                 ),
@@ -369,10 +308,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                           ),
                         ],
                       ),
-                      child: UserAvatarWidget(
-                        name: lead.userName,
-                        radius: 36.0,
-                      ),
+                      child: UserAvatarWidget(name: lead.userName, radius: 36.0),
                     ),
                     // Active Status Dot
                     Positioned(
@@ -414,11 +350,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
-                      Icons.access_time_rounded,
-                      size: 14.0,
-                      color: AppColors.textMuted,
-                    ),
+                    const Icon(Icons.access_time_rounded, size: 14.0, color: AppColors.textMuted),
                     const SizedBox(width: 4.0),
                     Text(
                       'Received $dateStr',
@@ -440,11 +372,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
 
           // 3 Large Action Option Callout Buttons (Call, Message, WhatsApp)
           Padding(
-            padding: const EdgeInsets.only(
-              left: 16.0,
-              right: 16.0,
-              bottom: 20.0,
-            ),
+            padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 20.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -452,37 +380,23 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                   context,
                   label: context.tr('action_call'),
                   icon: const CallIconWidget(size: 24.0, color: Colors.white),
-                  gradient: const LinearGradient(
-                    colors: [AppColors.primary600, AppColors.primary700],
-                  ),
+                  gradient: const LinearGradient(colors: [AppColors.primary600, AppColors.primary700]),
                   shadowColor: AppColors.primary600,
-                  onTap: () =>
-                      AppUtils.launchAppUrl('tel:${lead.contactNumber}'),
+                  onTap: () => AppUtils.launchAppUrl('tel:${lead.contactNumber}'),
                 ),
                 _buildActionCalloutButton(
                   context,
                   label: context.tr('action_message'),
-                  icon: const MessageIconWidget(
-                    size: 24.0,
-                    color: Colors.white,
-                  ),
-                  gradient: const LinearGradient(
-                    colors: [AppColors.primary400, AppColors.primary500],
-                  ),
+                  icon: const MessageIconWidget(size: 24.0, color: Colors.white),
+                  gradient: const LinearGradient(colors: [AppColors.primary400, AppColors.primary500]),
                   shadowColor: AppColors.primary400,
-                  onTap: () =>
-                      AppUtils.launchAppUrl('sms:${lead.contactNumber}'),
+                  onTap: () => AppUtils.launchAppUrl('sms:${lead.contactNumber}'),
                 ),
                 _buildActionCalloutButton(
                   context,
                   label: context.tr('action_whatsapp'),
-                  icon: const WhatsappIconWidget(
-                    size: 24.0,
-                    color: Colors.white,
-                  ),
-                  gradient: const LinearGradient(
-                    colors: [AppColors.whatsapp, AppColors.whatsappDark],
-                  ),
+                  icon: const WhatsappIconWidget(size: 24.0, color: Colors.white),
+                  gradient: const LinearGradient(colors: [AppColors.whatsapp, AppColors.whatsappDark]),
                   shadowColor: AppColors.whatsapp,
                   onTap: () => AppUtils.launchAppUrl(lead.buildWhatsappUrl()),
                 ),
@@ -512,11 +426,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
             gradient: gradient,
             shape: BoxShape.circle,
             boxShadow: [
-              BoxShadow(
-                color: shadowColor.withValues(alpha: 0.35),
-                blurRadius: 14,
-                offset: const Offset(0, 6),
-              ),
+              BoxShadow(color: shadowColor.withValues(alpha: 0.35), blurRadius: 14, offset: const Offset(0, 6)),
             ],
           ),
           child: Material(
@@ -542,11 +452,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
   }
 
   // --- 2. CONTACT INFORMATION CARD ---
-  Widget _buildContactInfoCard(
-    BuildContext context,
-    SocialLeadModel lead,
-    SocialPlatform? platform,
-  ) {
+  Widget _buildContactInfoCard(BuildContext context, SocialLeadModel lead, SocialPlatform? platform) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16.0),
@@ -554,13 +460,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16.0),
         border: Border.all(color: AppColors.border, width: 1.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 12, offset: const Offset(0, 4))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -585,17 +485,11 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
               child: InkWell(
                 onTap: () {
                   Clipboard.setData(ClipboardData(text: lead.contactNumber));
-                  AppToast.showSuccess(
-                    context.tr('copied_title'),
-                    context.tr('contact_number_copied'),
-                  );
+                  AppToast.showSuccess(context.tr('copied_title'), context.tr('contact_number_copied'));
                 },
                 borderRadius: BorderRadius.circular(8.0),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0,
-                    vertical: 6.0,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
                   decoration: BoxDecoration(
                     color: AppColors.primary.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(8.0),
@@ -603,11 +497,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(
-                        Icons.copy_rounded,
-                        size: 14.0,
-                        color: AppColors.primary,
-                      ),
+                      const Icon(Icons.copy_rounded, size: 14.0, color: AppColors.primary),
                       const SizedBox(width: 4.0),
                       Text(
                         'Copy',
@@ -636,9 +526,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                   ? const FacebookIconWidget(size: 24.0)
                   : const InstagramIconWidget(size: 24.0),
               label: context.tr('platform_source'),
-              value: platform == SocialPlatform.facebook
-                  ? 'Facebook Lead Ads'
-                  : 'Instagram Lead Form',
+              value: platform == SocialPlatform.facebook ? 'Facebook Lead Ads' : 'Instagram Lead Form',
             ),
           ],
         ],
@@ -654,17 +542,10 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
     List<dynamic>? mediaUrls,
   ) {
     final typeText = property != null
-        ? PropertyLocalizer.getLocalizedPropertyType(
-            context,
-            property.propertyType,
-          ).toUpperCase()
+        ? PropertyLocalizer.getLocalizedPropertyType(context, property.propertyType).toUpperCase()
         : '';
-    final priceStr = property != null && property.price > 0
-        ? property.price.toCompactCurrency()
-        : '';
-    final addressStr = property?.address?.fullAddress.isNotEmpty == true
-        ? property!.address!.fullAddress
-        : '';
+    final priceStr = property != null && property.price > 0 ? property.price.toCompactCurrency() : '';
+    final addressStr = property?.address?.fullAddress.isNotEmpty == true ? property!.address!.fullAddress : '';
 
     return Container(
       width: double.infinity,
@@ -672,13 +553,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16.0),
         border: Border.all(color: AppColors.border, width: 1.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 12, offset: const Offset(0, 4))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -715,10 +590,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                   children: [
                     if (typeText.isNotEmpty)
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0,
-                          vertical: 4.0,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
                         decoration: BoxDecoration(
                           color: AppColors.primary.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(8.0),
@@ -737,10 +609,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                         message: property!.price.toFullIndianCurrency(),
                         preferBelow: false,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0,
-                            vertical: 4.0,
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
                           decoration: BoxDecoration(
                             color: AppColors.success.withValues(alpha: 0.08),
                             borderRadius: BorderRadius.circular(8.0),
@@ -762,19 +631,12 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                   const SizedBox(height: 10.0),
                   Row(
                     children: [
-                      const Icon(
-                        Icons.location_on_outlined,
-                        size: 15.0,
-                        color: AppColors.textMuted,
-                      ),
+                      const Icon(Icons.location_on_outlined, size: 15.0, color: AppColors.textMuted),
                       const SizedBox(width: 4.0),
                       Expanded(
                         child: Text(
                           addressStr,
-                          style: AppTextStyles.caption.copyWith(
-                            color: AppColors.textMuted,
-                            fontSize: 12.5,
-                          ),
+                          style: AppTextStyles.caption.copyWith(color: AppColors.textMuted, fontSize: 12.5),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -796,21 +658,13 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                 scrollDirection: Axis.horizontal,
                 physics: const ClampingScrollPhysics(),
                 itemCount: mediaUrls.length,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(width: 10.0),
+                separatorBuilder: (context, index) => const SizedBox(width: 10.0),
                 itemBuilder: (context, index) {
                   final media = mediaUrls[index];
-                  final url = media is MediaModel
-                      ? media.url
-                      : media.toString();
+                  final url = media is MediaModel ? media.url : media.toString();
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(12.0),
-                    child: CachedImage(
-                      url,
-                      width: 130.0,
-                      height: 88.0,
-                      fit: BoxFit.cover,
-                    ),
+                    child: CachedImage(url, width: 130.0, height: 88.0, fit: BoxFit.cover),
                   );
                 },
               ),
@@ -830,13 +684,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16.0),
         border: Border.all(color: AppColors.border, width: 1.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 12, offset: const Offset(0, 4))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -857,19 +705,12 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
             decoration: BoxDecoration(
               color: AppColors.warning.withValues(alpha: 0.06),
               borderRadius: BorderRadius.circular(14.0),
-              border: Border.all(
-                color: AppColors.warning.withValues(alpha: 0.3),
-                width: 1.0,
-              ),
+              border: Border.all(color: AppColors.warning.withValues(alpha: 0.3), width: 1.0),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(
-                  Icons.format_quote_rounded,
-                  size: 22.0,
-                  color: AppColors.warning,
-                ),
+                const Icon(Icons.format_quote_rounded, size: 22.0, color: AppColors.warning),
                 const SizedBox(width: 10.0),
                 Expanded(
                   child: Text(
@@ -923,11 +764,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
               color: (iconColor ?? AppColors.primary).withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(10.0),
             ),
-            child: Icon(
-              icon,
-              size: 18.0,
-              color: iconColor ?? AppColors.primary,
-            ),
+            child: Icon(icon, size: 18.0, color: iconColor ?? AppColors.primary),
           ),
         const SizedBox(width: 12.0),
         Expanded(
@@ -937,11 +774,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
               // Muted grey field label
               Text(
                 label,
-                style: AppTextStyles.caption.copyWith(
-                  color: AppColors.textMuted,
-                  fontSize: 12.0,
-                  letterSpacing: 0.2,
-                ),
+                style: AppTextStyles.caption.copyWith(color: AppColors.textMuted, fontSize: 12.0, letterSpacing: 0.2),
               ),
               const SizedBox(height: 3.0),
               // Dark bold field content

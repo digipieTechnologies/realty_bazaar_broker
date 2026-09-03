@@ -7,6 +7,7 @@ enum ChatMessageMessageType {
   location('location');
 
   final String dbValue;
+
   const ChatMessageMessageType(this.dbValue);
 
   static ChatMessageMessageType fromDbValue(String? value) {

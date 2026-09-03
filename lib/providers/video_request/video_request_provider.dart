@@ -7,51 +7,67 @@ import '../../models/models.dart';
 
 class VideoRequestProvider extends ChangeNotifier {
   bool _isLoading = false;
+
   bool get isLoading => _isLoading;
 
   List<VideoRequestModel> _requests = [];
+
   List<VideoRequestModel> get requests => _requests;
 
   int _totalRequests = 0;
+
   int get totalRequests => _totalRequests;
 
   int _pendingRequests = 0;
+
   int get pendingRequests => _pendingRequests;
 
   int _inProgressRequests = 0;
+
   int get inProgressRequests => _inProgressRequests;
 
   int _completedRequests = 0;
+
   int get completedRequests => _completedRequests;
 
   int _cancelledRequests = 0;
+
   int get cancelledRequests => _cancelledRequests;
 
   int _currentPage = 1;
+
   int get currentPage => _currentPage;
 
   final int _itemsPerPage = 10;
+
   int get itemsPerPage => _itemsPerPage;
 
   int _totalItems = 0;
+
   int get totalItems => _totalItems;
 
   int _totalPages = 1;
+
   int get totalPages => _totalPages;
 
   bool _hasMore = false;
+
   bool get hasMore => _hasMore;
 
   String _searchQuery = '';
+
   String get searchQuery => _searchQuery;
 
   VideoRequestStatus? _statusFilter;
+
   VideoRequestStatus? get statusFilter => _statusFilter;
 
   List<VideoRequestStatus> _statusesFilter = [];
+
   List<VideoRequestStatus> get statusesFilter => _statusesFilter;
 
   String? _errorMessage;
+
   String? get errorMessage => _errorMessage;
 
   void setStatusFilter(VideoRequestStatus? status) {

@@ -24,7 +24,19 @@ class UserModel extends Equatable {
   final DateTime? updatedAt;
 
   String? get roleString => role?.dbValue;
+
   String? get genderString => gender?.dbValue;
+
+  String get formattedPhone {
+    final rawPhone = (phone ?? '').trim();
+    if (rawPhone.isEmpty) return '';
+    final code = (phoneCountryCode ?? '91').replaceAll('+', '').trim();
+    final cleanPhone = rawPhone.replaceAll(RegExp(r'\D'), '');
+    if (code.isNotEmpty && cleanPhone.startsWith(code) && cleanPhone.length > code.length + 8) {
+      return '+$code-${cleanPhone.substring(code.length)}';
+    }
+    return '+$code-$cleanPhone';
+  }
 
   const UserModel({
     this.id,

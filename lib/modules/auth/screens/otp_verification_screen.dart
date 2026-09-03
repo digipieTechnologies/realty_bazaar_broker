@@ -310,10 +310,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              AppColors.primary700.withValues(alpha: 0.85),
-              AppColors.primary.withValues(alpha: 0.70),
-            ],
+            colors: [AppColors.primary700.withValues(alpha: 0.85), AppColors.primary.withValues(alpha: 0.70)],
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
           ),

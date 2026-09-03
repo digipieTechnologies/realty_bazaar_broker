@@ -4,13 +4,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
+import 'package:the_realty_bazaar/core/localization/property_localizer.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_routes.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
-import '../../../core/localization/property_localizer.dart';
-import '../../../core/services/supabase_storage_service.dart';
+import '../../../core/services/r2_storage_service.dart';
 import '../../../core/utils/video_thumbnail_helper.dart';
 import '../../../models/media_model.dart';
 import '../../../models/property_model.dart';
@@ -24,7 +25,6 @@ import './property_location_card.dart';
 import './property_preview_buttons.dart';
 import './property_preview_media_gallery.dart';
 import './property_preview_specs_grid.dart';
-import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 class PropertyPreviewDialog extends StatefulWidget {
   final PropertyModel property;
@@ -51,22 +51,6 @@ class _PropertyPreviewDialogState extends State<PropertyPreviewDialog> {
   bool _showSuccessScreen = false;
   PropertyModel? _savedProperty;
 
-  Future<String> _uploadFileToSupabase(
-    String bucketName,
-    String path,
-    Uint8List bytes,
-    String mimeType,
-  ) async {
-    final publicUrl = await SupabaseStorageService.uploadFile(
-      filePath: path,
-      bucketName: bucketName,
-      customFileName: path.contains('/') ? path.split('/').last : path,
-      folderName: path.contains('/') ? path.split('/').first : null,
-      fileBytes: bytes,
-    );
-    return publicUrl ?? '';
-  }
-
   Future<void> _uploadAndSaveProperty(BuildContext dialogContext) async {
     final isEdit = widget.isEdit;
     final property = widget.property;
@@ -84,22 +68,27 @@ class _PropertyPreviewDialogState extends State<PropertyPreviewDialog> {
     try {
       final updatedMedias = <MediaModel>[];
       final totalMedias = property.medias.length;
-      final bucketName = 'property_media';
 
       for (int i = 0; i < totalMedias; i++) {
         final media = property.medias[i];
+        final isLocal =
+            media.bytes != null || (!kIsWeb && media.url != null && !media.url!.startsWith('http'));
 
-        if (media.bytes != null) {
+        if (isLocal) {
           setState(() {
             _uploadStatusText = "Uploading media ${i + 1} of $totalMedias...";
           });
 
           final ext = media.type == 'video' ? 'mp4' : 'jpg';
-          final mimeType = media.type == 'video' ? 'video/mp4' : 'image/jpeg';
           final uniqueName = '${DateTime.now().millisecondsSinceEpoch}_$i.$ext';
-          final path = 'listings/$uniqueName';
 
-          final publicUrl = await _uploadFileToSupabase(bucketName, path, media.bytes!, mimeType);
+          final publicUrl = await R2StorageService.uploadFile(
+            filePath: media.url ?? '',
+            entityType: 'properties',
+            entityId: property.id,
+            customFileName: uniqueName,
+            fileBytes: media.bytes,
+          );
 
           String? thumbUrl;
           if (media.type == 'video') {
@@ -112,12 +101,26 @@ class _PropertyPreviewDialogState extends State<PropertyPreviewDialog> {
                 _uploadStatusText = "Uploading video thumbnail...";
               });
               final thumbName = 'thumb_${DateTime.now().millisecondsSinceEpoch}_$i.jpg';
-              final thumbPath = 'listings/$thumbName';
-              thumbUrl = await _uploadFileToSupabase(bucketName, thumbPath, thumbBytes, 'image/jpeg');
+              thumbUrl = await R2StorageService.uploadFile(
+                filePath: thumbName,
+                entityType: 'properties',
+                entityId: property.id,
+                customFileName: thumbName,
+                fileBytes: thumbBytes,
+              );
             }
           }
 
-          updatedMedias.add(MediaModel(type: media.type, url: publicUrl, thumbnail: thumbUrl));
+          updatedMedias.add(
+            MediaModel(
+              type: media.type,
+              url: publicUrl ?? media.url,
+              thumbnail: thumbUrl ?? media.thumbnail,
+              width: media.width,
+              height: media.height,
+              aspectRatio: media.aspectRatio,
+            ),
+          );
         } else {
           updatedMedias.add(media);
         }

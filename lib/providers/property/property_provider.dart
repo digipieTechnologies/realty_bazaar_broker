@@ -9,33 +9,43 @@ import '../auth/auth_provider.dart';
 
 class PropertyProvider extends ChangeNotifier {
   bool _isLoading = false;
+
   bool get isLoading => _isLoading;
 
   List<PropertyModel> _properties = [];
+
   List<PropertyModel> get properties => _properties;
 
   int _currentPage = 1;
+
   int get currentPage => _currentPage;
 
   final int _itemsPerPage = 10;
+
   int get itemsPerPage => _itemsPerPage;
 
   int _totalItems = 0;
+
   int get totalItems => _totalItems;
 
   int _totalPages = 1;
+
   int get totalPages => _totalPages;
 
   bool _hasMore = false;
+
   bool get hasMore => _hasMore;
 
   String _searchQuery = '';
+
   String get searchQuery => _searchQuery;
 
   bool _isLoadingMore = false;
+
   bool get isLoadingMore => _isLoadingMore;
 
   String? _errorMessage;
+
   String? get errorMessage => _errorMessage;
 
   Future<void> fetchProperties({
@@ -93,10 +103,7 @@ class PropertyProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadMoreProperties({
-    required String brokerId,
-    bool forVideoRequest = false,
-  }) async {
+  Future<void> loadMoreProperties({required String brokerId, bool forVideoRequest = false}) async {
     if (_isLoading || _isLoadingMore || !_hasMore) return;
     _isLoadingMore = true;
     notifyListeners();

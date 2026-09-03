@@ -2,6 +2,7 @@
 // Purpose: Wrapper delegating to PostPropertyDialog for social posting flow.
 
 import 'package:flutter/material.dart';
+
 import '../../properties/widgets/post_property_dialog.dart';
 
 class PostCreationDialog extends StatelessWidget {

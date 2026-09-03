@@ -2,6 +2,7 @@
 // Purpose: Horizontal scrollable feature section for SubscriptionPackageDetailScreen.
 
 import 'package:flutter/material.dart';
+
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
@@ -12,20 +13,13 @@ class SubscriptionFeatureItemData {
   final String description;
   final String assetPath;
 
-  const SubscriptionFeatureItemData({
-    required this.title,
-    required this.description,
-    required this.assetPath,
-  });
+  const SubscriptionFeatureItemData({required this.title, required this.description, required this.assetPath});
 }
 
 class SubscriptionFeatureSection extends StatelessWidget {
   final List<SubscriptionFeatureItemData> features;
 
-  const SubscriptionFeatureSection({
-    super.key,
-    required this.features,
-  });
+  const SubscriptionFeatureSection({super.key, required this.features});
 
   static List<SubscriptionFeatureItemData> getDefaultFeatures(BuildContext context) {
     return [

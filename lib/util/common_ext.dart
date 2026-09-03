@@ -44,12 +44,14 @@ extension StringX on String? {
 
 extension ContextX on BuildContext {
   /// Responsive Breakpoint Constants
-  static const double desktopBreakpoint = 800.0;
+  static const double desktopBreakpoint = 900.0;
   static const double mobileBreakpoint = 600.0;
 
   /// Theme shorthand access
   ThemeData get theme => Theme.of(this);
+
   TextTheme get textTheme => theme.textTheme;
+
   ColorScheme get colorScheme => theme.colorScheme;
 
   /// Shorthand screen width.
@@ -60,7 +62,9 @@ extension ContextX on BuildContext {
 
   /// Safe area padding shorthand
   double get bottomPadding => MediaQuery.viewPaddingOf(this).bottom;
+
   EdgeInsets get viewPadding => MediaQuery.of(this).viewPadding;
+
   EdgeInsets get viewInsets => MediaQuery.of(this).viewInsets;
 
   /// Orientation helper
@@ -68,7 +72,9 @@ extension ContextX on BuildContext {
 
   /// Responsive Breakpoint checkers
   bool get isMobile => width < mobileBreakpoint;
+
   bool get isTablet => width >= mobileBreakpoint && width < desktopBreakpoint;
+
   bool get isDesktop => width >= desktopBreakpoint;
 
   /// Max width constraint: 800.0 on desktop, double.infinity on mobile/tablet

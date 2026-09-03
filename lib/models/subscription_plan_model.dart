@@ -2,6 +2,7 @@
 // Purpose: Model class representing subscription plans in database (Supabase subscription_plans table) with duration options support.
 
 import 'package:equatable/equatable.dart';
+
 import 'payment_enums.dart';
 import 'subscription_enums.dart';
 
@@ -88,9 +89,7 @@ class SubscriptionPlanModel extends Equatable {
 
     List<String> parsedBenefits = [];
     if (json['benefits'] != null && json['benefits'] is List) {
-      parsedBenefits = (json['benefits'] as List)
-          .map((e) => e.toString())
-          .toList();
+      parsedBenefits = (json['benefits'] as List).map((e) => e.toString()).toList();
     }
 
     List<PlanDurationOption> parsedDurationOptions = [];
@@ -170,17 +169,17 @@ class SubscriptionPlanModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        title,
-        amount,
-        billingType,
-        paymentProvider,
-        description,
-        benefits,
-        durationOptions,
-        isActive,
-        isPopular,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    title,
+    amount,
+    billingType,
+    paymentProvider,
+    description,
+    benefits,
+    durationOptions,
+    isActive,
+    isPopular,
+    createdAt,
+    updatedAt,
+  ];
 }

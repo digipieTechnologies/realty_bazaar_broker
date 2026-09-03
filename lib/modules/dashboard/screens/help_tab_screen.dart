@@ -2,6 +2,7 @@
 // Purpose: Screen containing the help & support tab page.
 
 import 'package:flutter/material.dart';
+
 import '../widgets/base_tab_screen.dart';
 
 class HelpTabScreen extends StatelessWidget {

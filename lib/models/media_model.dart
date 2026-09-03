@@ -15,8 +15,11 @@ class MediaModel extends Equatable {
   final double? aspectRatio;
 
   bool get isVideo => type == 'video' || (url?.isVideoUrl ?? false);
+
   bool get isImage => type == 'image' || (type == null && (url?.isImageUrl ?? false));
+
   bool get isDocument => type == 'document' || type == 'file' || (!isVideo && !isImage);
+
   String get displayImageUrl => (thumbnail != null && thumbnail!.isNotEmpty) ? thumbnail! : (url ?? '');
 
   const MediaModel({

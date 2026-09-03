@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 import '../../../../app/app_colors.dart';
-import '../../../../app/app_routes.dart';
 import '../../../../app/app_text_styles.dart';
 import '../../../../core/localization/property_localizer.dart';
 import '../../../../models/property_enums.dart';
@@ -21,11 +20,7 @@ class PropertyWebGridCard extends StatelessWidget {
   final PropertyModel property;
   final VoidCallback? onEditTap;
 
-  const PropertyWebGridCard({
-    super.key,
-    required this.property,
-    this.onEditTap,
-  });
+  const PropertyWebGridCard({super.key, required this.property, this.onEditTap});
 
   void _handleCardTap(BuildContext context) {
     AppNavigator.navigateToPropertyDetails(context, property);
@@ -44,18 +39,18 @@ class PropertyWebGridCard extends StatelessWidget {
     if (onEditTap != null) {
       onEditTap!();
     } else {
-      Navigator.of(context, rootNavigator: true).push(
-        MaterialPageRoute(
-          builder: (context) => AddEditPropertyScreen(propertyToEdit: property),
-        ),
-      );
+      Navigator.of(
+        context,
+        rootNavigator: true,
+      ).push(MaterialPageRoute(builder: (context) => AddEditPropertyScreen(propertyToEdit: property)));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final imageUrl = property.medias.isNotEmpty ? property.medias.first.url : null;
-    final addressText = property.address?.fullAddress ??
+    final addressText =
+        property.address?.fullAddress ??
         '${property.address?.city ?? "Surat"}, ${property.address?.state ?? "Gujarat"}';
     final listingLabel = property.listingType == ListingType.rent ? 'For Rent' : 'For Sale';
     final typeName = PropertyLocalizer.getLocalizedPropertyType(context, property.propertyType);
@@ -251,11 +246,7 @@ class PropertyWebGridCard extends StatelessWidget {
                       // Location / Address
                       Row(
                         children: [
-                          const Icon(
-                            Icons.location_on_rounded,
-                            size: 14.0,
-                            color: AppColors.primary,
-                          ),
+                          const Icon(Icons.location_on_rounded, size: 14.0, color: AppColors.primary),
                           const SizedBox(width: 4.0),
                           Expanded(
                             child: Text(
@@ -301,11 +292,7 @@ class PropertyWebGridCard extends StatelessWidget {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(
-                                Icons.verified_rounded,
-                                size: 15.0,
-                                color: AppColors.primary,
-                              ),
+                              const Icon(Icons.verified_rounded, size: 15.0, color: AppColors.primary),
                               const SizedBox(width: 4.0),
                               Text(
                                 'Verified Broker',
@@ -340,11 +327,7 @@ class PropertyWebGridCard extends StatelessWidget {
                                     ),
                                   ),
                                   const SizedBox(width: 3.0),
-                                  const Icon(
-                                    Icons.north_east_rounded,
-                                    size: 13.0,
-                                    color: AppColors.primary,
-                                  ),
+                                  const Icon(Icons.north_east_rounded, size: 13.0, color: AppColors.primary),
                                 ],
                               ),
                             ),
@@ -387,11 +370,7 @@ class PropertyWebGridCard extends StatelessWidget {
               ),
             ],
           ),
-          child: Icon(
-            icon,
-            size: 16.0,
-            color: AppColors.textPrimary,
-          ),
+          child: Icon(icon, size: 16.0, color: AppColors.textPrimary),
         ),
       ),
     );
@@ -413,10 +392,7 @@ class PropertyWebGridCard extends StatelessWidget {
     }
 
     if (property.area > 0) {
-      items.add(_buildSpecItem(
-        Icons.square_foot_rounded,
-        '${property.area.toStringAsFixed(0)} $unitLabel',
-      ));
+      items.add(_buildSpecItem(Icons.square_foot_rounded, '${property.area.toStringAsFixed(0)} $unitLabel'));
     } else if (items.isEmpty) {
       items.add(_buildSpecItem(Icons.apartment_rounded, property.propertyType.displayName));
     }

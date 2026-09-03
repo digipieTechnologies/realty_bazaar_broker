@@ -25,6 +25,7 @@ class VideoRequestModel extends Equatable {
   final BrokerDetails? broker;
 
   String? get propertyId => property?.id;
+
   String? get brokerId => broker?.id;
 
   const VideoRequestModel({

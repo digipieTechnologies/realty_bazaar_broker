@@ -29,7 +29,9 @@ class AppColors {
   // ==========================================
   // Secondary & Dynamic Accents
   // ==========================================
-  static const Color secondary = primary700;
+  static const Color secondary = Color(0xFF174A86); // Deep Nexus Blue
+  static const Color secondaryLight = Color(0xFFEAF3FF);
+  static const Color secondaryDark = Color(0xFF0F325E);
 
   // ==========================================
   // Neutral Palette (Backgrounds, Surfaces, Borders)

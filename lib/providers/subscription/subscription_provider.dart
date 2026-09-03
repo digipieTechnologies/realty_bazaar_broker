@@ -2,20 +2,25 @@
 // Purpose: Provider managing subscription plans fetched dynamically from Supabase database with smart sorting.
 
 import 'package:flutter/material.dart';
+
 import '../../core/supabase/supabase_config.dart';
 import '../../models/models.dart';
 
 class SubscriptionProvider extends ChangeNotifier {
   List<SubscriptionPlanModel> _plans = [];
+
   List<SubscriptionPlanModel> get plans => _plans;
 
   bool _isLoading = false;
+
   bool get isLoading => _isLoading;
 
   String? _errorMessage;
+
   String? get errorMessage => _errorMessage;
 
   SubscriptionPlanModel? _selectedPlan;
+
   SubscriptionPlanModel? get selectedPlan => _selectedPlan;
 
   void setSelectedPlan(SubscriptionPlanModel? plan) {
@@ -25,18 +30,14 @@ class SubscriptionProvider extends ChangeNotifier {
 
   /// Plans with one_time billing type, sorted by price ascending
   List<SubscriptionPlanModel> get oneTimePlans {
-    final list = _plans
-        .where((p) => p.billingType == PlanBillingType.oneTime)
-        .toList();
+    final list = _plans.where((p) => p.billingType == PlanBillingType.oneTime).toList();
     list.sort((a, b) => a.amount.compareTo(b.amount));
     return list;
   }
 
   /// Plans with recurring billing type, sorted by price ascending
   List<SubscriptionPlanModel> get recurringPlans {
-    final list = _plans
-        .where((p) => p.billingType == PlanBillingType.recurring)
-        .toList();
+    final list = _plans.where((p) => p.billingType == PlanBillingType.recurring).toList();
     list.sort((a, b) => a.amount.compareTo(b.amount));
     return list;
   }
@@ -46,9 +47,7 @@ class SubscriptionProvider extends ChangeNotifier {
 
   /// Plans with custom billing type
   List<SubscriptionPlanModel> get customPlans {
-    return _plans
-        .where((p) => p.billingType == PlanBillingType.custom)
-        .toList();
+    return _plans.where((p) => p.billingType == PlanBillingType.custom).toList();
   }
 
   /// Returns the designated Most Popular plan if available

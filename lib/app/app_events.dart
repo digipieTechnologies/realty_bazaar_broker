@@ -36,6 +36,7 @@ abstract class AppEvent extends ebp.AppEvent {
 /// Triggered when the theme switches.
 class ThemeChangedEvent extends AppEvent {
   final bool isDark;
+
   const ThemeChangedEvent(this.isDark);
 
   @override
@@ -45,6 +46,7 @@ class ThemeChangedEvent extends AppEvent {
 /// Triggered when user session changes.
 class UserAuthChangedEvent extends AppEvent {
   final bool isAuthenticated;
+
   const UserAuthChangedEvent(this.isAuthenticated);
 
   @override

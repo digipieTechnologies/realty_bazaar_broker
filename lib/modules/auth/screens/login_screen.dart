@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 import '../../../app/app_assets.dart';
 import '../../../app/app_colors.dart';
@@ -27,12 +28,12 @@ import '../widgets/auth_footer_link_widget.dart';
 import '../widgets/auth_header_widget.dart';
 import '../widgets/password_field_widget.dart';
 import '../widgets/phone_field_widget.dart';
-import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 enum AuthMode { login, signup, forgotPassword }
 
 class LoginScreen extends StatefulWidget {
   final AuthMode initialMode;
+
   const LoginScreen({super.key, this.initialMode = AuthMode.login});
 
   @override
