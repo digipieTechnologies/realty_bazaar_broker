@@ -595,7 +595,6 @@
   "grow_get_started": "Get Started",
   "grow_contact_team": "Contact Sales",
   "grow_no_options": "No options available right now",
-  "grow_check_back": "Please check back later for updates.",
   "connection_successful": "Connection Successful",
   "connection_success_desc": "Successfully connected your {platform} account!",
   "connection_failed": "Connection Failed",
@@ -832,7 +831,7 @@
   "trial_already_used_title": "Trial Already Claimed",
   "trial_already_used_desc": "You have already used your trial plan. Please select a paid package to continue.",
   "active_plan_chip": "ACTIVE PLAN",
-  "active_chip": "ACTIVE"
+  "active_chip": "ACTIVE",
   "grow_check_back": "Please check back later for updates.",
   "visits": "Site Visits",
   "site_visits": "Site Visits",

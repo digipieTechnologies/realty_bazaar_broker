@@ -65,7 +65,7 @@ class _VisitsTabScreenState extends State<VisitsTabScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = context.isMobileUI;
+    final isMobile = context.isMobile;
 
     return Scaffold(
       backgroundColor: AppColors.background,

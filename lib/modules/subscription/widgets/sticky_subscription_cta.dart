@@ -7,11 +7,9 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../models/models.dart';
-import '../../../providers/auth/auth_provider.dart';
 import '../../../util/common_ext.dart';
 import '../../../util/currency_formatter.dart';
 import '../../../widgets/buttons/app_button.dart';
@@ -38,18 +36,10 @@ class StickySubscriptionCta extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isMobileNative = !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 
-    final authProvider = context.watch<AuthProvider>();
-    final activeSub = authProvider.activeSubscription;
-
-    final bool isActiveOption = activeSub != null &&
-        !activeSub.isExpired &&
-        (
-          (selectedOption.code.isNotEmpty && activeSub.planCode.toLowerCase() == selectedOption.code.toLowerCase()) ||
-          (selectedOption.amount > 0 && activeSub.amount == selectedOption.amount)
-        );
-
     final double displayAmount = selectedOption.amount > 0 ? selectedOption.amount : plan.amount;
-    final String durationText = selectedOption.title.isNotEmpty ? selectedOption.title : '${selectedOption.days} Days';
+    final String durationText = selectedOption.title.isNotEmpty
+        ? selectedOption.title
+        : '${selectedOption.days} Days';
 
     final String buttonLabel = isMobileNative
         ? 'Continue with $durationText • ${_formatAmount(displayAmount)}'
@@ -63,7 +53,11 @@ class StickySubscriptionCta extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(22.0)),
         boxShadow: [
-          BoxShadow(color: AppColors.shadow.withValues(alpha: 0.12), blurRadius: 20.0, offset: const Offset(0, -4)),
+          BoxShadow(
+            color: AppColors.shadow.withValues(alpha: 0.12),
+            blurRadius: 20.0,
+            offset: const Offset(0, -4),
+          ),
         ],
       ),
       child: SafeArea(

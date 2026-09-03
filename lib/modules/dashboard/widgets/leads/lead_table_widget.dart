@@ -138,11 +138,11 @@ class _LeadTableWidgetState extends State<LeadTableWidget> {
                 ),
                 const SizedBox(width: 12.0),
                 AppButton(
-                  text: context.isMobileUI ? null : context.tr('add_new_lead'),
+                  text: context.isMobile ? null : context.tr('add_new_lead'),
                   iconData: Icons.person_add_alt_1_rounded,
                   height: 42.0,
-                  width: context.isMobileUI ? 42.0 : null,
-                  padding: context.isMobileUI
+                  width: context.isMobile ? 42.0 : null,
+                  padding: context.isMobile
                       ? EdgeInsets.zero
                       : const EdgeInsets.symmetric(horizontal: 16.0),
                   borderRadius: 10.0,

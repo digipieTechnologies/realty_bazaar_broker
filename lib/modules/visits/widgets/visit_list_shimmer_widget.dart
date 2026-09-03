@@ -15,7 +15,7 @@ class VisitListShimmerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final useMobileTile = isCompact ?? context.isMobileUI;
+    final useMobileTile = isCompact ?? context.isMobile;
 
     return ListView.builder(
       shrinkWrap: true,

@@ -12,7 +12,6 @@ import '../../../providers/lead/lead_provider.dart';
 import '../../../util/app_date_utils.dart';
 import '../../../app/app_utils.dart';
 import '../../../util/common_ext.dart';
-import '../../../util/app_utils.dart';
 import '../../../widgets/badges/app_lead_status_badge.dart';
 import '../../../widgets/badges/app_platform_badge.dart';
 import '../../../widgets/buttons/app_button.dart';
