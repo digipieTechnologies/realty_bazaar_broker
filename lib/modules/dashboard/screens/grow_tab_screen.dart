@@ -5,14 +5,15 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
+import '../../../providers/auth/auth_provider.dart';
 import '../../../providers/subscription/subscription_provider.dart';
+import '../../../util/common_ext.dart';
 import '../../../widgets/shimmer/grow_plan_shimmer_widget.dart';
 import '../widgets/grow_plan_carousel_widget.dart';
 
@@ -29,9 +30,11 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
     super.initState();
     // Fetch active plans on screen load
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final authProvider = context.read<AuthProvider>();
+      final brokerId = authProvider.userProfile?.brokerId?.id;
       final provider = context.read<SubscriptionProvider>();
       if (provider.plans.isEmpty && !provider.isLoading) {
-        provider.fetchActiveSubscriptionPlans();
+        provider.fetchActiveSubscriptionPlans(brokerId: brokerId);
       }
     });
   }
@@ -42,33 +45,47 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
       backgroundColor: AppColors.background,
       body: Consumer<SubscriptionProvider>(
         builder: (context, provider, child) {
-          final bool isMobile = MediaQuery.of(context).size.width < 600;
+          final bool isMobile = context.isMobile;
 
-          return SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: isMobile ? 12.0 : 20.0),
-            child: Column(
-              children: [
-                // Header Section
-                _buildHeader(context),
-                SizedBox(height: context.height * 0.06),
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final double minHeight = constraints.maxHeight - (isMobile ? 24.0 : 40.0);
 
-                // Plans Section
-                if (provider.isLoading)
-                  const GrowPlanShimmerWidget()
-                else if (provider.plans.isNotEmpty)
-                  GrowPlanCarouselWidget(
-                    plans: provider.plans,
-                    onSelectPlan: (plan) {
-                      provider.setSelectedPlan(plan);
-                      AppNavigator.navigateToSubscriptionPackageDetail(context, plan);
-                    },
-                  )
-                else
-                  _buildEmptyState(context),
+              return SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: EdgeInsets.symmetric(vertical: isMobile ? 12.0 : 20.0),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: minHeight > 0 ? minHeight : 0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // Header Section
+                        _buildHeader(context),
+                        SizedBox(height: isMobile ? 20.0 : 36.0),
 
-                const SizedBox(height: 24.0),
-              ],
-            ),
+                        // Plans Section
+                        if (provider.isLoading)
+                          const GrowPlanShimmerWidget()
+                        else if (provider.plans.isNotEmpty)
+                          GrowPlanCarouselWidget(
+                            plans: provider.plans,
+                            onSelectPlan: (plan) {
+                              provider.setSelectedPlan(plan);
+                              AppNavigator.navigateToSubscriptionPackageDetail(context, plan);
+                            },
+                          )
+                        else
+                          _buildEmptyState(context),
+
+                        const SizedBox(height: 24.0),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
           );
         },
       ),
@@ -86,10 +103,7 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
             children: [
               // Top Sparkle Badge Pill
               Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: isMobile ? 12.0 : 14.0,
-                  vertical: isMobile ? 5.0 : 6.0,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: isMobile ? 12.0 : 14.0, vertical: isMobile ? 5.0 : 6.0),
                 decoration: BoxDecoration(
                   color: AppColors.primary50,
                   borderRadius: BorderRadius.circular(20.0),
@@ -163,10 +177,7 @@ class _GrowTabScreenState extends State<GrowTabScreen> {
             style: AppTextStyles.body1.copyWith(color: AppColors.textSecondary, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 4.0),
-          Text(
-            context.tr('grow_check_back'),
-            style: AppTextStyles.caption.copyWith(color: AppColors.textMuted),
-          ),
+          Text(context.tr('grow_check_back'), style: AppTextStyles.caption.copyWith(color: AppColors.textMuted)),
         ],
       ),
     );

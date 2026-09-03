@@ -26,21 +26,14 @@ class AdCampaignBannerWidget extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
+          BoxShadow(color: AppColors.primary.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4)),
         ],
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              color: AppColors.surface.withValues(alpha: 0.18),
-              shape: BoxShape.circle,
-            ),
+            decoration: BoxDecoration(color: AppColors.surface.withValues(alpha: 0.18), shape: BoxShape.circle),
             child: const Icon(Icons.campaign_rounded, color: AppColors.surface, size: 24.0),
           ),
           const SizedBox(width: 14.0),

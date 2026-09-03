@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:the_realty_bazaar/core/localization/app_localizations.dart';
 
 import '../../../app/app_assets.dart';
 import '../../../app/app_colors.dart';
@@ -51,21 +52,18 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     final authProvider = context.read<AuthProvider>();
-    final success = await authProvider.resetPasswordWithOtp(
-      email: widget.email,
-      newPassword: _passwordController.text,
-    );
+    final success = await authProvider.resetPasswordWithOtp(email: widget.email, newPassword: _passwordController.text);
 
     if (success && mounted) {
       AppToast.showSuccess(
-        'Password Reset Successful',
-        'Your password has been updated. Please sign in with your new password.',
+        context.tr('password_reset_successful_title'),
+        context.tr('password_reset_successful_desc'),
       );
       context.go(AppRoutes.login);
     } else if (mounted) {
       AppToast.showError(
-        'Password Reset Failed',
-        authProvider.errorMessage ?? 'Failed to update password. Please try again.',
+        context.tr('password_reset_failed_title'),
+        authProvider.errorMessage ?? context.tr('password_reset_failed_desc'),
       );
     }
   }
@@ -95,10 +93,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               child: Container(
                 width: 380,
                 height: 380,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.primary800.withOpacity(0.03),
-                ),
+                decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.primary800.withOpacity(0.03)),
               ),
             ),
           ],
@@ -186,7 +181,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 const Icon(Icons.chevron_left_rounded, color: AppColors.textPrimary, size: 20.0),
                 const SizedBox(width: 8.0),
                 Text(
-                  'Back to Login',
+                  context.tr('back_to_login'),
                   style: AppTextStyles.button.copyWith(
                     color: AppColors.textPrimary,
                     fontSize: 13.0,
@@ -230,17 +225,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             ),
             const Spacer(),
             Text(
-              'Secure Your Account',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 32.0,
-                fontWeight: FontWeight.bold,
-                height: 1.25,
-              ),
+              context.tr('secure_your_account'),
+              style: const TextStyle(color: Colors.white, fontSize: 32.0, fontWeight: FontWeight.bold, height: 1.25),
             ),
             const SizedBox(height: 16.0),
             Text(
-              'Set a strong, new password to protect your ${AppStrings.appName} account and client data.',
+              context.tr('hero_desc'),
               style: TextStyle(color: Colors.white.withOpacity(0.85), fontSize: 15.0, height: 1.45),
             ),
             const Spacer(),
@@ -257,10 +247,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const AuthHeaderWidget(
-            title: 'Set New Password',
-            subtitle:
-                'Your new password must be at least 6 characters long and different from previous passwords.',
+          AuthHeaderWidget(
+            title: context.tr('set_new_password'),
+            subtitle: context.tr('set_new_password_subtitle'),
           ),
           const SizedBox(height: 24.0),
 
@@ -268,12 +257,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           PasswordFieldWidget(
             controller: _passwordController,
             focusNode: _passwordFocusNode,
-            label: 'New Password',
+            label: context.tr('new_password'),
             textInputAction: TextInputAction.next,
             validator: (val) {
-              if (val.isEmptyORNull) return 'Please enter a new password';
-              if (!val.isStrongPassword)
-                return 'Password must be at least 6 characters with a letter and digit';
+              if (val.isEmptyORNull) return context.tr('err_enter_new_password');
+              if (!val.isStrongPassword) return context.tr('err_strong_password');
               return null;
             },
           ),
@@ -283,11 +271,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           PasswordFieldWidget(
             controller: _confirmPasswordController,
             focusNode: _confirmPasswordFocusNode,
-            label: 'Confirm New Password',
+            label: context.tr('confirm_new_password'),
             textInputAction: TextInputAction.done,
             validator: (val) {
-              if (val.isEmptyORNull) return 'Please confirm your new password';
-              if (val != _passwordController.text) return 'Passwords do not match';
+              if (val.isEmptyORNull) return context.tr('err_confirm_new_password');
+              if (val != _passwordController.text) return context.tr('passwords_dont_match');
               return null;
             },
           ),
@@ -318,7 +306,7 @@ class _ResetPasswordSubmitButton extends StatelessWidget {
     final isLoading = context.select<AuthProvider, bool>((p) => p.isLoading);
 
     return AppButton(
-      text: 'UPDATE PASSWORD',
+      text: context.tr('update_password_btn'),
       variant: AppButtonVariant.gradient,
       isLoading: isLoading,
       icon: const Icon(Icons.check_circle_outline_rounded, color: Colors.white, size: 18.0),

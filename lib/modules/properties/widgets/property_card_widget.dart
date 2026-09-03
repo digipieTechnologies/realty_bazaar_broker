@@ -238,10 +238,7 @@ class PropertyCardWidget extends StatelessWidget {
                             ),
                           if (property.furnishingStatus != FurnishingStatus.unfurnished)
                             _buildChip(
-                              label: PropertyLocalizer.getLocalizedFurnishingStatus(
-                                context,
-                                property.furnishingStatus,
-                              ),
+                              label: PropertyLocalizer.getLocalizedFurnishingStatus(context, property.furnishingStatus),
                               color: AppColors.textSecondary,
                               isOutline: true,
                             ),
@@ -288,9 +285,7 @@ class PropertyCardWidget extends StatelessWidget {
                       ),
                       const SizedBox(height: 2.0),
                       Text(
-                        property.listingType == ListingType.rent
-                            ? context.tr('per_month')
-                            : context.tr('total_price'),
+                        property.listingType == ListingType.rent ? context.tr('per_month') : context.tr('total_price'),
                         style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary, fontSize: 12.0),
                       ),
                       const SizedBox(height: 6.0),
@@ -430,10 +425,7 @@ class PropertyCardWidget extends StatelessWidget {
                     runSpacing: 4.0,
                     children: [
                       _buildChip(
-                        label: PropertyLocalizer.getLocalizedListingType(
-                          context,
-                          property.listingType,
-                        ).toUpperCase(),
+                        label: PropertyLocalizer.getLocalizedListingType(context, property.listingType).toUpperCase(),
                         color: AppColors.primary,
                         isOutline: true,
                       ),
@@ -443,11 +435,7 @@ class PropertyCardWidget extends StatelessWidget {
                         isOutline: true,
                       ),
                       if (property.bedrooms > 0)
-                        _buildChip(
-                          label: '${property.bedrooms} BHK',
-                          color: AppColors.textSecondary,
-                          isOutline: true,
-                        ),
+                        _buildChip(label: '${property.bedrooms} BHK', color: AppColors.textSecondary, isOutline: true),
                     ],
                   ),
                   const SizedBox(height: 14.0),

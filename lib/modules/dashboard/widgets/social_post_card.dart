@@ -32,7 +32,7 @@ class SocialPostCard extends StatelessWidget {
     if (isMinimalView) {
       return _buildDashboardMinimalCard(context);
     }
-    final isMobile = context.isMobileUI;
+    final isMobile = context.isMobile;
     final isFB = post.platform == SocialPlatform.facebook;
 
     final mediaUrl =

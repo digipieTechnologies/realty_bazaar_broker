@@ -8,6 +8,7 @@ import 'dart:io' as io;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:the_realty_bazaar/core/localization/app_localizations.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../app/app_colors.dart';
@@ -102,12 +103,9 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
         pathLower.endsWith('.gif');
     final isVideo =
         !isImgExt &&
-        (currentMedia.type.toLowerCase() == 'video' ||
-            pathLower.endsWith('.mp4') ||
-            pathLower.endsWith('.mov'));
+        (currentMedia.type.toLowerCase() == 'video' || pathLower.endsWith('.mp4') || pathLower.endsWith('.mov'));
 
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isDesktop = screenWidth >= 600;
+    final isDesktop = context.isDesktop;
 
     return SingleChildScrollView(
       padding: EdgeInsets.all(isDesktop ? 16.0 : 10.0),
@@ -178,11 +176,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
               children: [
                 // Reel Preview Device Mockup Box (Centered)
                 Center(
-                  child: SizedBox(
-                    width: 240.0,
-                    height: 400.0,
-                    child: _buildReelPreviewDevice(currentMedia, isVideo),
-                  ),
+                  child: SizedBox(width: 240.0, height: 400.0, child: _buildReelPreviewDevice(currentMedia, isVideo)),
                 ),
                 const SizedBox(height: 16.0),
                 // Customization Controls Panel
@@ -201,11 +195,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
         borderRadius: BorderRadius.circular(20.0),
         border: Border.all(color: AppColors.border, width: 2.0),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.25),
-            blurRadius: 16.0,
-            offset: const Offset(0, 6),
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.25), blurRadius: 16.0, offset: const Offset(0, 6)),
         ],
       ),
       child: ClipRRect(
@@ -313,11 +303,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(
-                                Icons.location_on_rounded,
-                                size: 11.0,
-                                color: _getThemeLocationTextColor(),
-                              ),
+                              Icon(Icons.location_on_rounded, size: 11.0, color: _getThemeLocationTextColor()),
                               const SizedBox(width: 4.0),
                               Text(
                                 _locationBadgeController.text.trim(),
@@ -391,10 +377,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
                       borderRadius: BorderRadius.circular(20.0),
                       child: Container(
                         padding: const EdgeInsets.all(7.0),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.45),
-                          shape: BoxShape.circle,
-                        ),
+                        decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), shape: BoxShape.circle),
                         child: const Icon(Icons.chevron_left_rounded, color: Colors.white, size: 18.0),
                       ),
                     ),
@@ -411,10 +394,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
                       borderRadius: BorderRadius.circular(20.0),
                       child: Container(
                         padding: const EdgeInsets.all(7.0),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.45),
-                          shape: BoxShape.circle,
-                        ),
+                        decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), shape: BoxShape.circle),
                         child: const Icon(Icons.chevron_right_rounded, color: Colors.white, size: 18.0),
                       ),
                     ),
@@ -487,7 +467,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
 
         if (_enableOverlay) ...[
           // Theme Color Preset Selector
-          Text('Sticker Color Style:', style: AppTextStyles.caption.copyWith(fontWeight: FontWeight.bold)),
+          Text(context.tr('sticker_color_style'), style: AppTextStyles.caption.copyWith(fontWeight: FontWeight.bold)),
           const SizedBox(height: 6.0),
           Wrap(
             spacing: 8.0,
@@ -536,7 +516,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
           // Sticker 1: Main Header Title
           _buildTextFieldInput(
             controller: _titleBadgeController,
-            label: 'Top Header Badge (Title & Sqft)',
+            label: context.tr('top_header_badge'),
             icon: Icons.title_rounded,
             maxLines: 2,
           ),
@@ -545,7 +525,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
           // Sticker 2: Handle Pill
           _buildTextFieldInput(
             controller: _handleBadgeController,
-            label: 'Instagram / Brand Handle Tag',
+            label: context.tr('instagram_brand_handle'),
             icon: Icons.alternate_email_rounded,
             maxLines: 1,
           ),
@@ -554,7 +534,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
           // Sticker 3: Location Pin Badge
           _buildTextFieldInput(
             controller: _locationBadgeController,
-            label: 'Location Pin Text',
+            label: context.tr('location_pin_text'),
             icon: Icons.location_on_rounded,
             maxLines: 1,
           ),
@@ -563,7 +543,7 @@ class _StepMediaPreviewEditState extends State<StepMediaPreviewEdit> {
           // Sticker 4: Contact Badge
           _buildTextFieldInput(
             controller: _contactBadgeController,
-            label: 'Bottom Contact Info Badge',
+            label: context.tr('bottom_contact_info'),
             icon: Icons.phone_rounded,
             maxLines: 2,
           ),
@@ -816,9 +796,7 @@ class _StepVideoPreviewWidgetState extends State<StepVideoPreviewWidget> {
   Future<void> _initializePlayer() async {
     try {
       final controller = kIsWeb && widget.videoBytes != null && widget.videoBytes!.isNotEmpty
-          ? VideoPlayerController.networkUrl(
-              Uri.parse('data:video/mp4;base64,${base64Encode(widget.videoBytes!)}'),
-            )
+          ? VideoPlayerController.networkUrl(Uri.parse('data:video/mp4;base64,${base64Encode(widget.videoBytes!)}'))
           : (widget.videoUrl.startsWith('http')
                 ? VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
                 : VideoPlayerController.file(io.File(widget.videoUrl)));

@@ -99,9 +99,12 @@ class _DashboardTabScreenState extends State<DashboardTabScreen> with WidgetsBin
               );
             }
 
-            AppToast.showSuccess('Connection Successful', 'Successfully connected your $platform account!');
+            AppToast.showSuccess(
+              context.tr('connection_successful'),
+              context.tr('connection_success_desc', arguments: {'platform': platform}),
+            );
           } else if (error != null) {
-            AppToast.showError('Connection Failed', Uri.decodeComponent(error));
+            AppToast.showError(context.tr('connection_failed'), Uri.decodeComponent(error));
           }
         }
       });
@@ -118,7 +121,7 @@ class _DashboardTabScreenState extends State<DashboardTabScreen> with WidgetsBin
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthProvider>();
     final socialProvider = context.watch<SocialProvider>();
-    final isMobile = context.isMobileUI;
+    final isMobile = context.isMobile;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -146,8 +149,8 @@ class _DashboardTabScreenState extends State<DashboardTabScreen> with WidgetsBin
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const AppSectionHeader(
-                                title: 'Overview Performance',
+                              AppSectionHeader(
+                                title: context.tr('overview_performance'),
                                 svgAsset: AppAssets.icDashboardFilled,
                               ),
                               const DashboardSummaryWidget(),
@@ -174,7 +177,7 @@ class _DashboardTabScreenState extends State<DashboardTabScreen> with WidgetsBin
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const AppSectionHeader(title: 'Connected Channels', icon: Icons.link_rounded),
+                              AppSectionHeader(title: context.tr('connected_channels'), icon: Icons.link_rounded),
                               if (socialProvider.isFetchingConnections)
                                 const SocialConnectShimmerWidget(isVertical: true)
                               else ...[
@@ -198,8 +201,8 @@ class _DashboardTabScreenState extends State<DashboardTabScreen> with WidgetsBin
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Section 1: Summary / Overview Performance
-                      const AppSectionHeader(
-                        title: 'Overview Performance',
+                      AppSectionHeader(
+                        title: context.tr('overview_performance'),
                         svgAsset: AppAssets.icDashboardFilled,
                       ),
                       const DashboardSummaryWidget(),
@@ -208,7 +211,7 @@ class _DashboardTabScreenState extends State<DashboardTabScreen> with WidgetsBin
                       const SizedBox(height: 14.0),
 
                       // Section 2: Connected Channels (Social Channels)
-                      const AppSectionHeader(title: 'Connected Channels', icon: Icons.link_rounded),
+                      AppSectionHeader(title: context.tr('connected_channels'), icon: Icons.link_rounded),
                       if (socialProvider.isFetchingConnections)
                         const SocialConnectShimmerWidget(isVertical: true)
                       else ...[
@@ -261,9 +264,8 @@ class _DashboardTabScreenState extends State<DashboardTabScreen> with WidgetsBin
 
     AppDialog.show(
       context,
-      title: 'Disconnect $platformDisplayName',
-      description:
-          'Are you sure you want to disconnect $platformDisplayName? This will unsubscribe webhooks and revoke Meta access permissions.',
+      title: context.tr('disconnect_platform', arguments: {'platform': platformDisplayName}),
+      description: context.tr('disconnect_platform_desc', arguments: {'platform': platformDisplayName}),
       type: DialogType.error,
       confirmText: context.tr('disconnect'),
       cancelText: context.tr('cancel'),

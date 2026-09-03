@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 import 'broker_model.dart';
 import 'user_enums.dart';
+import 'user_subscription_model.dart';
 
 class UserModel extends Equatable {
   static String tableName = "users";
@@ -18,6 +19,7 @@ class UserModel extends Equatable {
   final bool? isDeleted;
   final bool? isEmailVerified;
   final BrokerModel? brokerId;
+  final UserSubscriptionModel? userSubscription;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -49,6 +51,7 @@ class UserModel extends Equatable {
     this.isDeleted,
     this.isEmailVerified = false,
     this.brokerId,
+    this.userSubscription,
     this.createdAt,
     this.updatedAt,
   });
@@ -70,12 +73,11 @@ class UserModel extends Equatable {
       isDeleted: json['is_deleted'] as bool? ?? false,
       isEmailVerified: json['is_email_verified'] as bool? ?? false,
       brokerId: json['broker_id'] != null ? BrokerModel.fromJson(json['broker_id']) : null,
-      createdAt: json['created_at'] != null
-          ? DateTime.tryParse(json['created_at'].toString())?.toLocal()
+      userSubscription: json['user_subscription'] != null
+          ? UserSubscriptionModel.fromJson(json['user_subscription'])
           : null,
-      updatedAt: json['updated_at'] != null
-          ? DateTime.tryParse(json['updated_at'].toString())?.toLocal()
-          : null,
+      createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'].toString())?.toLocal() : null,
+      updatedAt: json['updated_at'] != null ? DateTime.tryParse(json['updated_at'].toString())?.toLocal() : null,
     );
   }
 
@@ -93,6 +95,9 @@ class UserModel extends Equatable {
     data['is_deleted'] = isDeleted;
     data['is_email_verified'] = isEmailVerified;
     data['broker_id'] = brokerId?.id;
+    if (userSubscription != null) {
+      data['user_subscription'] = userSubscription!.toJson();
+    }
     if (createdAt != null) {
       data['created_at'] = createdAt?.toUtc().toIso8601String();
     }
@@ -112,6 +117,8 @@ class UserModel extends Equatable {
     bool? isDeleted,
     bool? isEmailVerified,
     BrokerModel? brokerId,
+    UserSubscriptionModel? userSubscription,
+    bool clearUserSubscription = false,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -128,6 +135,7 @@ class UserModel extends Equatable {
       isDeleted: isDeleted ?? this.isDeleted,
       isEmailVerified: isEmailVerified ?? this.isEmailVerified,
       brokerId: brokerId ?? this.brokerId,
+      userSubscription: clearUserSubscription ? userSubscription : (userSubscription ?? this.userSubscription),
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -147,6 +155,7 @@ class UserModel extends Equatable {
     isDeleted,
     isEmailVerified,
     brokerId,
+    userSubscription,
     createdAt,
     updatedAt,
   ];

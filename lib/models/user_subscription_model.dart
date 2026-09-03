@@ -97,14 +97,18 @@ class UserSubscriptionModel extends Equatable {
       );
     }
 
+    final DateTime endDateParsed = json['end_date'] != null
+        ? DateTime.parse(json['end_date'].toString())
+        : DateTime.now();
+
     return UserSubscriptionModel(
       id: json['id']?.toString() ?? '',
       brokerId: parsedBroker,
       paymentId: parsedPayment,
       subscriptionPlanId: parsedPlan,
       startDate: json['start_date'] != null ? DateTime.parse(json['start_date'].toString()) : DateTime.now(),
-      endDate: json['end_date'] != null ? DateTime.parse(json['end_date'].toString()) : DateTime.now(),
-      isExpired: json['is_expired'] as bool? ?? false,
+      endDate: endDateParsed,
+      isExpired: (json['is_expired'] as bool?) ?? DateTime.now().isAfter(endDateParsed),
       totalDays: int.tryParse(json['total_days']?.toString() ?? '0') ?? 0,
       amount: double.tryParse(json['amount']?.toString() ?? '0') ?? 0.0,
       planCode: json['plan_code']?.toString() ?? '',

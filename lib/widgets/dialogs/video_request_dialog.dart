@@ -409,7 +409,7 @@ class _VideoRequestDialogState extends State<VideoRequestDialog> {
           const SizedBox(height: 16.0),
           if (status == VideoRequestStatus.pending)
             AppButton.outline(
-              text: 'Cancel Request',
+              text: context.tr('cancel_request'),
               isLoading: _isSubmitting,
               height: 46.0,
               borderRadius: 10.0,
@@ -448,7 +448,7 @@ class _VideoRequestDialogState extends State<VideoRequestDialog> {
             )
           else
             AppButton.solid(
-              text: 'OK',
+              text: context.tr('ok'),
               height: 46.0,
               borderRadius: 10.0,
               color: AppColors.primary,

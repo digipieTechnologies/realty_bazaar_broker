@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
+import '../../core/localization/app_localizations.dart';
 import '../buttons/app_button.dart';
 import 'app_base_dialog.dart';
 
@@ -21,8 +22,8 @@ class EstimatedResultsInfoDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBaseDialog(
-      title: 'About Estimated Results',
-      subtitle: 'Campaign projection benchmark details',
+      title: context.tr('about_estimated_results'),
+      subtitle: context.tr('campaign_projection_details'),
       headerIcon: Icons.insights_rounded,
       maxWidth: 480.0,
       content: Column(
@@ -70,7 +71,7 @@ class EstimatedResultsInfoDialog extends StatelessWidget {
           _buildFactorBullet(
             iconData: Icons.location_on_outlined,
             iconColor: AppColors.primary,
-            title: 'Property Location & Area Demand',
+            title: context.tr('prop_location_area_demand'),
             description:
                 'Inquiry rates vary by city and micro-market. Prime high-demand locations typically see faster lead responses.',
           ),
@@ -79,7 +80,7 @@ class EstimatedResultsInfoDialog extends StatelessWidget {
           _buildFactorBullet(
             iconData: Icons.currency_rupee_rounded,
             iconColor: AppColors.success,
-            title: 'Property Price Point & Category',
+            title: context.tr('prop_price_category'),
             description:
                 'Affordable and mid-range residential listings convert faster than ultra-luxury niche properties.',
           ),
@@ -88,7 +89,7 @@ class EstimatedResultsInfoDialog extends StatelessWidget {
           _buildFactorBullet(
             iconData: Icons.palette_outlined,
             iconColor: AppColors.tagIndigo,
-            title: 'Ad Design & Creative Quality',
+            title: context.tr('ad_design_quality'),
             description:
                 'Eye-catching property graphics and HD video walkthroughs significantly boost buyer engagement.',
           ),
@@ -97,16 +98,15 @@ class EstimatedResultsInfoDialog extends StatelessWidget {
           _buildFactorBullet(
             iconData: Icons.trending_up_rounded,
             iconColor: AppColors.warning,
-            title: 'Market Activity & Target Audience',
-            description:
-                'Seasonal demand, interest rate trends, and demographic targeting affect conversion speeds.',
+            title: context.tr('market_activity_audience'),
+            description: 'Seasonal demand, interest rate trends, and demographic targeting affect conversion speeds.',
           ),
         ],
       ),
       footer: SizedBox(
         width: double.infinity,
         child: AppButton.solid(
-          text: 'Got It',
+          text: context.tr('got_it'),
           onPressed: () => Navigator.of(context).pop(),
           height: 48.0,
           borderRadius: 12.0,
@@ -145,11 +145,7 @@ class EstimatedResultsInfoDialog extends StatelessWidget {
               const SizedBox(height: 2.0),
               Text(
                 description,
-                style: AppTextStyles.caption.copyWith(
-                  color: AppColors.textSecondary,
-                  fontSize: 11.5,
-                  height: 1.35,
-                ),
+                style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary, fontSize: 11.5, height: 1.35),
               ),
             ],
           ),

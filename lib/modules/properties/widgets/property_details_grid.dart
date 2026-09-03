@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/localization/property_localizer.dart';
 import '../../../models/property_model.dart';
 
@@ -17,40 +18,44 @@ class PropertyDetailsGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final details = <_DetailItem>[
       if (property.propertyCode != null && property.propertyCode!.isNotEmpty)
-        _DetailItem(icon: Icons.code_outlined, label: 'Code', value: property.propertyCode!),
+        _DetailItem(icon: Icons.code_outlined, label: context.tr('code'), value: property.propertyCode!),
       _DetailItem(
         icon: Icons.chair_outlined,
-        label: 'Furnishing',
+        label: context.tr('furnishing'),
         value: PropertyLocalizer.getLocalizedFurnishingStatus(context, property.furnishingStatus),
       ),
       _DetailItem(
         icon: Icons.construction_outlined,
-        label: 'Construction',
+        label: context.tr('construction'),
         value: PropertyLocalizer.getLocalizedConstructionStatus(context, property.constructionStatus),
       ),
       if (property.floorNumber != null)
         _DetailItem(
           icon: Icons.layers_outlined,
-          label: 'Floor',
+          label: context.tr('floor'),
           value: property.totalFloors != null
               ? '${property.floorNumber} of ${property.totalFloors}'
               : '${property.floorNumber}',
         ),
       if (property.totalFloors != null && property.floorNumber == null)
-        _DetailItem(icon: Icons.apartment_outlined, label: 'Total Floors', value: '${property.totalFloors}'),
+        _DetailItem(
+          icon: Icons.apartment_outlined,
+          label: context.tr('total_floors'),
+          value: '${property.totalFloors}',
+        ),
       _DetailItem(
         icon: Icons.category_outlined,
-        label: 'Property Type',
+        label: context.tr('property_type'),
         value: PropertyLocalizer.getLocalizedPropertyType(context, property.propertyType),
       ),
       _DetailItem(
         icon: Icons.sell_outlined,
-        label: 'Listing Type',
+        label: context.tr('listing_type'),
         value: PropertyLocalizer.getLocalizedListingType(context, property.listingType),
       ),
       _DetailItem(
         icon: Icons.verified_outlined,
-        label: 'Status',
+        label: context.tr('status'),
         value: PropertyLocalizer.getLocalizedPropertyStatus(context, property.propertyStatus),
       ),
     ];
@@ -75,10 +80,7 @@ class PropertyDetailsGrid extends StatelessWidget {
               ),
               SelectableText(
                 item.value,
-                style: AppTextStyles.body2.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
-                ),
+                style: AppTextStyles.body2.copyWith(fontWeight: FontWeight.w600, color: AppColors.textPrimary),
               ),
             ],
           ),

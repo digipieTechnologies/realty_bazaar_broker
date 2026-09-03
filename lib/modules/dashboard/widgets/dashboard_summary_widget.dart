@@ -187,11 +187,7 @@ class _StatCard extends StatelessWidget {
             borderRadius: borderRadius,
             border: Border.all(color: data.iconBgColor.withValues(alpha: 0.25), width: 1.0),
             boxShadow: [
-              BoxShadow(
-                color: data.iconBgColor.withValues(alpha: 0.08),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
+              BoxShadow(color: data.iconBgColor.withValues(alpha: 0.08), blurRadius: 10, offset: const Offset(0, 4)),
             ],
           ),
           padding: EdgeInsets.all(isDesktop ? 16.0 : 12.0),
@@ -215,10 +211,7 @@ class _StatCard extends StatelessWidget {
                         : Icon(data.icon, color: data.iconColor, size: isDesktop ? 18.0 : 15.0),
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: isDesktop ? 9.0 : 7.0,
-                      vertical: isDesktop ? 4.0 : 3.0,
-                    ),
+                    padding: EdgeInsets.symmetric(horizontal: isDesktop ? 9.0 : 7.0, vertical: isDesktop ? 4.0 : 3.0),
                     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12.0)),
                     child: Text(
                       data.tagText,

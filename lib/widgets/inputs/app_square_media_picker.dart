@@ -6,6 +6,7 @@ import 'dart:io' as io;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../../core/localization/app_localizations.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../app/app_colors.dart';
@@ -180,7 +181,7 @@ class _AppSquareMediaPickerState extends State<AppSquareMediaPicker> {
                 onDelete: () => _removeMediaModel(media),
               ),
             if (!isFull && !widget.readOnly)
-              _buildAddSquareButton(label: 'Add Photo', icon: Icons.add_a_photo_rounded, onTap: _pickImages),
+              _buildAddSquareButton(label: context.tr('add_photo'), icon: Icons.add_a_photo_rounded, onTap: _pickImages),
           ],
         ),
       ],
@@ -244,7 +245,7 @@ class _AppSquareMediaPickerState extends State<AppSquareMediaPicker> {
               ),
             if (!isFull && !widget.readOnly)
               _buildAddSquareButton(
-                label: 'Add Video',
+                label: context.tr('add_video'),
                 icon: Icons.video_call_rounded,
                 isSecondary: true,
                 onTap: _pickVideos,

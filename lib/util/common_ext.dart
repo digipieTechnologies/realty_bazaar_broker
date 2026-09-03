@@ -44,8 +44,15 @@ extension StringX on String? {
 
 extension ContextX on BuildContext {
   /// Responsive Breakpoint Constants
-  static const double desktopBreakpoint = 950.0;
+  static const double desktopBreakpoint = 900;
   static const double mobileBreakpoint = 600.0;
+
+  /// Theme shorthand access
+  ThemeData get theme => Theme.of(this);
+
+  TextTheme get textTheme => theme.textTheme;
+
+  ColorScheme get colorScheme => theme.colorScheme;
 
   /// Shorthand screen width.
   double get width => MediaQuery.sizeOf(this).width;
@@ -53,15 +60,25 @@ extension ContextX on BuildContext {
   /// Shorthand screen height.
   double get height => MediaQuery.sizeOf(this).height;
 
-  /// Safe area bottom padding (useful for keyboard-aware layouts).
+  /// Safe area padding shorthand
   double get bottomPadding => MediaQuery.viewPaddingOf(this).bottom;
 
-  /// Responsive Breakpoint checkers
-  bool get isMobileUI => width < mobileBreakpoint;
+  EdgeInsets get viewPadding => MediaQuery.of(this).viewPadding;
 
-  bool get isTabletUI => width >= mobileBreakpoint && width < desktopBreakpoint;
+  EdgeInsets get viewInsets => MediaQuery.of(this).viewInsets;
+
+  /// Orientation helper
+  bool get isLandscape => MediaQuery.of(this).orientation == Orientation.landscape;
+
+  /// Responsive Breakpoint checkers
+  bool get isMobile => width < mobileBreakpoint;
+
+  bool get isTablet => width >= mobileBreakpoint && width < desktopBreakpoint;
 
   bool get isDesktop => width >= desktopBreakpoint;
+
+  /// Max width constraint: 800.0 on desktop, double.infinity on mobile/tablet
+  double get screenWidth800 => isDesktop ? 800.0 : double.infinity;
 
   /// Helper to evaluate desktop layout state from constraints width.
   static bool isDesktopWidth(double maxWidth) => maxWidth >= desktopBreakpoint;
@@ -107,9 +124,7 @@ extension ObjectX on Object {
       if (msg.contains('Invalid login credentials') || msg.contains('invalid_credentials')) {
         return 'Invalid login credentials. Please check your email and password.';
       }
-      if (msg.contains('User already registered') ||
-          msg.contains('already exists') ||
-          msg.contains('email_exists')) {
+      if (msg.contains('User already registered') || msg.contains('already exists') || msg.contains('email_exists')) {
         return 'An account with this email address already exists.';
       }
       if (msg.contains('Email not confirmed') || msg.contains('confirmation_required')) {

@@ -14,6 +14,7 @@ import '../../../models/property_enums.dart';
 import '../../../models/property_model.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../providers/property/property_provider.dart';
+import '../../../util/common_ext.dart';
 import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/common/common_app_bar.dart';
 import '../../../widgets/common/currency_text.dart';
@@ -82,9 +83,10 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
 
   Future<void> _onEditTap() async {
     if (_property == null) return;
-    final updated = await Navigator.of(context, rootNavigator: true).push<PropertyModel>(
-      MaterialPageRoute(builder: (context) => AddEditPropertyScreen(propertyToEdit: _property)),
-    );
+    final updated = await Navigator.of(
+      context,
+      rootNavigator: true,
+    ).push<PropertyModel>(MaterialPageRoute(builder: (context) => AddEditPropertyScreen(propertyToEdit: _property)));
     if (updated != null && mounted) {
       setState(() {
         _property = updated;
@@ -138,16 +140,10 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
 
       final success = await propertyProvider.deleteProperty(prop.id!, brokerId: brokerId);
       if (success && context.mounted) {
-        AppToast.showSuccess(
-          context.tr('toast_property_deleted_title'),
-          context.tr('toast_property_deleted_desc'),
-        );
+        AppToast.showSuccess(context.tr('toast_property_deleted_title'), context.tr('toast_property_deleted_desc'));
         Navigator.of(context).pop();
       } else if (context.mounted) {
-        AppToast.showError(
-          context.tr('error_generic'),
-          propertyProvider.errorMessage ?? 'Could not delete property.',
-        );
+        AppToast.showError(context.tr('error_generic'), propertyProvider.errorMessage ?? 'Could not delete property.');
       }
     }
   }
@@ -254,10 +250,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                       child: IconButton(
                         icon: const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white, size: 32.0),
                         onPressed: () {
-                          pageController.nextPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
+                          pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
                         },
                       ),
                     ),
@@ -294,9 +287,8 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
     }
 
     final property = _property!;
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isDesktop = screenWidth > 900;
-    final isTablet = screenWidth >= 600 && screenWidth <= 900;
+    final isDesktop = context.isDesktop;
+    final isTablet = context.isTablet;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
@@ -306,10 +298,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
       body: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
-            horizontal: isDesktop ? 24.0 : 14.0,
-            vertical: isDesktop ? 24.0 : 14.0,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: isDesktop ? 24.0 : 14.0, vertical: isDesktop ? 24.0 : 14.0),
           child: Align(
             alignment: Alignment.topCenter,
             child: isDesktop ? _buildDesktopLayout(context, property) : _buildMobileLayout(context, property),
@@ -416,10 +405,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
   // ---------------------------------------------------------------------------
   Widget _buildTopHeroCard(BuildContext context, PropertyModel property) {
     final listingLabel = property.listingType == ListingType.rent ? 'For Rent' : 'For Sale';
-    final categoryLabel = PropertyLocalizer.getLocalizedPropertyType(
-      context,
-      property.propertyType,
-    ).toUpperCase();
+    final categoryLabel = PropertyLocalizer.getLocalizedPropertyType(context, property.propertyType).toUpperCase();
     final addressText =
         property.address?.fullAddress ??
         '${property.address?.city ?? "Surat"}, ${property.address?.state ?? "Gujarat"}';
@@ -436,11 +422,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
         borderRadius: BorderRadius.circular(20.0),
         border: Border.all(color: AppColors.border, width: 1.0),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 10.0,
-            offset: const Offset(0, 2),
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 10.0, offset: const Offset(0, 2)),
         ],
       ),
       child: LayoutBuilder(
@@ -553,17 +535,10 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 6.0),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
+                    decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(20.0)),
                     child: Text(
                       listingLabel,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 12.0,
-                      ),
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12.0),
                     ),
                   ),
                   Container(
@@ -593,11 +568,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                       ),
                       child: Text(
                         '#${property.propertyCode}',
-                        style: const TextStyle(
-                          color: Color(0xFF2563EB),
-                          fontWeight: FontWeight.w800,
-                          fontSize: 11.5,
-                        ),
+                        style: const TextStyle(color: Color(0xFF2563EB), fontWeight: FontWeight.w800, fontSize: 11.5),
                       ),
                     ),
                   Container(
@@ -614,11 +585,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                         SizedBox(width: 4.0),
                         Text(
                           'Verified Listing',
-                          style: TextStyle(
-                            color: Color(0xFF059669),
-                            fontWeight: FontWeight.w700,
-                            fontSize: 11.5,
-                          ),
+                          style: TextStyle(color: Color(0xFF059669), fontWeight: FontWeight.w700, fontSize: 11.5),
                         ),
                       ],
                     ),
@@ -654,10 +621,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                               Expanded(
                                 child: Text(
                                   addressText,
-                                  style: AppTextStyles.body2.copyWith(
-                                    color: AppColors.textSecondary,
-                                    fontSize: 13.5,
-                                  ),
+                                  style: AppTextStyles.body2.copyWith(color: AppColors.textSecondary, fontSize: 13.5),
                                 ),
                               ),
                             ],
@@ -668,11 +632,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                     const SizedBox(width: 20.0),
 
                     // Stats & Action buttons (scaled down automatically if space is tight)
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerRight,
-                      child: statsAndActionsRow,
-                    ),
+                    FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerRight, child: statsAndActionsRow),
                   ],
                 )
               else
@@ -696,10 +656,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                         Expanded(
                           child: Text(
                             addressText,
-                            style: AppTextStyles.body2.copyWith(
-                              color: AppColors.textSecondary,
-                              fontSize: 13.0,
-                            ),
+                            style: AppTextStyles.body2.copyWith(color: AppColors.textSecondary, fontSize: 13.0),
                           ),
                         ),
                       ],
@@ -707,11 +664,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                     const SizedBox(height: 16.0),
                     const Divider(color: AppColors.border, height: 1.0),
                     const SizedBox(height: 16.0),
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerLeft,
-                      child: statsAndActionsRow,
-                    ),
+                    FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerLeft, child: statsAndActionsRow),
                   ],
                 ),
             ],
@@ -757,11 +710,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
     );
   }
 
-  Widget _buildOutlinedSmallAction({
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-  }) {
+  Widget _buildOutlinedSmallAction({required IconData icon, required String label, required VoidCallback onTap}) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(10.0),
@@ -778,11 +727,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
             const SizedBox(width: 6.0),
             Text(
               label,
-              style: const TextStyle(
-                fontSize: 12.0,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
-              ),
+              style: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
             ),
           ],
         ),
@@ -812,12 +757,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
             borderRadius: BorderRadius.circular(20.0),
             child: GestureDetector(
               onTap: () => _openFullscreenViewer(context, 0),
-              child: CachedImage(
-                imageUrl,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
-              ),
+              child: CachedImage(imageUrl, fit: BoxFit.cover, width: double.infinity, height: double.infinity),
             ),
           ),
 
@@ -839,11 +779,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                     const SizedBox(width: 6.0),
                     Text(
                       '1 of $mediasCount Photos',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w700,
-                      ),
+                      style: const TextStyle(color: Colors.white, fontSize: 12.0, fontWeight: FontWeight.w700),
                     ),
                   ],
                 ),
@@ -891,9 +827,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
         ? '${property.floorNumber}th of ${property.totalFloors ?? 1} Floors'
         : (property.totalFloors != null ? '${property.totalFloors} Floors' : '1st Floor');
 
-    final facingText = property.facing != null
-        ? '${property.facing!.displayName} Facing'
-        : 'North East Facing';
+    final facingText = property.facing != null ? '${property.facing!.displayName} Facing' : 'North East Facing';
 
     final possessionText = property.constructionStatus == ConstructionStatus.readyToMove
         ? 'Ready To Move'
@@ -904,18 +838,10 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
       _FeatureTileData(icon: Icons.bathtub_outlined, label: 'BATHROOMS', value: '${property.bathrooms}'),
       _FeatureTileData(icon: Icons.balcony_outlined, label: 'BALCONY', value: '${property.balconies}'),
       _FeatureTileData(icon: Icons.apartment_outlined, label: 'FLOOR', value: floorText),
-      _FeatureTileData(
-        icon: Icons.domain_outlined,
-        label: 'PROPERTY TYPE',
-        value: property.propertyType.displayName,
-      ),
+      _FeatureTileData(icon: Icons.domain_outlined, label: 'PROPERTY TYPE', value: property.propertyType.displayName),
       _FeatureTileData(icon: Icons.key_outlined, label: 'POSSESSION', value: possessionText),
       _FeatureTileData(icon: Icons.explore_outlined, label: 'FACING', value: facingText),
-      _FeatureTileData(
-        icon: Icons.directions_car_outlined,
-        label: 'PARKING',
-        value: '${property.parking} Reserved',
-      ),
+      _FeatureTileData(icon: Icons.directions_car_outlined, label: 'PARKING', value: '${property.parking} Reserved'),
     ];
 
     return Container(
@@ -958,10 +884,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
         children: [
           Container(
             padding: const EdgeInsets.all(7.0),
-            decoration: BoxDecoration(
-              color: const Color(0xFFEFF6FF),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
+            decoration: BoxDecoration(color: const Color(0xFFEFF6FF), borderRadius: BorderRadius.circular(10.0)),
             child: Icon(icon, color: const Color(0xFF3B82F6), size: 18.0),
           ),
           const SizedBox(width: 8.0),
@@ -984,11 +907,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                 const SizedBox(height: 2.0),
                 Text(
                   value,
-                  style: const TextStyle(
-                    fontSize: 13.0,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.textPrimary,
-                  ),
+                  style: const TextStyle(fontSize: 13.0, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -1069,11 +988,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                     const SizedBox(width: 8.0),
                     Text(
                       localizedLabel,
-                      style: const TextStyle(
-                        fontSize: 13.0,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
-                      ),
+                      style: const TextStyle(fontSize: 13.0, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
                     ),
                   ],
                 ),
@@ -1191,11 +1106,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
               const SizedBox(width: 6.0),
               Text(
                 'Listed on $dateString',
-                style: const TextStyle(
-                  fontSize: 12.0,
-                  color: AppColors.textMuted,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: const TextStyle(fontSize: 12.0, color: AppColors.textMuted, fontWeight: FontWeight.w500),
               ),
             ],
           ),
@@ -1486,14 +1397,8 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
   Widget _buildMobileMainInfoCard(PropertyModel property) {
     final categoryLabel = PropertyLocalizer.getLocalizedPropertyType(context, property.propertyType);
     final listingLabel = PropertyLocalizer.getLocalizedListingType(context, property.listingType);
-    final constStatusLabel = PropertyLocalizer.getLocalizedConstructionStatus(
-      context,
-      property.constructionStatus,
-    );
-    final propertyStatusLabel = PropertyLocalizer.getLocalizedPropertyStatus(
-      context,
-      property.propertyStatus,
-    );
+    final constStatusLabel = PropertyLocalizer.getLocalizedConstructionStatus(context, property.constructionStatus);
+    final propertyStatusLabel = PropertyLocalizer.getLocalizedPropertyStatus(context, property.propertyStatus);
 
     return Container(
       width: double.infinity,
@@ -1528,7 +1433,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
             ),
           ),
           if (property.listingType == ListingType.rent)
-            Text('Per Month', style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary)),
+            Text(context.tr('per_month'), style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary)),
           const SizedBox(height: 6.0),
           Text(property.propertyTitle, style: AppTextStyles.heading2.copyWith(fontWeight: FontWeight.bold)),
           if (property.propertyDescription != null && property.propertyDescription!.trim().isNotEmpty) ...[
@@ -1658,11 +1563,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
         color: AppColors.surface,
         border: const Border(top: BorderSide(color: AppColors.border, width: 1.0)),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 12.0,
-            offset: const Offset(0, -4),
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 12.0, offset: const Offset(0, -4)),
         ],
       ),
       child: isTablet
@@ -1752,11 +1653,7 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
                 const SizedBox(height: 4.0),
                 Text(
                   context.tr('post_property_feature_desc'),
-                  style: AppTextStyles.caption.copyWith(
-                    color: AppColors.textSecondary,
-                    fontSize: 11.5,
-                    height: 1.35,
-                  ),
+                  style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary, fontSize: 11.5, height: 1.35),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),

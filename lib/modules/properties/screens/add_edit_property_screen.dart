@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../core/localization/app_localizations.dart';
+import '../../../util/common_ext.dart';
 import '../../../models/address_model.dart';
 import '../../../models/broker_model.dart';
 import '../../../models/media_model.dart';
@@ -268,8 +269,7 @@ class _AddEditPropertyScreenState extends State<AddEditPropertyScreen> {
   @override
   Widget build(BuildContext context) {
     final isEdit = widget.propertyToEdit != null;
-    final mediaQueryWidth = MediaQuery.of(context).size.width;
-    final isMobileScreen = mediaQueryWidth < 600;
+    final isMobileScreen = context.isMobile;
 
     return PopScope(
       canPop: false,
@@ -293,7 +293,7 @@ class _AddEditPropertyScreenState extends State<AddEditPropertyScreen> {
                 padding: EdgeInsets.symmetric(horizontal: isMobile ? 12.0 : 24.0, vertical: 12),
                 child: Center(
                   child: Container(
-                    constraints: const BoxConstraints(maxWidth: 900.0),
+                    constraints: BoxConstraints(maxWidth: context.screenWidth800),
                     decoration: BoxDecoration(
                       color: AppColors.surface,
                       borderRadius: BorderRadius.circular(16.0),
@@ -368,7 +368,7 @@ class _AddEditPropertyScreenState extends State<AddEditPropertyScreen> {
             child: Center(
               heightFactor: 1.0,
               child: Container(
-                constraints: const BoxConstraints(maxWidth: 900.0),
+                constraints: BoxConstraints(maxWidth: context.screenWidth800),
                 child: WizardFooterWidget(
                   currentStep: isEdit ? _currentStep - 1 : _currentStep,
                   totalSteps: isEdit ? 2 : 3,

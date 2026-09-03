@@ -12,6 +12,9 @@ class PlanDurationOption extends Equatable {
   final int days;
   final String title;
   final bool isRecommended;
+  final bool isTrial;
+  final bool isAlreadyUsed;
+  final bool canPurchase;
 
   const PlanDurationOption({
     this.code = '',
@@ -19,18 +22,30 @@ class PlanDurationOption extends Equatable {
     this.days = 30,
     this.title = '',
     this.isRecommended = false,
+    this.isTrial = false,
+    this.isAlreadyUsed = false,
+    this.canPurchase = true,
   });
 
   static PlanDurationOption fromJson(dynamic json) {
     if (json is! Map) {
       return const PlanDurationOption();
     }
+    final codeVal = json['code']?.toString() ?? '';
+    final amountVal = double.tryParse(json['amount']?.toString() ?? '0') ?? 0.0;
+    final isTrialVal = (json['is_trial'] as bool?) ?? (codeVal.toUpperCase().contains('TRIAL') || amountVal == 0);
+    final isAlreadyUsedVal = (json['is_already_used'] as bool?) ?? false;
+    final canPurchaseVal = (json['can_purchase'] as bool?) ?? !(isTrialVal && isAlreadyUsedVal);
+
     return PlanDurationOption(
-      code: json['code']?.toString() ?? '',
-      amount: double.tryParse(json['amount']?.toString() ?? '0') ?? 0.0,
+      code: codeVal,
+      amount: amountVal,
       days: int.tryParse(json['days']?.toString() ?? '30') ?? 30,
       title: json['title']?.toString() ?? '',
       isRecommended: (json['is_recommended'] as bool?) ?? (json['is_popular'] as bool?) ?? false,
+      isTrial: isTrialVal,
+      isAlreadyUsed: isAlreadyUsedVal,
+      canPurchase: canPurchaseVal,
     );
   }
 
@@ -41,11 +56,36 @@ class PlanDurationOption extends Equatable {
       'days': days,
       if (title.isNotEmpty) 'title': title,
       'is_recommended': isRecommended,
+      'is_trial': isTrial,
+      'is_already_used': isAlreadyUsed,
+      'can_purchase': canPurchase,
     };
   }
 
+  PlanDurationOption copyWith({
+    String? code,
+    double? amount,
+    int? days,
+    String? title,
+    bool? isRecommended,
+    bool? isTrial,
+    bool? isAlreadyUsed,
+    bool? canPurchase,
+  }) {
+    return PlanDurationOption(
+      code: code ?? this.code,
+      amount: amount ?? this.amount,
+      days: days ?? this.days,
+      title: title ?? this.title,
+      isRecommended: isRecommended ?? this.isRecommended,
+      isTrial: isTrial ?? this.isTrial,
+      isAlreadyUsed: isAlreadyUsed ?? this.isAlreadyUsed,
+      canPurchase: canPurchase ?? this.canPurchase,
+    );
+  }
+
   @override
-  List<Object?> get props => [code, amount, days, title, isRecommended];
+  List<Object?> get props => [code, amount, days, title, isRecommended, isTrial, isAlreadyUsed, canPurchase];
 }
 
 class SubscriptionPlanModel extends Equatable {
@@ -94,9 +134,7 @@ class SubscriptionPlanModel extends Equatable {
 
     List<PlanDurationOption> parsedDurationOptions = [];
     if (json['duration_options'] != null && json['duration_options'] is List) {
-      parsedDurationOptions = (json['duration_options'] as List)
-          .map((e) => PlanDurationOption.fromJson(e))
-          .toList();
+      parsedDurationOptions = (json['duration_options'] as List).map((e) => PlanDurationOption.fromJson(e)).toList();
     }
 
     return SubscriptionPlanModel(
@@ -110,12 +148,8 @@ class SubscriptionPlanModel extends Equatable {
       durationOptions: parsedDurationOptions,
       isActive: json['is_active'] as bool? ?? true,
       isPopular: json['is_popular'] as bool? ?? false,
-      createdAt: json['created_at'] != null
-          ? DateTime.tryParse(json['created_at'].toString())?.toLocal()
-          : null,
-      updatedAt: json['updated_at'] != null
-          ? DateTime.tryParse(json['updated_at'].toString())?.toLocal()
-          : null,
+      createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'].toString())?.toLocal() : null,
+      updatedAt: json['updated_at'] != null ? DateTime.tryParse(json['updated_at'].toString())?.toLocal() : null,
     );
   }
 

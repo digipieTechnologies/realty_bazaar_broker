@@ -26,45 +26,44 @@ class AutomationConfirmationDialog extends StatelessWidget {
     final title = isEnabling ? context.tr('get_leads_title') : context.tr('pause_leads_title');
 
     final points = isEnabling
-        ? const [
+        ? [
             _AutomationPoint(
               icon: Icons.chat_bubble_outline_rounded,
               iconColor: AppColors.primary,
-              title: 'Instant Comment Replies',
-              description: 'Instantly reply to any user commenting on this social post.',
+              title: context.tr('automation_instant_replies_title'),
+              description: context.tr('automation_instant_replies_desc'),
             ),
             _AutomationPoint(
               icon: Icons.person_add_alt_1_rounded,
               iconColor: AppColors.primary800,
-              title: 'Direct Lead Capture',
-              description: 'Interested commenters will be captured as leads in your dashboard.',
+              title: context.tr('automation_lead_capture_title'),
+              description: context.tr('automation_lead_capture_desc'),
             ),
             _AutomationPoint(
               icon: Icons.insights_rounded,
               iconColor: AppColors.success,
-              title: 'Real-Time Insights',
-              description: 'Track comment engagements, lead conversion, and post metrics.',
+              title: context.tr('automation_real_time_insights_title'),
+              description: context.tr('automation_real_time_insights_desc'),
             ),
           ]
-        : const [
+        : [
             _AutomationPoint(
               icon: Icons.pause_circle_outline_rounded,
               iconColor: AppColors.warning,
-              title: 'Pause Comment Replies',
-              description: 'Stop responding to new comments on this post.',
+              title: context.tr('automation_pause_replies_title'),
+              description: context.tr('automation_pause_replies_desc'),
             ),
             _AutomationPoint(
               icon: Icons.person_off_rounded,
               iconColor: AppColors.error,
-              title: 'Pause Lead Generation',
-              description: 'New comments will no longer create lead entries in your CRM.',
+              title: context.tr('automation_pause_leads_title'),
+              description: context.tr('automation_pause_leads_desc'),
             ),
             _AutomationPoint(
               icon: Icons.verified_user_outlined,
               iconColor: AppColors.success,
-              title: 'Existing Data Preserved',
-              description:
-                  'All previously captured leads and reply history from this post remain safely saved.',
+              title: context.tr('automation_data_preserved_title'),
+              description: context.tr('automation_data_preserved_desc'),
             ),
           ];
 
@@ -102,10 +101,7 @@ class AutomationConfirmationDialog extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        title,
-                        style: AppTextStyles.heading3.copyWith(fontSize: 18.0, fontWeight: FontWeight.bold),
-                      ),
+                      Text(title, style: AppTextStyles.heading3.copyWith(fontSize: 18.0, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 2.0),
                       Text(
                         isEnabling ? context.tr('get_leads_subtitle') : context.tr('pause_leads_subtitle'),
@@ -167,10 +163,7 @@ class AutomationConfirmationDialog extends StatelessWidget {
                                   const SizedBox(height: 3.0),
                                   Text(
                                     point.description,
-                                    style: AppTextStyles.caption.copyWith(
-                                      color: AppColors.textSecondary,
-                                      height: 1.35,
-                                    ),
+                                    style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary, height: 1.35),
                                   ),
                                 ],
                               ),
@@ -226,10 +219,5 @@ class _AutomationPoint {
   final String title;
   final String description;
 
-  const _AutomationPoint({
-    required this.icon,
-    required this.iconColor,
-    required this.title,
-    required this.description,
-  });
+  const _AutomationPoint({required this.icon, required this.iconColor, required this.title, required this.description});
 }

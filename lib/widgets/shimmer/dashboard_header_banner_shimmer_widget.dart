@@ -12,7 +12,7 @@ class DashboardHeaderBannerShimmerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = context.isMobileUI;
+    final isMobile = context.isMobile;
 
     return Container(
       width: double.infinity,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/localization/property_localizer.dart';
 import '../../../models/property_model.dart';
 
@@ -31,17 +32,19 @@ class PropertyPreviewSpecsGrid extends StatelessWidget {
         children: [
           Row(
             children: [
-              _buildSpecItem(label: 'Bedrooms', value: '${property.bedrooms}'),
-              _buildSpecItem(
-                label: 'Bathrooms',
-                value: '${property.bathrooms}',
-                crossAxisAlignment: CrossAxisAlignment.center,
-              ),
-              _buildSpecItem(
-                label: 'Balconies',
-                value: '${property.balconies}',
-                crossAxisAlignment: CrossAxisAlignment.end,
-              ),
+              if (property.bedrooms > 0) _buildSpecItem(label: context.tr('bedrooms'), value: '${property.bedrooms}'),
+              if (property.bathrooms > 0)
+                _buildSpecItem(
+                  label: context.tr('bathrooms'),
+                  value: '${property.bathrooms}',
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                ),
+              if (property.balconies > 0)
+                _buildSpecItem(
+                  label: context.tr('balconies'),
+                  value: '${property.balconies}',
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                ),
             ],
           ),
           const Padding(
@@ -50,14 +53,15 @@ class PropertyPreviewSpecsGrid extends StatelessWidget {
           ),
           Row(
             children: [
-              _buildSpecItem(label: 'Area', value: formattedArea),
+              if (formattedArea.isNotEmpty) _buildSpecItem(label: context.tr('area'), value: formattedArea),
+              if (property.facing != null)
+                _buildSpecItem(
+                  label: context.tr('facing'),
+                  value: PropertyLocalizer.getLocalizedFacing(context, property.facing?.name),
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                ),
               _buildSpecItem(
-                label: 'Facing',
-                value: PropertyLocalizer.getLocalizedFacing(context, property.facing ?? ''),
-                crossAxisAlignment: CrossAxisAlignment.center,
-              ),
-              _buildSpecItem(
-                label: 'Parking',
+                label: context.tr('parking'),
                 value: '${property.parking}',
                 crossAxisAlignment: CrossAxisAlignment.end,
               ),

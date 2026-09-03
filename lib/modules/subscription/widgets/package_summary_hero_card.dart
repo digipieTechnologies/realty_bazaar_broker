@@ -4,10 +4,13 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../models/models.dart';
+import '../../../providers/auth/auth_provider.dart';
 import '../../../util/currency_formatter.dart';
 
 class PackageSummaryHeroCard extends StatelessWidget {
@@ -22,6 +25,15 @@ class PackageSummaryHeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = context.watch<AuthProvider>();
+    final activeSub = authProvider.activeSubscription;
+
+    final bool isActiveOption =
+        activeSub != null &&
+        !activeSub.isExpired &&
+        ((selectedOption.code.isNotEmpty && activeSub.planCode.toLowerCase() == selectedOption.code.toLowerCase()) ||
+            (selectedOption.amount > 0 && activeSub.amount == selectedOption.amount));
+
     final double displayAmount = selectedOption.amount > 0 ? selectedOption.amount : plan.amount;
     final double originalAmount = displayAmount * 1.25; // 25% original savings value reference
     final double savingsAmount = originalAmount - displayAmount;
@@ -38,10 +50,15 @@ class PackageSummaryHeroCard extends StatelessWidget {
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20.0),
-        border: Border.all(color: AppColors.heroDarkBorder.withValues(alpha: 0.4), width: 1.2),
+        border: Border.all(
+          color: isActiveOption ? AppColors.success : AppColors.heroDarkBorder.withValues(alpha: 0.4),
+          width: isActiveOption ? 1.8 : 1.2,
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.heroDarkBgEnd.withValues(alpha: 0.25),
+            color: isActiveOption
+                ? AppColors.success.withValues(alpha: 0.25)
+                : AppColors.heroDarkBgEnd.withValues(alpha: 0.25),
             blurRadius: 16.0,
             offset: const Offset(0, 6),
           ),
@@ -50,16 +67,13 @@ class PackageSummaryHeroCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Top Row: Plan Title & Icon + Recommended Pill
+          // Top Row: Plan Title & Icon + Recommended / Active Pill
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 padding: const EdgeInsets.all(7.0),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.25),
-                  shape: BoxShape.circle,
-                ),
+                decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.25), shape: BoxShape.circle),
                 child: const Icon(Icons.rocket_launch_rounded, size: 16.0, color: AppColors.heroAccentBlue),
               ),
               const SizedBox(width: 10.0),
@@ -70,7 +84,7 @@ class PackageSummaryHeroCard extends StatelessWidget {
                     Text(
                       plan.title.toUpperCase(),
                       style: AppTextStyles.caption.copyWith(
-                        color: AppColors.heroSubtextBlue,
+                        color: isActiveOption ? AppColors.emeraldTextLight : AppColors.heroSubtextBlue,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 1.0,
                         fontSize: 12.0,
@@ -80,7 +94,9 @@ class PackageSummaryHeroCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 1.0),
                     Text(
-                      '${selectedOption.title.isNotEmpty ? selectedOption.title : "${selectedOption.days} Days"} Campaign',
+                      selectedOption.title.isNotEmpty
+                          ? context.tr('campaign_title').replaceAll('{title}', selectedOption.title)
+                          : context.tr('campaign_days').replaceAll('{days}', selectedOption.days.toString()),
                       style: AppTextStyles.body2.copyWith(
                         color: AppColors.white,
                         fontWeight: FontWeight.w700,
@@ -92,7 +108,40 @@ class PackageSummaryHeroCard extends StatelessWidget {
                   ],
                 ),
               ),
-              if (isRecommended) ...[
+              if (isActiveOption) ...[
+                const SizedBox(width: 8.0),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(colors: [Color(0xFF059669), Color(0xFF10B981)]),
+                    borderRadius: BorderRadius.circular(12.0),
+                    border: Border.all(color: Colors.white, width: 1.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF10B981).withValues(alpha: 0.4),
+                        blurRadius: 6.0,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.check_circle_rounded, size: 12.0, color: Colors.white),
+                      const SizedBox(width: 4.0),
+                      Text(
+                        context.tr('active_plan_chip'),
+                        style: AppTextStyles.caption.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.5,
+                          fontSize: 9.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ] else if (isRecommended) ...[
                 const SizedBox(width: 8.0),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
@@ -113,7 +162,7 @@ class PackageSummaryHeroCard extends StatelessWidget {
                       const Icon(Icons.star_rounded, size: 12.0, color: AppColors.white),
                       const SizedBox(width: 4.0),
                       Text(
-                        'RECOMMENDED',
+                        context.tr('recommended'),
                         style: AppTextStyles.caption.copyWith(
                           color: AppColors.white,
                           fontWeight: FontWeight.w800,
@@ -165,7 +214,7 @@ class PackageSummaryHeroCard extends StatelessWidget {
                   border: Border.all(color: AppColors.success.withValues(alpha: 0.6)),
                 ),
                 child: Text(
-                  'Save ${_formatAmount(savingsAmount)}',
+                  context.tr('save_amount').replaceAll('{amount}', _formatAmount(savingsAmount)),
                   style: AppTextStyles.caption.copyWith(
                     color: AppColors.emeraldTextLight,
                     fontWeight: FontWeight.w700,

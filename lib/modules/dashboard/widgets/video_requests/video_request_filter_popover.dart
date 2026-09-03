@@ -2,20 +2,17 @@
 // Purpose: Separate modular filter widget for video request status filtering with multi-select checkboxes in a Wrap layout.
 
 import 'package:flutter/material.dart';
+import 'package:the_realty_bazaar/core/localization/app_localizations.dart';
+import 'package:the_realty_bazaar/models/video_request_enums.dart';
 
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
-import '../../../../models/models.dart';
 
 class VideoRequestFilterPopover extends StatelessWidget {
   final List<VideoRequestStatus> selectedStatuses;
   final ValueChanged<List<VideoRequestStatus>> onStatusesChanged;
 
-  const VideoRequestFilterPopover({
-    super.key,
-    required this.selectedStatuses,
-    required this.onStatusesChanged,
-  });
+  const VideoRequestFilterPopover({super.key, required this.selectedStatuses, required this.onStatusesChanged});
 
   void _toggleStatus(VideoRequestStatus status) {
     final updated = List<VideoRequestStatus>.from(selectedStatuses);
@@ -63,7 +60,7 @@ class VideoRequestFilterPopover extends StatelessWidget {
           spacing: 12.0,
           runSpacing: 10.0,
           children: [
-            _buildCheckboxRow(label: 'All', isChecked: isAllSelected, onTap: _selectAll),
+            _buildCheckboxRow(label: context.tr('filter_all'), isChecked: isAllSelected, onTap: _selectAll),
             for (final opt in statusOptions)
               _buildCheckboxRow(
                 label: opt['label'] as String,

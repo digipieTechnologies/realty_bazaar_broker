@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 import '../../app/app_colors.dart';
 import '../../app/app_text_styles.dart';
+import '../../core/localization/app_localizations.dart';
 
 class AppLoader extends StatelessWidget {
   final bool isFullScreen;
@@ -87,7 +88,7 @@ class AppLoader extends StatelessWidget {
                   ),
                 ] else ...[
                   const SizedBox(height: 12.0),
-                  Text('Loading...', style: AppTextStyles.body2.copyWith(color: AppColors.textSecondary)),
+                  Text(context.tr('loading'), style: AppTextStyles.body2.copyWith(color: AppColors.textSecondary)),
                 ],
               ],
             ),

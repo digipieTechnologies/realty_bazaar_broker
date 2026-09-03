@@ -11,6 +11,7 @@ import 'package:video_player/video_player.dart';
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
 import '../../../../core/localization/app_localizations.dart';
+import '../../../../util/common_ext.dart';
 import '../../../../models/media_model.dart';
 import '../../../../models/property_model.dart';
 import '../../../../providers/social/social_provider.dart';
@@ -118,8 +119,7 @@ class StepMediaSelection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final medias = property?.medias ?? [];
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 540;
+    final isMobile = context.isMobile;
     final crossAxisCount = isMobile ? 2 : 3;
 
     return SingleChildScrollView(
@@ -214,7 +214,7 @@ class StepMediaSelection extends StatelessWidget {
 
           // Media GridView
           if (medias.isEmpty && selectedMedia.isEmpty)
-            _buildEmptyMediaState()
+            _buildEmptyMediaState(context)
           else
             GridView.builder(
               shrinkWrap: true,
@@ -329,7 +329,7 @@ class StepMediaSelection extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyMediaState() {
+  Widget _buildEmptyMediaState(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(28.0),
@@ -344,10 +344,10 @@ class StepMediaSelection extends StatelessWidget {
         children: [
           const Icon(Icons.photo_library_outlined, size: 44.0, color: AppColors.textMuted),
           const SizedBox(height: 12.0),
-          Text('No Listing Media Attached', style: AppTextStyles.body1.copyWith(fontWeight: FontWeight.bold)),
+          Text(context.tr('no_listing_media_attached'), style: AppTextStyles.body1.copyWith(fontWeight: FontWeight.bold)),
           const SizedBox(height: 4.0),
           Text(
-            'No photos or videos are attached to this property listing.',
+            context.tr('no_listing_media_attached_desc'),
             style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary),
             textAlign: TextAlign.center,
           ),

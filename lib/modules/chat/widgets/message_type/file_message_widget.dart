@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
 import '../../../../core/utils/common_ext.dart';
-import '../../../../util/app_utils.dart';
+import '../../../../app/app_utils.dart';
 import '../../../../widgets/dialogs/app_file_preview_dialog.dart';
 
 class FileMessageWidget extends StatelessWidget {

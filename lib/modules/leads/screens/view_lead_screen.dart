@@ -10,6 +10,8 @@ import '../../../core/localization/property_localizer.dart';
 import '../../../models/models.dart';
 import '../../../providers/lead/lead_provider.dart';
 import '../../../util/app_date_utils.dart';
+import '../../../app/app_utils.dart';
+import '../../../util/common_ext.dart';
 import '../../../util/app_utils.dart';
 import '../../../widgets/badges/app_lead_status_badge.dart';
 import '../../../widgets/badges/app_platform_badge.dart';
@@ -115,7 +117,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
               const SizedBox(height: 16),
               Text(_errorMessage ?? 'Lead details not found.', style: AppTextStyles.body1),
               const SizedBox(height: 16),
-              ElevatedButton(onPressed: () => Navigator.of(context).maybePop(), child: const Text('Go Back')),
+              ElevatedButton(onPressed: () => Navigator.of(context).maybePop(), child: Text(context.tr('go_back'))),
             ],
           ),
         ),
@@ -161,7 +163,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
         physics: const ClampingScrollPhysics(),
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final isDesktop = constraints.maxWidth > 900;
+            final isDesktop = context.isDesktop;
 
             final profileHeroCard = _buildHeroProfileCard(context, lead, coverGradient, platform);
             final contactInfoCard = _buildContactInfoCard(context, lead, platform);
@@ -171,9 +173,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
             final notesCard = (notesText != null && notesText.trim().isNotEmpty)
                 ? _buildInquiryNotesCard(context, notesText.trim())
                 : null;
-            final permalinkButton = hasPermalink
-                ? _buildSocialPostButton(context, socialPost.permalink!)
-                : null;
+            final permalinkButton = hasPermalink ? _buildSocialPostButton(context, socialPost.permalink!) : null;
 
             final hasRightContent = propertyCard != null || notesCard != null;
 
@@ -182,7 +182,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                 // Centered single column for leads without property details or notes
                 return Center(
                   child: Container(
-                    constraints: const BoxConstraints(maxWidth: 720.0),
+                    constraints: BoxConstraints(maxWidth: context.screenWidth800),
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -273,9 +273,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20.0),
         border: Border.all(color: AppColors.border, width: 1.0),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 16, offset: const Offset(0, 4)),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 16, offset: const Offset(0, 4))],
       ),
       child: Column(
         children: [
@@ -298,9 +296,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                       right: -10,
                       bottom: -10,
                       child: Icon(
-                        platform == SocialPlatform.facebook
-                            ? Icons.facebook_rounded
-                            : Icons.camera_alt_rounded,
+                        platform == SocialPlatform.facebook ? Icons.facebook_rounded : Icons.camera_alt_rounded,
                         size: 90.0,
                         color: Colors.white.withValues(alpha: 0.12),
                       ),
@@ -423,7 +419,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
               children: [
                 _buildActionCalloutButton(
                   context,
-                  label: 'Call',
+                  label: context.tr('action_call'),
                   icon: const CallIconWidget(size: 24.0, color: Colors.white),
                   gradient: const LinearGradient(colors: [AppColors.primary600, AppColors.primary700]),
                   shadowColor: AppColors.primary600,
@@ -431,7 +427,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                 ),
                 _buildActionCalloutButton(
                   context,
-                  label: 'Message',
+                  label: context.tr('action_message'),
                   icon: const MessageIconWidget(size: 24.0, color: Colors.white),
                   gradient: const LinearGradient(colors: [AppColors.primary400, AppColors.primary500]),
                   shadowColor: AppColors.primary400,
@@ -439,7 +435,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                 ),
                 _buildActionCalloutButton(
                   context,
-                  label: 'WhatsApp',
+                  label: context.tr('action_whatsapp'),
                   icon: const WhatsappIconWidget(size: 24.0, color: Colors.white),
                   gradient: const LinearGradient(colors: [AppColors.whatsapp, AppColors.whatsappDark]),
                   shadowColor: AppColors.whatsapp,
@@ -471,11 +467,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
             gradient: gradient,
             shape: BoxShape.circle,
             boxShadow: [
-              BoxShadow(
-                color: shadowColor.withValues(alpha: 0.35),
-                blurRadius: 14,
-                offset: const Offset(0, 6),
-              ),
+              BoxShadow(color: shadowColor.withValues(alpha: 0.35), blurRadius: 14, offset: const Offset(0, 6)),
             ],
           ),
           child: Material(
@@ -509,9 +501,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16.0),
         border: Border.all(color: AppColors.border, width: 1.0),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 12, offset: const Offset(0, 4)),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 12, offset: const Offset(0, 4))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -596,9 +586,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
         ? PropertyLocalizer.getLocalizedPropertyType(context, property.propertyType).toUpperCase()
         : '';
     final priceStr = property != null && property.price > 0 ? property.price.toCompactCurrency() : '';
-    final addressStr = property?.address?.fullAddress.isNotEmpty == true
-        ? property!.address!.fullAddress
-        : '';
+    final addressStr = property?.address?.fullAddress.isNotEmpty == true ? property!.address!.fullAddress : '';
 
     return Container(
       width: double.infinity,
@@ -606,9 +594,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16.0),
         border: Border.all(color: AppColors.border, width: 1.0),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 12, offset: const Offset(0, 4)),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 12, offset: const Offset(0, 4))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -739,9 +725,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16.0),
         border: Border.all(color: AppColors.border, width: 1.0),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 12, offset: const Offset(0, 4)),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 12, offset: const Offset(0, 4))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -831,11 +815,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
               // Muted grey field label
               Text(
                 label,
-                style: AppTextStyles.caption.copyWith(
-                  color: AppColors.textMuted,
-                  fontSize: 12.0,
-                  letterSpacing: 0.2,
-                ),
+                style: AppTextStyles.caption.copyWith(color: AppColors.textMuted, fontSize: 12.0, letterSpacing: 0.2),
               ),
               const SizedBox(height: 3.0),
               // Dark bold field content

@@ -81,6 +81,7 @@ class AppColors {
 
   static const Color warning = Color(0xFFF59E0B); // Amber 500
   static const Color warningDark = Color(0xFFB45309);
+  static const Color warningAmberDark = Color(0xFFD97706);
   static const Color warningLight = Color(0xFFFFFBEB);
   static const Color warningBorder = Color(0xFFFDE68A);
 
@@ -166,4 +167,17 @@ class AppColors {
   static const List<Color> gradientInstagramTile = [Color(0xFFE1306C), Color(0xFFF58529)];
   static const List<Color> gradientAmber = [Color(0xFFF59E0B), Color(0xFFD97706)];
   static const List<Color> gradientIndigo = [Color(0xFF6366F1), Color(0xFF4F46E5)];
+
+  // Subscription Canvas & 3D Badge Color Tokens
+  static const Color mintGradientStart = Color(0xFFE6F7F0);
+  static const Color skyGradientEnd = Color(0xFFEFF6FF);
+  static const Color mintBadgeBgStart = Color(0xFFE0F2FE);
+  static const Color mintBadgeBgEnd = Color(0xFFECFDF5);
+  static const Color goldStarBg = Color(0xFFFEF3C7);
+  static const Color goldStarIcon = Color(0xFFD97706);
+  static const Color skyBlueAccent = Color(0xFF38BDF8);
+  static const Color cyanAccent = Color(0xFF06B6D4);
+  static const Color pinkConfetti = Color(0xFFEC4899);
+  static const Color indigoConfetti = Color(0xFF6366F1);
+  static const Color emeraldDark = Color(0xFF047857);
 }

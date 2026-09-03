@@ -56,7 +56,7 @@ class AppPaginationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final startItem = totalItems == 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
     final endItem = (currentPage * itemsPerPage) > totalItems ? totalItems : (currentPage * itemsPerPage);
-    final isMobile = context.isMobileUI;
+    final isMobile = context.isMobile;
 
     final infoWidget = RichText(
       text: TextSpan(

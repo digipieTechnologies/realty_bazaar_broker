@@ -11,6 +11,7 @@ class AppTagChip extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onDelete;
   final IconData? icon;
+  final IconData? trailingIcon;
   final bool isSelected;
   final Color? backgroundColor;
   final Color? textColor;
@@ -23,6 +24,7 @@ class AppTagChip extends StatelessWidget {
     this.onTap,
     this.onDelete,
     this.icon,
+    this.trailingIcon,
     this.isSelected = false,
     this.backgroundColor,
     this.textColor,
@@ -32,11 +34,9 @@ class AppTagChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveBg =
-        backgroundColor ?? (isSelected ? AppColors.primary : AppColors.primary.withValues(alpha: 0.08));
+    final effectiveBg = backgroundColor ?? (isSelected ? AppColors.primary : AppColors.primary.withValues(alpha: 0.08));
     final effectiveTextColor = textColor ?? (isSelected ? Colors.white : AppColors.primary);
-    final effectiveBorder =
-        borderColor ?? (isSelected ? AppColors.primary : AppColors.primary.withValues(alpha: 0.18));
+    final effectiveBorder = borderColor ?? (isSelected ? AppColors.primary : AppColors.primary.withValues(alpha: 0.18));
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
@@ -66,10 +66,7 @@ class AppTagChip extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (icon != null) ...[
-                  Icon(icon, size: 14.0, color: effectiveTextColor),
-                  const SizedBox(width: 6.0),
-                ],
+                if (icon != null) ...[Icon(icon, size: 14.0, color: effectiveTextColor), const SizedBox(width: 6.0)],
                 Flexible(
                   child: Text(
                     label,
@@ -95,6 +92,10 @@ class AppTagChip extends StatelessWidget {
                       child: Icon(Icons.close_rounded, size: 12.0, color: effectiveTextColor),
                     ),
                   ),
+                ],
+                if (trailingIcon != null) ...[
+                  const SizedBox(width: 6.0),
+                  Icon(trailingIcon, size: 12.0, color: effectiveTextColor),
                 ],
               ],
             ),

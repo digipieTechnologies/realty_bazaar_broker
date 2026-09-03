@@ -3,9 +3,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart' as package_shimmer;
+import 'package:the_realty_bazaar/util/common_ext.dart';
 
 import '../../app/app_colors.dart';
-import '../../util/common_ext.dart';
 
 class LeadListShimmerWidget extends StatelessWidget {
   final int count;
@@ -15,7 +15,7 @@ class LeadListShimmerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final useMobileTile = isCompact ?? context.isMobileUI;
+    final useMobileTile = isCompact ?? context.isMobile;
 
     return ListView.builder(
       shrinkWrap: true,
@@ -83,10 +83,7 @@ class LeadListShimmerWidget extends StatelessWidget {
                   Expanded(
                     child: Container(
                       height: 28.0,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6.0),
-                      ),
+                      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(6.0)),
                     ),
                   ),
                   const SizedBox(width: 6.0),

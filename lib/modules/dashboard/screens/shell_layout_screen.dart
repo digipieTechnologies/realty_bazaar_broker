@@ -200,15 +200,17 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
           onTap: () => AppNavigator.navigateToProfile(context),
           borderRadius: BorderRadius.circular(100),
           child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: CircleAvatar(
-              radius: 18,
-              backgroundColor: AppColors.primary.withOpacity(0.1),
-              child: Text(
-                displayName.substring(0, 1).toUpperCase(),
-                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.primary),
-              ),
-            ),
+            padding: const EdgeInsets.all(10.0),
+            child: profile == null
+                ? const AppShimmerContainer(width: 36, height: 36, borderRadius: 18.0)
+                : CircleAvatar(
+                    radius: 18,
+                    backgroundColor: AppColors.primary.withOpacity(0.1),
+                    child: Text(
+                      displayName.substring(0, 1).toUpperCase(),
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.primary),
+                    ),
+                  ),
           ),
         ),
         actions: const [Padding(padding: EdgeInsets.only(right: 12.0), child: CompactSetupProgressWidget())],
@@ -438,10 +440,7 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
                 children: [
                   Text(
                     name,
-                    style: AppTextStyles.body2.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
-                    ),
+                    style: AppTextStyles.body2.copyWith(fontWeight: FontWeight.w700, color: AppColors.textPrimary),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),

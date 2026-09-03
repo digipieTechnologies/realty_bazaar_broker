@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../widgets/dialogs/estimated_results_info_dialog.dart';
 
 class EstimatedResultsCard extends StatelessWidget {
@@ -38,11 +39,7 @@ class EstimatedResultsCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20.0),
         border: Border.all(color: AppColors.border.withValues(alpha: 0.8)),
         boxShadow: [
-          BoxShadow(
-            color: AppColors.shadow.withValues(alpha: 0.04),
-            blurRadius: 12.0,
-            offset: const Offset(0, 3),
-          ),
+          BoxShadow(color: AppColors.shadow.withValues(alpha: 0.04), blurRadius: 12.0, offset: const Offset(0, 3)),
         ],
       ),
       child: Column(
@@ -51,7 +48,7 @@ class EstimatedResultsCard extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Estimated Results',
+                context.tr('estimated_results'),
                 style: AppTextStyles.body1.copyWith(
                   fontWeight: FontWeight.w800,
                   color: AppColors.textPrimary,
@@ -80,7 +77,7 @@ class EstimatedResultsCard extends StatelessWidget {
                   bgColor: AppColors.primary.withValues(alpha: 0.04),
                   borderColor: AppColors.primary.withValues(alpha: 0.15),
                   valueText: '${numFmt.format(estViewsK)}K+',
-                  label: 'VIEWS',
+                  label: context.tr('views_uppercase'),
                 ),
               ),
               const SizedBox(width: 12.0),
@@ -92,19 +89,19 @@ class EstimatedResultsCard extends StatelessWidget {
                   bgColor: AppColors.success.withValues(alpha: 0.04),
                   borderColor: AppColors.success.withValues(alpha: 0.15),
                   valueText: '$estLeadsMin–$estLeadsMax',
-                  label: 'LEADS',
+                  label: context.tr('leads_uppercase'),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 12.0),
           Text(
-            'Receive estimated $estLeadsMin to $estLeadsMax qualified buyer leads directly within $days days.',
-            style: AppTextStyles.caption.copyWith(
-              color: AppColors.textSecondary,
-              fontSize: 12.0,
-              height: 1.35,
-            ),
+            context
+                .tr('estimated_results_desc')
+                .replaceAll('{min}', estLeadsMin.toString())
+                .replaceAll('{max}', estLeadsMax.toString())
+                .replaceAll('{days}', days.toString()),
+            style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary, fontSize: 12.0, height: 1.35),
           ),
         ],
       ),
