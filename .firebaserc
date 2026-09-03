@@ -5,6 +5,9 @@
   "targets": {
     "the-realty-bazaar": {
       "hosting": {
+        "dev": [
+          "the-realty-bazaar-broker-dev"
+        ],
         "partners": [
           "the-realty-bazaar-broker"
         ]
