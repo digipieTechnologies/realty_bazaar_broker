@@ -5,11 +5,13 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../models/models.dart';
+import '../../../providers/auth/auth_provider.dart';
 import '../../../util/currency_formatter.dart';
 import '../../../widgets/buttons/app_button.dart';
 
@@ -47,8 +49,19 @@ class GrowPlanCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = context.watch<AuthProvider>();
+    final activeSub = authProvider.activeSubscription;
+
+    final bool isActivePlan =
+        activeSub != null &&
+        !activeSub.isExpired &&
+        ((plan.id != null && activeSub.subscriptionPlanId?.id == plan.id) ||
+            (activeSub.amount > 0 && activeSub.amount == plan.amount) ||
+            (activeSub.planCode.isNotEmpty &&
+                plan.durationOptions.any((opt) => opt.code.toLowerCase() == activeSub.planCode.toLowerCase())));
+
     final bool isPopular = plan.isPopular;
-    final accent = _getAccentColor();
+    final accent = isActivePlan ? AppColors.success : _getAccentColor();
     final gradient = _getCardGradient();
 
     return Stack(
@@ -65,11 +78,20 @@ class GrowPlanCardWidget extends StatelessWidget {
             color: isPopular ? null : AppColors.surface,
             borderRadius: BorderRadius.circular(22.0),
             border: Border.all(
-              color: isPopular ? AppColors.primary300 : accent.withValues(alpha: 0.22),
-              width: isPopular ? 1.5 : 1.2,
+              color: isActivePlan
+                  ? AppColors.success
+                  : (isPopular ? AppColors.primary300 : accent.withValues(alpha: 0.22)),
+              width: isActivePlan ? 2.0 : (isPopular ? 1.5 : 1.2),
             ),
             boxShadow: [
-              if (isPopular)
+              if (isActivePlan)
+                BoxShadow(
+                  color: AppColors.success.withValues(alpha: 0.25),
+                  blurRadius: 28.0,
+                  spreadRadius: 2.0,
+                  offset: const Offset(0, 10),
+                )
+              else if (isPopular)
                 BoxShadow(
                   color: AppColors.primary.withValues(alpha: 0.25),
                   blurRadius: 28.0,
@@ -93,12 +115,12 @@ class GrowPlanCardWidget extends StatelessWidget {
             ],
           ),
           child: Padding(
-            padding: EdgeInsets.fromLTRB(20.0, isPopular ? 24.0 : 20.0, 20.0, 20.0),
+            padding: EdgeInsets.fromLTRB(20.0, (isPopular || isActivePlan) ? 24.0 : 20.0, 20.0, 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Title Badge
-                _buildTitleBadge(context, accent),
+                _buildTitleBadge(context, accent, isActivePlan: isActivePlan),
                 const SizedBox(height: 14.0),
 
                 // Amount & Period
@@ -150,8 +172,48 @@ class GrowPlanCardWidget extends StatelessWidget {
           ),
         ),
 
-        // Floating Popular Pill Badge (Minor up on top boundary of card)
-        if (isPopular)
+        // Active Plan Floating Pill Badge
+        if (isActivePlan)
+          Positioned(
+            top: 0.0,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(colors: [Color(0xFF059669), Color(0xFF10B981)]),
+                  borderRadius: BorderRadius.circular(20.0),
+                  border: Border.all(color: Colors.white, width: 1.5),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF10B981).withValues(alpha: 0.45),
+                      blurRadius: 12.0,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.check_circle_rounded, size: 14.0, color: Colors.white),
+                    const SizedBox(width: 5.0),
+                    Text(
+                      context.tr('active_plan_chip'),
+                      style: AppTextStyles.caption.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 11.0,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          )
+        // Floating Popular Pill Badge (If not active)
+        else if (isPopular)
           Positioned(
             top: 0.0,
             left: 0,
@@ -193,7 +255,7 @@ class GrowPlanCardWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildTitleBadge(BuildContext context, Color accent) {
+  Widget _buildTitleBadge(BuildContext context, Color accent, {bool isActivePlan = false}) {
     final bool isPopular = plan.isPopular;
 
     IconData titleIcon;
@@ -209,30 +271,36 @@ class GrowPlanCardWidget extends StatelessWidget {
         break;
     }
 
+    final Color badgeColor = isActivePlan ? AppColors.success : (isPopular ? AppColors.heroSubtextBlue : accent);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
       decoration: BoxDecoration(
-        gradient: isPopular
+        gradient: isActivePlan
             ? LinearGradient(
-                colors: [Colors.white.withValues(alpha: 0.15), Colors.white.withValues(alpha: 0.05)],
+                colors: [AppColors.success.withValues(alpha: 0.18), AppColors.success.withValues(alpha: 0.06)],
               )
-            : LinearGradient(colors: [accent.withValues(alpha: 0.12), accent.withValues(alpha: 0.04)]),
+            : (isPopular
+                  ? LinearGradient(colors: [Colors.white.withValues(alpha: 0.15), Colors.white.withValues(alpha: 0.05)])
+                  : LinearGradient(colors: [accent.withValues(alpha: 0.12), accent.withValues(alpha: 0.04)])),
         borderRadius: BorderRadius.circular(30.0),
         border: Border.all(
-          color: isPopular ? Colors.white.withValues(alpha: 0.2) : accent.withValues(alpha: 0.25),
+          color: isActivePlan
+              ? AppColors.success.withValues(alpha: 0.4)
+              : (isPopular ? Colors.white.withValues(alpha: 0.2) : accent.withValues(alpha: 0.25)),
           width: 1.0,
         ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(titleIcon, size: 13.0, color: isPopular ? AppColors.heroSubtextBlue : accent),
+          Icon(titleIcon, size: 13.0, color: badgeColor),
           const SizedBox(width: 5.0),
           Flexible(
             child: Text(
               plan.title.toUpperCase(),
               style: AppTextStyles.caption.copyWith(
-                color: isPopular ? AppColors.heroSubtextBlue : accent,
+                color: badgeColor,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 0.5,
                 fontSize: 11.0,

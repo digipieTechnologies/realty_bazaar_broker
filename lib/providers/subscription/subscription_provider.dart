@@ -59,54 +59,57 @@ class SubscriptionProvider extends ChangeNotifier {
     }
   }
 
-  /// Fetches all active subscription plans from Supabase subscription_plans table
-  /// and dynamically sorts them according to billing type and price.
-  Future<void> fetchActiveSubscriptionPlans() async {
+  /// Fetches all active subscription plans via RPC function get_broker_subscription_plans
+  Future<void> fetchActiveSubscriptionPlans({String? brokerId}) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      final response = await SupabaseConfig.client
-          .from(SubscriptionPlanModel.tableName)
-          .select()
-          .eq('is_active', true);
+      final response = await SupabaseConfig.client.rpc(
+        'get_broker_subscription_plans',
+        params: {'p_broker_id': brokerId},
+      );
 
       final List<SubscriptionPlanModel> loadedPlans = (response as List)
           .map((item) => SubscriptionPlanModel.fromJson(item))
           .toList();
 
-      // Dynamic sorting logic:
-      // Primary Sort: Billing type order -> oneTime (0), recurring (1), custom (2)
-      // Secondary Sort: Amount ascending
-      loadedPlans.sort((a, b) {
-        final orderA = _getBillingTypeSortWeight(a.billingType);
-        final orderB = _getBillingTypeSortWeight(b.billingType);
-
-        if (orderA != orderB) {
-          return orderA.compareTo(orderB);
-        }
-
-        return a.amount.compareTo(b.amount);
-      });
-
-      _plans = loadedPlans;
-
-      // Default selected plan to Most Popular if available, or first plan
-      if (_plans.isNotEmpty && _selectedPlan == null) {
-        _selectedPlan = popularPlan ?? _plans.first;
-      }
-
-      debugPrint(
-        '[SubscriptionProvider] Fetched ${_plans.length} active subscription plans successfully.',
-      );
+      _sortAndSetPlans(loadedPlans, brokerId);
     } catch (e) {
       _errorMessage = 'Failed to load subscription plans: ${e.toString()}';
-      debugPrint('[SubscriptionProvider] Error fetching subscription plans: $e');
+      debugPrint('[SubscriptionProvider] Error fetching subscription plans via RPC: $e');
     } finally {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void _sortAndSetPlans(List<SubscriptionPlanModel> loadedPlans, String? brokerId) {
+    // Dynamic sorting logic:
+    // Primary Sort: Billing type order -> oneTime (0), recurring (1), custom (2)
+    // Secondary Sort: Amount ascending
+    loadedPlans.sort((a, b) {
+      final orderA = _getBillingTypeSortWeight(a.billingType);
+      final orderB = _getBillingTypeSortWeight(b.billingType);
+
+      if (orderA != orderB) {
+        return orderA.compareTo(orderB);
+      }
+
+      return a.amount.compareTo(b.amount);
+    });
+
+    _plans = loadedPlans;
+
+    // Default selected plan to Most Popular if available, or first plan
+    if (_plans.isNotEmpty && _selectedPlan == null) {
+      _selectedPlan = popularPlan ?? _plans.first;
+    }
+
+    debugPrint(
+      '[SubscriptionProvider] Fetched ${_plans.length} active subscription plans successfully for broker: $brokerId',
+    );
   }
 
   int _getBillingTypeSortWeight(PlanBillingType billingType) {
@@ -143,7 +146,13 @@ class SubscriptionProvider extends ChangeNotifier {
         },
       );
 
-      return res['success'] == true;
+      final bool isSuccess = res != null && res['success'] == true;
+      if (isSuccess) {
+        // Re-fetch plans and active subscription state immediately on payment success
+        await fetchActiveSubscriptionPlans(brokerId: brokerId);
+      }
+
+      return isSuccess;
     } catch (e) {
       debugPrint('Error processing subscription payment: $e');
       return false;
@@ -151,14 +160,9 @@ class SubscriptionProvider extends ChangeNotifier {
   }
 
   /// Fetches the currently running active subscription for a broker using RPC
-  Future<UserSubscriptionModel?> fetchActiveBrokerSubscription(
-    String brokerId,
-  ) async {
+  Future<UserSubscriptionModel?> fetchActiveBrokerSubscription(String brokerId) async {
     try {
-      final res = await SupabaseConfig.client.rpc(
-        'get_broker_active_subscription',
-        params: {'p_broker_id': brokerId},
-      );
+      final res = await SupabaseConfig.client.rpc('get_broker_active_subscription', params: {'p_broker_id': brokerId});
 
       if (res != null) {
         return UserSubscriptionModel.fromJson(res);

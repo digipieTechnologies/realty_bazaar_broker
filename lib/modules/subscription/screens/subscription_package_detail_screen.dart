@@ -108,7 +108,9 @@ class _SubscriptionPackageDetailScreenState extends State<SubscriptionPackageDet
               );
             }
           } else {
-            AppToast.showError(context.tr('update_failed'), context.tr('payment_success_update_failed'));
+            if (mounted) {
+              AppToast.showError(context.tr('update_failed'), context.tr('payment_success_update_failed'));
+            }
           }
         }
         if (mounted) {
@@ -116,15 +118,19 @@ class _SubscriptionPackageDetailScreenState extends State<SubscriptionPackageDet
         }
       },
       onFailure: (response) {
-        setState(() => _isProcessingPayment = false);
-        AppToast.showError(context.tr('payment_failed'), response.message ?? context.tr('payment_error_default'));
+        if (mounted) {
+          setState(() => _isProcessingPayment = false);
+          AppToast.showError(context.tr('payment_failed'), response.message ?? context.tr('payment_error_default'));
+        }
       },
       onExternalWallet: (response) {
-        setState(() => _isProcessingPayment = false);
-        AppToast.showSuccess(
-          context.tr('external_wallet'),
-          context.tr('wallet_selected').replaceAll('{wallet}', response.walletName ?? ''),
-        );
+        if (mounted) {
+          setState(() => _isProcessingPayment = false);
+          AppToast.showSuccess(
+            context.tr('external_wallet'),
+            context.tr('wallet_selected').replaceAll('{wallet}', response.walletName ?? ''),
+          );
+        }
       },
     );
   }
@@ -147,16 +153,20 @@ class _SubscriptionPackageDetailScreenState extends State<SubscriptionPackageDet
       if (await canLaunchUrl(telUri)) {
         await launchUrl(telUri);
       } else {
+        if (mounted) {
+          AppToast.showError(
+            context.tr('support_call'),
+            context.tr('support_call_desc').replaceAll('{phone}', AppConstants.supportPhoneDisplay),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
         AppToast.showError(
           context.tr('support_call'),
           context.tr('support_call_desc').replaceAll('{phone}', AppConstants.supportPhoneDisplay),
         );
       }
-    } catch (e) {
-      AppToast.showError(
-        context.tr('support_call'),
-        context.tr('support_call_desc').replaceAll('{phone}', AppConstants.supportPhoneDisplay),
-      );
     }
   }
 
@@ -164,6 +174,13 @@ class _SubscriptionPackageDetailScreenState extends State<SubscriptionPackageDet
     final bool isMobileNative = !kIsWeb && (Platform.isAndroid || Platform.isIOS);
     if (!isMobileNative) {
       AppToast.showError(context.tr('mobile_app_required'), context.tr('mobile_app_required_desc'));
+      return;
+    }
+    final isTrialUsed = _currentPlan.durationOptions.any((element) => element.isAlreadyUsed && element.isTrial);
+    if (isTrialUsed) {
+      final String desc = context.tr('trial_already_used_desc');
+
+      AppToast.showError(context.tr('trial_already_used_title'), desc);
       return;
     }
 

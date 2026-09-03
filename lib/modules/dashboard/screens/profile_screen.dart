@@ -209,7 +209,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: isMobile ? CommonAppBar(title: context.tr('action_profile')) : null,
+      appBar: isDesktop ? null : CommonAppBar(title: context.tr('action_profile')),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: AppConstants.getTabPadding(context, bottomExtra: isMobile ? 80.0 : 24.0),

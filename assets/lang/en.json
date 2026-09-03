@@ -819,5 +819,9 @@
   "set_new_password_subtitle": "Your new password must be at least 6 characters long and different from previous passwords.",
   "err_enter_new_password": "Please enter a new password",
   "err_strong_password": "Password must be at least 6 characters with a letter and digit",
-  "err_confirm_new_password": "Please confirm your new password"
+  "err_confirm_new_password": "Please confirm your new password",
+  "trial_already_used_title": "Trial Already Claimed",
+  "trial_already_used_desc": "You have already used your trial plan. Please select a paid package to continue.",
+  "active_plan_chip": "ACTIVE PLAN",
+  "active_chip": "ACTIVE"
 }

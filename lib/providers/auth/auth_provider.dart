@@ -17,6 +17,7 @@ import '../dashboard/dashboard_provider.dart';
 import '../lead/lead_provider.dart';
 import '../property/property_provider.dart';
 import '../social/social_provider.dart';
+import '../subscription/subscription_provider.dart';
 import '../video_request/video_request_provider.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -623,6 +624,16 @@ class AuthProvider extends ChangeNotifier {
               );
             }
             notifyListeners();
+
+            // Auto-refresh subscription plans & duration flags in SubscriptionProvider
+            final navContext = AppRoutes.rootNavigatorKey.currentContext;
+            if (navContext != null && navContext.mounted) {
+              try {
+                navContext.read<SubscriptionProvider>().fetchActiveSubscriptionPlans(brokerId: brokerId);
+              } catch (e) {
+                debugPrint('Error refreshing plans from AuthProvider realtime callback: $e');
+              }
+            }
           },
         )
         .subscribe();
