@@ -7,10 +7,10 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import '../../../util/common_ext.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../models/models.dart';
+import '../../../util/common_ext.dart';
 import '../../../util/currency_formatter.dart';
 import '../../../widgets/buttons/app_button.dart';
 

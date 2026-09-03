@@ -4,7 +4,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../app/app_colors.dart';
-import '../../../../util/app_utils.dart';
+import '../../../../app/app_utils.dart';
 import '../../../../widgets/toast/app_toast.dart';
 
 class LocationMessageWidget extends StatelessWidget {

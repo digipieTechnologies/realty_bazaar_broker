@@ -14,7 +14,6 @@ import '../modules/leads/screens/view_lead_screen.dart';
 import '../modules/legal/screens/privacy_policy_screen.dart';
 import '../modules/legal/screens/terms_of_service_screen.dart';
 import '../modules/properties/screens/view_property_screen.dart';
-import '../modules/dashboard/screens/view_post_screen.dart';
 import '../modules/subscription/screens/active_plan_detail_screen.dart';
 import '../modules/subscription/screens/subscription_package_detail_screen.dart';
 import '../modules/subscription/screens/subscription_success_screen.dart';

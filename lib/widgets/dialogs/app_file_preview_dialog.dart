@@ -11,7 +11,7 @@ import 'package:the_realty_bazaar/widgets/buttons/app_button.dart';
 import '../../app/app_colors.dart';
 import '../../core/localization/app_localizations.dart';
 import '../../core/utils/common_ext.dart';
-import '../../util/app_utils.dart';
+import '../../app/app_utils.dart';
 import '../images/cached_image.dart';
 import '../toast/app_toast.dart';
 

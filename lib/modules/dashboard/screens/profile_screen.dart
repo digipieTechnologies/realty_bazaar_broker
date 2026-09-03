@@ -17,7 +17,6 @@ import '../../../providers/auth/auth_provider.dart';
 import '../../../util/common_ext.dart';
 import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/buttons/language_selector_button.dart';
-import '../../../widgets/common/common_app_bar.dart';
 import '../../../widgets/common/app_tag_chip.dart';
 import '../../../widgets/common/common_app_bar.dart';
 import '../../../widgets/dialogs/app_dialog.dart';

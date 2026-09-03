@@ -6,7 +6,7 @@ import 'package:the_realty_bazaar/core/services/clarity_service.dart';
 import '../../core/services/r2_storage_service.dart';
 import '../../core/supabase/supabase_config.dart';
 import '../../models/models.dart';
-import '../../util/app_utils.dart';
+import '../../app/app_utils.dart';
 import '../../widgets/toast/app_toast.dart';
 import '../auth/auth_provider.dart';
 

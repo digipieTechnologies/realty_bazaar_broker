@@ -8,7 +8,6 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../util/common_ext.dart';
 import 'package:the_realty_bazaar/modules/subscription/widgets/sticky_subscription_cta.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -21,6 +20,7 @@ import '../../../core/services/razorpay_service.dart';
 import '../../../models/models.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../providers/subscription/subscription_provider.dart';
+import '../../../util/common_ext.dart';
 import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/common/common_app_bar.dart';
 import '../../../widgets/toast/app_toast.dart';

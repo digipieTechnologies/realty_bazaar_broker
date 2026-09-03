@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:the_realty_bazaar/app/app_navigator.dart';
 import 'package:the_realty_bazaar/util/common_ext.dart';
 import 'package:the_realty_bazaar/widgets/toast/app_toast.dart';
-import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_routes.dart';
@@ -18,7 +17,6 @@ import '../../../providers/auth/auth_provider.dart';
 import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/dialogs/app_dialog.dart';
 import '../../../widgets/inputs/app_textfield.dart';
-import '../../../widgets/toast/app_toast.dart';
 
 class DeleteAccountScreen extends StatefulWidget {
   const DeleteAccountScreen({super.key});

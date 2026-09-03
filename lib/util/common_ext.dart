@@ -44,7 +44,7 @@ extension StringX on String? {
 
 extension ContextX on BuildContext {
   /// Responsive Breakpoint Constants
-  static const double desktopBreakpoint = 900.0;
+  static const double desktopBreakpoint = 900;
   static const double mobileBreakpoint = 600.0;
 
   /// Theme shorthand access

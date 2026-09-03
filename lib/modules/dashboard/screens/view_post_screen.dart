@@ -11,7 +11,7 @@ import '../../../core/localization/app_localizations.dart';
 import '../../../models/social_enums.dart';
 import '../../../models/social_post_model.dart';
 import '../../../providers/social/social_provider.dart';
-import '../../../util/app_utils.dart';
+import '../../../app/app_utils.dart';
 import '../../../util/common_ext.dart';
 import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/common/app_card_container.dart';

@@ -6,13 +6,11 @@ import 'package:go_router/go_router.dart';
 import 'package:the_realty_bazaar/app/app_navigator.dart';
 import 'package:the_realty_bazaar/util/common_ext.dart';
 import 'package:the_realty_bazaar/widgets/brand/app_logo.dart';
-import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/app_routes.dart';
 import '../../../app/app_text_styles.dart';
 import '../../../core/localization/app_localizations.dart';
-import '../../../widgets/brand/app_logo.dart';
 
 class TermsOfServiceScreen extends StatelessWidget {
   const TermsOfServiceScreen({super.key});

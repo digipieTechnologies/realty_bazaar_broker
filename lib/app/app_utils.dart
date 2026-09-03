@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../util/common_ext.dart';
 import '../widgets/dialogs/app_dialog.dart';
 import '../widgets/toast/app_toast.dart';
 
@@ -148,18 +147,6 @@ class AppUtils {
     AppToast.showError('Launch Failed', 'Could not open connection link in browser.');
     return false;
   }
-
-  // --- SCREEN SIZE HELPERS ---
-
-  static double getScreenWidth(BuildContext context) => context.width;
-
-  static double getScreenHeight(BuildContext context) => context.height;
-
-  static bool isMobile(BuildContext context) => context.isMobileUI;
-
-  static bool isTablet(BuildContext context) => context.isTabletUI;
-
-  static bool isDesktop(BuildContext context) => context.isDesktop;
 
   // --- DEBOUNCER ---
 
