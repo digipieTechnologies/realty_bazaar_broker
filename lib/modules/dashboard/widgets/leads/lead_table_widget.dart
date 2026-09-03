@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/app_colors.dart';
 import '../../../../core/localization/app_localizations.dart';
+import '../../../../models/lead_status_enum.dart';
 import '../../../../models/social_lead_model.dart';
 import '../../../../util/common_ext.dart';
 import '../../../../widgets/buttons/app_button.dart';
@@ -24,6 +25,8 @@ class LeadTableWidget extends StatefulWidget {
   final int totalItems;
   final List<String> selectedPlatforms;
   final ValueChanged<List<String>>? onPlatformsFilterChanged;
+  final LeadStatus? selectedStatus;
+  final ValueChanged<LeadStatus?>? onStatusFilterChanged;
   final String? activeFilter;
   final ValueChanged<String>? onFilterChanged;
   final ValueChanged<int> onPageChanged;
@@ -39,6 +42,8 @@ class LeadTableWidget extends StatefulWidget {
     required this.totalItems,
     this.selectedPlatforms = const [],
     this.onPlatformsFilterChanged,
+    this.selectedStatus,
+    this.onStatusFilterChanged,
     this.activeFilter,
     this.onFilterChanged,
     required this.onPageChanged,
@@ -52,11 +57,13 @@ class LeadTableWidget extends StatefulWidget {
 
 class _LeadTableWidgetState extends State<LeadTableWidget> {
   late List<String> _localPlatformsFilter;
+  LeadStatus? _localStatusFilter;
 
   @override
   void initState() {
     super.initState();
     _localPlatformsFilter = List<String>.from(widget.selectedPlatforms);
+    _localStatusFilter = widget.selectedStatus;
     if (_localPlatformsFilter.isEmpty && widget.activeFilter != null && widget.activeFilter != 'all') {
       _localPlatformsFilter = [widget.activeFilter!];
     }
@@ -68,6 +75,9 @@ class _LeadTableWidgetState extends State<LeadTableWidget> {
     if (widget.selectedPlatforms != oldWidget.selectedPlatforms) {
       _localPlatformsFilter = List<String>.from(widget.selectedPlatforms);
     }
+    if (widget.selectedStatus != oldWidget.selectedStatus) {
+      _localStatusFilter = widget.selectedStatus;
+    }
   }
 
   void _applyFilter() {
@@ -76,6 +86,7 @@ class _LeadTableWidgetState extends State<LeadTableWidget> {
     } else if (widget.onFilterChanged != null) {
       widget.onFilterChanged!(_localPlatformsFilter.isEmpty ? 'all' : _localPlatformsFilter.first);
     }
+    widget.onStatusFilterChanged?.call(_localStatusFilter);
   }
 
   @override
@@ -103,6 +114,7 @@ class _LeadTableWidgetState extends State<LeadTableWidget> {
                   onClear: () {
                     setState(() {
                       _localPlatformsFilter = [];
+                      _localStatusFilter = null;
                     });
                     _applyFilter();
                   },
@@ -114,6 +126,12 @@ class _LeadTableWidgetState extends State<LeadTableWidget> {
                     onPlatformsChanged: (updated) {
                       setState(() {
                         _localPlatformsFilter = updated;
+                      });
+                    },
+                    selectedStatus: _localStatusFilter,
+                    onStatusChanged: (updated) {
+                      setState(() {
+                        _localStatusFilter = updated;
                       });
                     },
                   ),
@@ -138,12 +156,13 @@ class _LeadTableWidgetState extends State<LeadTableWidget> {
 
           // Desktop Table Header Row (Only shown on full Desktop Web view)
           if (!useTileView)
-            const AppTableHeaderRow(
+            AppTableHeaderRow(
               columns: [
-                AppTableColumnDef(title: 'LEAD DETAILS', flex: 3),
-                AppTableColumnDef(title: 'SOURCE', flex: 2, alignment: Alignment.center),
-                AppTableColumnDef(title: 'PROPERTY DETAILS', flex: 4),
-                AppTableColumnDef(title: 'CREATED AT', flex: 2),
+                const AppTableColumnDef(title: 'LEAD DETAILS', flex: 3),
+                AppTableColumnDef(title: context.tr('leads_status').toUpperCase(), flex: 1),
+                const AppTableColumnDef(title: 'SOURCE', flex: 1),
+                const AppTableColumnDef(title: 'PROPERTY DETAILS', flex: 4),
+                const AppTableColumnDef(title: 'CREATED AT', flex: 1),
               ],
               endSpacing: 40.0,
             ),

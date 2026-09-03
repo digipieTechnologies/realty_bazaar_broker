@@ -74,7 +74,6 @@ CREATE TABLE public.attachments (
 CREATE TABLE public.brokers (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   business_name text NOT NULL,
-  plan text,
   onboarding_status text NOT NULL DEFAULT 'pending'::text,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   is_active boolean NOT NULL DEFAULT true,
@@ -211,9 +210,11 @@ CREATE TABLE public.social_leads (
   broker_id uuid,
   is_deleted boolean NOT NULL DEFAULT false,
   deleted_at timestamp with time zone,
+  property_id uuid,
   CONSTRAINT social_leads_pkey PRIMARY KEY (id),
   CONSTRAINT social_leads_broker_id_fkey FOREIGN KEY (broker_id) REFERENCES public.brokers(id),
-  CONSTRAINT social_leads_social_post_id_fkey FOREIGN KEY (social_post_id) REFERENCES public.social_posts(id)
+  CONSTRAINT social_leads_social_post_id_fkey FOREIGN KEY (social_post_id) REFERENCES public.social_posts(id),
+  CONSTRAINT social_leads_property_id_fkey FOREIGN KEY (property_id) REFERENCES public.properties(id)
 );
 CREATE TABLE public.social_posts (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -313,4 +314,47 @@ CREATE TABLE public.video_requests (
   CONSTRAINT video_requests_broker_id_fkey FOREIGN KEY (broker_id) REFERENCES public.brokers(id),
   CONSTRAINT video_requests_cancelled_by_user_id_fkey FOREIGN KEY (cancelled_by_user_id) REFERENCES public.users(id),
   CONSTRAINT video_requests_property_id_fkey FOREIGN KEY (property_id) REFERENCES public.properties(id)
+);
+CREATE TABLE public.user_payments (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  broker_id uuid NOT NULL,
+  subscription_plan_id uuid,
+  amount numeric NOT NULL,
+  purpose USER-DEFINED NOT NULL DEFAULT 'buy_subscription'::payment_purpose_type,
+  status USER-DEFINED NOT NULL DEFAULT 'pending'::payment_status_type,
+  payment_provider USER-DEFINED NOT NULL DEFAULT 'razorpay'::payment_provider_type,
+  payment_id text,
+  metadata jsonb,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  updated_at timestamp with time zone NOT NULL DEFAULT now(),
+  CONSTRAINT user_payments_pkey PRIMARY KEY (id),
+  CONSTRAINT user_payments_broker_id_fkey FOREIGN KEY (broker_id) REFERENCES public.brokers(id),
+  CONSTRAINT user_payments_subscription_plan_id_fkey FOREIGN KEY (subscription_plan_id) REFERENCES public.subscription_plans(id)
+);
+CREATE TABLE public.user_subscriptions (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  broker_id uuid NOT NULL,
+  payment_id uuid NOT NULL,
+  subscription_plan_id uuid NOT NULL,
+  start_date timestamp with time zone NOT NULL,
+  end_date timestamp with time zone NOT NULL,
+  total_days integer NOT NULL,
+  amount numeric NOT NULL,
+  plan_code text NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  updated_at timestamp with time zone NOT NULL DEFAULT now(),
+  CONSTRAINT user_subscriptions_pkey PRIMARY KEY (id),
+  CONSTRAINT user_subscriptions_broker_id_fkey FOREIGN KEY (broker_id) REFERENCES public.brokers(id),
+  CONSTRAINT user_subscriptions_payment_id_fkey FOREIGN KEY (payment_id) REFERENCES public.user_payments(id),
+  CONSTRAINT user_subscriptions_plan_id_fkey FOREIGN KEY (subscription_plan_id) REFERENCES public.subscription_plans(id)
+);
+CREATE TABLE public.property_faqs (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  property_id uuid NOT NULL,
+  question text NOT NULL,
+  answer text NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  updated_at timestamp with time zone NOT NULL DEFAULT now(),
+  CONSTRAINT property_faqs_pkey PRIMARY KEY (id),
+  CONSTRAINT property_faqs_property_id_fkey FOREIGN KEY (property_id) REFERENCES public.properties(id)
 );

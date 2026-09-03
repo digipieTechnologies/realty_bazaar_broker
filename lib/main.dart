@@ -31,6 +31,7 @@ import 'providers/property/property_provider.dart';
 import 'providers/social/social_provider.dart';
 import 'providers/subscription/subscription_provider.dart';
 import 'providers/video_request/video_request_provider.dart';
+import 'providers/visit/visit_provider.dart';
 
 void main() async {
   // Ensure Flutter engine bindings are loaded first
@@ -140,6 +141,7 @@ class RealtyBazaarApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LeadProvider()),
         ChangeNotifierProvider(create: (_) => AdCampaignProvider()),
         ChangeNotifierProvider(create: (_) => SubscriptionProvider()),
+        ChangeNotifierProvider(create: (_) => VisitProvider()),
       ],
       child: Consumer<LanguageProvider>(
         builder: (context, languageProvider, child) {

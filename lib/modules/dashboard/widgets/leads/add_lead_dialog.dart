@@ -10,6 +10,7 @@ import '../../../../app/app_text_styles.dart';
 import '../../../../app/app_utils.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/supabase/supabase_config.dart';
+import '../../../../models/lead_status_enum.dart';
 import '../../../../models/social_lead_model.dart';
 import '../../../../providers/auth/auth_provider.dart';
 import '../../../../widgets/buttons/app_button.dart';
@@ -31,6 +32,7 @@ class _AddLeadDialogState extends State<AddLeadDialog> {
   final _propertyDetailsController = TextEditingController();
   final _notesController = TextEditingController();
 
+  LeadStatus _selectedStatus = LeadStatus.pending;
   bool _isSaving = false;
 
   @override
@@ -105,6 +107,7 @@ class _AddLeadDialogState extends State<AddLeadDialog> {
             'property_details': propertyDetails,
             'notes': notes.isNotEmpty ? notes : null,
             'broker_id': brokerId,
+            'status': _selectedStatus.apiValue,
           })
           .select()
           .single();
@@ -186,6 +189,60 @@ class _AddLeadDialogState extends State<AddLeadDialog> {
               prefixIcon: const Icon(Icons.location_city_outlined, size: 20.0, color: AppColors.primary),
               validator: _validatePropertyDetails,
               textInputAction: TextInputAction.next,
+            ),
+            const SizedBox(height: 16.0),
+
+            // Lead Status Selector
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.tr('leads_status'),
+                  style: AppTextStyles.caption.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 6.0),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 4.0),
+                  decoration: BoxDecoration(
+                    color: AppColors.surface,
+                    borderRadius: BorderRadius.circular(12.0),
+                    border: Border.all(color: AppColors.border),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<LeadStatus>(
+                      isExpanded: true,
+                      value: _selectedStatus,
+                      items: LeadStatus.values.map((status) {
+                        return DropdownMenuItem<LeadStatus>(
+                          value: status,
+                          child: Row(
+                            children: [
+                              Icon(status.icon, size: 16, color: status.color),
+                              const SizedBox(width: 10),
+                              Text(
+                                status.label(context),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: status.color,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (newStatus) {
+                        if (newStatus != null) {
+                          setState(() => _selectedStatus = newStatus);
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 16.0),
 

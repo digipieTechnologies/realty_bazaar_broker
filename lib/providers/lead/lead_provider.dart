@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/supabase/supabase_config.dart';
+import '../../models/lead_status_enum.dart';
 import '../../models/social_lead_model.dart';
 
 class LeadProvider extends ChangeNotifier {
@@ -43,6 +44,9 @@ class LeadProvider extends ChangeNotifier {
   List<String> _platformsFilter = []; // Empty = All platforms, or ['facebook'], ['instagram'], ['other']
   List<String> get platformsFilter => _platformsFilter;
 
+  LeadStatus? _statusFilter;
+  LeadStatus? get statusFilter => _statusFilter;
+
   String? _errorMessage;
 
   String? get errorMessage => _errorMessage;
@@ -53,6 +57,13 @@ class LeadProvider extends ChangeNotifier {
   /// Update platform filters list (e.g., ['facebook'], ['instagram'], ['other'], or [] for all)
   void setPlatformsFilter(List<String> platforms, {String? brokerId}) {
     _platformsFilter = List<String>.from(platforms);
+    notifyListeners();
+    fetchLeads(brokerId: brokerId ?? _currentBrokerId, page: 1, searchQuery: _searchQuery);
+  }
+
+  /// Update status filter (LeadStatus.active, inactive, junk, or null for all)
+  void setStatusFilter(LeadStatus? status, {String? brokerId}) {
+    _statusFilter = status;
     notifyListeners();
     fetchLeads(brokerId: brokerId ?? _currentBrokerId, page: 1, searchQuery: _searchQuery);
   }
@@ -81,6 +92,7 @@ class LeadProvider extends ChangeNotifier {
     String? brokerId,
     int page = 1,
     String searchQuery = '',
+    LeadStatus? status,
     bool isSilent = false,
   }) async {
     if (!isSilent) {
@@ -89,6 +101,9 @@ class LeadProvider extends ChangeNotifier {
     }
     _currentPage = page;
     _searchQuery = searchQuery;
+    if (status != null) {
+      _statusFilter = status;
+    }
     _errorMessage = null;
     if (brokerId != null && brokerId.isNotEmpty) {
       _currentBrokerId = brokerId;
@@ -103,6 +118,7 @@ class LeadProvider extends ChangeNotifier {
           'p_limit': _itemsPerPage,
           'p_search_query': searchQuery,
           'p_platforms': _platformsFilter.isEmpty ? null : _platformsFilter,
+          'p_status': _statusFilter?.apiValue,
         },
       );
 
@@ -177,10 +193,12 @@ class LeadProvider extends ChangeNotifier {
   }
 
   /// Fetches a single lead by its ID
-  Future<SocialLeadModel?> fetchLeadById(String leadId) async {
-    // 1. Check cached list
-    for (final l in _leads) {
-      if (l.id == leadId) return l;
+  Future<SocialLeadModel?> fetchLeadById(String leadId, {bool forceRefresh = false}) async {
+    // 1. Check cached list if not forcing refresh
+    if (!forceRefresh) {
+      for (final l in _leads) {
+        if (l.id == leadId) return l;
+      }
     }
 
     // 2. Fetch from DB
@@ -192,12 +210,51 @@ class LeadProvider extends ChangeNotifier {
           .maybeSingle();
 
       if (response != null) {
-        return SocialLeadModel.fromJson(response);
+        final fetched = SocialLeadModel.fromJson(response);
+        updateCachedLead(fetched);
+        return fetched;
       }
     } catch (e) {
       debugPrint('[LeadProvider] Error fetching lead by ID ($leadId): $e');
     }
     return null;
+  }
+
+  /// Updates lead status with optimistic UI update and Supabase persistence
+  Future<bool> updateLeadStatus(String leadId, LeadStatus newStatus) async {
+    final oldIndex = _leads.indexWhere((l) => l.id == leadId);
+    final oldLead = oldIndex != -1 ? _leads[oldIndex] : null;
+
+    if (oldLead != null) {
+      _leads[oldIndex] = oldLead.copyWith(status: newStatus);
+      notifyListeners();
+    }
+
+    try {
+      await SupabaseConfig.client
+          .from('social_leads')
+          .update({'status': newStatus.apiValue})
+          .eq('id', leadId);
+      return true;
+    } catch (e) {
+      debugPrint('[LeadProvider] Error updating lead status: $e');
+      if (oldLead != null && oldIndex != -1) {
+        _leads[oldIndex] = oldLead;
+        notifyListeners();
+      }
+      return false;
+    }
+  }
+
+  /// Synchronizes or inserts a lead in the in-memory cache
+  void updateCachedLead(SocialLeadModel updatedLead) {
+    final index = _leads.indexWhere((l) => l.id == updatedLead.id);
+    if (index != -1) {
+      _leads[index] = updatedLead;
+    } else {
+      _leads.insert(0, updatedLead);
+    }
+    notifyListeners();
   }
 
   /// Unsubscribe from social_leads real-time changes
@@ -216,6 +273,7 @@ class LeadProvider extends ChangeNotifier {
     _hasMore = false;
     _searchQuery = '';
     _platformsFilter = [];
+    _statusFilter = null;
     _errorMessage = null;
     _currentBrokerId = null;
     _isLoading = false;

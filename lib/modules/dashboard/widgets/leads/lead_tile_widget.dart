@@ -1,18 +1,20 @@
-// File: lib/modules/dashboard/widgets/leads/lead_tile_widget.dart
-// Purpose: Modern, colorful, and highly polished lead tile widget matching modern card layout design with avatar platform overlay, top-right platform badge, soft property pill, and action chevron.
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:the_realty_bazaar/app/app_navigator.dart';
 
 import '../../../../app/app_colors.dart';
 import '../../../../app/app_text_styles.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../models/social_enums.dart';
 import '../../../../models/social_lead_model.dart';
+import '../../../../providers/lead/lead_provider.dart';
 import '../../../../util/app_date_utils.dart';
+import '../../../../widgets/badges/app_lead_status_badge.dart';
 import '../../../../widgets/badges/app_platform_badge.dart';
 import '../../../../widgets/buttons/app_circular_chevron.dart';
 import '../../../../widgets/common/user_avatar_widget.dart';
 import '../../../../widgets/icons/app_icons.dart';
+import '../../../../widgets/toast/app_toast.dart';
 
 class LeadTileWidget extends StatelessWidget {
   final SocialLeadModel lead;
@@ -139,13 +141,31 @@ class LeadTileWidget extends StatelessWidget {
                       ),
                       const SizedBox(width: 8.0),
 
-                      // Top-Right Action Arrow
-                      AppCircularChevron(
-                        collapsedIcon: Icons.chevron_right_rounded,
-                        iconColor: AppColors.primary,
-                        backgroundColor: AppColors.primary.withValues(alpha: 0.08),
-                        iconSize: 18.0,
-                        padding: 6.0,
+                      // Status Badge & Action Arrow
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          AppLeadStatusBadge(
+                            status: lead.status,
+                            onStatusChanged: (newStatus) async {
+                              final success = await context.read<LeadProvider>().updateLeadStatus(
+                                lead.id!,
+                                newStatus,
+                              );
+                              if (success && context.mounted) {
+                                AppToast.showSuccess('Lead Status', context.tr('leads_toast_status_updated'));
+                              }
+                            },
+                          ),
+                          const SizedBox(width: 8.0),
+                          AppCircularChevron(
+                            collapsedIcon: Icons.chevron_right_rounded,
+                            iconColor: AppColors.primary,
+                            backgroundColor: AppColors.primary.withValues(alpha: 0.08),
+                            iconSize: 18.0,
+                            padding: 6.0,
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -236,17 +256,35 @@ class LeadTileWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 12.0),
+
+              // Status Badge (Interactive)
+              Expanded(
+                flex: 1,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: AppLeadStatusBadge(
+                    status: lead.status,
+                    onStatusChanged: (newStatus) async {
+                      final success = await context.read<LeadProvider>().updateLeadStatus(
+                        lead.id!,
+                        newStatus,
+                      );
+                      if (success && context.mounted) {
+                        AppToast.showSuccess('Lead Status', context.tr('leads_toast_status_updated'));
+                      }
+                    },
+                  ),
+                ),
+              ),
 
               // Source / Platform Badge
               Expanded(
-                flex: 2,
+                flex: 1,
                 child: Align(
-                  alignment: Alignment.center,
+                  alignment: Alignment.centerLeft,
                   child: AppPlatformBadge(platform: platform),
                 ),
               ),
-              const SizedBox(width: 12.0),
 
               // Property Details
               Expanded(
@@ -262,11 +300,10 @@ class LeadTileWidget extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              const SizedBox(width: 12.0),
 
               // Created At
               Expanded(
-                flex: 2,
+                flex: 1,
                 child: Text(
                   _formatDate(lead.createdAt),
                   style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary, fontSize: 12.0),

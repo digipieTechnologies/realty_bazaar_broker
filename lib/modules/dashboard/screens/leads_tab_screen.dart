@@ -86,6 +86,10 @@ class _LeadsTabScreenState extends State<LeadsTabScreen> {
                     onPlatformsFilterChanged: (platforms) {
                       provider.setPlatformsFilter(platforms, brokerId: _brokerId);
                     },
+                    selectedStatus: provider.statusFilter,
+                    onStatusFilterChanged: (status) {
+                      provider.setStatusFilter(status, brokerId: _brokerId);
+                    },
                     onSearchChanged: (query) {
                       provider.fetchLeads(brokerId: _brokerId, page: 1, searchQuery: query);
                     },

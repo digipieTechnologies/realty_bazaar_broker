@@ -15,7 +15,7 @@ class AppDateUtils {
   /// Date format with time: '26, Jan 2026 at 14:30' (Format pattern: d, MMM yyyy 'at' HH:mm)
   static String formatDateWithTime(DateTime? dateTime) {
     if (dateTime == null) return '';
-    return DateFormat("d, MMM yyyy 'at' HH:mm").format(dateTime);
+    return DateFormat("d, MMM yyyy 'at' hh:mm a").format(dateTime);
   }
 
   /// Formats ISO String or DateTime into standard '26, Jan 2026' format

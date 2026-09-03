@@ -1,6 +1,3 @@
-// File: lib/modules/leads/screens/view_lead_screen.dart
-// Purpose: Premium Lead Details screen with standard AppSectionHeader components, hero cover banner, callout action buttons, interactive property card, and responsive desktop/mobile layouts.
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +11,7 @@ import '../../../models/models.dart';
 import '../../../providers/lead/lead_provider.dart';
 import '../../../util/app_date_utils.dart';
 import '../../../util/app_utils.dart';
+import '../../../widgets/badges/app_lead_status_badge.dart';
 import '../../../widgets/badges/app_platform_badge.dart';
 import '../../../widgets/buttons/app_button.dart';
 import '../../../widgets/common/app_section_header.dart';
@@ -49,15 +47,25 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
     }
   }
 
+  @override
+  void didUpdateWidget(covariant ViewLeadScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.lead != oldWidget.lead && widget.lead != null) {
+      _lead = widget.lead;
+    }
+  }
+
   Future<void> _fetchLead(String id) async {
     try {
       final provider = Provider.of<LeadProvider>(context, listen: false);
-      final fetched = await provider.fetchLeadById(id);
+      final fetched = await provider.fetchLeadById(id, forceRefresh: true);
       if (mounted) {
         setState(() {
-          _lead = fetched;
+          if (fetched != null) {
+            _lead = fetched;
+          }
           _isLoading = false;
-          if (fetched == null) {
+          if (fetched == null && _lead == null) {
             _errorMessage = 'Lead details not found.';
           }
         });
@@ -82,7 +90,20 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
       );
     }
 
-    if (_errorMessage != null || _lead == null) {
+    final provider = context.watch<LeadProvider>();
+    final targetId = _lead?.id ?? widget.leadId;
+    SocialLeadModel? liveLead;
+    if (targetId != null) {
+      for (final l in provider.leads) {
+        if (l.id == targetId) {
+          liveLead = l;
+          break;
+        }
+      }
+    }
+    final lead = liveLead ?? _lead;
+
+    if (_errorMessage != null || lead == null) {
       return Scaffold(
         backgroundColor: AppColors.background,
         appBar: CommonAppBar(title: context.tr('lead_details')),
@@ -101,7 +122,6 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
       );
     }
 
-    final lead = _lead!;
     final socialPost = lead.socialPost;
     final platform = socialPost?.platform;
     final hasPermalink = socialPost?.permalink != null && socialPost!.permalink!.trim().isNotEmpty;
@@ -287,6 +307,26 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                     ),
                     Positioned(
                       top: 12.0,
+                      left: 12.0,
+                      child: AppLeadStatusBadge(
+                        isSolid: true,
+                        status: lead.status,
+                        onStatusChanged: (newStatus) async {
+                          final msg = context.tr('leads_toast_status_updated');
+                          final currentId = lead.id;
+                          if (currentId == null) return;
+                          setState(() {
+                            _lead = _lead?.copyWith(status: newStatus);
+                          });
+                          final success = await context.read<LeadProvider>().updateLeadStatus(currentId, newStatus);
+                          if (success && mounted) {
+                            AppToast.showSuccess('Lead Status', msg);
+                          }
+                        },
+                      ),
+                    ),
+                    Positioned(
+                      top: 12.0,
                       right: 12.0,
                       child: AppPlatformBadge(platform: platform, isHeaderStyle: true, iconSize: 16.0),
                     ),
@@ -323,7 +363,7 @@ class _ViewLeadScreenState extends State<ViewLeadScreen> {
                         width: 16.0,
                         height: 16.0,
                         decoration: BoxDecoration(
-                          color: AppColors.success,
+                          color: lead.status.color,
                           shape: BoxShape.circle,
                           border: Border.all(color: Colors.white, width: 2.5),
                         ),

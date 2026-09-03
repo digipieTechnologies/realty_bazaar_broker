@@ -62,6 +62,12 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
       outlineIconAsset: AppAssets.icLeadsOutline,
     ),
     _NavigationItem(
+      title: 'Site Visits',
+      titleKey: 'site_visits',
+      path: '/visits',
+      iconData: Icons.calendar_month_rounded,
+    ),
+    _NavigationItem(
       title: 'Properties',
       titleKey: 'properties',
       path: '/properties',
@@ -316,15 +322,21 @@ class _ShellLayoutScreenState extends State<ShellLayoutScreen> {
                 SizedBox(
                   width: 20.0,
                   height: 20.0,
-                  child: SvgPicture.asset(
-                    isSelected ? item.filledIconAsset : item.outlineIconAsset,
-                    width: 20.0,
-                    height: 20.0,
-                    colorFilter: ColorFilter.mode(
-                      isSelected ? AppColors.primary : AppColors.textSecondary,
-                      BlendMode.srcIn,
-                    ),
-                  ),
+                  child: item.iconData != null
+                      ? Icon(
+                          item.iconData,
+                          size: 20.0,
+                          color: isSelected ? AppColors.primary : AppColors.textSecondary,
+                        )
+                      : SvgPicture.asset(
+                          isSelected ? item.filledIconAsset! : item.outlineIconAsset!,
+                          width: 20.0,
+                          height: 20.0,
+                          colorFilter: ColorFilter.mode(
+                            isSelected ? AppColors.primary : AppColors.textSecondary,
+                            BlendMode.srcIn,
+                          ),
+                        ),
                 ),
                 const SizedBox(width: 14.0),
                 Text(
@@ -513,14 +525,16 @@ class _NavigationItem {
   final String title;
   final String titleKey;
   final String path;
-  final String filledIconAsset;
-  final String outlineIconAsset;
+  final String? filledIconAsset;
+  final String? outlineIconAsset;
+  final IconData? iconData;
 
   const _NavigationItem({
     required this.title,
     required this.titleKey,
     required this.path,
-    required this.filledIconAsset,
-    required this.outlineIconAsset,
+    this.filledIconAsset,
+    this.outlineIconAsset,
+    this.iconData,
   });
 }

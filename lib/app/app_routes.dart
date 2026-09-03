@@ -30,6 +30,9 @@ import '../modules/dashboard/screens/settings_tab_screen.dart';
 import '../modules/dashboard/screens/shell_layout_screen.dart';
 import '../modules/dashboard/screens/view_post_screen.dart';
 import '../modules/leads/screens/view_lead_screen.dart';
+import '../modules/visits/screens/visits_tab_screen.dart';
+import '../modules/visits/screens/view_visit_screen.dart';
+import '../models/property_visit_model.dart';
 import '../modules/legal/screens/privacy_policy_screen.dart';
 import '../modules/legal/screens/terms_of_service_screen.dart';
 import '../modules/properties/screens/view_property_screen.dart';
@@ -60,6 +63,8 @@ class AppRoutes {
   static const String propertyDetails = '/properties/:idOrCode';
   static const String leadDetails = '/leads/:id';
   static const String postDetails = '/posts/:id';
+  static const String visits = '/visits';
+  static const String visitDetails = '/visits/:id';
 
   // GoRouter Singleton Instance
   static final GoRouter router = GoRouter(
@@ -209,6 +214,23 @@ class AppRoutes {
                   final id = state.pathParameters['id'];
                   final leadExtra = state.extra is SocialLeadModel ? state.extra as SocialLeadModel : null;
                   return ViewLeadScreen(lead: leadExtra, leadId: id);
+                },
+              ),
+            ],
+          ),
+          GoRoute(
+            path: '/visits',
+            name: 'visits',
+            builder: (context, state) => const VisitsTabScreen(),
+            routes: [
+              GoRoute(
+                parentNavigatorKey: rootNavigatorKey,
+                path: ':id',
+                name: 'visit_details',
+                builder: (context, state) {
+                  final id = state.pathParameters['id'];
+                  final visitExtra = state.extra is PropertyVisitModel ? state.extra as PropertyVisitModel : null;
+                  return ViewVisitScreen(visit: visitExtra, visitId: id);
                 },
               ),
             ],

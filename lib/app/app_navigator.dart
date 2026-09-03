@@ -11,6 +11,8 @@ import '../modules/dashboard/screens/profile_screen.dart';
 import '../modules/dashboard/screens/request_video_tab_screen.dart';
 import '../modules/dashboard/screens/view_post_screen.dart';
 import '../modules/leads/screens/view_lead_screen.dart';
+import '../modules/visits/screens/view_visit_screen.dart';
+import '../models/property_visit_model.dart';
 import '../modules/legal/screens/privacy_policy_screen.dart';
 import '../modules/legal/screens/terms_of_service_screen.dart';
 import '../modules/properties/screens/view_property_screen.dart';
@@ -54,6 +56,24 @@ class AppNavigator {
       Navigator.of(context, rootNavigator: true).push(
         MaterialPageRoute(
           builder: (context) => ViewLeadScreen(lead: lead, leadId: targetId),
+        ),
+      );
+    }
+  }
+
+  /// Navigates to Visit Details (URL deep link on Desktop, rootNavigator on Mobile)
+  static void navigateToVisitDetails(BuildContext context, PropertyVisitModel visit) {
+    final targetId = visit.id ?? '';
+    if (context.isDesktop) {
+      if (targetId.isNotEmpty) {
+        context.go('/visits/$targetId', extra: visit);
+      } else {
+        context.go('/visits');
+      }
+    } else {
+      Navigator.of(context, rootNavigator: true).push(
+        MaterialPageRoute(
+          builder: (context) => ViewVisitScreen(visit: visit, visitId: targetId),
         ),
       );
     }

@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import 'broker_model.dart';
+import 'lead_status_enum.dart';
 import 'social_post_model.dart';
 
 class SocialLeadModel extends Equatable {
@@ -15,6 +16,7 @@ class SocialLeadModel extends Equatable {
   final String? phoneCountryIso;
   final SocialPostModel? socialPostId;
   final BrokerModel? brokerId;
+  final LeadStatus status;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -69,6 +71,7 @@ class SocialLeadModel extends Equatable {
     SocialPostModel? socialPostId,
     SocialPostModel? socialPost,
     this.brokerId,
+    this.status = LeadStatus.pending,
     this.createdAt,
     this.updatedAt,
   }) : socialPostId = socialPostId ?? socialPost;
@@ -103,6 +106,7 @@ class SocialLeadModel extends Equatable {
       phoneCountryIso: json['phone_country_iso']?.toString() ?? 'IN',
       socialPostId: parsedSocialPost,
       brokerId: json['broker_id'] != null ? BrokerModel.fromJson(json['broker_id']) : null,
+      status: LeadStatus.fromString(json['status']?.toString()),
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'].toString())?.toLocal()
           : null,
@@ -123,6 +127,7 @@ class SocialLeadModel extends Equatable {
     data['phone_country_iso'] = phoneCountryIso ?? 'IN';
     data['social_post_id'] = socialPostId?.id;
     data['broker_id'] = brokerId?.id;
+    data['status'] = status.apiValue;
     if (createdAt != null) {
       data['created_at'] = createdAt?.toUtc().toIso8601String();
     }
@@ -139,6 +144,7 @@ class SocialLeadModel extends Equatable {
     String? phoneCountryIso,
     SocialPostModel? socialPostId,
     BrokerModel? brokerId,
+    LeadStatus? status,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -152,6 +158,7 @@ class SocialLeadModel extends Equatable {
       phoneCountryIso: phoneCountryIso ?? this.phoneCountryIso,
       socialPostId: socialPostId ?? this.socialPostId,
       brokerId: brokerId ?? this.brokerId,
+      status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -168,6 +175,7 @@ class SocialLeadModel extends Equatable {
     phoneCountryIso,
     socialPostId,
     brokerId,
+    status,
     createdAt,
     updatedAt,
   ];

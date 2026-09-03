@@ -315,6 +315,55 @@ class PropertyProvider extends ChangeNotifier {
     }
   }
 
+  Future<({List<PropertyModel>? properties, int? totalItems, int? totalPages, bool? hasMore, String? error})>
+  fetchPropertiesByBroker({
+    required String brokerId,
+    int page = 1,
+    int limit = 10,
+    String? searchQuery,
+    bool forVideoRequest = false,
+  }) async {
+    String? errorMessage;
+    try {
+      final response = await SupabaseConfig.client.rpc(
+        'fetch_properties',
+        params: {
+          'p_broker_id': brokerId,
+          'p_page': page,
+          'p_limit': limit,
+          'p_search_query': searchQuery,
+          'p_for_video_request': forVideoRequest,
+        },
+      );
+
+      if (response != null) {
+        final Map<String, dynamic> resMap = response is Map<String, dynamic> ? response : {};
+
+        if (resMap['success'] == true && resMap['data'] is List) {
+          final rawList = resMap['data'] as List;
+          final properties = rawList.map((json) => PropertyModel.fromJson(json)).toList();
+
+          final pagination = resMap['pagination'] as Map<String, dynamic>? ?? {};
+          final totalItems = int.tryParse(pagination['total_items']?.toString() ?? '0') ?? properties.length;
+          final totalPages = int.tryParse(pagination['total_pages']?.toString() ?? '1') ?? 1;
+          final hasMore = pagination['has_more'] as bool? ?? false;
+          return (
+            properties: properties,
+            totalItems: totalItems,
+            totalPages: totalPages,
+            hasMore: hasMore,
+            error: null,
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint('[PropertyProvider] Error fetching properties by broker: $e');
+      errorMessage = 'Failed to fetch properties by broker: $e';
+    }
+
+    return (properties: null, totalItems: null, totalPages: null, hasMore: null, error: errorMessage);
+  }
+
   /// Reset state on user sign out
   void clear() {
     _properties = [];

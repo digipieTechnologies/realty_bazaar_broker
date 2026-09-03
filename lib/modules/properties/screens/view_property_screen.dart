@@ -28,6 +28,7 @@ import '../widgets/property_details_grid.dart';
 import '../widgets/property_location_card.dart';
 import '../widgets/property_preview_media_gallery.dart';
 import '../widgets/property_preview_specs_grid.dart';
+import '../../visits/widgets/schedule_visit_dialog.dart';
 import 'add_edit_property_screen.dart';
 
 class ViewPropertyScreen extends StatefulWidget {
@@ -1338,6 +1339,27 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
           ),
           const SizedBox(height: 16.0),
 
+          // Schedule Site Visit Button
+          SizedBox(
+            width: double.infinity,
+            child: AppButton.solid(
+              iconData: Icons.calendar_today_rounded,
+              text: context.tr('schedule_site_visit'),
+              color: AppColors.primary,
+              height: 44.0,
+              borderRadius: 12.0,
+              onPressed: () {
+                if (_property != null) {
+                  showDialog(
+                    context: context,
+                    builder: (context) => ScheduleVisitDialog(preselectedProperty: _property),
+                  );
+                }
+              },
+            ),
+          ),
+          const SizedBox(height: 10.0),
+
           // Edit Button
           SizedBox(
             width: double.infinity,
@@ -1434,6 +1456,26 @@ class _ViewPropertyScreenState extends State<ViewPropertyScreen> {
             height: 44.0,
             borderRadius: 10.0,
             onPressed: () => _openVideoRequestDialog(context),
+          ),
+        ),
+        const SizedBox(height: 14.0),
+        _buildActionFeatureCard(
+          icon: Icons.calendar_month_outlined,
+          color: AppColors.secondary,
+          title: context.tr('site_visits'),
+          description: context.tr('schedule_visit_subtitle'),
+          actionButton: AppButton(
+            variant: AppButtonVariant.secondary,
+            iconData: Icons.calendar_today_rounded,
+            text: context.tr('schedule_site_visit'),
+            height: 44.0,
+            borderRadius: 10.0,
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => ScheduleVisitDialog(preselectedProperty: property),
+              );
+            },
           ),
         ),
         const SizedBox(height: 30.0),
